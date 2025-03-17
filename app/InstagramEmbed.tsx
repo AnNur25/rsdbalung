@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
-const InstagramEmbed = () => {
+
+const InstagramEmbed = ({ url }: { url: string }) => {
   useEffect(() => {
     // Load Instagram embed script
     const script = document.createElement('script');
@@ -13,7 +14,7 @@ const InstagramEmbed = () => {
     <div>
       <blockquote
         className="instagram-media"
-        data-instgrm-permalink="https://www.instagram.com/p/DG2qlZTtRFQ/"
+        data-instgrm-permalink={url}
         data-instgrm-version="14"
       ></blockquote>
     </div>
