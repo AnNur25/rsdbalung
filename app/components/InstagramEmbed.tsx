@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
-
+import { useEffect } from "react";
 
 const InstagramEmbed = ({ url }: { url: string }) => {
   useEffect(() => {
     // Load Instagram embed script
-    const script = document.createElement('script');
-    script.src = 'https://www.instagram.com/embed.js';
+    const script = document.createElement("script");
+    script.src = "https://www.instagram.com/embed.js";
     script.async = true;
     document.body.appendChild(script);
   }, []);
@@ -13,9 +12,9 @@ const InstagramEmbed = ({ url }: { url: string }) => {
   return (
     <div>
       <blockquote
-        className="instagram-media"
+        className="instagram-media w-80vw"
         data-instgrm-permalink={url}
-        data-instgrm-version="14"
+        // data-instgrm-version="14"
       ></blockquote>
     </div>
   );
