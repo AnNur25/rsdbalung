@@ -7,7 +7,7 @@ import Dropdown from "~/components/Dropdown";
 import Banner from "~/components/Banner";
 import InstagramEmbed from "~/components/InstagramEmbed";
 import SelectExample from "~/components/SelectExample";
-import Card from "~/components/Card";
+import NewsCard from "~/components/NewsCard";
 import banner from "~/assets/rsdbalung.jpeg";
 import YoutubeEmbed from "~/components/YoutubeEmbed";
 
@@ -38,7 +38,7 @@ export default function Home() {
     "sebelas",
     "duabelas",
   ].map((title) => ({
-    title,
+    title: `Judul Berita ${title} Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.`,
     description: `description ${title}`,
     image: banner,
     date: new Date().toLocaleDateString(),
@@ -63,15 +63,12 @@ export default function Home() {
     <>
       <Banner />
 
-      <Dropdown name="Dropdown" />
-      <SelectExample />
-
       <div className="overflow-x-scroll">
         <div className="flex w-max">
           {cards.map((card) => (
-            <Card
+            <NewsCard
               title={card.title}
-              description={card.description}
+              // description={card.description}
               image={card.image}
               date={card.date}
             />
