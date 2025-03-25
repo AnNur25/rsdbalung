@@ -10,7 +10,7 @@ export default function Banner() {
       }}
     >
       <div className="flex h-full items-center justify-center">
-        <h1 className="m-4 text-2xl font-bold lg:text-5xl">
+        <h1 className="m-4 text-2xl font-extrabold lg:text-5xl">
           Selamat Datang di Rumah Sakit Daerah Balung
         </h1>
       </div>

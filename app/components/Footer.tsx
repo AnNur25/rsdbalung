@@ -23,7 +23,7 @@ export default function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           <div>
-            <h3 className="mb-4 text-lg font-semibold">Tentang Kami</h3>
+            <h3 className="mb-4 text-lg font-bold">Tentang Kami</h3>
             <ul>
               <li className="mb-2">
                 <a href="/profile" className="hover:underline">
@@ -44,7 +44,7 @@ export default function Footer() {
           </div>
 
           <div className="lg:w-min lg:justify-self-end">
-            <h3 className="mb-4 text-lg font-semibold text-nowrap">
+            <h3 className="mb-4 text-lg font-bold text-nowrap">
               Media Sosial Kami
             </h3>
             <div className="flex space-x-4">
@@ -158,7 +158,7 @@ export default function Footer() {
         </div>
         <div className="mt-8 text-center text-sm">
           &copy; {new Date().getFullYear()} Rumah Sakit Daerah Balung Kabupaten
-          Jember
+          Jember.
         </div>
       </div>
     </footer>

@@ -9,7 +9,8 @@ const navigation = [
   { name: "Home", href: "/" },
   { name: "Profil", href: "/profile" },
   { name: "Jadwal Dokter", href: "#" },
-  { name: "Layanan", href: "#" },
+  { name: "Pelayanan", href: "#" },
+  { name: "Berita", href: "#" },
   { name: "Aduan", href: "#" },
 ];
 
@@ -17,7 +18,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="absolute inset-x-0 top-0 z-50 bg-white">
+    <header className="absolute inset-x-0 top-0 z-50 bg-white shadow-md">
       <nav
         aria-label="Global"
         className="flex items-center justify-between p-6 lg:px-8"
@@ -38,7 +39,7 @@ export default function Header() {
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
-        <div className="hidden lg:flex lg:gap-x-12">
+        <div className="hidden lg:flex lg:flex-2 lg:gap-x-12">
           {navigation.map((item) => (
             <a
               key={item.name}
@@ -48,14 +49,6 @@ export default function Header() {
               {item.name}
             </a>
           ))}
-        </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a
-            href="/admin/login"
-            className="text-sm/6 font-semibold text-gray-900"
-          >
-            Login
-          </a>
         </div>
       </nav>
       <Dialog
@@ -91,14 +84,6 @@ export default function Header() {
                     {item.name}
                   </a>
                 ))}
-              </div>
-              <div className="py-6">
-                <a
-                  href="/admin/login"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                >
-                  Login
-                </a>
               </div>
             </div>
           </div>
