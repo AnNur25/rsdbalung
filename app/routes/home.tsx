@@ -11,6 +11,7 @@ import NewsCard from "~/components/NewsCard";
 import banner from "~/assets/rsdbalung.jpeg";
 import YoutubeEmbed from "~/components/YoutubeEmbed";
 import DoctorCard from "~/components/DoctorCard";
+import TextWithRect from "~/components/TextWithRect";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -46,23 +47,29 @@ export default function Home() {
   }));
   useEffect(() => {
     console.log("Home");
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/app/");
-        console.log(response);
-        setMessage(response.data.message);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setMessage("Error fetching data");
-        setLoading(false);
-      }
-    };
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get("http://localhost:3001/app/");
+    //     console.log(response);
+    //     setMessage(response.data.message);
+    //     setLoading(false);
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //     setMessage("Error fetching data");
+    //     setLoading(false);
+    //   }
+    // };
   }, []);
 
   return (
     <>
       <Banner />
+      <div className="ms-5">
+        <TextWithRect>POLI MATA</TextWithRect>
+        <h2 className="text-4xl font-black text-persian-blue-950">
+          Layanan Unggulan Kami
+        </h2>
+      </div>
 
       <section className="p-5 lg:p-10">
         <h2 className="text-2xl font-extrabold uppercase lg:text-3xl">
