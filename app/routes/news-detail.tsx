@@ -14,7 +14,7 @@ import banner from "~/assets/rsdbalung.jpeg";
 //   return <h1>News {loaderData?.id ?? "not found"}</h1>;
 // }
 
-export default function News() {
+export default function NewsDetail() {
   const cards = [
     "satu",
     "dua",
@@ -36,7 +36,7 @@ export default function News() {
   }));
 
   return (
-    <main className="flex flex-col items-center">
+    <section>
       <h1>BERITA</h1>
       <div>
         <input
@@ -48,7 +48,7 @@ export default function News() {
         <button type="button">Cari</button>
       </div>
 
-      <section className="flex flex-col justify-center gap-4 p-4 lg:flex-row lg:flex-wrap lg:gap-4">
+      <div className="flex flex-col gap-4 lg:flex-row lg:flex-wrap lg:gap-8">
         {cards.map((card) => (
           <NewsCard
             title={card.title}
@@ -57,7 +57,7 @@ export default function News() {
             date={card.date}
           />
         ))}
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }

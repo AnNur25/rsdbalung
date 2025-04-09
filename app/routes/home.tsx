@@ -12,7 +12,9 @@ import banner from "~/assets/rsdbalung.jpeg";
 import YoutubeEmbed from "~/components/YoutubeEmbed";
 import DoctorCard from "~/components/DoctorCard";
 import TextWithRect from "~/components/TextWithRect";
-
+import ImageGradientCard from "~/components/ImageGradientCard";
+import whatsAppIcon from "~/assets/whatsapp.svg";
+import Slider from "~/components/Slider";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Rumah Sakit Daerah Balung" },
@@ -36,9 +38,6 @@ export default function Home() {
     "tujuh",
     "delapan",
     "sembilan",
-    "sepuluh",
-    "sebelas",
-    "duabelas",
   ].map((title) => ({
     title: `Judul Berita ${title} Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.`,
     description: `Description ${title} lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.`,
@@ -64,23 +63,99 @@ export default function Home() {
   return (
     <>
       <Banner />
-      <div className="ms-5">
-        <TextWithRect>POLI MATA</TextWithRect>
-        <h2 className="text-4xl font-black text-persian-blue-950">
-          Layanan Unggulan Kami
-        </h2>
-      </div>
+
+      <section className="mt-8 flex flex-col items-center">
+        <TextWithRect>KAMI BERKOMITMEN</TextWithRect>
+        <div className="grid grid-cols-1 gap-6 p-8 lg:max-w-2/3 lg:grid-cols-2 lg:grid-rows-2">
+          {[
+            {
+              title: "Pelayanan Nyaman",
+              description:
+                "Didukung dengan fasilitas lengkap dan ruang perwatan yang bersih, memberikan kenyamanan maksimal bagi pasien.",
+            },
+            {
+              title: "Tenaga Medis Profesional",
+              description:
+                "Tenaga medis kami terdiri dari dokter dan perawat berpengalaman yang siap memberikan pelayanan terbaik.",
+            },
+            {
+              title: "Fasilitas Modern",
+              description:
+                "Kami menyediakan fasilitas modern untuk mendukung proses diagnosa dan pengobatan yang akurat.",
+            },
+            {
+              title: "Pelayanan Cepat",
+              description:
+                "Proses administrasi dan pelayanan yang cepat untuk kenyamanan pasien.",
+            },
+          ].map((item, index) => (
+            <article key={index} className="flex gap-4">
+              <img
+                src={whatsAppIcon}
+                className="flex-inital aspect-square h-min rounded-full bg-yellow-400 p-2"
+              />
+              <div>
+                <h2 className="text-xl font-bold text-persian-blue-950">
+                  {item.title}
+                </h2>
+                <p className="text-justify text-gray-600">{item.description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-4 lg:p-10">
+        <div className="lg:flex-1">
+          <TextWithRect>POLI MATA</TextWithRect>
+          <h2 className="text-2xl font-black text-persian-blue-950 lg:text-4xl">
+            Layanan Unggulan Kami
+          </h2>
+
+          <p className="text-justify text-sm text-gray-600 lg:text-lg">
+            Poli Mata di RSD Balung merupakan layanan unggulan yang menghadirkan
+            pelayanan kesehatan mata berkualitas dengan tenaga medis
+            berpengalaman dan peralatan modern.
+          </p>
+        </div>
+
+        <div className="bg-sky-0 w-full overflow-hidden lg:flex-2">
+          <Slider>
+            <ImageGradientCard />
+            <ImageGradientCard />
+            <ImageGradientCard />
+            <ImageGradientCard />
+          </Slider>
+        </div>
+      </section>
+
+      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-4 lg:p-10">
+        <div className="lg:flex-1">
+          <TextWithRect>INSTAGRAM</TextWithRect>
+          <h2 className="text-2xl font-black text-persian-blue-950 lg:text-4xl">
+            Informasi Seputar Kesehatan dan Momen Lainnya
+          </h2>
+
+          <p className="text-justify text-sm text-gray-600 lg:text-lg">
+            Ikuti kami di Instagram untuk mendapatkan informasi seputar
+            kesehatan, layanan terbaru, dan momen menarik lainnya.
+          </p>
+        </div>
+
+        {/* Slider cannot move the embed */}
+        <div className="bg-sky-0 flex w-full overflow-x-auto lg:flex-2">
+          {/* <InstagramEmbed url="https://www.instagram.com/p/id/" /> */}
+        </div>
+      </section>
 
       <section className="p-5 lg:p-10">
-        <h2 className="text-2xl font-extrabold uppercase lg:text-3xl">
-          Berita
-        </h2>
+        <TextWithRect>BERITA</TextWithRect>
         <p className="text-justify text-sm text-gray-600 lg:text-lg">
           Dapatkan informasi seputar kesehatan, layanan terbaru, dan informasi
           menarik lainnya.
         </p>
-        <div className="overflow-x-scroll">
-          <div className="flex w-max">
+        <div className="w-full">
+          <Slider>
             {cards.map((card) => (
               <NewsCard
                 title={card.title}
@@ -89,43 +164,27 @@ export default function Home() {
                 date={card.date}
               />
             ))}
-          </div>
+          </Slider>
         </div>
       </section>
 
-      <section className="bg-sky-200">
-        <div className="p-5 lg:p-10">
-          <h2 className="text-2xl font-extrabold uppercase lg:text-3xl">
-            Instagram
-          </h2>
-          <p className="text-justify text-sm text-gray-700 lg:text-lg">
-            Selalu dapatkan berita terbaru seputar kesehatan, event, dan edukasi
-            medis langsung dari Instagram resmi kami. Dapatkan informasi
-            bermanfaat, tips kesehatan, serta update layanan terbaru yang bisa
-            membantu Anda dan keluarga menjalani hidup lebih sehat. Follow
-            sekarang dan tetap update!
-          </p>
-        </div>
-        <div className="flex gap-2 overflow-x-scroll bg-sky-800 p-4">
-          <InstagramEmbed url="https://www.instagram.com/p/DGufjWWzR46/" />
-          <InstagramEmbed url="https://www.instagram.com/p/DGufjWWzR46/" />
-        </div>
-      </section>
-      <h2 className="mt-4 mb-2 text-center text-2xl font-extrabold uppercase lg:text-3xl">
+      <h2 className="mt-4 mb-2 text-center text-2xl font-extrabold text-persian-blue-950 uppercase lg:text-3xl">
         Maps
       </h2>
-      <MapsEmbed />
+      <div className="px-3 lg:px-10">
+        <MapsEmbed />
+      </div>
 
-      <p className="m-4 rounded-md bg-sky-200 p-4 text-center text-xs lg:text-sm">
-        Jl. Rambipuji, Kebonsari, Balung Lor, Kec. Balung, Jember, Jawa Timur
-        68161
-      </p>
+      <section className="mt-2 flex flex-col gap-2 p-1 text-center text-sm text-persian-blue-950 lg:font-semibold">
+        <p>
+          Jl. Rambipuji, Kebonsari, Balung Lor, Kec. Balung, Jember, Jawa Timur
+          68161
+        </p>
 
-      <p className="m-4 rounded-md bg-sky-200 p-4 text-center text-sm">
-        rsd.balung@jemberkab.go.id
-      </p>
+        <p>rsd.balung@jemberkab.go.id</p>
+      </section>
 
-      <DoctorCard name="Dr. John Doe" specialty="Bedah" image={banner} />
+      {/* <DoctorCard name="Dr. John Doe" specialty="Bedah" image={banner} /> */}
       {/* <YoutubeEmbed videoId="_IBj20ojJnU" /> */}
 
       <Footer />

@@ -22,6 +22,7 @@ export default function Profile() {
       <section className="my-8">
         <h2 className="text-center text-2xl font-bold">Struktur Organisasi</h2>
         <img
+          loading="lazy"
           className="mx-auto p-4 lg:max-w-3/4"
           src={strukturImg}
           alt="Struktur Organisasi"

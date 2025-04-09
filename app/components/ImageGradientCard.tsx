@@ -2,6 +2,7 @@ export default function ImageGradientCard() {
   return (
     <div className="relative m-2 aspect-[2/3] w-3xs rounded-xl shadow-lg">
       <img
+        loading="lazy"
         src="https://images.unsplash.com/photo-1417325384643-aac51acc9e5d"
         alt="Background"
         className="h-full w-full rounded-xl object-cover"

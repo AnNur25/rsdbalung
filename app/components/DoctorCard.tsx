@@ -11,7 +11,7 @@ export default function DoctorCard({
 }: DoctorInterface) {
   return (
     <div className="m-4 mx-auto w-xs rounded-2xl">
-      <img className="aspect-[35/37] rounded-t-md object-cover" src={image} />
+      <img loading="lazy" className="aspect-[35/37] rounded-t-md object-cover" src={image} />
       <p className="bg-green-500 py-1 text-center uppercase">
         Spesialis {specialty}
       </p>

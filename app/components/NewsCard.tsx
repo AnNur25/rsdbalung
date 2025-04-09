@@ -19,6 +19,7 @@ export default function NewsCard({
         {formatDate(date)}
       </p>
       <img
+        loading="lazy"
         className="h-48 w-full object-cover lg:h-auto"
         src={image}
         alt={title}

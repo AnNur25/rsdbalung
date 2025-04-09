@@ -3,22 +3,46 @@
 import { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import logo from "../assets/logo.png";
-
+import "~/scroll.css";
+import logo from "~/assets/logo.png";
+import whatsappIcon from "~/assets/whatsapp.svg";
+import phoneIcon from "~/assets/call.svg";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Profil", href: "/profile" },
+  { name: "Berita", href: "/berita" },
+  { name: "Pelayanan", href: "/pelayanan" },
   { name: "Jadwal Dokter", href: "#" },
-  { name: "Pelayanan", href: "#" },
-  { name: "Berita", href: "#" },
   { name: "Aduan", href: "#" },
+];
+const contacts = [
+  { icon: whatsappIcon, name: "IGD", contact: "+62 814-5900-0183" },
+  { icon: phoneIcon, name: "IGD", contact: "0336 621595" },
+  { icon: phoneIcon, name: "Manajemen", contact: "0336 621017" },
+  { icon: phoneIcon, name: "CS dan Aduan", contact: "+62 82233444722" },
 ];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const loopedContacts = [...contacts, ...contacts, ...contacts, ...contacts];
+  // const loopedContacts = [...contacts, ...contacts, ...contacts];
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 bg-white shadow-md">
+      <div className="flex w-full overflow-x-hidden bg-blue-500 p-2 text-white">
+        <div className="flex gap-4">
+          <div className="scroll-left flex w-max gap-4">
+            {loopedContacts.map((contact) => (
+              <div className="flex items-center gap-1.5">
+                <img src={contact.icon} alt="WhatsApp" />
+                <p>
+                  {contact.name}: {contact.contact}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
       <nav
         aria-label="Global"
         className="flex items-center justify-between p-6 lg:px-8"

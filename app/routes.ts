@@ -13,7 +13,8 @@ export default [
     route("dokter", "routes/admin/home.tsx"),
   ]),
   route("profile", "routes/profile.tsx"),
-  route("berita/:id", "routes/news.tsx"),
+  route("berita/", "routes/news.tsx"),
+  route("berita/:id", "routes/news-detail.tsx"),
 ] satisfies RouteConfig;
 
 // npm i @react-router/fs-routes
