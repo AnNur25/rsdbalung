@@ -70,7 +70,7 @@ export async function loader(): Promise<NewsApiResponse> {
 export default function Home() {
   const response = useLoaderData() as NewsApiResponse;
   const news = response.data.berita;
-  console.log(news);
+  // console.log(news);
 
   return (
     <>

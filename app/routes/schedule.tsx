@@ -7,6 +7,7 @@ import { Select } from "@headlessui/react";
 import axios from "axios";
 import { useLoaderData, useSearchParams } from "react-router";
 import { useState } from "react";
+import { alternatingRowColor } from "~/utils/styles";
 
 export interface Poli {
   id_poli: string;
@@ -90,8 +91,8 @@ export async function loader({
   urlRequest.searchParams.set("page", page);
 
   try {
-    const response = await axios.get<ApiResponse>(urlRequest.href);
     const poliResponse = await axios.get<PoliApiResponse>(poliRequest.href);
+    const response = await axios.get<ApiResponse>(urlRequest.href);
 
     if (!poliResponse.data.success) {
       poliResponse.data.data = [];
@@ -99,8 +100,7 @@ export async function loader({
 
     // console.log("poliResponse", poliResponse.data);
 
-    const data = response.data;
-    if (!data.success || !data.data.dokter.length) {
+    if (!response.data.success || !response.data.data.dokter.length) {
       return {
         success: false,
         statusCode: 404,
@@ -114,20 +114,22 @@ export async function loader({
             totalPages: 0,
           },
         },
-        poli: [],
+        poli: poliResponse.data.data,
       };
     }
 
     return {
-      ...data,
+      ...response.data,
       poli: poliResponse.data.data,
     };
 
     // return data;
   } catch (error: any) {
-    // console.error("Error fetching data:", error);
+    console.error("Error fetching data:", error);
     return {
-      ...error.response.data,
+      success: false,
+      statusCode: 404,
+      message: "No data found",
       data: {
         dokter: [],
         pagination: {
@@ -137,6 +139,7 @@ export async function loader({
           totalPages: 0,
         },
       },
+      poli: [],
     };
   }
 }
@@ -144,9 +147,23 @@ export default function Schedule() {
   const tableHeader = ["No", "Dokter", "Layanan", "Hari", "Jam", "Sesi"];
   const nCols = tableHeader.length;
   const response = useLoaderData() as ApiResponseAndPoli;
-  // console.log("response", response);
-  const { dokter: schedules, pagination } = response.data;
+  console.log("response", response);
+  const { pagination } = response.data;
+  const schedules = response.data.dokter ?? [];
   console.log("schedules", schedules);
+  const flattenedSchedules = (schedules ?? []).flatMap((doctor) =>
+    doctor.pelayanan?.flatMap((pelayanan) =>
+      pelayanan.jadwal.map((jadwal) => ({
+        nama_dokter: doctor.nama_dokter,
+        gambar_dokter: doctor.gambar_dokter,
+        poli: doctor.poli.nama_poli,
+        pelayanan: pelayanan.nama_pelayanan,
+        hari: jadwal.hari,
+        sesi: jadwal.sesi,
+        jam: `${jadwal.jam_mulai} - ${jadwal.jam_selesai}`,
+      })),
+    ) ?? []
+   );
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [searchDate, setSearchDate] = useState<string>(
@@ -221,32 +238,28 @@ export default function Schedule() {
             </tr>
           </thead>
           <tbody>
-            {schedules.length > 0 && Array.from(searchParams.keys()).length > 0 ? (
-              schedules.map((item, index) => (
-                <tr key={index} className="bg-sky-50 even:bg-sky-200">
-                  <td className="border border-gray-300 px-4 py-2">
+            {flattenedSchedules.length > 0 &&
+            Array.from(searchParams.keys()).length > 0 ? (
+              flattenedSchedules.map((item, index) => (
+                <tr key={index} className={alternatingRowColor}>
+                  <td className="w-min border border-gray-300 px-4 py-2 text-center">
                     {index + 1}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     {item.nama_dokter}
                   </td>
-                  {item.pelayanan != null && (
-                    <>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {item.pelayanan[0].nama_pelayanan}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {item.pelayanan[0]?.jadwal[0].hari ?? ""}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {item.pelayanan[0]?.jadwal[0].jam_mulai ?? ""} -{" "}
-                        {item.pelayanan[0]?.jadwal[0].jam_selesai ?? ""}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2 capitalize">
-                        {item.pelayanan[0]?.jadwal[0].sesi ?? ""}
-                      </td>
-                    </>
-                  )}
+                  <td className="border border-gray-300 px-4 py-2">
+                    {item.pelayanan}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {item.hari}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {item.jam}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {item.sesi}
+                  </td>
                 </tr>
               ))
             ) : (

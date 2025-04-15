@@ -27,9 +27,9 @@ export async function loader(): Promise<PelayananResponse> {
     `https://rs-balung-cp.vercel.app/pelayanan/`,
   );
   try {
-    console.log("response");
+    // console.log("response");
     const response = await axios.get<PelayananResponse>(pelayananRequest.href);
-    console.log("response", response);
+    // console.log("response", response);
 
     if (!response.data.success || !response.data.data.length) {
       // response.data.data = [];
@@ -43,7 +43,7 @@ export async function loader(): Promise<PelayananResponse> {
 
     return response.data;
   } catch (error: any) {
-    console.error("Error fetching data:", error.response);
+    // console.error("Error fetching data:", error.response);
     return {
       success: false,
       statusCode: error.response?.status ?? 500,
@@ -87,7 +87,7 @@ export default function Header({
 
   const pelayananResponse = useLoaderData() as PelayananResponse;
   // const { data: pelayanan } = pelayananResponse;
-  console.log("pelayanan", pelayananResponse);
+  // console.log("pelayanan", pelayananResponse);
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 bg-white shadow-md">

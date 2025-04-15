@@ -103,7 +103,7 @@ export async function loader({
 export default function News() {
   const response = useLoaderData() as NewsApiResponse;
   const { berita: news, pagination } = response.data;
-  console.log(pagination); // Log the data and pagination for debugging
+  // console.log(pagination); // Log the data and pagination for debugging
   // Access the data and pagination from the loader
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(pagination?.currentPage || 1);

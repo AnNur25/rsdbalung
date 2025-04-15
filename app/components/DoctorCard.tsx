@@ -12,7 +12,7 @@ export default function DoctorCard({
   image,
 }: DoctorInterface) {
   return (
-    <div className="flex w-2xs flex-col rounded-2xl shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
+    <div className="flex h-full w-2xs flex-col rounded-2xl shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
       <img
         onError={imageErrorHandler}
         loading="lazy"

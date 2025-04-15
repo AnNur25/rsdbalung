@@ -1,8 +1,9 @@
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import Table from "~/components/Table";
 import type { Pagination } from "~/routes/schedule";
+import { alternatingRowColor } from "~/utils/styles";
 
 interface JadwalDokterResponse {
   success: boolean;
@@ -80,8 +81,9 @@ export default function AdminSchedule() {
   const headers = ["No", "Dokter", "Poli", "Layanan", "Hari", "Jam", "Aksi"];
 
   const response = useLoaderData() as JadwalDokterResponse;
-  console.log("response schedule", response);
+//   console.log("response schedule", response);
   const { dokter: doctors, pagination } = response.data;
+//   console.log("pagination", pagination); // Log the data and pagination for debugging
 
   const flattenedSchedules = doctors.flatMap((doctor) =>
     doctor.layananList.flatMap((layanan) =>
@@ -99,7 +101,7 @@ export default function AdminSchedule() {
       <section className="overflow-x-auto">
         <Table headers={headers}>
           {flattenedSchedules.map((item, index) => (
-            <tr key={index}>
+            <tr key={index} className={alternatingRowColor}>
               <td className="w-min border border-gray-300 px-4 py-2 text-center">
                 {index + 1}
               </td>
@@ -113,12 +115,17 @@ export default function AdminSchedule() {
               <td className="border border-gray-300 px-4 py-2">{item.hari}</td>
               <td className="border border-gray-300 px-4 py-2">{item.jam}</td>
               <td className="border border-gray-300 px-4 py-2">
-                <a
-                  href={`/admin/schedule/edit/${item.dokter}`}
-                  className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:underline"
-                >
-                  <PencilSquareIcon className="h-5 w-5" />
-                </a>
+                <div className="flex justify-center gap-0.5">
+                  <a
+                    href={`/admin/schedule/edit/${item.dokter}`}
+                    className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:underline"
+                  >
+                    <PencilSquareIcon className="h-5 w-5" />
+                  </a>
+                  <a className="block w-min rounded bg-red-600 p-2 text-white hover:underline">
+                    <TrashIcon className="h-5 w-5" />
+                  </a>
+                </div>
               </td>
             </tr>
           ))}

@@ -14,7 +14,7 @@ export async function loader(): Promise<PoliApiResponse> {
     }
     return poliResponse.data;
   } catch (error: any) {
-    console.error("Error fetching data:", error.response);
+    // console.error("Error fetching data:", error.response);
     return {
       success: false,
       statusCode: error.response?.status ?? 500,

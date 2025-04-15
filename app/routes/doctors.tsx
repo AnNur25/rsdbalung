@@ -8,7 +8,7 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 
-interface Doctor {
+export interface Doctor {
   id_dokter: string;
   nama: string;
   gambar: string;
@@ -196,12 +196,14 @@ export default function Doctors() {
       <section className="flex flex-col flex-wrap justify-center gap-6 p-4 min-md:flex-row">
         {doctors.length > 0 ? (
           doctors.map((doctor, index) => (
-            <DoctorCard
-              key={index}
-              name={doctor.nama}
-              specialty={doctor.poli.nama_poli}
-              image={doctor.gambar}
-            />
+            <div className="flex-1">
+              <DoctorCard
+                key={index}
+                name={doctor.nama}
+                specialty={doctor.poli.nama_poli}
+                image={doctor.gambar}
+              />
+            </div>
           ))
         ) : (
           <p className="text-gray-500">{response.message}</p>
