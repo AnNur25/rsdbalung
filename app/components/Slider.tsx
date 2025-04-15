@@ -87,25 +87,52 @@ export default function Slider({ children }: SliderProps) {
             {child}
           </div>
         ))}
-        {children.map((child, index) => (
+
+        {/* {children.map((child, index) => (
           <div key={index} className="flex-shrink-0">
             {child}
           </div>
-        ))}
+        ))} */}
       </div>
 
       {/* Navigation Buttons */}
       <button
         onClick={prevSlide}
-        className="absolute bottom-0 left-0 rounded-full bg-black/50 p-2 text-white transition hover:bg-black/70"
+        className="absolute bottom-0 left-0 rounded-full p-2 text-black transition"
       >
-        ◀
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15.75 19.5 8.25 12l7.5-7.5"
+          />
+        </svg>
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-0 bottom-0 rounded-full bg-black/50 p-2 text-white transition hover:bg-black/70"
+        className="absolute right-0 bottom-0 rounded-full p-2 text-black transition"
       >
-        ▶
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="m8.25 4.5 7.5 7.5-7.5 7.5"
+          />
+        </svg>
       </button>
 
       {/* Dots Navigation */}

@@ -34,7 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="flex min-h-screen flex-col justify-between">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -46,8 +46,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <>
-      <Header />
-      <div className="pb-20"></div>
       <Outlet />
     </>
   );
@@ -70,14 +68,28 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="container mx-auto p-4 pt-16">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
+    <main className="flex h-screen flex-col items-center justify-center gap-2 bg-sky-800 p-4 text-white">
+      <h1 className="text-4xl font-extrabold">{message}</h1>
+      <p className="text-center">{details}</p>
+      <a href="/" className="mt-4 rounded bg-white px-2 text-persian-blue-950">
+        Home
+      </a>
+
+      {import.meta.env.DEV && (
+        <p className="text-sm text-gray-400">Development Environment</p>
+      )}
+
+      {import.meta.env.DEV && stack && (
         <pre className="w-full overflow-x-auto p-4">
           <code>{stack}</code>
         </pre>
       )}
+      
+      {/* {stack && (
+        <pre className="w-full overflow-x-auto p-4">
+          <code>{stack}</code>
+        </pre>
+      )} */}
     </main>
   );
 }

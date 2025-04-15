@@ -12,8 +12,8 @@ export default function Dropdown({ name }: { name: string }) {
     <Menu>
       <MenuButton className="bg-white">{name}</MenuButton>
       <MenuItems anchor="bottom">
-        {menu.map((nav) => (
-          <MenuItem key={nav.name}>
+        {menu.map((nav,index) => (
+          <MenuItem key={index}>
             <a className="block data-[focus]:bg-blue-100" href={nav.href}>
               {nav.name}
             </a>

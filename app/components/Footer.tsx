@@ -1,15 +1,10 @@
 import logo from "~/assets/logo-text-white.png";
 export default function Footer() {
   const navLinks = [
-    { to: '/profile', label: 'Profile' },
-    { to: '/news', label: 'Berita' },
-    { to: '#layanan-unggulan', label: 'Layanan Unggulan' },
+    { to: "/profile", label: "Profile" },
+    { to: "/news", label: "Berita" },
+    { to: "#layanan-unggulan", label: "Layanan Unggulan" },
   ];
-  // {navLinks.map((link, index) => (
-  //   <a key={index} href={link.to} className="text-blue-500 no-underline">
-  //     {link.label}
-  //   </a>
-  // ))}
 
   const iconSize: number = 36;
   const socialMedia = {
@@ -19,7 +14,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="mt-4 bg-sky-700 text-white">
+    <footer className="mt-16 bg-sky-700 text-white bottom-0">
       <div className="flex flex-col justify-between gap-8 px-10 py-8 lg:flex-row">
         <div className="flex-1">
           <img src={logo} className="w-30" />
@@ -31,8 +26,8 @@ export default function Footer() {
         <div className="flex-2">
           <h3 className="mb-4 text-lg font-bold">Tentang Kami</h3>
           <ul className="flex flex-col gap-2">
-            {navLinks.map(({ to, label }) => (
-              <li>
+            {navLinks.map(({ to, label }, index) => (
+              <li key={index}>
                 <a href={to} className="hover:underline">
                   {label}
                 </a>
@@ -60,18 +55,18 @@ export default function Footer() {
                 viewBox="0,0,256,256"
               >
                 <g
-                  fill-rule="nonzero"
+                  fillRule="nonzero"
                   stroke="none"
-                  stroke-width="1"
-                  stroke-linecap="butt"
-                  stroke-linejoin="miter"
-                  stroke-miterlimit="10"
-                  stroke-dasharray=""
-                  stroke-dashoffset="0"
-                  font-family="none"
-                  font-weight="none"
-                  font-size="none"
-                  text-anchor="none"
+                  strokeWidth="1"
+                  strokeLinecap="butt"
+                  strokeLinejoin="miter"
+                  strokeMiterlimit="10"
+                  strokeDasharray=""
+                  strokeDashoffset="0"
+                  fontFamily="none"
+                  fontWeight="none"
+                  fontSize="none"
+                  textAnchor="none"
                   style={{ mixBlendMode: "normal" }}
                   className="h-6 w-6 fill-white"
                 >
@@ -95,18 +90,18 @@ export default function Footer() {
                 viewBox="0,0,256,256"
               >
                 <g
-                  fill-rule="nonzero"
+                  fillRule="nonzero"
                   stroke="none"
-                  stroke-width="1"
-                  stroke-linecap="butt"
-                  stroke-linejoin="miter"
-                  stroke-miterlimit="10"
-                  stroke-dasharray=""
-                  stroke-dashoffset="0"
-                  font-family="none"
-                  font-weight="none"
-                  font-size="none"
-                  text-anchor="none"
+                  strokeWidth="1"
+                  strokeLinecap="butt"
+                  strokeLinejoin="miter"
+                  strokeMiterlimit="10"
+                  strokeDasharray=""
+                  strokeDashoffset="0"
+                  fontFamily="none"
+                  fontWeight="none"
+                  fontSize="none"
+                  textAnchor="none"
                   style={{ mixBlendMode: "normal" }}
                   className="h-6 w-6 fill-white"
                 >
@@ -130,18 +125,18 @@ export default function Footer() {
                 viewBox="0,0,256,256"
               >
                 <g
-                  fill-rule="nonzero"
+                  fillRule="nonzero"
                   stroke="none"
-                  stroke-width="1"
-                  stroke-linecap="butt"
-                  stroke-linejoin="miter"
-                  stroke-miterlimit="10"
-                  stroke-dasharray=""
-                  stroke-dashoffset="0"
-                  font-family="none"
-                  font-weight="none"
-                  font-size="none"
-                  text-anchor="none"
+                  strokeWidth="1"
+                  strokeLinecap="butt"
+                  strokeLinejoin="miter"
+                  strokeMiterlimit="10"
+                  strokeDasharray=""
+                  strokeDashoffset="0"
+                  fontFamily="none"
+                  fontWeight="none"
+                  fontSize="none"
+                  textAnchor="none"
                   style={{ mixBlendMode: "normal" }}
                   className="h-6 w-6 fill-white"
                 >

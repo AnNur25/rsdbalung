@@ -1,6 +1,8 @@
 import { formatDate } from "~/utils/formatDate";
+import imageErrorHandler from "~/utils/imageErrorHandler";
 
 interface NewsCardProps {
+  id: string;
   title: string;
   description: string;
   image: string;
@@ -8,6 +10,7 @@ interface NewsCardProps {
 }
 
 export default function NewsCard({
+  id,
   title,
   description,
   image,
@@ -19,13 +22,19 @@ export default function NewsCard({
         {formatDate(date)}
       </p>
       <img
+        onError={imageErrorHandler}
         loading="lazy"
-        className="h-48 w-full object-cover lg:h-auto"
+        className="h-48 w-full object-cover"
         src={image}
         alt={title}
       />
       <div className="p-4">
-        <a href="#" className="hover:cursor-pointer hover:underline">
+        <a
+          href={`/berita/${id}`}
+          className="hover:cursor-pointer hover:underline"
+        >
+          <span className="absolute inset-0"></span>
+
           <h2 className="text-md line-clamp-2 font-bold text-gray-900 lg:text-xl">
             {title}
           </h2>

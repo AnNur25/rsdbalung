@@ -1,3 +1,5 @@
+import loginImage from "~/assets/loginimage.jpg";
+
 export default function LoginAdmin() {
   return (
     <>
@@ -5,9 +7,9 @@ export default function LoginAdmin() {
         <div
           className="hidden h-[100vh] bg-cover bg-center py-10 text-center text-white shadow-md lg:block lg:w-1/4"
           style={{
-            backgroundImage: `url(https://images.unsplash.com/photo-1519681393784-d120267933ba)`,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            backgroundBlendMode: "darken",
+            backgroundImage: `url(${loginImage})`,
+            // backgroundColor: "rgba(0, 0, 0, 0.5)",
+            // backgroundBlendMode: "darken",
           }}
         ></div>
         <div className="mt-12 flex w-min flex-1 flex-col justify-center px-6 pt-8 pb-12 lg:px-8">
@@ -30,7 +32,7 @@ export default function LoginAdmin() {
                     id="email"
                     name="email"
                     type="email"
-                    required
+                    // required
                     autoComplete="email"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
                   />
@@ -59,22 +61,23 @@ export default function LoginAdmin() {
                     id="password"
                     name="password"
                     type="password"
-                    required
+                    // required
                     autoComplete="current-password"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm/6"
                   />
                 </div>
               </div>
 
-              <div>
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                >
-                  Masuk
-                </button>
-              </div>
+              <div></div>
             </form>
+            <a href="/admin/">
+              <button
+                type="button"
+                className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              >
+                Masuk
+              </button>
+            </a>
           </div>
         </div>
       </div>

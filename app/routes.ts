@@ -1,20 +1,68 @@
 import {
   type RouteConfig,
   index,
+  layout,
   prefix,
   route,
 } from "@react-router/dev/routes";
 
 export default [
-  index("routes/home.tsx"),
-  route("test", "routes/test.tsx"),
+  // Public routes
+  layout("routes/layout.tsx", [
+    route("test", "routes/test.tsx"),
+    index("routes/home.tsx"),
+    route("profile", "routes/profile.tsx"),
+    route("berita/", "routes/news.tsx"),
+    route("dokter", "routes/doctors.tsx"),
+    route("jadwal-dokter", "routes/schedule.tsx"),
+    route("berita/:id", "routes/news-detail.tsx"),
+    route("pelayanan/:id", "routes/layanan-detail.tsx"),
+  ]),
+
+  // Admin routes
   ...prefix("admin", [
     route("login", "routes/admin/login.tsx"),
-    route("dokter", "routes/admin/home.tsx"),
+    layout("routes/admin/layout.tsx", [
+      index("routes/admin/home.tsx"),
+      ...prefix("akun", [
+        index("routes/admin/account/index.tsx"),
+      ]),
+      ...prefix("berita", [
+        index("routes/admin/news/index.tsx"),
+        // route("detail/:id", "routes/admin/news/detail.tsx"),
+        route("create", "routes/admin/news/create.tsx"),
+        route("edit/:id", "routes/admin/news/edit.tsx"),
+      ]),
+      ...prefix("pelayanan", [
+        index("routes/admin/services/index.tsx"),
+        // route("detail/:id", "routes/admin/services/detail.tsx"),
+        route("create", "routes/admin/services/create.tsx"),
+        route("edit/:id", "routes/admin/services/edit.tsx"),
+      ]),
+      ...prefix("dokter", [
+        index("routes/admin/doctors/index.tsx"),
+        // route("detail/:id", "routes/admin/doctors/detail.tsx"),
+        route("create", "routes/admin/doctors/create.tsx"),
+        route("edit/:id", "routes/admin/doctors/edit.tsx"),
+      ]),
+      ...prefix("poli", [
+        index("routes/admin/poli/index.tsx"),
+        // route("detail/:id", "routes/admin/poli/detail.tsx"),
+        route("create", "routes/admin/poli/create.tsx"),
+        route("edit/:id", "routes/admin/poli/edit.tsx"),
+      ]),
+      ...prefix("jadwal-dokter", [
+        index("routes/admin/schedule/index.tsx"),
+        route("create", "routes/admin/schedule/create.tsx"),
+        route("edit/:id", "routes/admin/schedule/edit.tsx"),
+      ]),
+      ...prefix("aduan", [
+        index("routes/admin/complaints/index.tsx"),
+        route("create", "routes/admin/complaints/create.tsx"),
+        route("edit/:id", "routes/admin/complaints/edit.tsx"),
+      ]),
+    ]),
   ]),
-  route("profile", "routes/profile.tsx"),
-  route("berita/", "routes/news.tsx"),
-  route("berita/:id", "routes/news-detail.tsx"),
 ] satisfies RouteConfig;
 
 // npm i @react-router/fs-routes

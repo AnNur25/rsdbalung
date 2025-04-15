@@ -1,6 +1,10 @@
 import NewsCard from "~/components/NewsCard";
 import type { Route } from "./+types/news";
 import banner from "~/assets/rsdbalung.jpeg";
+import axios from "axios";
+import { useLoaderData } from "react-router";
+import NewsBanner from "~/components/NewsBanner";
+import type { News, NewsApiResponse } from "./news";
 
 // export async function loader({ params }: Route.LoaderArgs) {
 //   return { id: params.id };
@@ -13,51 +17,175 @@ import banner from "~/assets/rsdbalung.jpeg";
 // export default function News({ loaderData }: Route.ComponentProps) {
 //   return <h1>News {loaderData?.id ?? "not found"}</h1>;
 // }
+interface NewsDetail {
+  id: string;
+  judul: string;
+  ringkasan: string;
+  isi: string;
+  gambar_sampul: string;
+  tanggal_dibuat: string;
+  gambar_tambahan: [];
+}
+interface NewsDetailAndAll {
+  id: string;
+  judul: string;
+  ringkasan: string;
+  isi: string;
+  gambar_sampul: string;
+  tanggal_dibuat: string;
+  gambar_tambahan: [];
+  berita: News[];
+}
 
+interface NewsDetailApiResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: NewsDetail;
+}
+
+export async function loader({
+  params,
+}: {
+  params: { id: string };
+}): Promise<NewsDetailAndAll> {
+  const { id } = params;
+
+  try {
+    const response = await axios.get<NewsDetailApiResponse>(
+      `https://rs-balung-cp.vercel.app/berita/${id}`,
+    );
+    const data = response.data;
+
+    if (!data.success) {
+      throw new Error(data.message || "Failed to fetch news detail");
+    }
+
+    console.log(data);
+
+    const responseAll = await axios.get<NewsApiResponse>(
+      `https://rs-balung-cp.vercel.app/berita?page=1`,
+    );
+
+    const dataAll = responseAll.data;
+    if (!dataAll.success || !dataAll.data.berita.length) {
+      return {
+        ...data.data,
+        berita: [],
+      };
+    }
+
+    return { ...data.data, berita: dataAll.data.berita };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch news detail",
+    );
+  }
+}
 export default function NewsDetail() {
-  const cards = [
-    "satu",
-    "dua",
-    "tiga",
-    "empat",
-    "lima",
-    "enam",
-    "tujuh",
-    "delapan",
-    "sembilan",
-    "sepuluh",
-    "sebelas",
-    "duabelas",
-  ].map((title) => ({
-    title: `Judul Berita ${title} Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.`,
-    description: `Description ${title} lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.`,
-    image: banner,
-    date: new Date().toLocaleDateString(),
-  }));
+  const response = useLoaderData() as NewsDetailAndAll;
+  const {
+    judul,
+    ringkasan,
+    isi,
+    gambar_sampul,
+    tanggal_dibuat,
+    gambar_tambahan,
+    berita: news,
+  } = response;
+
+  console.log(gambar_tambahan);
+
+  const tanggal = tanggal_dibuat.split(" pukul")[0];
 
   return (
-    <section>
-      <h1>BERITA</h1>
-      <div>
-        <input
-          type="search"
-          placeholder="Cari Berita"
-          name="news"
-          id="news-search"
-        />
-        <button type="button">Cari</button>
-      </div>
-
-      <div className="flex flex-col gap-4 lg:flex-row lg:flex-wrap lg:gap-8">
-        {cards.map((card) => (
-          <NewsCard
-            title={card.title}
-            description={card.description}
-            image={card.image}
-            date={card.date}
+    <main>
+      <NewsBanner
+        banner={gambar_sampul}
+        title={judul}
+        description={ringkasan}
+        date={tanggal}
+      />
+      <section className="flex flex-col lg:flex-row lg:gap-8">
+        <article className="flex-6 px-8 text-justify">
+          <img
+            src={gambar_sampul}
+            alt={judul}
+            className="mx-auto my-8 h-auto w-full object-cover"
           />
-        ))}
-      </div>
-    </section>
+          <h1 className="text-2xl font-bold lg:text-3xl">{judul}</h1>
+          <p className="my-4">{ringkasan}</p>
+          <p className="my-4">{isi}</p>
+          <div className="grid grid-cols-1 gap-4 py-8 lg:p-8 lg:max-w-2/3 lg:grid-cols-2 lg:grid-rows-2">
+            <img
+              src={gambar_sampul}
+              alt={judul}
+              className="h-auto w-full object-cover"
+            />
+            <img
+              src={gambar_sampul}
+              alt={judul}
+              className="h-auto w-full object-cover"
+            />
+            <img
+              src={gambar_sampul}
+              alt={judul}
+              className="h-auto w-full object-cover"
+            />
+            <img
+              src={gambar_sampul}
+              alt={judul}
+              className="h-auto w-full object-cover"
+            />
+            {gambar_tambahan.map((image, index) => (
+              <img
+                key={index}
+                src={gambar_sampul}
+                alt={`Gambar ${index + 1}`}
+                className="h-auto w-full object-cover"
+              />
+            ))}
+          </div>
+        </article>
+
+        <aside className="flex flex-2 flex-col items-center gap-4 p-4">
+          <h2 className="text-2xl font-bold">Berita Lainnya</h2>
+          <div className="flex flex-col gap-4">
+            {/* Berita lainnya */}
+            {news.length > 0 ? (
+              news.slice(0, 5).map((berita, index) => (
+                // <NewsCard
+                //   key={index}
+                //   id={berita.id}
+                //   title={berita.judul}
+                //   description={berita.isi}
+                //   image={berita.gambar_sampul}
+                //   date={berita.tanggal_dibuat}
+                // />
+                <article className="relative flex gap-2 items-center">
+                  <img
+                    src={berita.gambar_sampul}
+                    alt={berita.judul}
+                    className="aspect-video h-24 rounded object-cover"
+                  />
+                  <div>
+                    <p className="w-fit rounded-lg bg-green-600 px-4 py-2 text-sm text-white">
+                      {berita.tanggal_dibuat.split(" pukul")[0]}
+                    </p>
+                    <a href={`/berita/${berita.id}`}>
+                      <span className="absolute inset-0"></span>
+
+                      <h3 className="line-clamp-3 text-base font-bold">{berita.judul}</h3>
+                    </a>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <p className="text-gray-500">No data</p>
+            )}
+          </div>
+        </aside>
+      </section>
+    </main>
   );
 }

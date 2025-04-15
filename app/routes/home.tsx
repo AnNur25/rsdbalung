@@ -1,20 +1,21 @@
 import type { Route } from "./+types/home";
-import MapsEmbed from "~/components/MapsEmbed";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import Footer from "~/components/Footer";
-import Dropdown from "~/components/Dropdown";
+import type { NewsApiResponse } from "./news";
+import { useLoaderData } from "react-router";
+
 import Banner from "~/components/Banner";
+import Footer from "~/components/Footer";
+import MapsEmbed from "~/components/MapsEmbed";
 import InstagramEmbed from "~/components/InstagramEmbed";
-import SelectExample from "~/components/SelectExample";
 import NewsCard from "~/components/NewsCard";
-import banner from "~/assets/rsdbalung.jpeg";
-import YoutubeEmbed from "~/components/YoutubeEmbed";
-import DoctorCard from "~/components/DoctorCard";
 import TextWithRect from "~/components/TextWithRect";
-import ImageGradientCard from "~/components/ImageGradientCard";
-import whatsAppIcon from "~/assets/whatsapp.svg";
+import LayananUnggulanCard from "~/components/LayananUnggulanCard";
 import Slider from "~/components/Slider";
+import whatsAppIcon from "~/assets/whatsapp.svg";
+import pelayananNyamanIcon from "~/assets/pelayanan-nyaman.svg";
+import kualitasTerbaikIcon from "~/assets/kualitas-terbaik.svg";
+import penangananCepatIcon from "~/assets/penanganan-cepat.svg";
+import layananRamahIcon from "~/assets/layanan-ramah.svg";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Rumah Sakit Daerah Balung" },
@@ -25,40 +26,51 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+export async function loader(): Promise<NewsApiResponse> {
+  try {
+    const response = await axios.get<NewsApiResponse>(
+      `https://rs-balung-cp.vercel.app/berita?page=1`,
+    );
+    const data = response.data;
+
+    if (!data.success || !data.data.berita.length) {
+      // Return empty data if no doctors are found
+      return {
+        ...data,
+        data: {
+          berita: [],
+          pagination: {
+            currentPage: 1,
+            pageSize: 15,
+            totalItems: 0,
+            totalPages: 1,
+          },
+        },
+      };
+    }
+
+    return data; // Return the full API response
+  } catch (error: any) {
+    const data = {
+      ...error.response.data,
+      data: {
+        berita: [],
+        pagination: {
+          currentPage: 1,
+          pageSize: 9,
+          totalItems: 0,
+          totalPages: 1,
+        },
+      },
+    };
+    return data;
+  }
+}
+
 export default function Home() {
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(true);
-  const cards = [
-    "satu",
-    "dua",
-    "tiga",
-    "empat",
-    "lima",
-    "enam",
-    "tujuh",
-    "delapan",
-    "sembilan",
-  ].map((title) => ({
-    title: `Judul Berita ${title} Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.`,
-    description: `Description ${title} lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptate.`,
-    image: banner,
-    date: new Date().toLocaleDateString(),
-  }));
-  useEffect(() => {
-    console.log("Home");
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await axios.get("http://localhost:3001/app/");
-    //     console.log(response);
-    //     setMessage(response.data.message);
-    //     setLoading(false);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //     setMessage("Error fetching data");
-    //     setLoading(false);
-    //   }
-    // };
-  }, []);
+  const response = useLoaderData() as NewsApiResponse;
+  const news = response.data.berita;
+  console.log(news);
 
   return (
     <>
@@ -69,31 +81,34 @@ export default function Home() {
         <div className="grid grid-cols-1 gap-6 p-8 lg:max-w-2/3 lg:grid-cols-2 lg:grid-rows-2">
           {[
             {
+              icon: pelayananNyamanIcon,
               title: "Pelayanan Nyaman",
               description:
                 "Didukung dengan fasilitas lengkap dan ruang perwatan yang bersih, memberikan kenyamanan maksimal bagi pasien.",
             },
             {
-              title: "Tenaga Medis Profesional",
+              icon: kualitasTerbaikIcon,
+              title: "Kualitas Terbaik",
               description:
-                "Tenaga medis kami terdiri dari dokter dan perawat berpengalaman yang siap memberikan pelayanan terbaik.",
+                "Pemeriksaan menyeluruh dan penanganan tepat oleh tenaga medis berpengalaman, membantu pemulihan lebih cepat.",
             },
             {
-              title: "Fasilitas Modern",
+              icon: penangananCepatIcon,
+              title: "Penanganan Cepat",
               description:
-                "Kami menyediakan fasilitas modern untuk mendukung proses diagnosa dan pengobatan yang akurat.",
+                "Dengan sistem pelayanan yang efisien, pasien mendapatkan perawatan tanpa harus menunggu lama.",
             },
             {
-              title: "Pelayanan Cepat",
+              icon: layananRamahIcon,
+              title: "Layanan Ramah",
               description:
-                "Proses administrasi dan pelayanan yang cepat untuk kenyamanan pasien.",
+                "Keramahan dan kepedulian tim medis RSD Balung menjadikan pengalaman berobat lebih tenang dan menyenangkan.",
             },
           ].map((item, index) => (
             <article key={index} className="flex gap-4">
-              <img
-                src={whatsAppIcon}
-                className="flex-inital aspect-square h-min rounded-full bg-yellow-400 p-2"
-              />
+              <div className="aspect-square h-12 w-12 rounded-full bg-yellow-400 p-2">
+                <img src={item.icon} className="h-full w-full" />
+              </div>
               <div>
                 <h2 className="text-xl font-bold text-persian-blue-950">
                   {item.title}
@@ -105,7 +120,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-4 lg:p-10">
+      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-10">
         <div className="lg:flex-1">
           <TextWithRect>POLI MATA</TextWithRect>
           <h2 className="text-2xl font-black text-persian-blue-950 lg:text-4xl">
@@ -119,17 +134,49 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="bg-sky-0 w-full overflow-hidden lg:flex-2">
+        <div className="bg-sky-0 w-full overflow-hidden lg:flex-1">
           <Slider>
-            <ImageGradientCard />
-            <ImageGradientCard />
-            <ImageGradientCard />
-            <ImageGradientCard />
+            {[
+              // Slide 1
+              // [
+              "Menggunakan Media Tes Mata Terbaik",
+              "Menggunakan Alat-Alat yang Canggih",
+              // ],
+              // Slide 2
+              // [
+              "Ditangani Dokter Spesialis Berpengalaman",
+              "Pelayanan Cepat, Tepat, dan Nyaman",
+              // ],
+              // Slide 3
+              // [
+              "Konsultasi Sesuai Standar Medis Terkini",
+              "Fasilitas Lengkap untuk Semua Kebutuhan Mata",
+              // ],
+            ]
+              //   .map((description, index) => (
+              //   <div className="flex gap-2">
+              //     <LayananUnggulanCard
+              //       description={description[0]}
+              //       image={`/images/layanan-unggulan/layanan-unggulan${index + 1}.jpg`}
+              //     />
+              //     <LayananUnggulanCard
+              //       description={description[1]}
+              //       image={`/images/layanan-unggulan/layanan-unggulan${index + 2}.jpg`}
+              //     />
+              //   </div>
+              // ))
+              .map((item, index) => (
+                <LayananUnggulanCard
+                  key={index}
+                  description={item}
+                  image={`/images/layanan-unggulan/layanan-unggulan${index + 1}.jpg`}
+                />
+              ))}
           </Slider>
         </div>
       </section>
 
-      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-4 lg:p-10">
+      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-10">
         <div className="lg:flex-1">
           <TextWithRect>INSTAGRAM</TextWithRect>
           <h2 className="text-2xl font-black text-persian-blue-950 lg:text-4xl">
@@ -143,8 +190,9 @@ export default function Home() {
         </div>
 
         {/* Slider cannot move the embed */}
-        <div className="bg-sky-0 flex w-full overflow-x-auto lg:flex-2">
-          {/* <InstagramEmbed url="https://www.instagram.com/p/id/" /> */}
+        <div className="bg-sky-0 flex w-full items-center gap-2 overflow-x-auto lg:flex-1">
+          <InstagramEmbed url="https://www.instagram.com/p/DILIx7czwOo/" />
+          <InstagramEmbed url="https://www.instagram.com/p/DILNKUKTwV2/" />
         </div>
       </section>
 
@@ -155,16 +203,22 @@ export default function Home() {
           menarik lainnya.
         </p>
         <div className="w-full">
-          <Slider>
-            {cards.map((card) => (
-              <NewsCard
-                title={card.title}
-                description={card.description}
-                image={card.image}
-                date={card.date}
-              />
-            ))}
-          </Slider>
+          {news.length > 0 ? (
+            <Slider>
+              {news.map((berita, index) => (
+                <NewsCard
+                  key={index}
+                  id={berita.id}
+                  title={berita.judul}
+                  description={berita.isi}
+                  image={berita.gambar_sampul}
+                  date={berita.tanggal_dibuat}
+                />
+              ))}
+            </Slider>
+          ) : (
+            <p className="text-gray-500">{response.message}</p>
+          )}
         </div>
       </section>
 
@@ -183,11 +237,6 @@ export default function Home() {
 
         <p>rsd.balung@jemberkab.go.id</p>
       </section>
-
-      {/* <DoctorCard name="Dr. John Doe" specialty="Bedah" image={banner} /> */}
-      {/* <YoutubeEmbed videoId="_IBj20ojJnU" /> */}
-
-      <Footer />
     </>
   );
 }

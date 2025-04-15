@@ -7,12 +7,66 @@ import "~/scroll.css";
 import logo from "~/assets/logo.png";
 import whatsappIcon from "~/assets/whatsapp.svg";
 import phoneIcon from "~/assets/call.svg";
+import { href, useLoaderData } from "react-router";
+import axios from "axios";
+
+interface PelayananResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: Pelayanan[];
+}
+
+interface Pelayanan {
+  id_pelayanan: string;
+  nama_pelayanan: string;
+}
+
+export async function loader(): Promise<PelayananResponse> {
+  const pelayananRequest = new URL(
+    `https://rs-balung-cp.vercel.app/pelayanan/`,
+  );
+  try {
+    console.log("response");
+    const response = await axios.get<PelayananResponse>(pelayananRequest.href);
+    console.log("response", response);
+
+    if (!response.data.success || !response.data.data.length) {
+      // response.data.data = [];
+      return {
+        success: false,
+        statusCode: response.status,
+        message: "No data found",
+        data: [],
+      };
+    }
+
+    return response.data;
+  } catch (error: any) {
+    console.error("Error fetching data:", error.response);
+    return {
+      success: false,
+      statusCode: error.response?.status ?? 500,
+      message: "Failed to fetch data",
+      data: [],
+    };
+  }
+}
+
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Profil", href: "/profile" },
   { name: "Berita", href: "/berita" },
-  { name: "Pelayanan", href: "/pelayanan" },
-  { name: "Jadwal Dokter", href: "#" },
+  {
+    name: "Pelayanan",
+    href: "/pelayanan/f2bd5f40-35e3-4b58-812f-c3e1872d3722",
+    submenu: [
+      { name: "test", href: "/test" },
+      { name: "another", href: "/dokter" },
+    ],
+  },
+  { name: "Dokter", href: "/dokter" },
+  { name: "Jadwal Dokter", href: "/jadwal-dokter" },
   { name: "Aduan", href: "#" },
 ];
 const contacts = [
@@ -22,18 +76,26 @@ const contacts = [
   { icon: phoneIcon, name: "CS dan Aduan", contact: "+62 82233444722" },
 ];
 
-export default function Header() {
+export default function Header({
+  pelayanan = [],
+}: {
+  pelayanan?: Pelayanan[];
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const loopedContacts = [...contacts, ...contacts, ...contacts, ...contacts];
   // const loopedContacts = [...contacts, ...contacts, ...contacts];
+
+  const pelayananResponse = useLoaderData() as PelayananResponse;
+  // const { data: pelayanan } = pelayananResponse;
+  console.log("pelayanan", pelayananResponse);
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 bg-white shadow-md">
       <div className="flex w-full overflow-x-hidden bg-blue-500 p-2 text-white">
         <div className="flex gap-4">
           <div className="scroll-left flex w-max gap-4">
-            {loopedContacts.map((contact) => (
-              <div className="flex items-center gap-1.5">
+            {loopedContacts.map((contact, index) => (
+              <div key={index} className="flex items-center gap-1.5">
                 <img src={contact.icon} alt="WhatsApp" />
                 <p>
                   {contact.name}: {contact.contact}
@@ -48,7 +110,7 @@ export default function Header() {
         className="flex items-center justify-between p-6 lg:px-8"
       >
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
+          <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Rumah Sakit Daerah Balung</span>
             <img alt="" src={logo} className="h-8 w-auto" />
           </a>
@@ -64,9 +126,9 @@ export default function Header() {
           </button>
         </div>
         <div className="hidden lg:flex lg:flex-2 lg:gap-x-12">
-          {navigation.map((item) => (
+          {navigation.map((item, index) => (
             <a
-              key={item.name}
+              key={index}
               href={item.href}
               className="text-sm/6 font-semibold text-gray-900"
             >
@@ -83,9 +145,9 @@ export default function Header() {
         <div className="fixed inset-0 z-50" />
         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
-            <a href="#" className="-m-1.5 p-1.5">
+            <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Rumah Sakit Daerah Balung</span>
-              <img alt="" src={logo} className="h-8 w-auto" />
+              <img alt="Logo RSD Balung" src={logo} className="h-8 w-auto" />
             </a>
             <button
               type="button"
@@ -99,15 +161,19 @@ export default function Header() {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                  >
-                    {item.name}
-                  </a>
-                ))}
+                {navigation.map((item, index) =>
+                  item.submenu ? (
+                    <></>
+                  ) : (
+                    <a
+                      key={index}
+                      href={item.href}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      {item.name}
+                    </a>
+                  ),
+                )}
               </div>
             </div>
           </div>

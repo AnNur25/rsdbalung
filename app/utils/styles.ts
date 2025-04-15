@@ -1,0 +1,1 @@
+export const alternatingRowColor = "bg-sky-50 even:bg-sky-200";
