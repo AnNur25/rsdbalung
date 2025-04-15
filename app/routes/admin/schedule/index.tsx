@@ -81,13 +81,14 @@ export default function AdminSchedule() {
   const headers = ["No", "Dokter", "Poli", "Layanan", "Hari", "Jam", "Aksi"];
 
   const response = useLoaderData() as JadwalDokterResponse;
-//   console.log("response schedule", response);
+  //   console.log("response schedule", response);
   const { dokter: doctors, pagination } = response.data;
-//   console.log("pagination", pagination); // Log the data and pagination for debugging
+  //   console.log("pagination", pagination); // Log the data and pagination for debugging
 
   const flattenedSchedules = doctors.flatMap((doctor) =>
     doctor.layananList.flatMap((layanan) =>
       layanan.hariList.map((hari) => ({
+        id_dokter: doctor.id_dokter,
         dokter: doctor.nama_dokter,
         poli: doctor.poli.nama,
         layanan: layanan.nama_pelayanan,
@@ -117,7 +118,7 @@ export default function AdminSchedule() {
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex justify-center gap-0.5">
                   <a
-                    href={`/admin/schedule/edit/${item.dokter}`}
+                    href={`/admin/schedule/edit/${item.id_dokter}`}
                     className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:underline"
                   >
                     <PencilSquareIcon className="h-5 w-5" />

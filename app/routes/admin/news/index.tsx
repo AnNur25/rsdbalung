@@ -1,4 +1,8 @@
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {
+  PaperAirplaneIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import Table from "~/components/Table";
@@ -66,18 +70,20 @@ export default function AdminNews() {
               <td className="border border-gray-300 px-4 py-2">
                 {item.tanggal_dibuat}
               </td>
-              <td className="border border-gray-300 px-4 py-2">PPID</td>
               <td className="border border-gray-300 px-4 py-2">
-                <div className="flex gap-0.5 justify-center">
+                <div className="rounded w-fit mx-auto bg-blue-600 p-2 text-white">
+                  <PaperAirplaneIcon className="h-5 w-5" />
+                </div>
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                <div className="flex justify-center gap-0.5">
                   <a
                     href={`/admin/news/edit/${item.id}`}
-                    className=" block w-min rounded bg-green-600 p-2 text-white hover:underline"
+                    className="block w-min rounded bg-green-600 p-2 text-white"
                   >
                     <PencilSquareIcon className="h-5 w-5" />
                   </a>
-                  <a
-                    className=" block w-min rounded bg-red-600 p-2 text-white hover:underline"
-                  >
+                  <a className="block w-min rounded bg-red-600 p-2 text-white">
                     <TrashIcon className="h-5 w-5" />
                   </a>
                 </div>
