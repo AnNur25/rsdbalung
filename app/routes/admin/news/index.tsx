@@ -1,6 +1,7 @@
 import {
   PaperAirplaneIcon,
   PencilSquareIcon,
+  PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import axios from "axios";
@@ -59,7 +60,14 @@ export default function AdminNews() {
 
   return (
     <>
-      <section className="overflow-x-auto">
+      <a
+        href="./admin/berita/create"
+        className="rounded-lg flex items-center gap-2 w-fit m-6 bg-green-600 ps-2 pe-4 ms-auto py-2 text-white"
+      >
+        <PlusIcon className="h-5 w-5" />
+        <span>Tambah</span>
+      </a>
+      <section className="overflow-x-auto m-6">
         <Table headers={headers}>
           {news.map((item, index) => (
             <tr key={index} className="border-b border-gray-300">
@@ -71,7 +79,7 @@ export default function AdminNews() {
                 {item.tanggal_dibuat}
               </td>
               <td className="border border-gray-300 px-4 py-2">
-                <div className="rounded w-fit mx-auto bg-blue-600 p-2 text-white">
+                <div className="mx-auto w-fit rounded bg-blue-600 p-2 text-white">
                   <PaperAirplaneIcon className="h-5 w-5" />
                 </div>
               </td>

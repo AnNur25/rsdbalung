@@ -1,5 +1,4 @@
 import NewsCard from "~/components/NewsCard";
-import type { Route } from "./+types/news";
 import banner from "~/assets/rsdbalung.jpeg";
 import axios from "axios";
 import { useLoaderData } from "react-router";
@@ -54,7 +53,7 @@ export async function loader({
   try {
     const response = await axios.get<NewsDetailApiResponse>(
       `https://rs-balung-cp.vercel.app/berita/${id}`,
-    );
+    );``
     const data = response.data;
 
     if (!data.success) {

@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogPanel } from "@headlessui/react";
+import {
+  Dialog,
+  DialogPanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import "~/scroll.css";
 import logo from "~/assets/logo.png";
@@ -22,53 +29,6 @@ interface Pelayanan {
   nama_pelayanan: string;
 }
 
-export async function loader(): Promise<PelayananResponse> {
-  const pelayananRequest = new URL(
-    `https://rs-balung-cp.vercel.app/pelayanan/`,
-  );
-  try {
-    // console.log("response");
-    const response = await axios.get<PelayananResponse>(pelayananRequest.href);
-    // console.log("response", response);
-
-    if (!response.data.success || !response.data.data.length) {
-      // response.data.data = [];
-      return {
-        success: false,
-        statusCode: response.status,
-        message: "No data found",
-        data: [],
-      };
-    }
-
-    return response.data;
-  } catch (error: any) {
-    // console.error("Error fetching data:", error.response);
-    return {
-      success: false,
-      statusCode: error.response?.status ?? 500,
-      message: "Failed to fetch data",
-      data: [],
-    };
-  }
-}
-
-const navigation = [
-  { name: "Home", href: "/" },
-  { name: "Profil", href: "/profile" },
-  { name: "Berita", href: "/berita" },
-  {
-    name: "Pelayanan",
-    href: "/pelayanan/f2bd5f40-35e3-4b58-812f-c3e1872d3722",
-    submenu: [
-      { name: "test", href: "/test" },
-      { name: "another", href: "/dokter" },
-    ],
-  },
-  { name: "Dokter", href: "/dokter" },
-  { name: "Jadwal Dokter", href: "/jadwal-dokter" },
-  { name: "Aduan", href: "#" },
-];
 const contacts = [
   { icon: whatsappIcon, name: "IGD", contact: "+62 814-5900-0183" },
   { icon: phoneIcon, name: "IGD", contact: "0336 621595" },
@@ -81,11 +41,26 @@ export default function Header({
 }: {
   pelayanan?: Pelayanan[];
 }) {
+  const navigation = [
+    { name: "Home", href: "/" },
+    { name: "Profil", href: "/profile" },
+    { name: "Berita", href: "/berita" },
+    {
+      name: "Pelayanan",
+      // href: "/pelayanan/f2bd5f40-35e3-4b58-812f-c3e1872d3722",
+      submenu: pelayanan.map((item) => ({
+        name: item.nama_pelayanan,
+        href: `/pelayanan/${item.id_pelayanan}`,
+      })),
+    },
+    { name: "Dokter", href: "/dokter" },
+    { name: "Jadwal Dokter", href: "/jadwal-dokter" },
+    { name: "Aduan", href: "#" },
+  ];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const loopedContacts = [...contacts, ...contacts, ...contacts, ...contacts];
   // const loopedContacts = [...contacts, ...contacts, ...contacts];
 
-  const pelayananResponse = useLoaderData() as PelayananResponse;
   // const { data: pelayanan } = pelayananResponse;
   // console.log("pelayanan", pelayananResponse);
 
@@ -125,8 +100,49 @@ export default function Header({
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
-        <div className="hidden lg:flex lg:flex-2 lg:gap-x-12">
-          {navigation.map((item, index) => (
+        <div className="hidden items-center lg:flex lg:flex-2 lg:gap-x-12">
+          {navigation.map((item, index) =>
+            item.submenu ? (
+              <Menu
+                as="div"
+                className="relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer hover:bg-gray-50"
+                key={index}
+              >
+                <MenuButton className="hover:cursor-pointer">
+                  {item.name}
+                </MenuButton>
+                <MenuItems
+                  anchor="bottom"
+                  className="absolute left-0 z-100 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black focus:outline-none"
+                >
+                  {item.submenu.map((subitem, subindex) => (
+                    <MenuItem>
+                      {({ active }) => (
+                        <a
+                          key={subindex}
+                          href={subitem.href}
+                          className={`${
+                            active ? "bg-gray-100" : ""
+                          } block px-4 py-2 text-sm text-gray-700`}
+                        >
+                          {subitem.name}
+                        </a>
+                      )}
+                    </MenuItem>
+                  ))}
+                </MenuItems>
+              </Menu>
+            ) : (
+              <a
+                key={index}
+                href={item.href}
+                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+              >
+                {item.name}
+              </a>
+            ),
+          )}
+          {/* {navigation.map((item, index) => (
             <a
               key={index}
               href={item.href}
@@ -134,7 +150,7 @@ export default function Header({
             >
               {item.name}
             </a>
-          ))}
+          ))} */}
         </div>
       </nav>
       <Dialog
@@ -163,7 +179,34 @@ export default function Header({
               <div className="space-y-2 py-6">
                 {navigation.map((item, index) =>
                   item.submenu ? (
-                    <></>
+                    <Menu
+                      as="div"
+                      className="relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer hover:bg-gray-50"
+                      key={index}
+                    >
+                      <MenuButton className="text-base font-semibold text-gray-900 hover:bg-gray-50 hover:underline">
+                        {item.name}
+                      </MenuButton>
+                      <MenuItems
+                        anchor="bottom"
+                        className="ring-opacity-5 absolute left-0 z-100 mt-2 w-56 origin-top-left rounded-md bg-white font-semibold shadow-lg ring-1 ring-black focus:outline-none"
+                      >
+                        {item.submenu.map((subitem, subindex) => (
+                          <MenuItem>
+                            {({ active }) => (
+                              <a
+                                href={subitem.href}
+                                className={`${
+                                  active ? "bg-gray-100" : ""
+                                } block px-4 py-2 text-sm text-gray-700`}
+                              >
+                                {subitem.name}
+                              </a>
+                            )}
+                          </MenuItem>
+                        ))}
+                      </MenuItems>
+                    </Menu>
                   ) : (
                     <a
                       key={index}

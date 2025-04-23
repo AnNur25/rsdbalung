@@ -29,7 +29,7 @@ export interface Schedule {
     id_poli: string;
     nama_poli: string;
   };
-  pelayanan: {
+  layananList: {
     id_pelayanan: string;
     nama_pelayanan: string;
     jadwal: {
@@ -92,8 +92,10 @@ export async function loader({
 
   try {
     const poliResponse = await axios.get<PoliApiResponse>(poliRequest.href);
+    // console.log("poliResponse", poliResponse.data);
+    console.log("asdfasdf");
     const response = await axios.get<ApiResponse>(urlRequest.href);
-
+    console.log("responseJadwall", response.data);
     if (!poliResponse.data.success) {
       poliResponse.data.data = [];
     }
@@ -125,7 +127,9 @@ export async function loader({
 
     // return data;
   } catch (error: any) {
-    console.error("Error fetching data:", error);
+    // console.error("Error fetching data:", error);
+    const poliResponse = await axios.get<PoliApiResponse>(poliRequest.href);
+
     return {
       success: false,
       statusCode: 404,
@@ -139,7 +143,7 @@ export async function loader({
           totalPages: 0,
         },
       },
-      poli: [],
+      poli: poliResponse.data.data,
     };
   }
 }
@@ -151,21 +155,23 @@ export default function Schedule() {
   const { pagination } = response.data;
   const schedules = response.data.dokter ?? [];
   console.log("schedules", schedules);
-  const flattenedSchedules = (schedules ?? []).flatMap((doctor) =>
-    doctor.pelayanan?.flatMap((pelayanan) =>
-      pelayanan.jadwal.map((jadwal) => ({
-        nama_dokter: doctor.nama_dokter,
-        gambar_dokter: doctor.gambar_dokter,
-        poli: doctor.poli.nama_poli,
-        pelayanan: pelayanan.nama_pelayanan,
-        hari: jadwal.hari,
-        sesi: jadwal.sesi,
-        jam: `${jadwal.jam_mulai} - ${jadwal.jam_selesai}`,
-      })),
-    ) ?? []
-   );
+  const flattenedSchedules = (schedules ?? []).flatMap(
+    (doctor) =>
+      doctor.layananList?.flatMap((pelayanan) =>
+        pelayanan.jadwal.map((jadwal) => ({
+          nama_dokter: doctor.nama_dokter,
+          gambar_dokter: doctor.gambar_dokter,
+          poli: doctor.poli.nama_poli,
+          pelayanan: pelayanan.nama_pelayanan,
+          hari: jadwal.hari,
+          sesi: jadwal.sesi,
+          jam: `${jadwal.jam_mulai} - ${jadwal.jam_selesai}`,
+        })),
+      ) ?? [],
+  );
+  console.log("flattenedSchedules", flattenedSchedules);
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [currentPage, setCurrentPage] = useState(pagination?.currentPage || 1);
   const [searchDate, setSearchDate] = useState<string>(
     new Date().toISOString().split("T")[0],
   );
@@ -185,8 +191,21 @@ export default function Schedule() {
     }
   };
 
+  const handlePageChange = (page: number) => {
+    if (searchPoli.trim() !== "" && searchDate.trim() !== "") {
+      setSearchParams({
+        date: searchDate,
+        poli: searchPoli,
+        page: page.toString(),
+      });
+    } else {
+      setSearchParams({ page: page.toString() });
+    }
+    setCurrentPage(page);
+  };
+
   return (
-    <main className="mt-4 flex flex-col items-center lg:mt-8">
+    <main className="mt-4 flex flex-col items-center">
       <h1 className="mt-2 text-2xl font-extrabold uppercase">Jadwal Dokter</h1>
       <p className="px-4 py-2 text-center text-gray-600">
         Jadwal dapat berubah sewaktu-waktu, Silakan periksa secara berkala
@@ -214,7 +233,7 @@ export default function Schedule() {
             placeholder="Pilih Tanggal"
             name="date"
             id="schedule-date-search"
-            value={new Date().toISOString().split("T")[0]}
+            value={searchDate}
             onChange={(e) => setSearchDate(e.target.value)}
           />
           <button
@@ -275,6 +294,38 @@ export default function Schedule() {
           </tbody>
         </table>
       </section>
+
+      <div className="mt-4 flex w-fit max-w-full justify-center gap-2">
+        <button
+          className="flex-none px-4 py-2 text-black disabled:opacity-50"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          <ChevronLeftIcon className="h-6" />
+        </button>
+        <div className="flex w-fit flex-auto gap-2 overflow-auto p-2">
+          {[...Array(pagination.totalPages).keys()].map((index) => (
+            <button
+              key={index}
+              className={`aspect-square h-12 rounded-full text-center text-white ${
+                index + 1 === currentPage
+                  ? "bg-persian-blue-950 shadow-md"
+                  : "bg-gray-400"
+              }`}
+              onClick={() => handlePageChange(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+        <button
+          className="flex-none px-4 py-2 text-black disabled:opacity-50"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === pagination.totalPages}
+        >
+          <ChevronRightIcon className="h-6" />
+        </button>
+      </div>
     </main>
   );
 }

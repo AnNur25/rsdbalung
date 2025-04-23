@@ -1,6 +1,5 @@
 import NewsCard from "~/components/NewsCard";
 import type { Route } from "./+types/news";
-import banner from "~/assets/rsdbalung.jpeg";
 import { useLoaderData, useSearchParams } from "react-router";
 import { useState } from "react";
 import axios from "axios";
@@ -121,12 +120,16 @@ export default function News() {
   };
 
   const handlePageChange = (page: number) => {
-    setSearchParams({ page: page.toString() });
+    if (searchKeyword.trim() !== "") {
+      setSearchParams({ keyword: searchKeyword, page: page.toString() });
+    } else {
+      setSearchParams({ page: page.toString() });
+    }
     setCurrentPage(page);
   };
 
   return (
-    <main className="flex flex-col items-center">
+    <main className="mt-4 flex flex-col items-center">
       <h1 className="mt-2 text-2xl font-extrabold uppercase">Berita</h1>
       <div className="items-centers mt-4 flex gap-2">
         <div className="relative flex items-center">
@@ -168,39 +171,39 @@ export default function News() {
       </section>
 
       {/* Pagination Controls */}
-      {!isSearching && !searchParams.get("keyword") && (
-        <div className="mt-4 flex w-fit max-w-full justify-center gap-2">
-          <button
-            className="flex-none px-4 py-2 text-black disabled:opacity-50"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            <ChevronLeftIcon className="h-6" />
-          </button>
-          <div className="flex w-fit flex-auto gap-2 overflow-auto p-2">
-            {[...Array(pagination.totalPages).keys()].map((index) => (
-              <button
-                key={index}
-                className={`aspect-square h-12 rounded-full text-center text-white ${
-                  index + 1 === currentPage
-                    ? "bg-persian-blue-950 shadow-md"
-                    : "bg-gray-400"
-                }`}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </div>
-          <button
-            className="flex-none px-4 py-2 text-black disabled:opacity-50"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === pagination.totalPages}
-          >
-            <ChevronRightIcon className="h-6" />
-          </button>
+      {/* {!isSearching && !searchParams.get("keyword") && ( */}
+      <div className="mt-4 flex w-fit max-w-full justify-center gap-2">
+        <button
+          className="flex-none px-4 py-2 text-black disabled:opacity-50"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          <ChevronLeftIcon className="h-6" />
+        </button>
+        <div className="flex w-fit flex-auto gap-2 overflow-auto p-2">
+          {[...Array(pagination.totalPages).keys()].map((index) => (
+            <button
+              key={index}
+              className={`aspect-square h-12 rounded-full text-center text-white ${
+                index + 1 === currentPage
+                  ? "bg-persian-blue-950 shadow-md"
+                  : "bg-gray-400"
+              }`}
+              onClick={() => handlePageChange(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
-      )}
+        <button
+          className="flex-none px-4 py-2 text-black disabled:opacity-50"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === pagination.totalPages}
+        >
+          <ChevronRightIcon className="h-6" />
+        </button>
+      </div>
+      {/* )} */}
     </main>
   );
 }

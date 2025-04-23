@@ -13,6 +13,7 @@ export interface Doctor {
   nama: string;
   gambar: string;
   poli: {
+    id_poli: string;
     nama_poli: string;
   };
 }
@@ -30,12 +31,6 @@ interface ApiResponse {
       totalPages: number;
     };
   };
-}
-interface SearchApiResponse {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  data: Doctor[];
 }
 
 export async function loader({
@@ -64,29 +59,29 @@ export async function loader({
     // `https://rs-balung-cp.vercel.app/dokter?page=${page}`,
     // const data = response.data
     console.log(response.data);
-    const data = {
-      success: response.data.success,
-      statusCode: response.data.statusCode,
-      message: response.data.message,
-      data: {
-        Dokter: keyword ? response.data.data : response.data.data.Dokter,
-        pagination: {
-          currentPage: response.data.data.pagination?.currentPage || 1,
-          pageSize: response.data.data.pagination?.pageSize || 15,
-          totalItems:
-            response.data.data.pagination?.totalItems ||
-            response.data.data.length,
-          totalPages:
-            response.data.data.pagination?.totalPages ||
-            Math.ceil(response.data.data.length / 15),
-        },
-      },
-    };
+    // const data = {
+    //   success: response.data.success,
+    //   statusCode: response.data.statusCode,
+    //   message: response.data.message,
+    //   data: {
+    //     Dokter: keyword ? response.data.data : response.data.data.Dokter,
+    //     pagination: {
+    //       currentPage: response.data.data.pagination?.currentPage || 1,
+    //       pageSize: response.data.data.pagination?.pageSize || 15,
+    //       totalItems:
+    //         response.data.data.pagination?.totalItems ||
+    //         response.data.data.length,
+    //       totalPages:
+    //         response.data.data.pagination?.totalPages ||
+    //         Math.ceil(response.data.data.length / 15),
+    //     },
+    //   },
+    // };
 
-    if (!data.success || !data.data.Dokter.length) {
+    if (!response.data.success || !response.data.data.Dokter.length) {
       // Return empty data if no doctors are found
       return {
-        ...data,
+        ...response.data,
         data: {
           Dokter: [],
           pagination: {
@@ -98,9 +93,8 @@ export async function loader({
         },
       };
     }
-    console.log(data);
 
-    return data;
+    return response.data;
   } catch (error: any) {
     console.log(error.response);
     const data = {
@@ -117,8 +111,6 @@ export async function loader({
     };
     console.log(data);
     return data;
-    // return error.response.data; // Return the error response
-    // throw new Error(error.response?.data || "Failed to fetch doctors");
   }
 }
 
@@ -169,7 +161,7 @@ export default function Doctors() {
   };
 
   return (
-    <main className="flex flex-col items-center">
+    <main className="mt-4 flex flex-col items-center">
       <h1 className="mt-2 text-2xl font-extrabold uppercase">Daftar Dokter</h1>
       <div className="items-centers mt-4 flex gap-2">
         <div className="relative flex items-center">

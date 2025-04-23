@@ -1,12 +1,21 @@
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import Table from "~/components/Table";
 import type { Poli, PoliApiResponse } from "~/routes/schedule";
+import { getSession } from "~/sessions.server";
 import { alternatingRowColor } from "~/utils/styles";
+import type { Route } from "./+types";
 
-export async function loader(): Promise<PoliApiResponse> {
+export async function loader({
+  request,
+}: Route.LoaderArgs): Promise<PoliApiResponse> {
+  const session = await getSession(request.headers.get("Cookie"));
+  console.log("session", session);
+  // session.get("token");
+  console.log("token", session.get("token"));
   const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
+
   try {
     const poliResponse = await axios.get<PoliApiResponse>(poliRequest.href);
     if (!poliResponse.data.success) {
@@ -31,6 +40,13 @@ export default function AdminPoli() {
   const headers = ["No", "Poli", "Aksi"];
   return (
     <>
+      <a
+        href="/admin/poli/create"
+        className="ms-auto flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
+      >
+        <PlusIcon className="h-5 w-5" />
+        <span>Tambah</span>
+      </a>
       <section className="overflow-x-auto">
         <Table headers={headers}>
           {poli.map((item, index) => (

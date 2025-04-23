@@ -3,6 +3,7 @@ import { Outlet, useLoaderData } from "react-router";
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
 import type { Pelayanan, PelayananResponse } from "./admin/services";
+import { useEffect } from "react";
 
 export async function loader(): Promise<PelayananResponse> {
   const pelayananRequest = new URL(
@@ -36,12 +37,22 @@ export async function loader(): Promise<PelayananResponse> {
 }
 
 export default function Layout() {
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem("hasVisited");
+    const nVisits = localStorage.getItem("nVisits") ?? "0";
+    const nVisitsInt = parseInt(nVisits, 10);
+    if (!hasVisited) {
+      sessionStorage.setItem("hasVisited", "true");
+      localStorage.setItem("nVisits", (nVisitsInt + 1).toString());
+      console.log("Visitor count incremented");
+    }
+  }, []);
   const data = useLoaderData() as PelayananResponse;
   const pelayanan = data.data ?? [];
   // console.log("pelayanan", pelayanan);
   return (
     <>
-      <Header pelayanan={pelayanan}/>
+      <Header pelayanan={pelayanan} />
       <div className="pb-30"></div>
       <Outlet />
       <Footer />

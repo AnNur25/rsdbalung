@@ -30,7 +30,7 @@ interface Poli {
 interface Layanan {
   id_pelayanan: string;
   nama_pelayanan: string;
-  hariList: Hari[];
+  jadwal: Hari[];
 }
 
 interface Hari {
@@ -87,7 +87,7 @@ export default function AdminSchedule() {
 
   const flattenedSchedules = doctors.flatMap((doctor) =>
     doctor.layananList.flatMap((layanan) =>
-      layanan.hariList.map((hari) => ({
+      layanan.jadwal.map((hari) => ({
         id_dokter: doctor.id_dokter,
         dokter: doctor.nama_dokter,
         poli: doctor.poli.nama,
@@ -97,6 +97,7 @@ export default function AdminSchedule() {
       })),
     ),
   );
+
   return (
     <>
       <section className="overflow-x-auto">

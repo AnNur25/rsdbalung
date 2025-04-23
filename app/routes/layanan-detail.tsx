@@ -55,7 +55,7 @@ export default function LayananDetail() {
     Biaya,
   } = data.data;
   return (
-    <main className="mx-auto my-6 lg:max-w-3/4">
+    <main className="mx-auto my-6 mt-4 lg:max-w-3/4">
       <h1 className="text-center text-3xl font-bold uppercase">
         {nama_pelayanan}
       </h1>

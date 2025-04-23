@@ -20,7 +20,15 @@ export default function Banner() {
           RSD Balung
         </h1>
 
-        {/* <div className="mt-2 flex gap-2 lg:mt-6">
+        {/*<Menu>
+      <MenuButton>My account</MenuButton>
+      <MenuItems anchor="bottom">
+        <MenuItem>
+        </MenuItem>
+        </MenuItems>
+        </Menu>
+
+         <div className="mt-2 flex gap-2 lg:mt-6">
           <div className="relative flex w-max flex-1 flex-col items-center rounded bg-sky-700 p-2 text-center text-white shadow-md">
             <p>asdf</p>
             <a href="#">

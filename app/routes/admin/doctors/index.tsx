@@ -1,6 +1,6 @@
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
-import { useLoaderData } from "react-router";
+import { Form, useLoaderData } from "react-router";
 import DoctorCard from "~/components/DoctorCard";
 import type { Doctor } from "~/routes/doctors";
 
@@ -59,6 +59,48 @@ export async function loader() {
   }
 }
 
+export async function action({ request }: { request: Request }) {
+  const method = request.method;
+  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
+  let formData;
+
+  if (method === "POST" || method === "PUT" || method === "DELETE") {
+    formData = await request.formData();
+  } else {
+    return { error: "Invalid method" };
+  }
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoiYjMwNmVkYmEtYWNmMS00OTEzLThkNmYtZDUyMmViZGY5ZTY2IiwibmFtYSI6IlRheWFuZyIsImVtYWlsIjoidGF5YW5ndGFodUBnbWFpbC5jb20iLCJpYXQiOjE3NDUyMTg5MDcsImV4cCI6MTc0NTIyMjUwN30.qpyHMZci0i6mUGa6niRVoyOL_suyMqbMJu7RVeFYa4s";
+  try {
+    let response;
+    if (!token) {
+      return { error: "Token is required" };
+    }
+    if (method === "DELETE") {
+      const idDokter = formData.get("id_dokter") as string;
+      response = await axios.delete(
+        `https://rs-balung-cp.vercel.app/dokter/${idDokter}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+    }
+    if (!response) {
+      return { error: "Error response" };
+    }
+
+    return { success: true, message: response.data.message };
+  } catch (error: any) {
+    return {
+      success: false,
+      statusCode: error.response?.status ?? 500,
+      message: error.response?.data?.message ?? "Internal Server Error",
+    };
+  }
+}
+
 export default function AdminDoctors() {
   const response = useLoaderData() as ApiResponse;
   const { Dokter: doctors } = response.data;
@@ -85,9 +127,19 @@ export default function AdminDoctors() {
                 >
                   <PencilSquareIcon className="h-5 w-5" />
                 </a>
-                <a className="block w-min rounded bg-red-600 p-2 text-white hover:underline">
-                  <TrashIcon className="h-5 w-5" />
-                </a>
+                <Form
+                  method="delete"
+                  className="block w-min rounded bg-red-600 p-2 text-white hover:underline"
+                >
+                  <input
+                    type="hidden"
+                    name="id_dokter"
+                    value={doctor.id_dokter}
+                  />
+                  <button className="cursor-pointer">
+                    <TrashIcon className="h-5 w-5" />
+                  </button>
+                </Form>
               </div>
             </div>
           ))

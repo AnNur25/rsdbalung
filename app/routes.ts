@@ -22,6 +22,7 @@ export default [
   // Admin routes
   ...prefix("admin", [
     route("login", "routes/admin/login.tsx"),
+    route("logout", "routes/admin/logout.tsx"),
     layout("routes/admin/layout.tsx", [
       index("routes/admin/home.tsx"),
       ...prefix("akun", [
