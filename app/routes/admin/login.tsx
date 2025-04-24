@@ -43,7 +43,23 @@ export async function action({ request }: Route.ActionArgs) {
     const response = await axios.post(urlRequest.href, {
       email,
       password,
-    });
+    }
+    );
+
+    // Extract cookies from the response headers
+    const setCookieHeader = response.headers["set-cookie"];
+    console.log("setCookieHeader", setCookieHeader);
+    if (setCookieHeader) {
+      const refreshTokenCookie = setCookieHeader.find((cookie: string) =>
+        cookie.startsWith("refreshToken="),
+      );
+      if (refreshTokenCookie) {
+        const refreshToken = refreshTokenCookie.split(";")[0].split("=")[1];
+        console.log("refreshToken", refreshToken);
+        session.set("refreshToken", refreshToken);
+      }
+    }
+
     const data = response.data;
     console.log("data", data);
 
