@@ -47,24 +47,24 @@ export async function action({ request }: Route.ActionArgs) {
     );
 
     // Extract cookies from the response headers
-    const setCookieHeader = response.headers["set-cookie"];
-    console.log("setCookieHeader", setCookieHeader);
-    if (setCookieHeader) {
-      const refreshTokenCookie = setCookieHeader.find((cookie: string) =>
-        cookie.startsWith("refreshToken="),
-      );
-      if (refreshTokenCookie) {
-        const refreshToken = refreshTokenCookie.split(";")[0].split("=")[1];
-        console.log("refreshToken", refreshToken);
-        session.set("refreshToken", refreshToken);
-      }
-    }
+    // const setCookieHeader = response.headers["set-cookie"];
+    // console.log("setCookieHeader", setCookieHeader);
+    // if (setCookieHeader) {
+    //   const refreshTokenCookie = setCookieHeader.find((cookie: string) =>
+    //     cookie.startsWith("refreshToken="),
+    //   );
+    //   if (refreshTokenCookie) {
+    //     const refreshToken = refreshTokenCookie.split(";")[0].split("=")[1];
+    //     console.log("refreshToken", refreshToken);
+    //     session.set("refreshToken", refreshToken);
+    //   }
+    // }
 
     const data = response.data;
     console.log("data", data);
 
     if (data.success) {
-      session.set("token", data.data.accessToken);
+      session.set("token", data.data.token);
       const getToken = session.get("token");
       console.log("getToken", getToken);
       return redirect("/admin/", {

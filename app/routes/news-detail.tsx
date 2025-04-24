@@ -4,7 +4,8 @@ import axios from "axios";
 import { useLoaderData } from "react-router";
 import NewsBanner from "~/components/NewsBanner";
 import type { News, NewsApiResponse } from "./news";
-
+import DOMPurify from "dompurify";
+import "~/lists.css";
 // export async function loader({ params }: Route.LoaderArgs) {
 //   return { id: params.id };
 // }
@@ -53,7 +54,8 @@ export async function loader({
   try {
     const response = await axios.get<NewsDetailApiResponse>(
       `https://rs-balung-cp.vercel.app/berita/${id}`,
-    );``
+    );
+    ``;
     const data = response.data;
 
     if (!data.success) {
@@ -92,7 +94,7 @@ export default function NewsDetail() {
     gambar_tambahan,
     berita: news,
   } = response;
-
+  const cleanHtml = DOMPurify.sanitize(isi);
   console.log(gambar_tambahan);
 
   const tanggal = tanggal_dibuat.split(" pukul")[0];
@@ -114,8 +116,13 @@ export default function NewsDetail() {
           />
           <h1 className="text-2xl font-bold lg:text-3xl">{judul}</h1>
           <p className="my-4">{ringkasan}</p>
-          <p className="my-4">{isi}</p>
-          <div className="grid grid-cols-1 gap-4 py-8 lg:p-8 lg:max-w-2/3 lg:grid-cols-2 lg:grid-rows-2">
+
+          <div
+            className="my-4"
+            dangerouslySetInnerHTML={{ __html: cleanHtml }}
+          />
+
+          <div className="grid grid-cols-1 gap-4 py-8 lg:max-w-2/3 lg:grid-cols-2 lg:grid-rows-2 lg:p-8">
             <img
               src={gambar_sampul}
               alt={judul}
@@ -161,7 +168,7 @@ export default function NewsDetail() {
                 //   image={berita.gambar_sampul}
                 //   date={berita.tanggal_dibuat}
                 // />
-                <article className="relative flex gap-2 items-center">
+                <article className="relative flex items-center gap-2">
                   <img
                     src={berita.gambar_sampul}
                     alt={berita.judul}
@@ -174,7 +181,9 @@ export default function NewsDetail() {
                     <a href={`/berita/${berita.id}`}>
                       <span className="absolute inset-0"></span>
 
-                      <h3 className="line-clamp-3 text-base font-bold">{berita.judul}</h3>
+                      <h3 className="line-clamp-3 text-base font-bold">
+                        {berita.judul}
+                      </h3>
                     </a>
                   </div>
                 </article>

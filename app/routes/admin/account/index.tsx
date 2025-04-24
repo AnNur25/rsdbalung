@@ -8,9 +8,9 @@ export async function loader({ request }: Route.LoaderArgs) {
   const token = session.get("token");
   console.log("tokenakun", token);
 
-  // if (!token) {
-  //   return redirect("/admin/login");
-  // }
+  if (!token) {
+    return redirect("/admin/login");
+  }
 
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/profil`);
   try {

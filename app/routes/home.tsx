@@ -51,8 +51,12 @@ export async function loader(): Promise<NewsApiResponse> {
 
     return data; // Return the full API response
   } catch (error: any) {
+    console.log("Error fetching news:", error);
+    const errorResponse = error.response?.data || {};
     const data = {
-      ...error.response.data,
+      success: errorResponse.success || false,
+      statusCode: errorResponse.statusCode || 400,
+      message: errorResponse.message || "Error",
       data: {
         berita: [],
         pagination: {

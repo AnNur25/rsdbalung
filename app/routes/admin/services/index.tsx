@@ -61,7 +61,7 @@ export default function AdminServices() {
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 <a
-                  href={`/admin/services/edit/${item.id_pelayanan}`}
+                  href={`/admin/pelayanan/edit/${item.id_pelayanan}`}
                   className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:underline"
                 >
                   <PencilSquareIcon className="h-5 w-5" />

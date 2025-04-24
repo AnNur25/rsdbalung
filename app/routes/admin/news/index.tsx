@@ -11,6 +11,7 @@ import type { NewsApiResponse } from "~/routes/news";
 
 export async function loader({
   request,
+  
 }: {
   request: Request;
 }): Promise<NewsApiResponse> {
@@ -61,7 +62,7 @@ export default function AdminNews() {
   return (
     <>
       <a
-        href="./admin/berita/create"
+        href="/admin/berita/create"
         className="rounded-lg flex items-center gap-2 w-fit m-6 bg-green-600 ps-2 pe-4 ms-auto py-2 text-white"
       >
         <PlusIcon className="h-5 w-5" />
@@ -86,7 +87,7 @@ export default function AdminNews() {
               <td className="border border-gray-300 px-4 py-2">
                 <div className="flex justify-center gap-0.5">
                   <a
-                    href={`/admin/news/edit/${item.id}`}
+                    href={`/admin/berita/edit/${item.id}`}
                     className="block w-min rounded bg-green-600 p-2 text-white"
                   >
                     <PencilSquareIcon className="h-5 w-5" />

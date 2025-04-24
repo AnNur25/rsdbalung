@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Form } from "react-router";
 import type { Route } from "./+types";
-import { token } from "~/utils/secrets";
+import { getSession } from "~/sessions.server";
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
@@ -10,6 +10,8 @@ export async function action({ request }: Route.ActionArgs) {
   const Prosedur = formData.get("Prosedur");
   const JangkaWaktu = formData.get("JangkaWaktu");
   const Biaya = formData.get("Biaya");
+  const session = await getSession(request.headers.get("Cookie"));
+  const token = session.get("token");
 
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/pelayanan`);
 

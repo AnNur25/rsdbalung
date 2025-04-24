@@ -3,6 +3,8 @@ import axios from "axios";
 import { Form, useLoaderData } from "react-router";
 import DoctorCard from "~/components/DoctorCard";
 import type { Doctor } from "~/routes/doctors";
+import { getSession } from "~/sessions.server";
+import type { Route } from "./+types";
 
 interface ApiResponse {
   success: boolean;
@@ -59,7 +61,7 @@ export async function loader() {
   }
 }
 
-export async function action({ request }: { request: Request }) {
+export async function action({ request }: Route.ActionArgs) {
   const method = request.method;
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
   let formData;
@@ -69,8 +71,8 @@ export async function action({ request }: { request: Request }) {
   } else {
     return { error: "Invalid method" };
   }
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoiYjMwNmVkYmEtYWNmMS00OTEzLThkNmYtZDUyMmViZGY5ZTY2IiwibmFtYSI6IlRheWFuZyIsImVtYWlsIjoidGF5YW5ndGFodUBnbWFpbC5jb20iLCJpYXQiOjE3NDUyMTg5MDcsImV4cCI6MTc0NTIyMjUwN30.qpyHMZci0i6mUGa6niRVoyOL_suyMqbMJu7RVeFYa4s";
+  const session = await getSession(request.headers.get("Cookie"));
+  const token = session.get("token");
   try {
     let response;
     if (!token) {
@@ -122,7 +124,7 @@ export default function AdminDoctors() {
               </div>
               <div className="flex flex-none justify-center gap-0.5">
                 <a
-                  href={`/admin/news/edit/${doctor.id_dokter}`}
+                  href={`/admin/dokter/edit/${doctor.id_dokter}`}
                   className="block w-min rounded bg-green-600 p-2 text-white hover:underline"
                 >
                   <PencilSquareIcon className="h-5 w-5" />
