@@ -12,16 +12,7 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   console.log("formData", formData);
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/berita`);
-  const gambarSampul = formData.get("gambar_sampul");
-  const judul = formData.get("judul");
-  const ringkasan = formData.get("ringkasan");
-  const isi = formData.get("isi");
-  // const data = {
-  //   gambar_sampul: gambarSampul,
-  //   judul: judul,
-  //   ringkasan: ringkasan,
-  //   isi: isi,
-  // };
+
   const headers = {
     "Content-Type": "multipart/form-data",
     "Authorization": `Bearer ${token}`,

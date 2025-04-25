@@ -23,7 +23,7 @@ export async function action({ request }: Route.ActionArgs) {
         Persyaratan,
         Prosedur,
         JangkaWaktu,
-        Biaya: parseInt(Biaya as string, 10), // Convert Biaya to a number
+        Biaya: parseInt(Biaya as string, 10),
       },
       {
         headers: {

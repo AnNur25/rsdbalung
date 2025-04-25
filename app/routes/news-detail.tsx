@@ -4,8 +4,8 @@ import axios from "axios";
 import { useLoaderData } from "react-router";
 import NewsBanner from "~/components/NewsBanner";
 import type { News, NewsApiResponse } from "./news";
-import DOMPurify from "dompurify";
 import "~/lists.css";
+import HtmlParse from "~/components/HtmlParse";
 // export async function loader({ params }: Route.LoaderArgs) {
 //   return { id: params.id };
 // }
@@ -94,7 +94,7 @@ export default function NewsDetail() {
     gambar_tambahan,
     berita: news,
   } = response;
-  const cleanHtml = DOMPurify.sanitize(isi);
+  // const cleanHtml = DOMPurify.sanitize(isi);
   console.log(gambar_tambahan);
 
   const tanggal = tanggal_dibuat.split(" pukul")[0];
@@ -117,10 +117,7 @@ export default function NewsDetail() {
           <h1 className="text-2xl font-bold lg:text-3xl">{judul}</h1>
           <p className="my-4">{ringkasan}</p>
 
-          <div
-            className="my-4"
-            dangerouslySetInnerHTML={{ __html: cleanHtml }}
-          />
+          <HtmlParse htmlString={isi} />
 
           <div className="grid grid-cols-1 gap-4 py-8 lg:max-w-2/3 lg:grid-cols-2 lg:grid-rows-2 lg:p-8">
             <img

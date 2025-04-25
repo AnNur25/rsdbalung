@@ -40,11 +40,7 @@ export async function action({ request }: Route.ActionArgs) {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/auth/login`);
   console.log("urlRequest", urlRequest);
   try {
-    const response = await axios.post(urlRequest.href, {
-      email,
-      password,
-    }
-    );
+    const response = await axios.post(urlRequest.href, { email, password });
 
     // Extract cookies from the response headers
     // const setCookieHeader = response.headers["set-cookie"];

@@ -20,9 +20,7 @@ export async function action({ request }: Route.ActionArgs) {
   try {
     const response = await axios.post(
       urlRequest.href,
-      {
-        nama_poli: namaPoli,
-      },
+      { nama_poli: namaPoli },
       {
         headers: {
           Authorization: `Bearer ${token}`,
