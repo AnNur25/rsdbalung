@@ -52,12 +52,13 @@ export async function action({ request }: Route.ActionArgs) {
 
   const urlRequest = new URL("https://rs-balung-cp.vercel.app/dokter/");
   try {
-    await axios.post(urlRequest.href, formData, {
+    const response = await axios.post(urlRequest.href, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    console.log(response);
     // return redirect("/admin/doctors");
   } catch (error: any) {
-    // console.error("Failed to create doctor", error.response.data.message);
+    console.error("Failed to create doctor", error.response.data.message);
     // throw new Response("Submission failed", { status: 500 });
   }
 }
