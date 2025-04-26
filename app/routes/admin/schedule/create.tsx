@@ -63,20 +63,44 @@ export async function action({ request }: Route.ActionArgs) {
   const urlRequest = new URL("https://rs-balung-cp.vercel.app/jadwal-dokter/");
   const formData = await request.formData();
   console.log("action form", formData);
-  let data = {
-    id_dokter: formData.get("id_dokter"),
-    layananList: [
-      {
-        id_pelayanan: formData.get("id_pelayanan"),
-        hariList: [
-          {
-            hari: formData.get("hari"),
-            jam_mulai: formData.get("jam_mulai"),
-            jam_selesai: formData.get("jam_selesai"),
-          },
-        ],
-      },
-    ],
+
+  const idDokter = formData.get("id_dokter") as string;
+  const hariList = formData.getAll("hari") as string[];
+  const jamMulaiList = formData.getAll("jam_mulai") as string[];
+  const jamSelesaiList = formData.getAll("jam_selesai") as string[];
+  const idPelayananList = formData.getAll("id_pelayanan") as string[];
+
+  const layananMap = new Map<
+    string,
+    {
+      id_pelayanan: string;
+      hariList: { hari: string; jam_mulai: string; jam_selesai: string }[];
+    }
+  >();
+
+  for (let i = 0; i < idPelayananList.length; i++) {
+    const idPelayanan = idPelayananList[i];
+    const hari = hariList[i];
+    const jamMulai = jamMulaiList[i];
+    const jamSelesai = jamSelesaiList[i];
+
+    if (!layananMap.has(idPelayanan)) {
+      layananMap.set(idPelayanan, {
+        id_pelayanan: idPelayanan,
+        hariList: [],
+      });
+    }
+
+    layananMap.get(idPelayanan)!.hariList.push({
+      hari,
+      jam_mulai: jamMulai,
+      jam_selesai: jamSelesai,
+    });
+  }
+
+  const data = {
+    id_dokter: idDokter,
+    layananList: Array.from(layananMap.values()),
   };
 
   try {
@@ -86,6 +110,14 @@ export async function action({ request }: Route.ActionArgs) {
     console.error("action err", error);
   }
 }
+
+type ScheduleItem = {
+  hari: string;
+  jam_mulai: string;
+  jam_selesai: string;
+  id_pelayanan: string;
+  layanan: string;
+};
 
 export default function CreateSchedule({ loaderData }: Route.ComponentProps) {
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
@@ -100,6 +132,42 @@ export default function CreateSchedule({ loaderData }: Route.ComponentProps) {
   const doctorsByPoli = doctors.filter(
     (doctor) => doctor.poli.id_poli === selectedPoli,
   );
+
+  const [schedules, setSchedules] = useState([
+    {
+      hari: "",
+      jam_mulai: "07:00",
+      jam_selesai: "07:00",
+      id_pelayanan: "",
+      layanan: "",
+    },
+  ]);
+
+  const handleAddSchedule = () => {
+    setSchedules([
+      ...schedules,
+      {
+        hari: "",
+        jam_mulai: "07:00",
+        jam_selesai: "07:00",
+        id_pelayanan: "",
+        layanan: "",
+      },
+    ]);
+  };
+  const handleRemoveSchedule = (index: number) => {
+    setSchedules(schedules.filter((_, i) => i !== index));
+  };
+
+  const handleChange = (
+    index: number,
+    field: keyof ScheduleItem,
+    value: string,
+  ) => {
+    const newSchedules = [...schedules];
+    newSchedules[index][field] = value;
+    setSchedules(newSchedules);
+  };
 
   return (
     <>
@@ -131,24 +199,75 @@ export default function CreateSchedule({ loaderData }: Route.ComponentProps) {
             ))}
           </select>
 
-          <select required name="hari" id="hari">
-            {days.map((day, index) => (
-              <option key={index} value={day}>
-                {day}
-              </option>
-            ))}
-          </select>
+          {schedules.map((schedule, index) => (
+            <div key={index} className="flex">
+              <select
+                value={schedule.hari}
+                required
+                name="hari"
+                onChange={(e) => handleChange(index, "hari", e.target.value)}
+              >
+                {days.map((day, index) => (
+                  <option key={index} value={day}>
+                    {day}
+                  </option>
+                ))}
+              </select>
 
-          <input type="time" name="jam_mulai" id="jam_mulai" />
-          <input type="time" name="jam_selesai" id="jam_mulai" />
+              <input
+                type="time"
+                name="jam_mulai"
+                onChange={(e) =>
+                  handleChange(index, "jam_mulai", e.target.value)
+                }
+                value={schedule.jam_mulai}
+              />
+              <input
+                type="time"
+                name="jam_selesai"
+                onChange={(e) =>
+                  handleChange(index, "jam_selesai", e.target.value)
+                }
+                value={schedule.jam_selesai}
+              />
 
-          <select required name="id_pelayanan">
-            {layananList.map((layanan, index) => (
-              <option key={index} value={layanan.id_pelayanan}>
-                {layanan.nama_pelayanan}
-              </option>
-            ))}
-          </select>
+              <select
+                value={schedule.id_pelayanan}
+                required
+                name="id_pelayanan"
+                onChange={(e) =>
+                  handleChange(index, "id_pelayanan", e.target.value)
+                }
+              >
+                {layananList.map((layanan, index) => (
+                  <option key={index} value={layanan.id_pelayanan}>
+                    {layanan.nama_pelayanan}
+                  </option>
+                ))}
+              </select>
+
+              {/* Add / Remove Buttons */}
+              <div className="col-span-2 flex gap-2">
+                {index == 0 ? (
+                  <button
+                    type="button"
+                    onClick={handleAddSchedule}
+                    className="w-full rounded-md bg-green-500 p-2 text-white hover:bg-green-600"
+                  >
+                    +
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveSchedule(index)}
+                    className="w-full rounded-md bg-red-500 p-2 text-white hover:bg-red-600"
+                  >
+                    -
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
 
           <button>Simpan</button>
         </Form>

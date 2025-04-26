@@ -24,7 +24,7 @@ interface Dokter {
 
 interface Poli {
   id: string;
-  nama: string;
+  nama_poli: string;
 }
 
 interface Layanan {
@@ -60,6 +60,7 @@ export async function loader(): Promise<JadwalDokterResponse> {
       };
     }
 
+    console.log(response.data.data.dokter)
     return response.data;
   } catch (error: any) {
     return {
@@ -90,7 +91,7 @@ export default function AdminSchedule() {
       layanan.jadwal.map((hari) => ({
         id_dokter: doctor.id_dokter,
         dokter: doctor.nama_dokter,
-        poli: doctor.poli.nama,
+        poli: doctor.poli.nama_poli,
         layanan: layanan.nama_pelayanan,
         hari: hari.hari,
         jam: `${hari.jam_mulai} - ${hari.jam_selesai}`,

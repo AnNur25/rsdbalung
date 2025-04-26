@@ -49,7 +49,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
-  console.log("action form", formData);
+  // console.log("action form", formData);
 
   const idDokter = formData.get("id_dokter") as string;
   const hariList = formData.getAll("hari") as string[];
@@ -85,8 +85,8 @@ export async function action({ request }: Route.ActionArgs) {
     });
   }
 
-  console.log("values", layananMap.values());
-  console.log("layananMap", Array.from(layananMap.values()));
+  // console.log("values", layananMap.values());
+  // console.log("layananMap", Array.from(layananMap.values()));
   const data = {
     id_dokter: idDokter,
     layananList: Array.from(layananMap.values()),
@@ -98,7 +98,7 @@ export async function action({ request }: Route.ActionArgs) {
   try {
     const response = await axios.put(urlRequest.href, data);
     // console.log("action res", response);
-    console.log("action res data", response.data);
+    // console.log("action res data", response.data);
   } catch (error: any) {
     console.error("action err", error);
   }
@@ -175,7 +175,7 @@ export default function EditSchedule({ loaderData }: Route.ComponentProps) {
   );
   const [schedules, setSchedules] = useState(flattendSchedules);
 
-  console.log(schedules);
+  // console.log(schedules);
 
   const handleAddSchedule = () => {
     setSchedules([
