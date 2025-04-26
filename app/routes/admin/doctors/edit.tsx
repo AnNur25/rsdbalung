@@ -8,13 +8,12 @@ export async function loader({ params }: Route.LoaderArgs) {
     `https://rs-balung-cp.vercel.app/dokter/${doctorId}`,
   );
 
-//   console.log("doctorId", doctorId);
+  //
 
   try {
     const response = await axios.get(urlRequest.href);
     const data = response.data;
 
-    // console.log("data", data);
     return data;
   } catch (error: any) {
     console.error("Error fetching doctor data:", error);
@@ -27,10 +26,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
 }
 
-export async function action({ request, params }: Route.ActionArgs) {
-    console.log("action params", params);
-    console.log("action request", request);
-}
+export async function action({ request, params }: Route.ActionArgs) {}
 
 export default function EditDoctor({ loaderData }: Route.ComponentProps) {
   const { data } = loaderData;

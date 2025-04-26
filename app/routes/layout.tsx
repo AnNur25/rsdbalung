@@ -10,9 +10,7 @@ export async function loader(): Promise<PelayananResponse> {
     `https://rs-balung-cp.vercel.app/pelayanan/`,
   );
   try {
-    // console.log("response");
     const response = await axios.get<PelayananResponse>(pelayananRequest.href);
-    // console.log("response", response);
 
     if (!response.data.success || !response.data.data.length) {
       // response.data.data = [];
@@ -44,12 +42,11 @@ export default function Layout() {
     if (!hasVisited) {
       sessionStorage.setItem("hasVisited", "true");
       localStorage.setItem("nVisits", (nVisitsInt + 1).toString());
-      console.log("Visitor count incremented");
     }
   }, []);
   const data = useLoaderData() as PelayananResponse;
   const pelayanan = data.data ?? [];
-  // console.log("pelayanan", pelayanan);
+
   return (
     <>
       <Header pelayanan={pelayanan} />

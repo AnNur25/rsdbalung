@@ -5,13 +5,12 @@ import { getSession } from "~/sessions.server";
 
 export async function action({ request }: Route.ActionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-  console.log("session", session);
+
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/poli`);
 
   let formData = await request.formData();
   let namaPoli = formData.get("nama_poli");
   const token = session.get("token");
-  console.log("tokencreate", token);
 
   if (!namaPoli || typeof namaPoli !== "string") {
     return { error: "Nama Poli is required" };
@@ -21,11 +20,11 @@ export async function action({ request }: Route.ActionArgs) {
     const response = await axios.post(
       urlRequest.href,
       { nama_poli: namaPoli },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+      // {
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // },
     );
 
     return { success: true, nama_poli: response.data.nama_poli };
@@ -35,9 +34,7 @@ export async function action({ request }: Route.ActionArgs) {
   }
 }
 
-export default function CreatePoli() {
-  const actionData = useActionData<typeof action>();
-
+export default function CreatePoli({ actionData }: Route.ComponentProps) {
   return (
     <div className="mx-auto mt-10 max-w-md rounded-md bg-white p-6 shadow-md">
       <h1 className="mb-6 text-center text-2xl font-bold">Create Poli</h1>

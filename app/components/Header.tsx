@@ -62,7 +62,6 @@ export default function Header({
   // const loopedContacts = [...contacts, ...contacts, ...contacts];
 
   // const { data: pelayanan } = pelayananResponse;
-  // console.log("pelayanan", pelayananResponse);
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 bg-white shadow-md">

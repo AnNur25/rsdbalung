@@ -62,8 +62,6 @@ export async function loader({
       throw new Error(data.message || "Failed to fetch news detail");
     }
 
-    console.log(data);
-
     const responseAll = await axios.get<NewsApiResponse>(
       `https://rs-balung-cp.vercel.app/berita?page=1`,
     );
@@ -95,7 +93,6 @@ export default function NewsDetail() {
     berita: news,
   } = response;
   // const cleanHtml = DOMPurify.sanitize(isi);
-  console.log(gambar_tambahan);
 
   const tanggal = tanggal_dibuat.split(" pukul")[0];
 

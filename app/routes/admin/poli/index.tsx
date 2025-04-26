@@ -11,9 +11,9 @@ export async function loader({
   request,
 }: Route.LoaderArgs): Promise<PoliApiResponse> {
   const session = await getSession(request.headers.get("Cookie"));
-  console.log("session", session);
+
   // session.get("token");
-  console.log("token", session.get("token"));
+
   const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
 
   try {

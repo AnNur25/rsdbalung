@@ -6,7 +6,6 @@ import axios from "axios";
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const token = session.get("token");
-  console.log("tokenakun", token);
 
   if (!token) {
     return redirect("/admin/login");
@@ -30,7 +29,6 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 }
 export default function AdminAccount({ loaderData }: Route.ComponentProps) {
-  console.log("loaderData", loaderData);
   const { data } = loaderData || { data: { id_user: "", nama: "", email: "" } };
   const { id_user, nama, email } = data;
   return (

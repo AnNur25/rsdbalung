@@ -34,8 +34,7 @@ export async function loader() {
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
-  console.log("formData", formData);
-  console.log("action", request.url);
+
   //   try {
   //     await axios.post("https://your-api.com/api/doctors", formData, {
   //       headers: { "Content-Type": "multipart/form-data" },
@@ -50,7 +49,7 @@ export async function action({ request }: Route.ActionArgs) {
 export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
   const { data: poli } = loaderData as PoliApiResponse;
   const poliList = poli || [];
-  console.log("poliList", poliList);
+
   const [selectedPoli, setSelectedPoli] = useState<Poli>(poliList[0]);
   const navigation = useNavigation();
   const [preview, setPreview] = useState<string | null>(null);

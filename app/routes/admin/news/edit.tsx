@@ -11,8 +11,10 @@ export async function action({ request, params }: Route.ActionArgs) {
   const token = session.get("token");
   const formData = await request.formData();
   const newsId = params.id;
-  console.log("formData", formData);
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/berita/${newsId}`);
+
+  const urlRequest = new URL(
+    `https://rs-balung-cp.vercel.app/berita/${newsId}`,
+  );
 
   const headers = {
     "Content-Type": "multipart/form-data",
@@ -23,7 +25,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   };
   try {
     const response = await axios.put(urlRequest.href, formData, config);
-    console.log("response", response.data);
+
     return response.data;
   } catch (error: any) {
     console.error("Error creating news:", error.response);
@@ -41,14 +43,12 @@ export default function EditNews() {
   const [content, setContent] = React.useState<string>("");
   const handleEditorChange = () => {
     if (editorRef.current) {
-      console.log(editorRef.current.getContent());
       setContent(editorRef.current.getContent());
     }
   };
 
   const log = () => {
     if (editorRef.current) {
-      console.log(editorRef.current.getContent());
     }
   };
 

@@ -31,7 +31,7 @@ export async function action({ request }: Route.ActionArgs) {
         },
       },
     );
-    console.log("Service created:", response.data);
+
     return response.data;
   } catch (error) {
     console.error("Error creating service:", error);

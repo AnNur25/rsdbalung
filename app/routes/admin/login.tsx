@@ -7,9 +7,9 @@ import axios from "axios";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-  console.log("session", session);
+
   // session.get("token");
-  console.log("token", session.data.token);
+
   if (session.has("token")) {
     // Redirect to the home page if they are already signed in.
     // return redirect("/admin/");
@@ -27,42 +27,36 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-  console.log("session", session.get("token"));
+
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
 
-  console.log("login", {
-    email,
-    password,
-  });
-
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/auth/login`);
-  console.log("urlRequest", urlRequest);
+
   try {
     const response = await axios.post(urlRequest.href, { email, password });
 
     // Extract cookies from the response headers
     // const setCookieHeader = response.headers["set-cookie"];
-    // console.log("setCookieHeader", setCookieHeader);
+
     // if (setCookieHeader) {
     //   const refreshTokenCookie = setCookieHeader.find((cookie: string) =>
     //     cookie.startsWith("refreshToken="),
     //   );
     //   if (refreshTokenCookie) {
     //     const refreshToken = refreshTokenCookie.split(";")[0].split("=")[1];
-    //     console.log("refreshToken", refreshToken);
+    //
     //     session.set("refreshToken", refreshToken);
     //   }
     // }
 
     const data = response.data;
-    console.log("data", data);
 
     if (data.success) {
       session.set("token", data.data.token);
       const getToken = session.get("token");
-      console.log("getToken", getToken);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${getToken}`;
       return redirect("/admin/", {
         headers: {
           "Set-Cookie": await commitSession(session),
@@ -73,7 +67,6 @@ export async function action({ request }: Route.ActionArgs) {
       session.flash("error", data.message);
     }
   } catch (error: any) {
-    console.log("error", error);
     if (axios.isAxiosError(error)) {
       session.flash("error", error.response?.data.message);
     } else {
@@ -85,7 +78,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
   // const { error } = loaderData;
-  // console.log("error", error);
+
   return (
     <>
       <div className="flex min-h-screen items-center justify-center">

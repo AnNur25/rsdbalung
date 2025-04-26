@@ -6,7 +6,7 @@
 }
 
 @theme {
-  --font-sans: "Nunito", sans-serif;
+  --font-sans: "Nunito", "Inter", sans-serif;
   --color-persian-blue-950: #152151;
   /* "Inter", ui-sans-serif, system-ui, sans-serif; */
   /* "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */

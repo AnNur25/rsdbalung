@@ -63,7 +63,7 @@ export async function loader() {
 
 export async function action({ request }: Route.ActionArgs) {
   const method = request.method;
-  console.log(request.url)
+  // console.log(request.url)
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
   let formData;
 

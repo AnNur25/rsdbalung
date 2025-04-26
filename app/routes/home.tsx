@@ -51,7 +51,6 @@ export async function loader(): Promise<NewsApiResponse> {
 
     return data; // Return the full API response
   } catch (error: any) {
-    console.log("Error fetching news:", error);
     const errorResponse = error.response?.data || {};
     const data = {
       success: errorResponse.success || false,
@@ -74,7 +73,6 @@ export async function loader(): Promise<NewsApiResponse> {
 export default function Home() {
   const response = useLoaderData() as NewsApiResponse;
   const news = response.data.berita;
-  // console.log(news);
 
   return (
     <>

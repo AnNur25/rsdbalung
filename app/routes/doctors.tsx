@@ -39,8 +39,7 @@ export async function loader({
   request: Request;
 }): Promise<ApiResponse> {
   const url = new URL(request.url);
-  console.log(url);
-  console.log(url.href);
+
   const page = url.searchParams.get("page") || "1";
   const keyword = url.searchParams.get("keyword");
 
@@ -50,15 +49,13 @@ export async function loader({
     urlRequest.searchParams.set("keyword", keyword);
   }
   urlRequest.searchParams.set("page", page);
-  console.log(urlRequest.href);
 
   try {
-    console.log("sebelum response");
     const response = await axios.get(urlRequest.href);
-    console.log("setelah response");
+
     // `https://rs-balung-cp.vercel.app/dokter?page=${page}`,
     // const data = response.data
-    console.log(response.data);
+
     // const data = {
     //   success: response.data.success,
     //   statusCode: response.data.statusCode,
@@ -96,7 +93,6 @@ export async function loader({
 
     return response.data;
   } catch (error: any) {
-    console.log(error.response);
     const data = {
       ...error.response.data,
       data: {
@@ -109,23 +105,21 @@ export async function loader({
         },
       },
     };
-    console.log(data);
+
     return data;
   }
 }
 
 export default function Doctors() {
   const response = useLoaderData() as ApiResponse;
-  console.log(response);
+
   const { Dokter: doctors, pagination } = response.data;
-  console.log(pagination);
 
   // Access the data and pagination from the loader
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(pagination.currentPage || 1);
   const [isSearching, setIsSearching] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
-  console.log(searchParams.get("keyword"));
 
   // useEffect(() => {
   //   if (isSearching) {
@@ -135,8 +129,6 @@ export default function Doctors() {
   //     setFilteredDoctors(doctors); // Reset to original doctors list
   //   }
   // }, [isSearching, response]);
-
-  // console.log("sdfasdfa", filteredDoctors);
 
   const handleSearch = () => {
     if (searchKeyword.trim() === "") {

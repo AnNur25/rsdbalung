@@ -10,19 +10,19 @@ export async function action({ request }: Route.ActionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const token = session.get("token");
   const formData = await request.formData();
-  console.log("formData", formData);
+
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/berita`);
 
   const headers = {
     "Content-Type": "multipart/form-data",
-    "Authorization": `Bearer ${token}`,
+    Authorization: `Bearer ${token}`,
   };
   const config = {
     headers: headers,
   };
   try {
     const response = await axios.post(urlRequest.href, formData, config);
-    console.log("response", response.data);
+
     return response.data;
   } catch (error: any) {
     console.error("Error creating news:", error.response);
@@ -40,14 +40,12 @@ export default function CreateNews() {
   const [content, setContent] = React.useState<string>("");
   const handleEditorChange = () => {
     if (editorRef.current) {
-      console.log(editorRef.current.getContent());
       setContent(editorRef.current.getContent());
     }
   };
 
   const log = () => {
     if (editorRef.current) {
-      console.log(editorRef.current.getContent());
     }
   };
 

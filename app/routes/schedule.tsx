@@ -71,8 +71,6 @@ export async function loader({
   const page = url.searchParams.get("page") || "1";
   const poli = url.searchParams.get("poli") ?? "";
   const date = url.searchParams.get("date") ?? "";
-  console.log("poli", poli);
-  console.log("date", date);
 
   const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
 
@@ -92,15 +90,11 @@ export async function loader({
 
   try {
     const poliResponse = await axios.get<PoliApiResponse>(poliRequest.href);
-    // console.log("poliResponse", poliResponse.data);
-    console.log("asdfasdf");
     const response = await axios.get<ApiResponse>(urlRequest.href);
-    console.log("responseJadwall", response.data);
+
     if (!poliResponse.data.success) {
       poliResponse.data.data = [];
     }
-
-    // console.log("poliResponse", poliResponse.data);
 
     if (!response.data.success || !response.data.data.dokter.length) {
       return {
@@ -151,10 +145,11 @@ export default function Schedule() {
   const tableHeader = ["No", "Dokter", "Layanan", "Hari", "Jam", "Sesi"];
   const nCols = tableHeader.length;
   const response = useLoaderData() as ApiResponseAndPoli;
-  console.log("response", response);
+
   const { pagination } = response.data;
+
   const schedules = response.data.dokter ?? [];
-  console.log("schedules", schedules);
+
   const flattenedSchedules = (schedules ?? []).flatMap(
     (doctor) =>
       doctor.layananList?.flatMap((pelayanan) =>
@@ -169,7 +164,7 @@ export default function Schedule() {
         })),
       ) ?? [],
   );
-  console.log("flattenedSchedules", flattenedSchedules);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(pagination?.currentPage || 1);
   const [searchDate, setSearchDate] = useState<string>(
@@ -180,8 +175,6 @@ export default function Schedule() {
   const { poli } = response;
 
   const handleSearch = () => {
-    console.log("searchPoli", searchPoli);
-    console.log("searchDate", searchDate);
     if (searchPoli.trim() !== "" && searchDate.trim() !== "") {
       setSearchParams({ poli: searchPoli, date: searchDate });
     } else {
@@ -257,8 +250,7 @@ export default function Schedule() {
             </tr>
           </thead>
           <tbody>
-            {flattenedSchedules.length > 0 &&
-            Array.from(searchParams.keys()).length > 0 ? (
+            {flattenedSchedules.length > 0 ? (
               flattenedSchedules.map((item, index) => (
                 <tr key={index} className={alternatingRowColor}>
                   <td className="w-min border border-gray-300 px-4 py-2 text-center">
@@ -267,16 +259,16 @@ export default function Schedule() {
                   <td className="border border-gray-300 px-4 py-2">
                     {item.nama_dokter}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className="border border-gray-300 px-4 py-2 capitalize">
                     {item.pelayanan}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className="border border-gray-300 px-4 py-2 capitalize">
                     {item.hari}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     {item.jam}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className="border border-gray-300 px-4 py-2 capitalize">
                     {item.sesi}
                   </td>
                 </tr>

@@ -9,5 +9,5 @@ export default function HtmlParse({ htmlString }: { htmlString: string }) {
     setSanitizedHtml(clean);
   }, [htmlString]);
 
-  return <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />;
+  return <div className="sanitizedHtml" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />;
 }

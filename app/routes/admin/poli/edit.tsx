@@ -4,12 +4,14 @@ import { Form } from "react-router";
 import { getSession } from "~/sessions.server";
 import { useState } from "react";
 
-export async function loader({ params }: Route.LoaderArgs ) {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/poli/${params.id}`);
+export async function loader({ params }: Route.LoaderArgs) {
+  const urlRequest = new URL(
+    `https://rs-balung-cp.vercel.app/poli/${params.id}`,
+  );
   try {
     const response = await axios.get(urlRequest.href);
     const data = response.data;
-    console.log("data", data);
+
     return data.data;
   } catch (error: any) {
     console.error("Error fetching Poli data:", error);
@@ -23,7 +25,6 @@ export async function loader({ params }: Route.LoaderArgs ) {
 }
 export async function action({ params, request }: Route.ActionArgs) {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
-  console.log("urlRequest", urlRequest.href);
 
   let formData = await request.formData();
   const idPoli = params.id;
@@ -78,7 +79,6 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
               id="nama_poli"
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none sm:text-sm"
             />
-
           </div>
           <button
             type="submit"
