@@ -1,6 +1,7 @@
 import axios from "axios";
 import type { Route } from "./+types";
 import { Form } from "react-router";
+import { useState } from "react";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const doctorId = params.id;
@@ -13,7 +14,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   try {
     const response = await axios.get(urlRequest.href);
     const data = response.data;
-
+    console.log(data)
     return data;
   } catch (error: any) {
     console.error("Error fetching doctor data:", error);
@@ -26,11 +27,15 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
 }
 
-export async function action({ request, params }: Route.ActionArgs) {}
+export async function action({ request, params }: Route.ActionArgs) {
+
+}
 
 export default function EditDoctor({ loaderData }: Route.ComponentProps) {
   const { data } = loaderData;
-  const doctor = data.dokter;
+  const dokter = data.dokter;
+
+  const [doctor, setDoctor] = useState(dokter)
 
   return (
     <div className="flex flex-col gap-4">
@@ -42,6 +47,7 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
           placeholder="Name"
           required
           value={doctor.nama}
+          onChange={(e) => setDoctor(e.target.value)}
         />
         <button type="submit">Save</button>
       </Form>

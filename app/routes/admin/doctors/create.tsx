@@ -1,6 +1,7 @@
 import { Form, useLoaderData, useNavigation, redirect } from "react-router";
 import { useState } from "react";
 import axios from "axios";
+import defimg from "~/public/logosquare.jpg";
 import {
   Listbox,
   ListboxButton,
@@ -34,16 +35,31 @@ export async function loader() {
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
+  const defaultImageUrl = `http://localhost:5173/logosquare.jpg`;
+  console.log("formData", formData);
+  const file = formData.get("file") as File;
 
-  //   try {
-  //     await axios.post("https://your-api.com/api/doctors", formData, {
-  //       headers: { "Content-Type": "multipart/form-data" },
-  //     });
-  //     return redirect("/admin/doctors");
-  //   } catch (error) {
-  //     console.error("Failed to create doctor", error);
-  //     throw new Response("Submission failed", { status: 500 });
-  //   }
+  // Check if no file uploaded
+  if (!file || file.size === 0) {
+    // Create a default image file
+    const defaultImageResponse = await fetch(defaultImageUrl); // you must have this image in your public folder
+    const blob = await defaultImageResponse.blob();
+    const defaultFile = new File([blob], "logosquare.jpg", { type: blob.type });
+    formData.delete("file");
+    formData.append("file", defaultFile);
+  }
+  console.log("formData", formData);
+
+  const urlRequest = new URL("https://rs-balung-cp.vercel.app/dokter/");
+  try {
+    await axios.post(urlRequest.href, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    // return redirect("/admin/doctors");
+  } catch (error: any) {
+    // console.error("Failed to create doctor", error.response.data.message);
+    // throw new Response("Submission failed", { status: 500 });
+  }
 }
 
 export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
@@ -61,6 +77,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
       reader.onloadend = () => setPreview(reader.result as string);
       reader.readAsDataURL(file);
     }
+    console.log(file);
   };
 
   return (
@@ -70,7 +87,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
         <div>
           <label className="mb-1 block font-medium">Name</label>
           <input
-            name="name"
+            name="nama"
             type="text"
             required
             className="w-full rounded border p-2"
@@ -78,7 +95,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
         </div>
 
         {/* Hidden input to pass selected poliId */}
-        <input type="hidden" name="poliId" value={selectedPoli.id_poli} />
+        <input type="hidden" name="id_poli" value={selectedPoli.id_poli} />
         <div>
           <label className="mb-1 block font-medium">Poli</label>
           <Listbox value={selectedPoli} onChange={setSelectedPoli}>
@@ -116,7 +133,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
           <label className="mb-1 block font-medium">Profile Picture</label>
           <input
             type="file"
-            name="image"
+            name="file"
             accept="image/*"
             onChange={handleImagePreview}
             className="block"
