@@ -57,6 +57,7 @@ export async function action({ request }: Route.ActionArgs) {
       session.set("token", data.data.token);
       const getToken = session.get("token");
       axios.defaults.headers.common["Authorization"] = `Bearer ${getToken}`;
+
       return redirect("/admin/", {
         headers: {
           "Set-Cookie": await commitSession(session),

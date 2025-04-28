@@ -1,7 +1,7 @@
 import { Form, useLoaderData, useNavigation, redirect } from "react-router";
 import { useState } from "react";
 import axios from "axios";
-import defimg from "~/public/logosquare.jpg";
+
 import {
   Listbox,
   ListboxButton,

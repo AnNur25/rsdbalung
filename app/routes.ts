@@ -17,6 +17,7 @@ export default [
     route("jadwal-dokter", "routes/schedule.tsx"),
     route("berita/:id", "routes/news-detail.tsx"),
     route("pelayanan/:id", "routes/layanan-detail.tsx"),
+    route("aduan", "routes/complaint.tsx")
   ]),
 
   // Admin routes
@@ -33,6 +34,7 @@ export default [
         // route("detail/:id", "routes/admin/news/detail.tsx"),
         route("create", "routes/admin/news/create.tsx"),
         route("edit/:id", "routes/admin/news/edit.tsx"),
+        route("galeri/:id", "routes/admin/news/gallery.tsx"),
       ]),
       ...prefix("pelayanan", [
         index("routes/admin/services/index.tsx"),

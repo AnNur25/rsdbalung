@@ -112,17 +112,16 @@ export default function Header({
                 </MenuButton>
                 <MenuItems
                   anchor="bottom"
-                  className="absolute left-0 z-100 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black focus:outline-none"
+                  className="ring-opacity-5 absolute left-0 z-100 mt-9 w-56 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none"
                 >
                   {item.submenu.map((subitem, subindex) => (
-                    <MenuItem>
+                    <MenuItem key={subindex}>
                       {({ active }) => (
                         <a
-                          key={subindex}
                           href={subitem.href}
                           className={`${
                             active ? "bg-gray-100" : ""
-                          } block px-4 py-2 text-sm text-gray-700`}
+                          } block px-4 py-2 text-sm font-medium`}
                         >
                           {subitem.name}
                         </a>
@@ -183,12 +182,12 @@ export default function Header({
                       className="relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer hover:bg-gray-50"
                       key={index}
                     >
-                      <MenuButton className="text-base font-semibold text-gray-900 hover:bg-gray-50 hover:underline">
+                      <MenuButton className="text-base font-semibold text-gray-900 hover:bg-gray-50">
                         {item.name}
                       </MenuButton>
                       <MenuItems
                         anchor="bottom"
-                        className="ring-opacity-5 absolute left-0 z-100 mt-2 w-56 origin-top-left rounded-md bg-white font-semibold shadow-lg ring-1 ring-black focus:outline-none"
+                        className="ring-opacity-5 absolute left-0 z-100 ms-5 mt-4 w-56 origin-top-left rounded-md bg-white font-semibold shadow-2xl ring-1 ring-gray-200 focus:outline-none"
                       >
                         {item.submenu.map((subitem, subindex) => (
                           <MenuItem>
@@ -197,7 +196,7 @@ export default function Header({
                                 href={subitem.href}
                                 className={`${
                                   active ? "bg-gray-100" : ""
-                                } block px-4 py-2 text-sm text-gray-700`}
+                                } block px-4 py-2 text-sm font-medium`}
                               >
                                 {subitem.name}
                               </a>
