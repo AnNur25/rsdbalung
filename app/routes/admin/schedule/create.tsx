@@ -107,7 +107,7 @@ export async function action({ request }: Route.ActionArgs) {
     const response = await axios.post(urlRequest.href, data);
     console.log("action res", response);
   } catch (error: any) {
-    console.error("action err", error);
+    // console.error("action err", error);
   }
 }
 

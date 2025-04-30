@@ -122,7 +122,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-10">
+      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-16">
         <div className="lg:flex-1">
           <TextWithRect>POLI MATA</TextWithRect>
           <h2 className="text-2xl font-black text-persian-blue-950 lg:text-4xl">
@@ -178,7 +178,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-10">
+      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-16">
         <div className="lg:flex-1">
           <TextWithRect>INSTAGRAM</TextWithRect>
           <h2 className="text-2xl font-black text-persian-blue-950 lg:text-4xl">
@@ -198,7 +198,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="p-5 lg:p-10">
+      <section className="p-5 lg:p-16">
         <TextWithRect>BERITA</TextWithRect>
         <p className="text-justify text-sm text-gray-600 lg:text-lg">
           Dapatkan informasi seputar kesehatan, layanan terbaru, dan informasi
@@ -212,7 +212,7 @@ export default function Home() {
                   key={index}
                   id={berita.id}
                   title={berita.judul}
-                  description={berita.isi}
+                  description={berita.ringkasan}
                   image={berita.gambar_sampul}
                   date={berita.tanggal_dibuat}
                 />

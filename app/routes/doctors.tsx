@@ -157,7 +157,7 @@ export default function Doctors() {
       <h1 className="mt-2 text-2xl font-extrabold uppercase">Daftar Dokter</h1>
       <div className="items-centers mt-4 flex gap-2">
         <div className="relative flex items-center">
-          <MagnifyingGlassIcon className="absolute left-3 h-5 w-5 text-gray-400" />
+          <MagnifyingGlassIcon className="absolute left-3 h-4 w-4 text-gray-400" />
 
           <input
             className="max-w-[60vw] rounded-md border-1 border-gray-300 py-2 ps-10 pe-2 focus:border-green-600 focus:outline-none lg:w-2xl"
@@ -177,10 +177,10 @@ export default function Doctors() {
         </button>
       </div>
 
-      <section className="flex flex-col flex-wrap justify-center gap-6 p-4 min-md:flex-row">
+      <section className="flex flex-col flex-wrap justify-center gap-10 p-6 min-md:flex-row">
         {doctors.length > 0 ? (
           doctors.map((doctor, index) => (
-            <div className="flex-1">
+            <div className="w-min">
               <DoctorCard
                 key={index}
                 name={doctor.nama}

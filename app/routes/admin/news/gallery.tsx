@@ -1,78 +1,133 @@
-import { Form, useFetcher } from "react-router";
-import { useState } from "react";
+import { Form, useActionData, useFetcher } from "react-router";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import type { Route } from "./+types/gallery";
+import { handleAction } from "~/utils/handleAction";
+import { useToast, useToastFromAction } from "~/hooks/useToast";
+import { getErrorMessage } from "~/utils/handleError";
+import { toast } from "react-hot-toast";
+import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
 
 // Load existing gallery photos
 export async function loader({ params }: Route.LoaderArgs) {
   const urlRequest = new URL(
     `https://rs-balung-cp.vercel.app/berita/${params.id}/galeri-berita`,
   );
-  try {
-    const { data } = await axios.get(urlRequest.href);
-    return data.data;
-  } catch (error: any) {}
+  return handleLoader(() => axios.get(urlRequest.href));
+  // try {
+  //   const { data } = await axios.get(urlRequest.href);
+  //   return data.data;
+  // } catch (error: any) {}
 }
 
 // Handle uploads
+// export async function action({ request, params }: Route.ActionArgs) {
+//   const urlRequest = new URL(
+//     `https://rs-balung-cp.vercel.app/berita/${params.id}/galeri-berita`,
+//   );
+//   const bannerUrl = new URL("https://rs-balung-cp.vercel.app/berita");
+//   const formData = await request.formData();
+//   console.log(request);
+//   const method = request.method;
+//   if (method === "POST") {
+//     const files = formData.getAll("gambar_tambahan");
+//     console.log("files", formData);
+
+//     if (files.length > 4) {
+//       return { message: "Maksimal 4 foto." };
+//     }
+
+//     const uploadForm = new FormData();
+//     files.forEach((file) => {
+//       uploadForm.append("gambar_tambahan", file);
+//     });
+//     console.log("uploadForm", uploadForm);
+
+//     try {
+//       const response = await axios.post(urlRequest.href, formData, {
+//         headers: { "Content-Type": "multipart/form-data" },
+//       });
+//       console.log(response);
+//     } catch (error: any) {
+//       console.error("error", error.response.data);
+//     }
+//   }
+//   if (method === "DELETE") {
+//     try {
+//       const deleteData = formData.getAll("ids");
+//       console.log("deleteData", formData);
+//       console.log("deleteData", deleteData);
+
+//       const response = await axios.delete(urlRequest.href, {
+//         data: { ids: [...deleteData] },
+//       });
+//       console.log("res delete", response);
+//     } catch (error: any) {
+//       console.log("error", error.response.data);
+//     }
+//   }
+// }
+
 export async function action({ request, params }: Route.ActionArgs) {
   const urlRequest = new URL(
     `https://rs-balung-cp.vercel.app/berita/${params.id}/galeri-berita`,
   );
-  const bannerUrl = new URL("https://rs-balung-cp.vercel.app/berita");
   const formData = await request.formData();
-  console.log(request);
   const method = request.method;
+
   if (method === "POST") {
     const files = formData.getAll("gambar_tambahan");
-    console.log("files", formData);
-
     if (files.length > 4) {
-      return { message: "Maksimal 4 foto." };
+      return { error: "Maksimal upload 4 foto." };
+    }
+    console.log(files);
+    if (
+      files.length === 0 ||
+      files.every((file) => !(file instanceof File) || file.size === 0)
+    ) {
+      return { error: "Mohon upload minimal 1 foto" };
     }
 
-    const uploadForm = new FormData();
-    files.forEach((file) => {
-      uploadForm.append("gambar_tambahan", file);
-    });
-    console.log("uploadForm", uploadForm);
-
-    try {
-      const response = await axios.post(urlRequest.href, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console.log(response);
-    } catch (error: any) {
-      console.error("error", error.response.data);
-    }
+    return handleAction(
+      () =>
+        axios.post(urlRequest.href, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        }),
+      "Foto berhasil diupload.",
+    );
   }
+
   if (method === "DELETE") {
-    try {
-      const deleteData = formData.getAll("ids");
-      console.log("deleteData", formData);
-      console.log("deleteData", deleteData);
+    const deleteData = formData.getAll("ids");
 
-      const response = await axios.delete(urlRequest.href, {
-        data: { ids: [...deleteData] },
-      });
-      console.log("res delete", response);
-    } catch (error: any) {
-      console.log("error", error.response.data);
-    }
+    return handleAction(
+      () => axios.delete(urlRequest.href, { data: { ids: [...deleteData] } }),
+      "Foto berhasil dihapus.",
+    );
   }
+
+  return { error: "Method tidak dikenal." };
 }
+export default function GalleryNews({
+  loaderData,
+  actionData,
+}: Route.ComponentProps) {
+  // const photos = (loaderData as unknown as { id: string; url: string }[]) || [];
+  const photos = ((loaderData as LoaderResult)?.data || []) as {
+    id: string;
+    url: string;
+  }[];
 
-export default function GalleryNews({ loaderData }: Route.ComponentProps) {
-  const photos = (loaderData as { id: string; url: string }[]) || [];
-
-  console.log(photos);
   const fetcher = useFetcher();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-
-  console.log(selectedIds);
-
+  console.log("ActionData:", actionData);
+  const data = actionData as { error?: string; success?: string };
+  useEffect(() => {
+    if (data?.success) toast.success(data.success);
+    if (data?.error) toast.error(data.error);
+  }, [data]);
   const handleCheckboxChange = (photoId: string) => {
     setSelectedIds((prev) =>
       prev.includes(photoId)
@@ -101,7 +156,7 @@ export default function GalleryNews({ loaderData }: Route.ComponentProps) {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 shadow-2xl">
       <h1 className="mb-4 text-2xl font-bold">Form Galeri Berita</h1>
 
       <Form
@@ -140,13 +195,13 @@ export default function GalleryNews({ loaderData }: Route.ComponentProps) {
       <button
         disabled={selectedIds.length <= 0}
         onClick={handleDeleteSelected}
-        className={`mt-4 flex items-center rounded p-2 text-white ${selectedIds.length <= 0 ? "bg-red-600/50" : "bg-red-600"}`}
+        className={`ms-auto me-2 mt-4 flex items-center rounded p-2 text-white ${selectedIds.length <= 0 ? "bg-red-600/50" : "bg-red-600"}`}
       >
-        <TrashIcon className="h-5 w-5" />
+        <TrashIcon className="h-4 w-4" />
       </button>
       {/* )} */}
 
-      <div className="mt-6 grid grid-cols-2 gap-4 rounded-lg border p-4 md:grid-cols-4">
+      <div className="mt-6 grid min-h-[40vh] grid-cols-2 gap-4 rounded-lg border p-4 md:grid-cols-4">
         {photos?.map((photo) => (
           <div key={photo.id} className="relative aspect-video">
             <img

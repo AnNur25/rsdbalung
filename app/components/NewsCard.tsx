@@ -17,7 +17,7 @@ export default function NewsCard({
   date,
 }: NewsCardProps) {
   return (
-    <div className="relative m-2 w-72 overflow-hidden rounded-sm bg-white shadow-md lg:w-[30vw]">
+    <div className="relative m-2 w-72 overflow-hidden rounded-sm bg-white shadow-md lg:w-[26vw]">
       <p className="absolute top-0 right-0 rounded-bl-3xl bg-green-600 px-4 py-2 text-sm text-white">
         {formatDate(date)}
       </p>
@@ -35,7 +35,7 @@ export default function NewsCard({
         >
           <span className="absolute inset-0"></span>
 
-          <h2 className="text-md line-clamp-2 font-bold text-gray-900 lg:text-xl">
+          <h2 className="text-md line-clamp-2 font-bold text-gray-900 lg:text-lg">
             {title}
           </h2>
         </a>

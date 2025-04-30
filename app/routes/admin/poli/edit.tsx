@@ -14,7 +14,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 
     return data.data;
   } catch (error: any) {
-    console.error("Error fetching Poli data:", error);
+    // console.error("Error fetching Poli data:", error);
     return {
       success: false,
       statusCode: error.response?.status ?? 500,
@@ -49,7 +49,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 
     return { success: true, nama_poli: response.data.nama_poli };
   } catch (error: any) {
-    console.error("Error creating Poli:", error.response);
+    // console.error("Error creating Poli:", error.response);
     return { error: error.response?.data?.message || "Failed to create Poli" };
   }
 }

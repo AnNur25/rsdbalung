@@ -29,7 +29,7 @@ export async function action({ request }: Route.ActionArgs) {
 
     return { success: true, nama_poli: response.data.nama_poli };
   } catch (error: any) {
-    console.error("Error creating Poli:", error.response);
+    // console.error("Error creating Poli:", error.response);
     return { error: error.response?.data?.message || "Failed to create Poli" };
   }
 }

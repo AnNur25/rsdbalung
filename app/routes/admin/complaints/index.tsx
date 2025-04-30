@@ -3,6 +3,7 @@ import Table from "~/components/Table";
 import type { Route } from "./+types";
 import { formatDate } from "~/utils/formatDate";
 import { Form } from "react-router";
+import { alternatingRowColor } from "~/utils/styles";
 export interface ResponAdmin {
   id_respon_admin: string;
   message: string;
@@ -41,19 +42,19 @@ export async function action({ request }: Route.ActionArgs) {
     const response = await axios.post(urlRequest.href, formData);
     console.log(response.data);
   } catch (error: any) {
-    console.error(error.response.data);
+    // console.error(error.response.data);
   }
 }
 
 export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Nama", "Aduan", "Tanggal", "Status", "Aksi"];
-  const aduanList = loaderData as Aduan[];
+  const aduanList = (loaderData as Aduan[]) || [];
   return (
     <>
-      <section className="overflow-x-auto">
+      <section className="w-full overflow-x-auto">
         <Table headers={headers}>
           {aduanList.map((item, index) => (
-            <tr key={index} className="border-b border-gray-300">
+            <tr key={index} className={alternatingRowColor}>
               <td className="w-min border border-gray-300 px-4 py-2 text-center">
                 {index + 1}
               </td>
@@ -83,7 +84,8 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
             <p>{formatDate(item.createdAt)}</p>
             <p>{item.deskripsi}</p>
             <p>
-              <a target="__blank"
+              <a
+                target="__blank"
                 href={`https://api.whatsapp.com/send/?phone=${item.no_wa}`}
               >
                 WA
@@ -93,7 +95,13 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
               <p className="border">{respon.message}</p>
             ))}
             <Form method="post" action="/admin/aduan">
-              <input hidden readOnly type="text" name="id_aduan" value={item.id_aduan} />
+              <input
+                hidden
+                readOnly
+                type="text"
+                name="id_aduan"
+                value={item.id_aduan}
+              />
               <input className="rounded border" type="text" name="message" />
               <button>Balas</button>
             </Form>

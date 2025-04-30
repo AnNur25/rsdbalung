@@ -1,4 +1,8 @@
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {
+  PencilSquareIcon,
+  PlusIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import Table from "~/components/Table";
@@ -60,11 +64,11 @@ export async function loader(): Promise<JadwalDokterResponse> {
       };
     }
 
-    console.log(response.data.data.dokter)
     return response.data;
   } catch (error: any) {
+    console.log(error.response?.data);
     return {
-      ...error.response.data,
+      ...error.response?.data,
       data: {
         dokter: [],
         pagination: {
@@ -82,10 +86,8 @@ export default function AdminSchedule() {
   const headers = ["No", "Dokter", "Poli", "Layanan", "Hari", "Jam", "Aksi"];
 
   const response = useLoaderData() as JadwalDokterResponse;
-  //
   const { dokter: doctors, pagination } = response.data;
-  //   //  // Log the data and pagination for debugging
-
+  console.log(response);
   const flattenedSchedules = doctors.flatMap((doctor) =>
     doctor.layananList.flatMap((layanan) =>
       layanan.jadwal.map((hari) => ({
@@ -101,7 +103,14 @@ export default function AdminSchedule() {
 
   return (
     <>
-      <section className="overflow-x-auto">
+      <a
+        href="/admin/jadwal-dokter/create"
+        className="ms-auto mb-6 flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
+      >
+        <PlusIcon className="h-4 w-4" />
+        <span>Tambah</span>
+      </a>
+      <section className="w-full overflow-x-auto">
         <Table headers={headers}>
           {flattenedSchedules.map((item, index) => (
             <tr key={index} className={alternatingRowColor}>
@@ -123,10 +132,10 @@ export default function AdminSchedule() {
                     href={`/admin/jadwal-dokter/edit/${item.id_dokter}`}
                     className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:underline"
                   >
-                    <PencilSquareIcon className="h-5 w-5" />
+                    <PencilSquareIcon className="h-4 w-4" />
                   </a>
                   <a className="block w-min rounded bg-red-600 p-2 text-white hover:underline">
-                    <TrashIcon className="h-5 w-5" />
+                    <TrashIcon className="h-4 w-4" />
                   </a>
                 </div>
               </td>

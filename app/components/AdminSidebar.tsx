@@ -38,7 +38,7 @@ export default function AdminSidebar() {
   return (
     <>
       {/* Mobile top bar */}
-      <div className="to flex items-center justify-between bg-gradient-to-r from-blue-950 to-blue-700 p-4 text-white lg:hidden">
+      <div className="flex items-center justify-between bg-gradient-to-r from-blue-950 to-blue-700 p-4 text-white lg:hidden">
         <button onClick={() => setSidebarOpen(true)}>
           <Bars3Icon className="h-6 w-6" />
         </button>
@@ -68,12 +68,12 @@ export default function AdminSidebar() {
                   }`
                 }
               >
-                <item.icon className="h-5 w-5" />
+                <item.icon className="h-4 w-4" />
                 {item.name}
               </NavLink>
             ))}
             <button className="mt-4 flex w-full items-center gap-3 rounded-md bg-red-500 px-3 py-2 text-sm font-medium text-white hover:bg-red-600">
-              <ArrowLeftEndOnRectangleIcon className="h-5 w-5" />
+              <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
               Keluar
             </button>
           </nav>
@@ -81,7 +81,7 @@ export default function AdminSidebar() {
       </Dialog>
 
       {/* Desktop Sidebar */}
-      <aside className="hidden bg-gradient-to-r from-blue-950 to-blue-700 p-4 text-white lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
+      <aside className="hidden bg-gradient-to-r from-blue-950 to-blue-700 p-4 text-white lg:fixed lg:inset-y-0 lg:flex lg:w-54 lg:flex-col">
         <div className="mb-8 flex items-center justify-center">
           <img src={logo} alt="Logo" className="h-10" />
         </div>
@@ -98,19 +98,19 @@ export default function AdminSidebar() {
                 }`
               }
             >
-              <item.icon className="h-5 w-5" />
+              <item.icon className="h-4 w-4" />
               {item.name}
             </NavLink>
           ))}
         </nav>
         <button className="mt-6 flex items-center gap-3 rounded-md bg-red-500 px-3 py-2 text-sm font-medium hover:bg-red-600">
-          <ArrowLeftEndOnRectangleIcon className="h-5 w-5" />
+          <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
           Keluar
         </button>
       </aside>
 
       {/* Offset for content */}
-      <div className="lg:ml-64" />
+      <div className="lg:ml-54" />
     </>
   );
 }

@@ -116,28 +116,8 @@ export default function NewsDetail() {
 
           <HtmlParse htmlString={isi} />
 
-          <div className="grid grid-cols-1 gap-4 py-8 lg:max-w-2/3 lg:grid-cols-2 lg:grid-rows-2 lg:p-8">
-            <img
-              src={gambar_sampul}
-              alt={judul}
-              className="h-auto w-full object-cover"
-            />
-            <img
-              src={gambar_sampul}
-              alt={judul}
-              className="h-auto w-full object-cover"
-            />
-            <img
-              src={gambar_sampul}
-              alt={judul}
-              className="h-auto w-full object-cover"
-            />
-            <img
-              src={gambar_sampul}
-              alt={judul}
-              className="h-auto w-full object-cover"
-            />
-            {gambar_tambahan.map((image, index) => (
+          <div className="grid grid-cols-1 gap-4 py-8 lg:max-w-3/4 lg:grid-cols-2 lg:grid-rows-2 lg:p-8">
+            {gambar_tambahan?.map((image, index) => (
               <img
                 key={index}
                 src={gambar_sampul}
@@ -169,7 +149,7 @@ export default function NewsDetail() {
                     className="aspect-video h-24 rounded object-cover"
                   />
                   <div>
-                    <p className="w-fit rounded-lg bg-green-600 px-4 py-2 text-sm text-white">
+                    <p className="w-fit rounded-lg bg-green-600 px-3 py-1 text-xs text-white">
                       {berita.tanggal_dibuat.split(" pukul")[0]}
                     </p>
                     <a href={`/berita/${berita.id}`}>

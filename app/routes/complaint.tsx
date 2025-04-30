@@ -20,7 +20,7 @@ export async function action({ request }: Route.ActionArgs) {
     });
     console.log(response.data.data);
   } catch (error: any) {
-    console.error(error.response.data);
+    // console.error(error.response.data);
   }
 }
 

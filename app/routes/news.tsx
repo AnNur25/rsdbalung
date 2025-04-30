@@ -24,7 +24,7 @@ import {
 export interface News {
   id: string;
   judul: string;
-  isi: string;
+  ringkasan: string;
   gambar_sampul: string;
   tanggal_dibuat: string;
 }
@@ -133,7 +133,7 @@ export default function News() {
       <h1 className="mt-2 text-2xl font-extrabold uppercase">Berita</h1>
       <div className="items-centers mt-4 flex gap-2">
         <div className="relative flex items-center">
-          <MagnifyingGlassIcon className="absolute left-3 h-5 w-5 text-gray-400" />
+          <MagnifyingGlassIcon className="absolute left-3 h-4 w-4 text-gray-400" />
 
           <input
             className="max-w-[60vw] rounded-md border-1 border-gray-300 py-2 ps-10 pe-2 focus:border-green-600 focus:outline-none lg:w-2xl"
@@ -153,14 +153,14 @@ export default function News() {
         </button>
       </div>
 
-      <section className="flex flex-col flex-wrap justify-center gap-4 p-4 min-md:flex-row">
+      <section className="flex flex-col flex-wrap justify-center gap-5 p-4 min-md:flex-row">
         {news.length > 0 ? (
           news.map((berita, index) => (
             <NewsCard
               key={index}
               id={berita.id}
               title={berita.judul}
-              description={berita.isi}
+              description={berita.ringkasan}
               image={berita.gambar_sampul}
               date={berita.tanggal_dibuat}
             />

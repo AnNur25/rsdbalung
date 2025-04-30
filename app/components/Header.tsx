@@ -46,6 +46,15 @@ export default function Header({
     { name: "Profil", href: "/profile" },
     { name: "Berita", href: "/berita" },
     {
+      name: "Informasi RS",
+      // href: "/pelayanan/f2bd5f40-35e3-4b58-812f-c3e1872d3722",
+      submenu: [
+        { name: "Dokter", href: "/dokter" },
+        { name: "Ketersediaan Tempat Tidur", href: "#" },
+        { name: "Jadwal Praktek", href: "/jadwal-dokter" },
+      ],
+    },
+    {
       name: "Pelayanan",
       // href: "/pelayanan/f2bd5f40-35e3-4b58-812f-c3e1872d3722",
       submenu: pelayanan.map((item) => ({
@@ -53,8 +62,6 @@ export default function Header({
         href: `/pelayanan/${item.id_pelayanan}`,
       })),
     },
-    { name: "Dokter", href: "/dokter" },
-    { name: "Jadwal Dokter", href: "/jadwal-dokter" },
     { name: "Aduan", href: "#" },
   ];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -121,7 +128,7 @@ export default function Header({
                           href={subitem.href}
                           className={`${
                             active ? "bg-gray-100" : ""
-                          } block px-4 py-2 text-sm font-medium`}
+                          } block w-full px-4 py-2 text-sm font-medium`}
                         >
                           {subitem.name}
                         </a>

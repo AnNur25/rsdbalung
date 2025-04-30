@@ -17,7 +17,7 @@ export default [
     route("jadwal-dokter", "routes/schedule.tsx"),
     route("berita/:id", "routes/news-detail.tsx"),
     route("pelayanan/:id", "routes/layanan-detail.tsx"),
-    route("aduan", "routes/complaint.tsx")
+    route("aduan", "routes/complaint.tsx"),
   ]),
 
   // Admin routes
@@ -25,10 +25,9 @@ export default [
     route("login", "routes/admin/login.tsx"),
     route("logout", "routes/admin/logout.tsx"),
     layout("routes/admin/layout.tsx", [
-      index("routes/admin/home.tsx"),
-      ...prefix("akun", [
-        index("routes/admin/account/index.tsx"),
-      ]),
+      index("routes/admin/index.tsx"),
+      route("home", "routes/admin/home.tsx"),
+      ...prefix("akun", [index("routes/admin/account/index.tsx")]),
       ...prefix("berita", [
         index("routes/admin/news/index.tsx"),
         // route("detail/:id", "routes/admin/news/detail.tsx"),

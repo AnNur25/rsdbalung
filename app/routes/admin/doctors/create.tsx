@@ -58,7 +58,7 @@ export async function action({ request }: Route.ActionArgs) {
     console.log(response);
     // return redirect("/admin/doctors");
   } catch (error: any) {
-    console.error("Failed to create doctor", error.response.data.message);
+    // console.error("Failed to create doctor", error.response.data.message);
     // throw new Response("Submission failed", { status: 500 });
   }
 }
@@ -103,7 +103,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
             <div className="relative">
               <ListboxButton className="flex w-full items-center justify-between rounded border p-2">
                 <span>{selectedPoli.nama_poli}</span>
-                <ChevronDownIcon className="h-5 w-5 text-gray-500" />
+                <ChevronDownIcon className="h-4 w-4 text-gray-500" />
               </ListboxButton>
               <ListboxOptions
                 anchor="bottom"
@@ -119,7 +119,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
                       <div className="flex items-center justify-between">
                         <span>{poli.nama_poli}</span>
                         {selected && (
-                          <CheckIcon className="h-5 w-5 text-blue-600" />
+                          <CheckIcon className="h-4 w-4 text-blue-600" />
                         )}
                       </div>
                     )}

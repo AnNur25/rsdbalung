@@ -42,12 +42,12 @@ export default function AdminPoli() {
     <>
       <a
         href="/admin/poli/create"
-        className="ms-auto flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
+        className="ms-auto mb-6 flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
       >
-        <PlusIcon className="h-5 w-5" />
+        <PlusIcon className="h-4 w-4" />
         <span>Tambah</span>
       </a>
-      <section className="overflow-x-auto">
+      <section className="w-full overflow-x-auto">
         <Table headers={headers}>
           {poli.map((item, index) => (
             <tr key={index} className={alternatingRowColor}>
@@ -62,7 +62,7 @@ export default function AdminPoli() {
                   href={`/admin/poli/edit/${item.id_poli}`}
                   className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:underline"
                 >
-                  <PencilSquareIcon className="h-5 w-5" />
+                  <PencilSquareIcon className="h-4 w-4" />
                 </a>
               </td>
             </tr>

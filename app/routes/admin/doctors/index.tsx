@@ -1,10 +1,15 @@
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {
+  PencilSquareIcon,
+  PlusIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 import axios from "axios";
 import { Form, useLoaderData } from "react-router";
 import DoctorCard from "~/components/DoctorCard";
 import type { Doctor } from "~/routes/doctors";
 import { getSession } from "~/sessions.server";
 import type { Route } from "./+types";
+import { handleAction } from "~/utils/handleAction";
 
 interface ApiResponse {
   success: boolean;
@@ -22,9 +27,11 @@ interface ApiResponse {
 }
 export async function loader() {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
+  handleAction(() => axios.get(urlRequest.href));
 
   try {
     const response = await axios.get(urlRequest.href);
+    console.log(response.data);
 
     if (!response.data.success) {
       return {
@@ -44,6 +51,8 @@ export async function loader() {
     }
     return response.data;
   } catch (error: any) {
+    console.log(error.response?.data);
+
     return {
       success: false,
       statusCode: error.response?.status ?? 500,
@@ -109,7 +118,14 @@ export default function AdminDoctors() {
   const { Dokter: doctors } = response.data;
   return (
     <>
-      <section className="flex flex-col flex-wrap justify-center gap-6 p-4 min-md:flex-row">
+      <a
+        href="/admin/dokter/create"
+        className="ms-auto mb-6 flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
+      >
+        <PlusIcon className="h-4 w-4" />
+        <span>Tambah</span>
+      </a>
+      <section className="flex flex-col flex-wrap justify-center gap-5 py-4 min-md:flex-row">
         {doctors.length > 0 ? (
           doctors.map((doctor, index) => (
             <div
@@ -128,11 +144,11 @@ export default function AdminDoctors() {
                   href={`/admin/dokter/edit/${doctor.id_dokter}`}
                   className="block w-min rounded bg-green-600 p-2 text-white hover:underline"
                 >
-                  <PencilSquareIcon className="h-5 w-5" />
+                  <PencilSquareIcon className="h-4 w-4" />
                 </a>
                 <Form
                   method="delete"
-                  className="block w-min rounded bg-red-600 p-2 text-white hover:underline"
+                  className="block h-min rounded bg-red-600 p-2 text-white hover:underline"
                 >
                   <input
                     type="hidden"
@@ -140,7 +156,7 @@ export default function AdminDoctors() {
                     value={doctor.id_dokter}
                   />
                   <button className="cursor-pointer">
-                    <TrashIcon className="h-5 w-5" />
+                    <TrashIcon className="h-4 w-4" />
                   </button>
                 </Form>
               </div>

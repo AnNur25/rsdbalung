@@ -100,7 +100,7 @@ export async function action({ request }: Route.ActionArgs) {
     // console.log("action res", response);
     // console.log("action res data", response.data);
   } catch (error: any) {
-    console.error("action err", error);
+    // console.error("action err", error);
   }
   // let data = {
   //   id_dokter: formData.get("id_dokter"),

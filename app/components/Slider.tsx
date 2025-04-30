@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef, type ReactNode } from "react";
 
 interface SliderProps {
+  navInside?: boolean;
   children: ReactNode[]; // Accept an array of ReactNode as slides
 }
 
-export default function Slider({ children }: SliderProps) {
+export default function Slider({ navInside = false, children }: SliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [childWidth, setChildWidth] = useState(0);
@@ -94,60 +95,61 @@ export default function Slider({ children }: SliderProps) {
           </div>
         ))} */}
       </div>
-
-      {/* Navigation Buttons */}
-      <button
-        onClick={prevSlide}
-        className="absolute bottom-0 left-0 rounded-full p-2 text-black transition"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6"
+      <div className={navInside ? "absolute inset-0 bottom-14" : ""}>
+        {/* Navigation Buttons */}
+        <button
+          onClick={prevSlide}
+          className="absolute bottom-0 left-0 rounded-full p-2 text-black transition"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15.75 19.5 8.25 12l7.5-7.5"
-          />
-        </svg>
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute right-0 bottom-0 rounded-full p-2 text-black transition"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 19.5 8.25 12l7.5-7.5"
+            />
+          </svg>
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-0 bottom-0 rounded-full p-2 text-black transition"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m8.25 4.5 7.5 7.5-7.5 7.5"
-          />
-        </svg>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m8.25 4.5 7.5 7.5-7.5 7.5"
+            />
+          </svg>
+        </button>
 
-      {/* Dots Navigation */}
-      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 space-x-2">
-        {children.map((_, index) => (
-          <button
-            key={index}
-            className={`h-3 rounded-full ${
-              index === currentIndex
-                ? "w-8 bg-persian-blue-950 shadow-md"
-                : "w-3 bg-gray-400"
-            }`}
-            onClick={() => goToSlide(index)}
-          ></button>
-        ))}
+        {/* Dots Navigation */}
+        <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 space-x-2">
+          {children.map((_, index) => (
+            <button
+              key={index}
+              className={`h-3 rounded-full ${
+                index === currentIndex
+                  ? "w-8 bg-persian-blue-950 shadow-md"
+                  : "w-3 bg-gray-400"
+              }`}
+              onClick={() => goToSlide(index)}
+            ></button>
+          ))}
+        </div>
       </div>
     </div>
   );

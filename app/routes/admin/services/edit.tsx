@@ -11,7 +11,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     // console.log(response);
     return response.data;
   } catch (error: any) {
-    console.error(error.response.data);
+    // console.error(error.response.data);
   }
 }
 
@@ -29,7 +29,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     // console.log(response.data);
     return response.data;
   } catch (error: any) {
-    console.error(error.response.data.data);
+    // console.error(error.response.data.data);
   }
 }
 

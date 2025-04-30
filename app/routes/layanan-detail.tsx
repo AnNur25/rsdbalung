@@ -62,25 +62,23 @@ export default function LayananDetail() {
 
       {/* Jangka Waktu & Biaya  */}
       <div className="m-4 mx-auto flex flex-col gap-4 px-4 min-md:flex-row">
-        <section className="flex-1rounded-md text-center shadow-md">
-          <h2 className="rounded-t-md bg-sky-700 p-2 text-xl font-bold text-white">
+        <section className="flex-1 rounded-md h-fit text-center shadow-md">
+          <h2 className="rounded-t-md bg-sky-700 p-1 text-lg font-bold text-white">
             Jangka Waktu
           </h2>
-          <p className="h-min p-4 text-center">{JangkaWaktu}</p>
+          <p className="h-min w-max p-2 px-8 text-center">{JangkaWaktu}</p>
         </section>
-        <section className="flex-1 rounded-md text-center shadow-md">
-          <h2 className="rounded-t-md bg-sky-700 p-2 text-xl font-bold text-white">
+        <section className="flex-1 h-fit rounded-md text-center shadow-md">
+          <h2 className="rounded-t-md bg-sky-700 p-1 text-lg font-bold text-white">
             Biaya
           </h2>
-          <p className="h-min p-4 text-center">{Biaya}</p>
+          <p className="h-min w-max mx-auto p-2 px-8 text-center">{Biaya}</p>
         </section>
       </div>
 
       {/* Persyaratan */}
       <section className="mx-auto mt-4 max-w-9/10">
-        <h2 className="text-2xl font-bold text-persian-blue-950">
-          Persyaratan
-        </h2>
+        <h2 className="text-xl font-bold text-persian-blue-950">Persyaratan</h2>
         <ol className="ms-8 list-decimal text-justify">
           {Persyaratan.split(",")
             .map((item) => item.trim())
@@ -129,7 +127,7 @@ export default function LayananDetail() {
 
       {/* Prosedur */}
       <section className="mx-auto mt-4 max-w-9/10">
-        <h2 className="text-2xl font-bold text-persian-blue-950">Prosedur</h2>
+        <h2 className="text-xl font-bold text-persian-blue-950">Prosedur</h2>
         <ol className="ms-8 list-decimal text-justify">
           {Prosedur.split(",")
             .map((item) => item.trim())

@@ -25,7 +25,7 @@ export async function action({ request }: Route.ActionArgs) {
 
     return response.data;
   } catch (error: any) {
-    console.error("Error creating news:", error.response);
+    // console.error("Error creating news:", error.response);
     return {
       success: false,
       statusCode: error.response?.status ?? 500,
