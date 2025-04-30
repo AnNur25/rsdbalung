@@ -16,21 +16,13 @@ export async function action({ request }: Route.ActionArgs) {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/pelayanan`);
 
   try {
-    const response = await axios.post(
-      urlRequest.href,
-      {
-        nama_pelayanan,
-        Persyaratan,
-        Prosedur,
-        JangkaWaktu,
-        Biaya: parseInt(Biaya as string, 10),
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    const response = await axios.post(urlRequest.href, {
+      nama_pelayanan,
+      Persyaratan,
+      Prosedur,
+      JangkaWaktu,
+      Biaya: parseInt(Biaya as string, 10),
+    });
 
     return response.data;
   } catch (error) {

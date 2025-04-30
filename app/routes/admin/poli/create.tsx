@@ -17,15 +17,7 @@ export async function action({ request }: Route.ActionArgs) {
   }
 
   try {
-    const response = await axios.post(
-      urlRequest.href,
-      { nama_poli: namaPoli },
-      // {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // },
-    );
+    const response = await axios.post(urlRequest.href, { nama_poli: namaPoli });
 
     return { success: true, nama_poli: response.data.nama_poli };
   } catch (error: any) {

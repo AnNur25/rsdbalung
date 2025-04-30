@@ -18,15 +18,8 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/profil`);
   try {
-    const response = await axios.get(urlRequest.href, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(urlRequest.href);
     const data = response.data;
-    // if (!data.success) {
-    //   return redirect("/admin/login");
-    // }
     return data;
   } catch (error: any) {
     // console.error("Error fetching data:", error.response);

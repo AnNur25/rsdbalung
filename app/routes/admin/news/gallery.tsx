@@ -105,7 +105,7 @@ export default function GalleryNews({
     const formData = new FormData();
     selectedIds.forEach((id) => formData.append("ids", id));
     fetcher.submit(formData, {
-      method: "DELETE",
+      method: "delete",
     });
     setSelectedIds([]);
     setSelectAll(false);

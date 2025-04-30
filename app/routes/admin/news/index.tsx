@@ -82,7 +82,7 @@ export default function AdminNews() {
     fetcher.submit(
       { id },
       {
-        method: "DELETE",
+        method: "delete",
       },
     );
   };

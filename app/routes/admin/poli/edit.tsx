@@ -35,17 +35,9 @@ export async function action({ params, request }: Route.ActionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const token = session.get("token");
   try {
-    const response = await axios.put(
-      urlRequest.href,
-      {
-        nama_poli: formData.get("nama_poli"),
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    const response = await axios.put(urlRequest.href, {
+      nama_poli: formData.get("nama_poli"),
+    });
 
     return { success: true, nama_poli: response.data.nama_poli };
   } catch (error: any) {

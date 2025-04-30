@@ -8,6 +8,7 @@ import {
   useFetcher,
   useRouteError,
   useSubmit,
+  type HTMLFormMethod,
 } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -114,9 +115,10 @@ export default function AdminHome({
   const [selectAll, setSelectAll] = useState(false);
 
   // Layanan Unggulan Data
-  const [disableLayananForm, setDisableLayananForm] = useState<boolean>(true);
-  const [layananTitle, setLayananTitle] = useState<string>("");
-  const [layananDescription, setLayananDescription] = useState<string>("");
+  const [disableUnggulanForm, setDisableUnggulanForm] = useState<boolean>(true);
+  const [unggulanMethod, setUnggulanMethod] = useState<string>("post");
+  const [unggulanTitle, setUnggulanTitle] = useState<string>("");
+  const [unggulanDescription, setUnggulanDescription] = useState<string>("");
 
   const handleCheckboxChange = (bannerId: string) => {
     setSelectedIds((prev) =>
@@ -142,7 +144,7 @@ export default function AdminHome({
     // console.log("form delete", formData);
     formData.append("feat", "banner");
     fetcher.submit(formData, {
-      method: "DELETE",
+      method: "delete",
     });
     setSelectedIds([]);
     setSelectAll(false);
@@ -228,8 +230,8 @@ export default function AdminHome({
           Layanan Unggulan
         </h2>
         <button
-          onClick={() => setDisableLayananForm(false)}
-          className={`h-min rounded p-2 text-white ${disableLayananForm ? "bg-green-600" : "bg-gray-500"}`}
+          onClick={() => setDisableUnggulanForm(false)}
+          className={`h-min rounded p-2 text-white ${disableUnggulanForm ? "bg-green-600" : "bg-gray-500"}`}
         >
           <PencilSquareIcon className="h-4 w-4" />
         </button>
@@ -237,7 +239,7 @@ export default function AdminHome({
       <div className="mb-8 w-full p-4 shadow-2xl">
         <div className="flex items-center justify-center gap-2">
           <Form
-            method="post"
+            method={unggulanMethod as HTMLFormMethod}
             encType="multipart/form-data"
             className="flex w-full shrink flex-col gap-2"
           >
@@ -245,11 +247,11 @@ export default function AdminHome({
             <div className="flex flex-col gap-2">
               <label
                 htmlFor="judul"
-                className={`text-md font-semibold ${disableLayananForm && "text-gray-500"}`}
+                className={`text-md font-semibold ${disableUnggulanForm && "text-gray-500"}`}
               >
                 Judul{" "}
                 <span
-                  className={`${disableLayananForm ? "text-gray-500" : "text-red-600"}`}
+                  className={`${disableUnggulanForm ? "text-gray-500" : "text-red-600"}`}
                 >
                   *
                 </span>
@@ -260,17 +262,17 @@ export default function AdminHome({
                 className="rounded-lg border border-gray-400 px-4 py-2"
                 name="judul"
                 id="judul"
-                disabled={disableLayananForm}
+                disabled={disableUnggulanForm}
               />
             </div>
             <div className="flex flex-col gap-2">
               <label
                 htmlFor="deskripsi"
-                className={`text-md font-semibold ${disableLayananForm && "text-gray-500"}`}
+                className={`text-md font-semibold ${disableUnggulanForm && "text-gray-500"}`}
               >
                 Deskripsi{" "}
                 <span
-                  className={`${disableLayananForm ? "text-gray-500" : "text-red-600"}`}
+                  className={`${disableUnggulanForm ? "text-gray-500" : "text-red-600"}`}
                 >
                   *
                 </span>
@@ -281,27 +283,27 @@ export default function AdminHome({
                 className="rounded-lg border border-gray-400 px-4 py-2"
                 name="deskripsi"
                 id="deskripsi"
-                disabled={disableLayananForm}
+                disabled={disableUnggulanForm}
               />
             </div>
 
             <div className="mt-6 flex gap-17">
               <h2
-                className={`text-md font-semibold ${disableLayananForm && "text-gray-500"}`}
+                className={`text-md font-semibold ${disableUnggulanForm && "text-gray-500"}`}
               >
                 Gambar Layanan Unggulan{" "}
                 <span
-                  className={`${disableLayananForm ? "text-gray-500" : "text-red-600"}`}
+                  className={`${disableUnggulanForm ? "text-gray-500" : "text-red-600"}`}
                 >
                   *
                 </span>
               </h2>
               <h2
-                className={`text-md font-semibold max-md:hidden ${disableLayananForm && "text-gray-500"}`}
+                className={`text-md font-semibold max-md:hidden ${disableUnggulanForm && "text-gray-500"}`}
               >
                 Caption{" "}
                 <span
-                  className={`${disableLayananForm ? "text-gray-500" : "text-red-600"}`}
+                  className={`${disableUnggulanForm ? "text-gray-500" : "text-red-600"}`}
                 >
                   *
                 </span>
@@ -309,14 +311,14 @@ export default function AdminHome({
             </div>
             <div className="flex items-center gap-2 max-md:flex-col">
               <input
-                disabled={disableLayananForm}
+                disabled={disableUnggulanForm}
                 type="file"
                 name="file"
                 accept="image/*"
-                className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableLayananForm && "text-gray-500"}`}
+                className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500"}`}
               />
               <input
-                disabled={disableLayananForm}
+                disabled={disableUnggulanForm}
                 placeholder="Isi caption di sini"
                 type="text"
                 name="caption"
@@ -324,16 +326,16 @@ export default function AdminHome({
               />
 
               <button
-                disabled={disableLayananForm}
-                className={`flex h-min w-full justify-center rounded p-1.5 text-white min-md:w-min ${disableLayananForm ? "bg-gray-500" : "bg-green-500"}`}
+                disabled={disableUnggulanForm}
+                className={`flex h-min w-full justify-center rounded p-1.5 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-500"}`}
               >
                 <PlusIcon className="h-4 w-4" />
               </button>
             </div>
 
             <button
-              onClick={() => setDisableLayananForm(true)}
-              className={`rounded px-8 py-2 text-white min-md:w-min ${disableLayananForm ? "bg-gray-500" : "bg-green-500"}`}
+              onClick={() => setDisableUnggulanForm(true)}
+              className={`rounded px-8 py-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-500"}`}
             >
               Simpan
             </button>

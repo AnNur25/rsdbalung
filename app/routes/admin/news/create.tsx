@@ -15,7 +15,6 @@ export async function action({ request }: Route.ActionArgs) {
 
   const headers = {
     "Content-Type": "multipart/form-data",
-    Authorization: `Bearer ${token}`,
   };
   const config = {
     headers: headers,

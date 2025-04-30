@@ -96,7 +96,7 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
           <p className="text-center text-sm text-gray-600">Selamat datang</p>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <Form method="POST" className="space-y-6">
+            <Form method="post" className="space-y-6">
               <div>
                 <label
                   htmlFor="email"

@@ -92,11 +92,6 @@ export async function action({ request }: Route.ActionArgs) {
       const idDokter = formData.get("id_dokter") as string;
       response = await axios.delete(
         `https://rs-balung-cp.vercel.app/dokter/${idDokter}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
       );
     }
     if (!response) {
