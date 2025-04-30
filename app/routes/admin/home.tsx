@@ -223,8 +223,10 @@ export default function AdminHome({
       </div>
 
       {/* Layanan Unggulan */}
-      <div className="mt-12 mb-4 flex justify-between items-center">
-        <h2 className="w-min text-2xl font-bold uppercase">Layanan Unggulan</h2>
+      <div className="mt-12 mb-4 flex items-center justify-between">
+        <h2 className="w-min text-2xl font-bold uppercase min-md:w-max">
+          Layanan Unggulan
+        </h2>
         <button
           onClick={() => setDisableLayananForm(false)}
           className={`h-min rounded p-2 text-white ${disableLayananForm ? "bg-green-600" : "bg-gray-500"}`}
@@ -311,7 +313,7 @@ export default function AdminHome({
                 type="file"
                 name="file"
                 accept="image/*"
-                className="h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64"
+                className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableLayananForm && "text-gray-500"}`}
               />
               <input
                 disabled={disableLayananForm}
@@ -323,7 +325,7 @@ export default function AdminHome({
 
               <button
                 disabled={disableLayananForm}
-                className="flex h-min w-full justify-center rounded bg-green-500 p-1.5 text-white min-md:w-min"
+                className={`flex h-min w-full justify-center rounded p-1.5 text-white min-md:w-min ${disableLayananForm ? "bg-gray-500" : "bg-green-500"}`}
               >
                 <PlusIcon className="h-4 w-4" />
               </button>
@@ -331,7 +333,7 @@ export default function AdminHome({
 
             <button
               onClick={() => setDisableLayananForm(true)}
-              className="rounded bg-green-500 px-8 py-2 text-white min-md:w-min"
+              className={`rounded px-8 py-2 text-white min-md:w-min ${disableLayananForm ? "bg-gray-500" : "bg-green-500"}`}
             >
               Simpan
             </button>
