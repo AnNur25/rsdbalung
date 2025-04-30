@@ -1,33 +1,19 @@
 import axios from "axios";
 import Table from "~/components/Table";
-import type { Route } from "./+types";
+import type { Route } from "./+types/index";
 import { formatDate } from "~/utils/formatDate";
 import { Form } from "react-router";
 import { alternatingRowColor } from "~/utils/styles";
-export interface ResponAdmin {
-  id_respon_admin: string;
-  message: string;
-  createdAt: string; // ISO date string
-  id_user: string;
-  id_aduan: string;
-}
-
-export interface Aduan {
-  id_aduan: string;
-  judul: string;
-  deskripsi: string;
-  createdAt: string; // ISO date string
-  no_wa: string;
-  is_read: boolean;
-  responAdmin: ResponAdmin[];
-}
+import { handleLoader } from "~/utils/handleLoader";
+import type { ComplaintModel } from "~/models/Complaint";
+import { handleAction } from "~/utils/handleAction";
+import { mapAdminResponseToCard } from "~/utils/mapTypes";
+import MessageCard from "~/components/MessageCard";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/aduan/`);
-  try {
-    const response = await axios.get(urlRequest.href);
-    return response.data.data;
-  } catch (error: any) {}
+
+  return handleLoader(() => axios.get(urlRequest.href));
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -36,53 +22,65 @@ export async function action({ request }: Route.ActionArgs) {
   console.log(formData);
   console.log(method);
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/aduan/${formData.get("id_aduan")}`,
+    `https://rs-balung-cp.vercel.app/aduan/${formData.get("id")}`,
   );
-  try {
-    const response = await axios.post(urlRequest.href, formData);
-    console.log(response.data);
-  } catch (error: any) {
-    // console.error(error.response.data);
-  }
+
+  return handleAction(() => axios.post(urlRequest.href, formData));
 }
 
 export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Nama", "Aduan", "Tanggal", "Status", "Aksi"];
-  const aduanList = (loaderData as Aduan[]) || [];
+  const dummy: ComplaintModel = {
+    dibuat_pada: formatDate(Date().toString()),
+    id: "1",
+    message:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    nama: "Pasien X",
+    no_wa: "1234",
+    is_visible: true,
+    responAdmin: [
+      {
+        id: "a",
+        message: "Balasan Admin A",
+        dibuat_pada: formatDate(Date().toString()),
+      },
+      {
+        id: "a",
+        message: "Balasan Admin A",
+        dibuat_pada: formatDate(Date().toString()),
+      },
+    ],
+  };
+
+  const complaints = Array.isArray(loaderData?.data?.data_aduan)
+    ? (loaderData.data.data_aduan as ComplaintModel[])
+    : [];
+
+  if (complaints.length <= 0) {
+    complaints.push(dummy);
+    complaints.push(dummy);
+  }
+
+  console.log("complaints", complaints);
   return (
     <>
       <section className="w-full overflow-x-auto">
-        <Table headers={headers}>
-          {aduanList.map((item, index) => (
-            <tr key={index} className={alternatingRowColor}>
-              <td className="w-min border border-gray-300 px-4 py-2 text-center">
-                {index + 1}
-              </td>
-              <td className="w-min border border-gray-300 px-4 py-2 text-center">
-                {item.judul}
-              </td>
-              <td className="w-min border border-gray-300 px-4 py-2 text-center">
-                {item.judul}
-              </td>
-              <td className="w-min border border-gray-300 px-4 py-2 text-center">
-                {formatDate(item.createdAt)}
-              </td>
-              <td className="w-min border border-gray-300 px-4 py-2 text-center">
-                {item.is_read ? "Sudah dibaca" : "Belum dibaca"}
-              </td>
-              <td className="w-min border border-gray-300 px-4 py-2 text-center">
-                <a href={`/admin/aduan/balas/${item.id_aduan}`}>
-                  {item.id_aduan}
-                </a>
-              </td>
-            </tr>
-          ))}
-        </Table>
-        {aduanList.map((item, index) => (
-          <div>
-            <p>{item.judul}</p>
-            <p>{formatDate(item.createdAt)}</p>
-            <p>{item.deskripsi}</p>
+        {complaints?.map((complaint) => (
+          <MessageCard
+            isAdmin={true}
+            date={complaint.dibuat_pada}
+            message={complaint.message}
+            name={complaint.nama}
+            replies={complaint.responAdmin?.map((res) =>
+              mapAdminResponseToCard(res),
+            )}
+          />
+        ))}
+        {complaints?.map((item, index) => (
+          <div key={index}>
+            <p>{item.nama}</p>
+            <p>{formatDate(item.dibuat_pada)}</p>
+            <p>{item.message}</p>
             <p>
               <a
                 target="__blank"
@@ -100,7 +98,7 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
                 readOnly
                 type="text"
                 name="id_aduan"
-                value={item.id_aduan}
+                value={item.id}
               />
               <input className="rounded border" type="text" name="message" />
               <button>Balas</button>

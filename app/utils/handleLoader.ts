@@ -8,7 +8,7 @@ export async function handleLoader(
 ): Promise<LoaderResult> {
   try {
     const response = await fn();
-    // console.log("Loader Success", response.data);
+    console.log("Loader Success", response.data);
 
     return {
       success: response.data?.success || response.success || true,
