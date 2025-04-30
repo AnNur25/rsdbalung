@@ -120,9 +120,9 @@ export default function NewsDetail() {
             {gambar_tambahan?.map((image, index) => (
               <img
                 key={index}
-                src={gambar_sampul}
+                src={gambar_tambahan[index]}
                 alt={`Gambar ${index + 1}`}
-                className="h-auto w-full object-cover"
+                className="aspect-video h-auto w-full object-cover"
               />
             ))}
           </div>

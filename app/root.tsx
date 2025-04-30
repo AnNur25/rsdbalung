@@ -55,7 +55,7 @@ export default function App() {
 
   return (
     <>
-      {isClient && <Toaster position="top-center" />}
+      {isClient && <Toaster position="top-right" />}
       <Outlet />
     </>
   );
