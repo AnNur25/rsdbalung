@@ -4,6 +4,7 @@ import {
   Bars3Icon,
   XMarkIcon,
   ArrowLeftEndOnRectangleIcon,
+  HomeIcon,
 } from "@heroicons/react/24/solid";
 import {
   UserIcon,
@@ -19,6 +20,7 @@ import logoBlack from "~/assets/logo-black.png";
 import { NavLink } from "react-router";
 
 const navigation = [
+  { name: "Beranda", href: "/admin/home", icon: HomeIcon },
   { name: "Akun", href: "/admin/akun", icon: UserIcon },
   { name: "Berita", href: "/admin/berita", icon: NewspaperIcon },
   { name: "Layanan RS", href: "/admin/pelayanan", icon: BuildingOffice2Icon },

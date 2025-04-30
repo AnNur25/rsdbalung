@@ -137,13 +137,6 @@ export default function AdminHome({
   return (
     <div className="w-[100%] p-4 shadow-2xl">
       <h1 className="mb-4 w-max text-2xl font-bold">Banner</h1>
-      <button
-        onClick={() =>
-          fetcher.submit({ message: "Test Action" }, { method: "POST" })
-        }
-      >
-        Test
-      </button>
 
       <div className="flex items-center justify-center gap-2 lg:max-w-3/5">
         <Form
