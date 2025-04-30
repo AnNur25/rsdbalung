@@ -22,28 +22,28 @@ function useToastFromData<T extends { error?: string; success?: string }>(
   }, []);
 
   useEffect(() => {
-    if (!data || !isClient) return; // Don't run before hydration or data is empty
+    if (data && isClient) {
+      if (loadingId) {
+        // dismiss loading toast
+        toast.dismiss(loadingId);
+      }
 
-    if (loadingId) {
-      // dismiss loading toast
-      toast.dismiss(loadingId);
-    }
+      if (data.error) {
+        toast.error(data.error);
+      }
 
-    if (data.error) {
-      toast.error(data.error);
-    }
+      if (data.success) {
+        toast.success(data.success);
 
-    if (data.success) {
-      toast.success(data.success);
-
-      if (options?.successRedirectPath) {
-        const delay = options.successDelayMs ?? 1000;
-        setTimeout(() => {
-          navigate(options.successRedirectPath!);
-        }, delay);
+        if (options?.successRedirectPath) {
+          const delay = options.successDelayMs ?? 1000;
+          setTimeout(() => {
+            navigate(options.successRedirectPath!);
+          }, delay);
+        }
       }
     }
-  }, [data, navigate, options, loadingId, isClient]);
+  }, [data, navigate, options, loadingId]);
 }
 
 export function useToastFromLoader<
@@ -67,14 +67,13 @@ export function useToastFromAction<
 }
 
 export function useToast<T extends { error?: string; success?: string }>(
-  actionData?: T,
+  data?: T,
   options?: ToastHookOptions,
 ) {
-
   // show loading toast immediately, only in client-side
   const loadingId = options?.loadingMessage
     ? toast.loading(options.loadingMessage)
     : null;
 
-  useToastFromData(actionData, options, loadingId);
+  useToastFromData(data, options, loadingId);
 }

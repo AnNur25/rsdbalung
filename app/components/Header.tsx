@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import {
   Dialog,
@@ -8,8 +6,15 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
+  Popover,
+  PopoverButton,
+  PopoverPanel,
 } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  Bars3Icon,
+  ChevronDownIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
 import "~/scroll.css";
 import logo from "~/assets/logo.png";
 import whatsappIcon from "~/assets/whatsapp.svg";
@@ -64,7 +69,7 @@ export default function Header({
   const loopedContacts = [...contacts, ...contacts, ...contacts, ...contacts];
 
   return (
-    <header className="absolute inset-x-0 top-0 z-50 bg-white shadow-md">
+    <header className="sticky inset-x-0 top-0 z-50 bg-white shadow-md">
       <div className="flex w-full overflow-x-hidden bg-blue-500 p-2 text-white">
         <div className="flex gap-4">
           <div className="scroll-left flex w-max gap-4">
@@ -102,34 +107,26 @@ export default function Header({
         <div className="hidden items-center lg:flex lg:flex-2 lg:gap-x-12">
           {navigation.map((item, index) =>
             item.submenu ? (
-              <Menu
+              <Popover
                 as="div"
                 className="relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer hover:bg-gray-50"
                 key={index}
               >
-                <MenuButton className="hover:cursor-pointer">
+                <PopoverButton className="flex items-center gap-2 outline-none hover:cursor-pointer">
                   {item.name}
-                </MenuButton>
-                <MenuItems
-                  anchor="bottom"
-                  className="ring-opacity-5 absolute left-0 z-100 mt-9 w-56 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none"
-                >
-                  {item.submenu.map((subitem, subindex) => (
-                    <MenuItem key={subindex}>
-                      {({ active }) => (
-                        <a
-                          href={subitem.href}
-                          className={`${
-                            active ? "bg-gray-100" : ""
-                          } block w-full px-4 py-2 text-sm font-medium`}
-                        >
-                          {subitem.name}
-                        </a>
-                      )}
-                    </MenuItem>
+                  <ChevronDownIcon className="h-4 w-4" />
+                </PopoverButton>
+                <PopoverPanel className="ring-opacity-5 absolute left-0 z-100 mt-2 w-56  rounded-md bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none">
+                  {item.submenu.map((subitem) => (
+                    <a
+                      href={subitem.href}
+                      className="block w-full px-4 py-2 text-sm font-medium hover:bg-gray-100"
+                    >
+                      {subitem.name}
+                    </a>
                   ))}
-                </MenuItems>
-              </Menu>
+                </PopoverPanel>
+              </Popover>
             ) : (
               <a
                 key={index}

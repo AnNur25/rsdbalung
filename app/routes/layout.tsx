@@ -50,7 +50,6 @@ export default function Layout() {
   return (
     <>
       <Header pelayanan={pelayanan} />
-      <div className="pb-30"></div>
       <Outlet />
       <Footer />
     </>

@@ -12,7 +12,6 @@ import {
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import type { error } from "console";
 import { useToastFromAction, useToastFromLoader } from "~/hooks/useToast";
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -50,7 +49,6 @@ export async function action({ request }: Route.ActionArgs) {
 export default function AdminHome({ loaderData }: Route.ComponentProps) {
   // const { data } = loaderData || { data: { id_user: "", nama: "", email: "" } };
   // const { id_user, nama, email } = data;
-  console.log("home");
   const fetcher = useFetcher();
   const title = "Hai";
   // useToastFromLoader();
@@ -64,16 +62,5 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
   const showToast = (message?: string) => {
     toast.success(message || "Default");
   };
-  return (
-    <>
-      <h1>
-        {title} {data.error}
-      </h1>
-      <Form method="post">
-        <input type="text" name="title" />
-        <button>Test</button>
-      </Form>
-      <button onClick={() => showToast(data.error)}>Toast</button>
-    </>
-  );
+  return <></>;
 }

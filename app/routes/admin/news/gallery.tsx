@@ -4,7 +4,11 @@ import axios from "axios";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import type { Route } from "./+types/gallery";
 import { handleAction } from "~/utils/handleAction";
-import { useToast, useToastFromAction } from "~/hooks/useToast";
+import {
+  useToast,
+  useToastFromAction,
+  useToastFromLoader,
+} from "~/hooks/useToast";
 import { getErrorMessage } from "~/utils/handleError";
 import { toast } from "react-hot-toast";
 import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
@@ -16,14 +20,22 @@ export async function loader({ params }: Route.LoaderArgs) {
   );
   return handleLoader(() => axios.get(urlRequest.href));
 }
-
+function getDataForToast({
+  success,
+  message,
+}: {
+  message: string;
+  success: boolean;
+}) {
+  if (success) return { success: message };
+  else return { error: message };
+}
 export async function action({ request, params }: Route.ActionArgs) {
   const urlRequest = new URL(
     `https://rs-balung-cp.vercel.app/berita/${params.id}/galeri-berita`,
   );
   const formData = await request.formData();
   const method = request.method;
-
   if (method === "POST") {
     const files = formData.getAll("gambar_tambahan");
     if (files.length > 4) {
@@ -71,11 +83,16 @@ export default function GalleryNews({
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
   console.log("ActionData:", actionData);
-  const data = actionData as { error?: string; success?: string };
+  const actionToastData = actionData as { error?: string; success?: string };
+  const loaderToastData = getDataForToast(loaderData);
   useEffect(() => {
-    if (data?.success) toast.success(data.success);
-    if (data?.error) toast.error(data.error);
-  }, [data]);
+    if (loaderToastData?.success) toast.success(loaderToastData.success);
+    if (loaderToastData?.error) toast.error(loaderToastData.error);
+  }, [loaderToastData]);
+  // useEffect(() => {
+  //   if (actionToastData?.success) toast.success(actionToastData.success);
+  //   if (actionToastData?.error) toast.error(actionToastData.error);
+  // }, [actionToastData]);
   const handleCheckboxChange = (photoId: string) => {
     setSelectedIds((prev) =>
       prev.includes(photoId)
