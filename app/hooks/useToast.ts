@@ -9,6 +9,17 @@ type ToastHookOptions = {
   loadingMessage?: string;
 };
 
+export function getDataForToast({
+  success,
+  message,
+}: {
+  message: string;
+  success: boolean;
+}) {
+  if (success) return { success: message };
+  else return { error: message };
+}
+
 function useToastFromData<T extends { error?: string; success?: string }>(
   data: T | undefined,
   options?: ToastHookOptions,
