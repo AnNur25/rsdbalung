@@ -12,6 +12,14 @@
   /* "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
 }
 
+input::file-selector-button {
+  background-color: var(--color-gray-300);
+  border: 1px solid var(--color-gray-600);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  margin-inline-end: 12px;
+}
+
 /* html,
 body {
   @apply bg-white dark:bg-gray-950;
