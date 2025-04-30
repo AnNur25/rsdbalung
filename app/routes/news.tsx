@@ -7,7 +7,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/solid";
 
 // export async function loader({ params }: Route.LoaderArgs) {
 //   return { id: params.id };

@@ -1,7 +1,7 @@
 import { Form, useActionData, useFetcher } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { TrashIcon } from "@heroicons/react/24/solid";
 import type { Route } from "./+types/gallery";
 import { handleAction } from "~/utils/handleAction";
 import { useToast, useToastFromAction } from "~/hooks/useToast";

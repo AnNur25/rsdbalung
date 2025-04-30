@@ -1,4 +1,4 @@
-import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import Table from "~/components/Table";

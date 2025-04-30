@@ -6,7 +6,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/solid";
 
 export interface Doctor {
   id_dokter: string;

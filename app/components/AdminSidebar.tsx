@@ -4,7 +4,7 @@ import {
   Bars3Icon,
   XMarkIcon,
   ArrowLeftEndOnRectangleIcon,
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/solid";
 import {
   UserIcon,
   NewspaperIcon,
@@ -58,6 +58,7 @@ export default function AdminSidebar() {
           <nav className="space-y-2">
             {navigation.map((item) => (
               <NavLink
+                onClick={() => setSidebarOpen(false)}
                 key={item.name}
                 to={item.href}
                 className={({ isActive }: { isActive: boolean }) =>

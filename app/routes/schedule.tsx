@@ -2,7 +2,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/solid";
 import { Select } from "@headlessui/react";
 import axios from "axios";
 import { useLoaderData, useSearchParams } from "react-router";

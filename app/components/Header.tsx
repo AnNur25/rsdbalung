@@ -9,13 +9,11 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import "~/scroll.css";
 import logo from "~/assets/logo.png";
 import whatsappIcon from "~/assets/whatsapp.svg";
 import phoneIcon from "~/assets/call.svg";
-import { href, useLoaderData } from "react-router";
-import axios from "axios";
 
 interface PelayananResponse {
   success: boolean;
@@ -47,7 +45,6 @@ export default function Header({
     { name: "Berita", href: "/berita" },
     {
       name: "Informasi RS",
-      // href: "/pelayanan/f2bd5f40-35e3-4b58-812f-c3e1872d3722",
       submenu: [
         { name: "Dokter", href: "/dokter" },
         { name: "Ketersediaan Tempat Tidur", href: "#" },
@@ -56,7 +53,6 @@ export default function Header({
     },
     {
       name: "Pelayanan",
-      // href: "/pelayanan/f2bd5f40-35e3-4b58-812f-c3e1872d3722",
       submenu: pelayanan.map((item) => ({
         name: item.nama_pelayanan,
         href: `/pelayanan/${item.id_pelayanan}`,
@@ -66,9 +62,6 @@ export default function Header({
   ];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const loopedContacts = [...contacts, ...contacts, ...contacts, ...contacts];
-  // const loopedContacts = [...contacts, ...contacts, ...contacts];
-
-  // const { data: pelayanan } = pelayananResponse;
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 bg-white shadow-md">
@@ -147,15 +140,6 @@ export default function Header({
               </a>
             ),
           )}
-          {/* {navigation.map((item, index) => (
-            <a
-              key={index}
-              href={item.href}
-              className="text-sm/6 font-semibold text-gray-900"
-            >
-              {item.name}
-            </a>
-          ))} */}
         </div>
       </nav>
       <Dialog

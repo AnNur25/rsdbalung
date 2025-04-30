@@ -2,7 +2,7 @@ import {
   PencilSquareIcon,
   PlusIcon,
   TrashIcon,
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/solid";
 import axios from "axios";
 import { Form, useLoaderData } from "react-router";
 import DoctorCard from "~/components/DoctorCard";

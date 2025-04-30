@@ -2,7 +2,7 @@ import {
   MagnifyingGlassIcon,
   PencilSquareIcon,
   PlusIcon,
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/solid";
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import Table from "~/components/Table";

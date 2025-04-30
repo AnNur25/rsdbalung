@@ -1,4 +1,4 @@
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useEffect, useRef } from "react";
 // import Quill from "quill";
 // import "quill/dist/quill.snow.css";
@@ -12,9 +12,9 @@ export default function Test() {
   //   const editorRef = useRef<HTMLDivElement>(null);
 
   // useEffect(() => {
-    // new Quill("#editor", {
-    //   theme: "snow",
-    // });
+  // new Quill("#editor", {
+  //   theme: "snow",
+  // });
   // }, []);
   // const response = {
   //   success: true,
