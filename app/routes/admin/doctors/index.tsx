@@ -54,7 +54,6 @@ export default function AdminDoctors({ loaderData }: Route.ComponentProps) {
 
   const [currentPage, setCurrentPage] = useState(pagination.currentPage || 1);
   const [searchKeyword, setSearchKeyword] = useState("");
-
   const [searchParams, setSearchParams] = useSearchParams();
   const [isSearching, setIsSearching] = useState(false);
 

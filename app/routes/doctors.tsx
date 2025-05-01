@@ -10,11 +10,8 @@ import type { Pagination } from "~/models/Pagination";
 
 import DoctorCard from "~/components/DoctorCard";
 
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/solid";
+import PaginationControls from "~/components/PaginationControl";
+import SearchBar from "~/components/SearchBar";
 
 export async function loader({
   request,
@@ -36,17 +33,16 @@ export async function loader({
 
 export default function Doctors({ loaderData }: Route.ComponentProps) {
   const data = loaderData.data;
-
-  const { Dokter: doctors, pagination } = data as {
-    Dokter: Doctor[];
-    pagination: Pagination;
-  };
+  const {
+    Dokter: doctors = [],
+    pagination = { currentPage: 1, totalPages: 1, pageSize: 0, totalItems: 0 },
+  } = data as { Dokter: Doctor[]; pagination: Pagination };
 
   // Access the data and pagination from the loader
-  const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(pagination.currentPage || 1);
-  const [isSearching, setIsSearching] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isSearching, setIsSearching] = useState(false);
 
   const handleSearch = () => {
     if (searchKeyword.trim() === "") {
@@ -66,7 +62,6 @@ export default function Doctors({ loaderData }: Route.ComponentProps) {
       setSearchParams({ page: page.toString(), keyword: searchKeyword });
       setIsSearching(true);
     }
-    // setSearchParams({ page: page.toString() });
     setCurrentPage(page);
   };
 
@@ -74,25 +69,10 @@ export default function Doctors({ loaderData }: Route.ComponentProps) {
     <main className="mt-4 flex flex-col items-center">
       <h1 className="mt-2 text-2xl font-extrabold uppercase">Daftar Dokter</h1>
       <div className="items-centers mt-4 flex gap-2">
-        <div className="relative flex items-center">
-          <MagnifyingGlassIcon className="absolute left-3 h-4 w-4 text-gray-400" />
-
-          <input
-            className="max-w-[60vw] rounded-md border-1 border-gray-300 py-2 ps-10 pe-2 focus:border-green-600 focus:outline-none lg:w-2xl"
-            type="search"
-            placeholder="Cari Nama Dokter"
-            name="doctor"
-            id="doctor-search"
-            onChange={(e) => setSearchKeyword(e.target.value)}
-          />
-        </div>
-        <button
-          className="rounded-lg bg-green-600 px-6 py-2 text-white"
-          type="button"
-          onClick={handleSearch}
-        >
-          Cari
-        </button>
+        <SearchBar
+          handleSearch={handleSearch}
+          onSearchChange={setSearchKeyword}
+        />
       </div>
 
       <section className="flex flex-col flex-wrap justify-center gap-10 p-6 min-md:flex-row">
@@ -112,37 +92,12 @@ export default function Doctors({ loaderData }: Route.ComponentProps) {
         )}
       </section>
 
-      {/* Pagination Controls */}
-      <div className="mt-4 flex w-fit max-w-full justify-center gap-2">
-        <button
-          className="flex-none px-4 py-2 text-black disabled:opacity-50"
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          <ChevronLeftIcon className="h-6" />
-        </button>
-        <div className="flex w-fit flex-auto gap-2 overflow-auto p-2">
-          {[...Array(pagination.totalPages).keys()].map((index) => (
-            <button
-              key={index}
-              className={`aspect-square h-12 rounded-full text-center text-white ${
-                index + 1 === currentPage
-                  ? "bg-persian-blue-950 shadow-md"
-                  : "bg-gray-400"
-              }`}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
-        <button
-          className="flex-none px-4 py-2 text-black disabled:opacity-50"
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === pagination.totalPages}
-        >
-          <ChevronRightIcon className="h-6" />
-        </button>
+      <div className="flex w-full justify-center">
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </main>
   );
