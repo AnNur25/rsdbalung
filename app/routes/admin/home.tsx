@@ -450,7 +450,7 @@ export default function AdminHome({
                 </span>
               </h2>
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               {(existingImagesData ?? []).length > 0 ? (
                 existingImagesData.map((u, index) => (
                   <>
@@ -484,27 +484,37 @@ export default function AdminHome({
                         className="w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4"
                       />
                       {/* Add / Remove Buttons */}
-                      <div className="col-span-2 flex gap-2">
-                        {index == 0 ? (
+                      {/* <div className="col-span-2 flex gap-2"> */}
+                      {index == 0 ? (
+                        <div className="flex gap-2 w-full">
                           <button
                             disabled={disableUnggulanForm}
                             type="button"
                             onClick={handleAddUnggulan}
-                            className={`flex h-min w-full justify-center rounded p-1.5 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-500 hover:bg-green-600"}`}
+                            className={`flex h-min w-full justify-center rounded p-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-500 hover:bg-green-600"}`}
                           >
                             <PlusIcon className="h-4 w-4" />
                           </button>
-                        ) : (
                           <button
                             disabled={disableUnggulanForm}
                             type="button"
                             onClick={() => handleRemoveUnggulan(index)}
-                            className={`flex h-min w-full justify-center rounded p-1.5 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
+                            className={`flex h-min w-full justify-center rounded p-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
                           >
                             <MinusIcon className="h-4 w-4" />
                           </button>
-                        )}
-                      </div>
+                        </div>
+                      ) : (
+                        <button
+                          disabled={disableUnggulanForm}
+                          type="button"
+                          onClick={() => handleRemoveUnggulan(index)}
+                          className={`flex h-min w-full justify-center rounded p-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
+                        >
+                          <MinusIcon className="h-4 w-4" />
+                        </button>
+                      )}
+                      {/* </div> */}
                     </div>
                   </>
                 ))
@@ -530,7 +540,7 @@ export default function AdminHome({
 
                     <button
                       disabled={disableUnggulanForm}
-                      className={`flex h-min w-full justify-center rounded p-1.5 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
+                      className={`flex h-min w-full grow justify-center rounded p-1.5 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
                     >
                       <PlusIcon className="h-4 w-4" />
                     </button>
@@ -543,7 +553,7 @@ export default function AdminHome({
                 // setDisableUnggulanForm(true)
               }}
               type="submit"
-              className={`rounded px-8 py-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
+              className={`mt-3 rounded px-8 py-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
             >
               Simpan
             </button>
