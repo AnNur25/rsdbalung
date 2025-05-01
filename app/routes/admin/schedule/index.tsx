@@ -7,7 +7,7 @@ import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
 
 import { paginationDefault, type Pagination } from "~/models/Pagination";
-import type { Dokter } from "~/models/Schedule";
+import type { DokterSchedule } from "~/models/Schedule";
 
 import { alternatingRowColor } from "~/utils/styles";
 import Table from "~/components/Table";
@@ -18,6 +18,8 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
+import { Select } from "@headlessui/react";
+import type { Poli } from "~/models/Poli";
 
 export async function loader({
   request,
@@ -26,18 +28,34 @@ export async function loader({
 
   const url = new URL(request.url);
   const page = url.searchParams.get("page") || "1";
-  const id_poli = url.searchParams.get("id_poli");
-  const tanggal = url.searchParams.get("tanggal");
+  const poli = url.searchParams.get("poli") ?? "";
+  const date = url.searchParams.get("date") ?? "";
 
-  if (id_poli && tanggal) {
+  const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
+
+  if (poli) {
     urlRequest.pathname = "/jadwal-dokter/search";
-    urlRequest.searchParams.set("id_poli", id_poli);
-    urlRequest.searchParams.set("tanggal", tanggal);
+    urlRequest.searchParams.set("id_poli", poli);
   }
-
+  if (date) {
+    urlRequest.pathname = "/jadwal-dokter/search";
+    urlRequest.searchParams.set("tanggal", date);
+  }
   urlRequest.searchParams.set("page", page);
 
-  return handleLoader(() => axios.get(urlRequest.href));
+  const jadwalResponse = await handleLoader(() => axios.get(urlRequest.href));
+  const poliResponse = await handleLoader(() => axios.get(poliRequest.href));
+
+  const data = {
+    schedules: jadwalResponse.data,
+    poli: poliResponse.data,
+  };
+
+  return {
+    success: jadwalResponse.success && poliResponse.success,
+    message: "Selesai mendapatkan data",
+    data,
+  };
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -55,11 +73,14 @@ export async function action({ request }: Route.ActionArgs) {
 export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Dokter", "Poli", "Layanan", "Hari", "Jam", "Aksi"];
 
-  const data = loaderData.data;
-  const { dokter: doctors = [], pagination = paginationDefault } = data as {
-    dokter: Dokter[];
+  const poli: Poli[] = loaderData.data.poli || [];
+
+  const scheduleData: {
+    dokter: DokterSchedule[];
     pagination: Pagination;
-  };
+  } = loaderData.data.schedules;
+
+  const { dokter: doctors = [], pagination = paginationDefault } = scheduleData;
 
   const flattenedSchedules = doctors.flatMap((doctor) =>
     doctor.layananList.map((layanan) => ({
@@ -71,28 +92,31 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
     })),
   );
 
-  const [currentPage, setCurrentPage] = useState(pagination.currentPage || 1);
-  const [searchKeyword, setSearchKeyword] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isSearching, setIsSearching] = useState(false);
+  const [currentPage, setCurrentPage] = useState(pagination?.currentPage || 1);
+  const [searchDate, setSearchDate] = useState<string>(
+    new Date().toISOString().split("T")[0],
+  );
+
+  const [searchPoli, setSearchPoli] = useState<string>("");
 
   const handleSearch = () => {
-    if (searchKeyword.trim() === "") {
-      setSearchParams({});
-      setIsSearching(false);
+    if (searchPoli.trim() !== "" && searchDate.trim() !== "") {
+      setSearchParams({ poli: searchPoli, date: searchDate });
     } else {
-      setSearchParams({ keyword: searchKeyword });
-      setIsSearching(true);
+      setSearchParams({});
     }
   };
 
   const handlePageChange = (page: number) => {
-    if (searchKeyword.trim() === "") {
-      setSearchParams({ page: page.toString() });
-      setIsSearching(false);
+    if (searchPoli.trim() !== "" && searchDate.trim() !== "") {
+      setSearchParams({
+        date: searchDate,
+        poli: searchPoli,
+        page: page.toString(),
+      });
     } else {
-      setSearchParams({ page: page.toString(), keyword: searchKeyword });
-      setIsSearching(true);
+      setSearchParams({ page: page.toString() });
     }
     setCurrentPage(page);
   };
@@ -116,6 +140,45 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
         <PlusIcon className="h-4 w-4" />
         <span>Tambah</span>
       </a>
+
+    <div className="items-centers w-full my-4 flex justify-center">
+      <div className="relative w-full gap-2 flex items-center">
+      {/* <div className="items-centers my-4 flex w-screen flex-col justify-center gap-2 lg:max-w-full lg:flex-row"> */}
+        {/* <div className="flex w-screen flex-wrap items-center justify-center gap-2 px-8 lg:max-w-3/5"> */}
+          <Select
+            className="max-w-full flex-1 rounded-md border-1 border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none lg:max-w-2xl"
+            value={searchPoli}
+            onChange={(e) => setSearchPoli(e.target.value)}
+          >
+            {poli.length > 0 ? (
+              poli.map((item, index) => (
+                <option key={index} value={item.id_poli}>
+                  {item.nama_poli}
+                </option>
+              ))
+            ) : (
+              <option value="">Tidak ada data</option>
+            )}
+          </Select>
+          <input
+            className="flex-1 rounded-md border-1 border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none lg:max-w-2xl"
+            type="date"
+            placeholder="Pilih Tanggal"
+            name="date"
+            id="schedule-date-search"
+            value={searchDate}
+            onChange={(e) => setSearchDate(e.target.value)}
+          />
+          <button
+            className="rounded-lg bg-green-600 px-6 py-2 text-white max-lg:w-full"
+            type="button"
+            onClick={handleSearch}
+          >
+            Cari
+          </button>
+        </div>
+      </div>
+
       <section className="w-full overflow-x-auto">
         <Table headers={headers}>
           {flattenedSchedules.map((doctor, index) =>

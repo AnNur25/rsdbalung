@@ -5,58 +5,26 @@ import {
 } from "@heroicons/react/24/solid";
 import { Select } from "@headlessui/react";
 import axios from "axios";
-import { useLoaderData, useSearchParams } from "react-router";
+import { data, useLoaderData, useSearchParams } from "react-router";
 import { useState } from "react";
 import { alternatingRowColor } from "~/utils/styles";
-import type { Pagination } from "~/models/Pagination";
+import { paginationDefault, type Pagination } from "~/models/Pagination";
 import type { Poli } from "~/models/Poli";
+import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
+import type { Route } from "./+types/schedule";
+import type { DokterSchedule } from "~/models/Schedule";
+import Table from "~/components/Table";
+import PaginationControls from "~/components/PaginationControl";
 
-export interface PoliApiResponse {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  data: Poli[];
-}
-
-export interface Schedule {
-  id_dokter: string;
-  nama_dokter: string;
-  gambar_dokter: string;
-  poli: {
-    id_poli: string;
-    nama_poli: string;
-  };
-  layananList: {
-    id_pelayanan: string;
-    nama_pelayanan: string;
-    jadwal: {
-      hari: string;
-      sesi: string;
-      jam_mulai: string;
-      jam_selesai: string;
-    }[];
-  }[];
-}
-
-export interface ApiResponse {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  data: {
-    dokter: Schedule[];
-    pagination: Pagination;
-  };
-}
-
-export interface ApiResponseAndPoli extends ApiResponse {
-  poli: Poli[];
-}
+// export interface ApiResponseAndPoli extends ApiResponse {
+//   poli: Poli[];
+// }
 
 export async function loader({
   request,
-}: {
-  request: Request;
-}): Promise<ApiResponseAndPoli> {
+}: Route.LoaderArgs): Promise<LoaderResult> {
+  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/jadwal-dokter/`);
+
   const url = new URL(request.url);
   const page = url.searchParams.get("page") || "1";
   const poli = url.searchParams.get("poli") ?? "";
@@ -64,10 +32,6 @@ export async function loader({
 
   const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
 
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/jadwal-dokter/`);
-  // const urlRequest = new URL(
-  //   `https://rs-balung-cp.vercel.app/jadwal-dokter/search?id_poli=2f68199c-08f3-4664-bd0e-7131c84be212&tanggal=2025-04-14`,
-  // );
   if (poli) {
     urlRequest.pathname = "/jadwal-dokter/search";
     urlRequest.searchParams.set("id_poli", poli);
@@ -78,81 +42,41 @@ export async function loader({
   }
   urlRequest.searchParams.set("page", page);
 
-  try {
-    const poliResponse = await axios.get<PoliApiResponse>(poliRequest.href);
-    const response = await axios.get<ApiResponse>(urlRequest.href);
+  const jadwalResponse = await handleLoader(() => axios.get(urlRequest.href));
+  const poliResponse = await handleLoader(() => axios.get(poliRequest.href));
 
-    if (!poliResponse.data.success) {
-      poliResponse.data.data = [];
-    }
+  const data = {
+    schedules: jadwalResponse.data,
+    poli: poliResponse.data,
+  };
 
-    if (!response.data.success || !response.data.data.dokter.length) {
-      return {
-        success: false,
-        statusCode: 404,
-        message: "No data found",
-        data: {
-          dokter: [],
-          pagination: {
-            currentPage: 1,
-            pageSize: 0,
-            totalItems: 0,
-            totalPages: 0,
-          },
-        },
-        poli: poliResponse.data.data,
-      };
-    }
-
-    return {
-      ...response.data,
-      poli: poliResponse.data.data,
-    };
-
-    // return data;
-  } catch (error: any) {
-    // console.error("Error fetching data:", error);
-    const poliResponse = await axios.get<PoliApiResponse>(poliRequest.href);
-
-    return {
-      success: false,
-      statusCode: 404,
-      message: "No data found",
-      data: {
-        dokter: [],
-        pagination: {
-          currentPage: 1,
-          pageSize: 0,
-          totalItems: 0,
-          totalPages: 0,
-        },
-      },
-      poli: poliResponse.data.data,
-    };
-  }
+  return {
+    success: jadwalResponse.success && poliResponse.success,
+    message: "Selesai mendapatkan data",
+    data,
+  };
 }
-export default function Schedule() {
-  const tableHeader = ["No", "Dokter", "Layanan", "Hari", "Jam", "Sesi"];
-  const nCols = tableHeader.length;
-  const response = useLoaderData() as ApiResponseAndPoli;
 
-  const { pagination } = response.data;
+export default function Schedule({ loaderData }: Route.ComponentProps) {
+  const headers = ["No", "Dokter", "Layanan", "Hari", "Jam", "Sesi"];
 
-  const schedules = response.data.dokter ?? [];
+  const poli: Poli[] = loaderData.data.poli || [];
 
-  const flattenedSchedules = (schedules ?? []).flatMap(
-    (doctor) =>
-      doctor.layananList?.flatMap((pelayanan) =>
-        pelayanan.jadwal.map((jadwal) => ({
-          nama_dokter: doctor.nama_dokter,
-          gambar_dokter: doctor.gambar_dokter,
-          poli: doctor.poli.nama_poli,
-          pelayanan: pelayanan.nama_pelayanan,
-          hari: jadwal.hari,
-          sesi: jadwal.sesi,
-          jam: `${jadwal.jam_mulai} - ${jadwal.jam_selesai}`,
-        })),
-      ) ?? [],
+  const scheduleData: {
+    dokter: DokterSchedule[];
+    pagination: Pagination;
+  } = loaderData.data.schedules;
+
+  const { dokter: doctors = [], pagination = paginationDefault } = scheduleData;
+
+  const flattenedSchedules = doctors.flatMap((doctor) =>
+    doctor.layananList.map((layanan) => ({
+      id_dokter: doctor.id_dokter,
+      dokter: doctor.nama_dokter,
+      poli: doctor.poli.nama_poli,
+      layanan: layanan.nama_pelayanan,
+      jadwal: layanan.jadwal,
+    })),
   );
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -160,17 +84,14 @@ export default function Schedule() {
   const [searchDate, setSearchDate] = useState<string>(
     new Date().toISOString().split("T")[0],
   );
-  const [searchPoli, setSearchPoli] = useState<string>("");
 
-  const { poli } = response;
+  const [searchPoli, setSearchPoli] = useState<string>("");
 
   const handleSearch = () => {
     if (searchPoli.trim() !== "" && searchDate.trim() !== "") {
       setSearchParams({ poli: searchPoli, date: searchDate });
     } else {
       setSearchParams({});
-      // setSearchParams({ poli: "" });
-      // setSearchParams({ date: "" });
     }
   };
 
@@ -228,86 +149,54 @@ export default function Schedule() {
           </button>
         </div>
       </div>
+
       <section className="max-w-[90vw] overflow-auto">
-        <table className="border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-sky-700 text-white">
-              {tableHeader.map((header, index) => (
-                <th key={index} className="border border-gray-300 px-4 py-2">
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {flattenedSchedules.length > 0 ? (
-              flattenedSchedules.map((item, index) => (
-                <tr key={index} className={alternatingRowColor}>
-                  <td className="w-min border border-gray-300 px-4 py-2 text-center">
-                    {index + 1}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {item.nama_dokter}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 capitalize">
-                    {item.pelayanan}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 capitalize">
-                    {item.hari}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {item.jam}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 capitalize">
-                    {item.sesi}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan={nCols}
-                  className="border border-gray-300 px-4 py-2 text-center"
-                >
-                  Tidak ada data
+        <Table headers={headers}>
+          {flattenedSchedules.map((doctor, index) =>
+            doctor.jadwal.map((jadwal, jIndex) => (
+              <tr key={index} className={alternatingRowColor}>
+                {jIndex === 0 && (
+                  <>
+                    <td
+                      rowSpan={doctor.jadwal.length}
+                      className="w-min border border-gray-300 px-4 py-2 text-center"
+                    >
+                      {index + 1}
+                    </td>
+                    <td
+                      rowSpan={doctor.jadwal.length}
+                      className="border border-gray-300 px-4 py-2"
+                    >
+                      {doctor.dokter}
+                    </td>
+                    <td
+                      rowSpan={doctor.jadwal.length}
+                      className="border border-gray-300 px-4 py-2"
+                    >
+                      {doctor.poli}
+                    </td>
+                  </>
+                )}
+                <td className="border border-gray-300 px-4 py-2">
+                  {jadwal.hari}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {jadwal.jam_mulai} - {jadwal.jam_selesai}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 capitalize">
+                  {jadwal.sesi}
                 </td>
               </tr>
-            )}
-          </tbody>
-        </table>
+            )),
+          )}
+        </Table>
       </section>
 
-      <div className="mt-4 flex w-fit max-w-full justify-center gap-2">
-        <button
-          className="flex-none px-4 py-2 text-black disabled:opacity-50"
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          <ChevronLeftIcon className="h-6" />
-        </button>
-        <div className="flex w-fit flex-auto gap-2 overflow-auto p-2">
-          {[...Array(pagination.totalPages).keys()].map((index) => (
-            <button
-              key={index}
-              className={`aspect-square h-12 rounded-full text-center text-white ${
-                index + 1 === currentPage
-                  ? "bg-persian-blue-950 shadow-md"
-                  : "bg-gray-400"
-              }`}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
-        <button
-          className="flex-none px-4 py-2 text-black disabled:opacity-50"
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === pagination.totalPages}
-        >
-          <ChevronRightIcon className="h-6" />
-        </button>
-      </div>
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={pagination.totalPages}
+        onPageChange={handlePageChange}
+      />
     </main>
   );
 }

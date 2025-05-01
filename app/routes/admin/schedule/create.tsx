@@ -23,7 +23,6 @@ import { Form } from "react-router";
 import type { Route } from "./+types/create";
 import { useState } from "react";
 import axios from "axios";
-import type { PoliApiResponse } from "~/routes/schedule";
 import type { Poli } from "~/models/Poli";
 import type { Doctor } from "~/models/Doctor";
 import type { Pelayanan } from "~/models/Pelayanan";
