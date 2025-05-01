@@ -1,25 +1,28 @@
 import imageErrorHandler from "~/utils/imageErrorHandler";
 import Slider from "./Slider";
 
-export default function Banner() {
+interface BannerProps {
+  bannersSrc: string[] | [];
+}
+
+export default function Banner({ bannersSrc }: BannerProps) {
   const bannerUrl: string =
     "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d";
   return (
     <div className="h-48 w-full lg:h-96">
-      <Slider navInside>
+      {bannersSrc.length > 0 ? (
+        <Slider navInside>
+          {bannersSrc.map((url) => (
+            <div className="h-48 w-screen lg:h-96">
+              <img src={url} className="h-full w-full object-cover" />
+            </div>
+          ))}
+        </Slider>
+      ) : (
         <div className="h-48 w-screen lg:h-96">
           <img src={bannerUrl} className="h-full w-full object-cover" />
         </div>
-        <div className="h-48 w-screen lg:h-96">
-          <img src={bannerUrl} className="h-full w-full object-cover" />
-        </div>
-        <div className="h-48 w-screen lg:h-96">
-          <img src={bannerUrl} className="h-full w-full object-cover" />
-        </div>
-        <div className="h-48 w-screen lg:h-96">
-          <img src={bannerUrl} className="h-full w-full object-cover" />
-        </div>
-      </Slider>
+      )}
     </div>
     // <div className="relative h-48 w-full lg:h-96">
     //   <img

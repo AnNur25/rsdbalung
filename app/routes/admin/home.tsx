@@ -26,7 +26,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import { handleAction } from "~/utils/handleAction";
-import type { Banner } from "~/models/Banner";
+import type { BannerModel } from "~/models/Banner";
 import type {
   ExistingImage,
   ImageCaption,
@@ -140,7 +140,7 @@ export default function AdminHome({
   console.log("actionToastData", actionToastData);
 
   const banners = Array.isArray(loaderData?.data?.banners)
-    ? (loaderData?.data?.banners as Banner[])
+    ? (loaderData?.data?.banners as BannerModel[])
     : [];
 
   // useEffect(() => {

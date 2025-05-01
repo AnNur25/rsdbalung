@@ -19,17 +19,13 @@ import "~/scroll.css";
 import logo from "~/assets/logo.png";
 import whatsappIcon from "~/assets/whatsappWhite.svg";
 import phoneIcon from "~/assets/call.svg";
+import type { Pelayanan } from "~/models/Pelayanan";
 
 interface PelayananResponse {
   success: boolean;
   statusCode: number;
   message: string;
   data: Pelayanan[];
-}
-
-interface Pelayanan {
-  id_pelayanan: string;
-  nama_pelayanan: string;
 }
 
 const contacts = [

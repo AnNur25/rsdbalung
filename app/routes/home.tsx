@@ -1,23 +1,25 @@
 import type { Route } from "./+types/home";
 import axios from "axios";
-import { useLoaderData } from "react-router";
+
+import pelayananNyamanIcon from "~/assets/pelayanan-nyaman.svg";
+import kualitasTerbaikIcon from "~/assets/kualitas-terbaik.svg";
+import penangananCepatIcon from "~/assets/penanganan-cepat.svg";
+import layananRamahIcon from "~/assets/layanan-ramah.svg";
 
 import Banner from "~/components/Banner";
-import Footer from "~/components/Footer";
 import MapsEmbed from "~/components/MapsEmbed";
 import InstagramEmbed from "~/components/InstagramEmbed";
 import NewsCard from "~/components/NewsCard";
 import TextWithRect from "~/components/TextWithRect";
 import LayananUnggulanCard from "~/components/LayananUnggulanCard";
 import Slider from "~/components/Slider";
-import whatsAppIcon from "~/assets/whatsapp.svg";
-import pelayananNyamanIcon from "~/assets/pelayanan-nyaman.svg";
-import kualitasTerbaikIcon from "~/assets/kualitas-terbaik.svg";
-import penangananCepatIcon from "~/assets/penanganan-cepat.svg";
-import layananRamahIcon from "~/assets/layanan-ramah.svg";
-import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
+
 import type { News } from "~/models/News";
-import type { Pagination } from "~/models/Pagination";
+import type { BannerModel } from "~/models/Banner";
+
+import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
+import type { Unggulan } from "~/models/Unggulan";
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Rumah Sakit Daerah Balung" },
@@ -30,32 +32,47 @@ export function meta({}: Route.MetaArgs) {
 
 export async function loader(): Promise<LoaderResult> {
   const bannerRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
+  const unggulanRequest = new URL(
+    "https://rs-balung-cp.vercel.app/layanan-unggulan/",
+  );
   const newsRequest = new URL("https://rs-balung-cp.vercel.app/berita?page=1");
 
   const bannerResponse = await handleLoader(() =>
     axios.get(bannerRequest.href),
+  );
+  const unggulanResponse = await handleLoader(() =>
+    axios.get(unggulanRequest.href),
   );
   const newsResponse = await handleLoader(() => axios.get(newsRequest.href));
 
   // return handleLoader(() =>
   //   Promise.all([axios.get(newsRequest.href), axios.get(bannerRequest.href)]),
   // );
+  const data = {
+    banners: bannerResponse.data,
+    unggulan: unggulanResponse.data,
+    news: newsResponse.data,
+  };
+
   return {
     success: true,
     message: "Selesai mendapatkan data",
-    data: [bannerResponse.data, newsResponse.data],
+    data,
   };
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const data = loaderData;
-  const banners = data.data[0];
-  const news = data.data[1].berita as News[]; //{ berita: News[]; pagination: Pagination };
-  console.log(data);
+  const data = loaderData.data;
+  const banners: BannerModel[] = data.banners || [];
+  const unggulanData: Unggulan = loaderData?.data?.unggulan ?? {};
+  const news = (data.news?.berita as News[]) || []; //{ berita: News[]; pagination: Pagination };
+  console.log(data.unggulan);
+
+  const bannerList = banners.map((b) => b.gambar);
 
   return (
     <>
-      <Banner />
+      <Banner bannersSrc={bannerList} />
 
       <section className="mt-8 flex flex-col items-center">
         <TextWithRect>KAMI BERKOMITMEN</TextWithRect>
@@ -103,56 +120,55 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
       <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-16">
         <div className="lg:flex-1">
-          <TextWithRect>POLI MATA</TextWithRect>
+          <TextWithRect>{unggulanData.judul}</TextWithRect>
           <h2 className="text-2xl font-black text-persian-blue-950 lg:text-4xl">
             Layanan Unggulan Kami
           </h2>
 
           <p className="text-justify text-sm text-gray-600 lg:text-lg">
-            Poli Mata di RSD Balung merupakan layanan unggulan yang menghadirkan
-            pelayanan kesehatan mata berkualitas dengan tenaga medis
-            berpengalaman dan peralatan modern.
+            {unggulanData.deskripsi}
           </p>
         </div>
 
         <div className="bg-sky-0 w-full overflow-hidden lg:flex-1">
           <Slider>
-            {[
-              // Slide 1
-              // [
-              "Menggunakan Media Tes Mata Terbaik",
-              "Menggunakan Alat-Alat yang Canggih",
-              // ],
-              // Slide 2
-              // [
-              "Ditangani Dokter Spesialis Berpengalaman",
-              "Pelayanan Cepat, Tepat, dan Nyaman",
-              // ],
-              // Slide 3
-              // [
-              "Konsultasi Sesuai Standar Medis Terkini",
-              "Fasilitas Lengkap untuk Semua Kebutuhan Mata",
-              // ],
-            ]
-              //   .map((description, index) => (
-              //   <div className="flex gap-2">
-              //     <LayananUnggulanCard
-              //       description={description[0]}
-              //       image={`/images/layanan-unggulan/layanan-unggulan${index + 1}.jpg`}
-              //     />
-              //     <LayananUnggulanCard
-              //       description={description[1]}
-              //       image={`/images/layanan-unggulan/layanan-unggulan${index + 2}.jpg`}
-              //     />
-              //   </div>
-              // ))
-              .map((item, index) => (
-                <LayananUnggulanCard
-                  key={index}
-                  description={item}
-                  image={`/images/layanan-unggulan/layanan-unggulan${index + 1}.jpg`}
-                />
-              ))}
+            {/* [
+               Slide 1
+               [
+               "Menggunakan Media Tes Mata Terbaik",
+               "Menggunakan Alat-Alat yang Canggih",
+               ],
+               Slide 2
+               [
+               "Ditangani Dokter Spesialis Berpengalaman",
+               "Pelayanan Cepat, Tepat, dan Nyaman",
+               ],
+               Slide 3
+               [
+               "Konsultasi Sesuai Standar Medis Terkini",
+               "Fasilitas Lengkap untuk Semua Kebutuhan Mata",
+               ],
+             ]
+                 .map((description, index) => (
+                 <div className="flex gap-2">
+                   <LayananUnggulanCard
+                     description={description[0]}
+                     image={`/images/layanan-unggulan/layanan-unggulan${index + 1}.jpg`}
+                   />
+                   <LayananUnggulanCard
+                     description={description[1]}
+                     image={`/images/layanan-unggulan/layanan-unggulan${index + 2}.jpg`}
+                   />
+                 </div>
+               )) */}
+            {unggulanData.gambarCaptions.map((item, index) => (
+              <LayananUnggulanCard
+                key={index}
+                description={item.caption}
+                image={item.gambar}
+                // image={`/images/layanan-unggulan/layanan-unggulan${index + 1}.jpg`}
+              />
+            ))}
           </Slider>
         </div>
       </section>
