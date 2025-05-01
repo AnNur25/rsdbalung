@@ -24,7 +24,7 @@ export async function handleLoader(
       message,
       data,
     };
-    console.log(result);
+    // console.log(result);
     return result;
     // return {
     //   success: response.data?.success || response.success || true,

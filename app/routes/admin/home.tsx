@@ -117,6 +117,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       );
     }
     if (method === "PUT") {
+      unggulanRequest.pathname = `/layanan-unggulan/${formData.get("id")}`;
       return handleAction(
         () =>
           axios.put(unggulanRequest.href, formData, {
@@ -141,30 +142,33 @@ export default function AdminHome({
   const banners = Array.isArray(loaderData?.data?.banners)
     ? (loaderData?.data?.banners as Banner[])
     : [];
-  const unggulan = Array.isArray(loaderData?.data?.unggulan)
-    ? (loaderData?.data?.unggulan as Unggulan[])
-    : [];
+  // const unggulan = Array.isArray(loaderData?.data?.unggulan)
+  //   ? (loaderData?.data?.unggulan as Unggulan[])
+  //   : [];
 
-  useEffect(() => {
-    if (actionToastData?.success) toast.success(actionToastData.success);
-    if (actionToastData?.error) toast.error(actionToastData.error);
-  }, [actionToastData]);
+  // useEffect(() => {
+  //   if (actionToastData?.success) toast.success(actionToastData.success);
+  //   if (actionToastData?.error) toast.error(actionToastData.error);
+  // }, [actionToastData]);
 
-  useEffect(() => {
-    if (loaderToastData?.success) toast.success(loaderToastData.success);
-    if (loaderToastData?.error) toast.error(loaderToastData.error);
-  }, []);
+  // useEffect(() => {
+  //   if (loaderToastData?.success) toast.success(loaderToastData.success);
+  //   if (loaderToastData?.error) toast.error(loaderToastData.error);
+  // }, []);
 
-  const showToast = (message?: string) => {
-    toast.success(message || "Default");
-  };
+  // const showToast = (message?: string) => {
+  //   toast.success(message || "Default");
+  // };
 
   const fetcher = useFetcher();
 
   // Selected Banner Data
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-  const unggulanData = unggulan[0];
+
+  // const unggulanData = unggulan[0];
+  const unggulanData: Unggulan = loaderData?.data?.unggulan ?? {};
+
   const transformedUnggulanData: UnggulanRequest = {
     id_layanan_unggulan: unggulanData.id_layanan_unggulan,
     judul: unggulanData.judul,
@@ -178,21 +182,21 @@ export default function AdminHome({
   };
   // Layanan Unggulan Data
   const [disableUnggulanForm, setDisableUnggulanForm] = useState<boolean>(true);
-  const [unggulanMethod, setUnggulanMethod] = useState<HTMLFormMethod>("post");
+  const [unggulanMethod, setUnggulanMethod] = useState<HTMLFormMethod>("put");
   const [unggulanTitle, setUnggulanTitle] = useState<string>(
-    unggulanData?.judul || "",
+    transformedUnggulanData?.judul || "",
   );
   const [unggulanDescription, setUnggulanDescription] = useState<string>(
-    unggulanData?.deskripsi || "",
+    transformedUnggulanData?.deskripsi || "",
   );
 
-  useEffect(() => {
-    if (unggulan.length > 0) {
-      setUnggulanMethod("put");
-    } else {
-      setUnggulanMethod("post");
-    }
-  }, [unggulan]);
+  // useEffect(() => {
+  //   if (unggulan.length > 0) {
+  //     setUnggulanMethod("put");
+  //   } else {
+  //     setUnggulanMethod("post");
+  //   }
+  // }, [unggulan]);
 
   const handleCheckboxChange = (bannerId: string) => {
     setSelectedIds((prev) =>
@@ -227,46 +231,124 @@ export default function AdminHome({
   const [existingImagesData, setExistingImagesData] = useState<ImageCaption[]>(
     transformedUnggulanData.existingImages || [],
   );
+
+  // const [newUnggulanData, setNewUnggulanData] = useState<{ caption: string }[]>(
+  //   [
+  //     {
+  //       caption: "",
+  //     },
+  //   ],
+  // );
+  const [newUnggulanData, setNewUnggulanData] = useState<
+    { caption: string }[] | null
+  >(null);
+
   const handleAddUnggulan = () => {
-    setExistingImagesData([
-      ...existingImagesData,
+    setNewUnggulanData([
+      ...(newUnggulanData || []),
       {
-        id: "",
         caption: "",
-        gambar: "",
-        nama_file: "",
       },
     ]);
   };
-  const handleRemoveUnggulan = (index: number) => {
-    setExistingImagesData(existingImagesData.filter((_, i) => i !== index));
+
+  const handleRemoveExistingUnggulan = (index: number) => {
+    if (existingImagesData.length === 1) {
+      // setExistingImagesData([
+      //   {
+      //     id: "",
+      //     caption: "",
+      //     gambar: "",
+      //     nama_file: "",
+      //   },
+      // ]);
+      setExistingImagesData(existingImagesData.filter((_, i) => i !== index));
+      setNewUnggulanData([{ caption: "" }]);
+    } else {
+      setExistingImagesData(existingImagesData.filter((_, i) => i !== index));
+    }
   };
+  const handleRemoveNewUnggulan = (index: number) => {
+    if (newUnggulanData && newUnggulanData.length === 1) {
+      setNewUnggulanData([
+        {
+          caption: "",
+        },
+      ]);
+    } else {
+      if (newUnggulanData) {
+        setNewUnggulanData(newUnggulanData.filter((_, i) => i !== index));
+      }
+    }
+  };
+
+  console.log("existingImagesData", existingImagesData);
   const handleUnggulanChange = (
     index: number,
     field: keyof ExistingImage,
     value: string,
   ) => {
-    const newUnggulan = [...existingImagesData];
+    const editedUnggulan = [...existingImagesData];
+    editedUnggulan[index][field] = value;
+    setExistingImagesData(editedUnggulan);
+  };
+  const handleNewUnggulanChange = (
+    index: number,
+    field: keyof { caption: string },
+    value: string,
+  ) => {
+    const newUnggulan = [...(newUnggulanData || [])];
     newUnggulan[index][field] = value;
-    setExistingImagesData(newUnggulan);
+    setNewUnggulanData(newUnggulan);
   };
   const handleUnggulan = () => {
     const formData = new FormData();
 
+    formData.append("id", transformedUnggulanData.id_layanan_unggulan);
     formData.append("feat", "unggulan");
 
     formData.append("judul", unggulanTitle);
     formData.append("deskripsi", unggulanDescription);
-    // formData.append("file", unggulanFiles as File[]);
-    const gambarCaptions: ImageCaption[] = [];
-    // formData.append("gambarCaptions", );
+    formData.append("existingImages", JSON.stringify(existingImagesData));
+    const fileInputs = document.querySelectorAll<HTMLInputElement>(
+      'input[type="file"][name="file"]',
+    );
+    const captionInputs = document.querySelectorAll<HTMLInputElement>(
+      'input[type="text"][name="caption"]',
+    );
+    // console.log(fileInputs)
+    // console.log(captionInputs)
 
-    // console.log("form unggulan", formData);
+    fileInputs.forEach((fileInput) => {
+      if (fileInput.files && fileInput.files.length > 0) {
+        Array.from(fileInput.files).forEach((file) => {
+          console.log(file);
+          formData.append("file", file);
+        });
+      }
+    });
+
+    const captionsArray: { caption: string }[] = [];
+    captionInputs.forEach((captionInput) => {
+      console.log({ caption: captionInput.value });
+
+      captionsArray.push({ caption: captionInput.value });
+    });
+
+    formData.append("gambarCaptions", JSON.stringify(captionsArray));
+
+    console.log(formData);
+
+    console.log("form unggulan", formData);
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
     fetcher.submit(formData, {
       encType: "multipart/form-data",
       method: unggulanMethod,
     });
-    setDisableUnggulanForm(true);
+    // setDisableUnggulanForm(true);
   };
 
   return (
@@ -365,9 +447,9 @@ export default function AdminHome({
       </div>
       <div className="mb-8 w-full p-4 shadow-2xl">
         <div className="flex items-center justify-center gap-2">
-          <Form
-            method={unggulanMethod}
-            encType="multipart/form-data"
+          <div
+            // method={unggulanMethod}
+            // encType="multipart/form-data"
             className="flex w-full shrink flex-col gap-2"
           >
             <input
@@ -451,16 +533,17 @@ export default function AdminHome({
               </h2>
             </div>
             <div className="flex flex-col gap-4">
-              {(existingImagesData ?? []).length > 0 ? (
+              {(existingImagesData ?? []).length > 0 &&
+              (existingImagesData ?? []).length <= 4 ? (
                 existingImagesData.map((u, index) => (
                   <>
                     <div className="flex items-center gap-2 max-md:flex-col">
-                      {u.id ? (
-                        <img
-                          src={u.gambar}
-                          className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500"}`}
-                        />
-                      ) : (
+                      {/* {u.id ? ( */}
+                      <img
+                        src={u.gambar}
+                        className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500"}`}
+                      />
+                      {/* ) : (
                         <input
                           required
                           disabled={disableUnggulanForm}
@@ -469,7 +552,7 @@ export default function AdminHome({
                           accept="image/*"
                           className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500"}`}
                         />
-                      )}
+                      )} */}
 
                       <input
                         value={u.caption}
@@ -486,7 +569,15 @@ export default function AdminHome({
                       {/* Add / Remove Buttons */}
                       {/* <div className="col-span-2 flex gap-2"> */}
                       {index == 0 ? (
-                        <div className="flex gap-2 w-full">
+                        <div className="flex w-full gap-2 min-md:w-min">
+                          <button
+                            disabled={disableUnggulanForm}
+                            type="button"
+                            onClick={() => handleRemoveExistingUnggulan(index)}
+                            className={`flex h-min w-full justify-center rounded p-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
+                          >
+                            <MinusIcon className="h-4 w-4" />
+                          </button>
                           <button
                             disabled={disableUnggulanForm}
                             type="button"
@@ -495,20 +586,12 @@ export default function AdminHome({
                           >
                             <PlusIcon className="h-4 w-4" />
                           </button>
-                          <button
-                            disabled={disableUnggulanForm}
-                            type="button"
-                            onClick={() => handleRemoveUnggulan(index)}
-                            className={`flex h-min w-full justify-center rounded p-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
-                          >
-                            <MinusIcon className="h-4 w-4" />
-                          </button>
                         </div>
                       ) : (
                         <button
                           disabled={disableUnggulanForm}
                           type="button"
-                          onClick={() => handleRemoveUnggulan(index)}
+                          onClick={() => handleRemoveExistingUnggulan(index)}
                           className={`flex h-min w-full justify-center rounded p-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
                         >
                           <MinusIcon className="h-4 w-4" />
@@ -520,7 +603,7 @@ export default function AdminHome({
                 ))
               ) : (
                 <>
-                  <div className="flex items-center gap-2 max-md:flex-col">
+                  {/* <div className="flex items-center gap-2 max-md:flex-col">
                     <input
                       required
                       disabled={disableUnggulanForm}
@@ -539,25 +622,87 @@ export default function AdminHome({
                     />
 
                     <button
+                      onClick={handleAddUnggulan}
                       disabled={disableUnggulanForm}
                       className={`flex h-min w-full grow justify-center rounded p-1.5 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
                     >
                       <PlusIcon className="h-4 w-4" />
                     </button>
-                  </div>
+                  </div> */}
                 </>
               )}
+              {(newUnggulanData ?? []).length > 0 &&
+                (newUnggulanData ?? []).length + existingImagesData.length <=
+                  4 &&
+                (newUnggulanData ?? []).map((u, index) => (
+                  <>
+                    <div className="flex items-center gap-2 max-md:flex-col">
+                      n
+                      <input
+                        required
+                        disabled={disableUnggulanForm}
+                        type="file"
+                        name="file"
+                        accept="image/*"
+                        className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500"}`}
+                      />
+                      <input
+                        value={u.caption}
+                        onChange={(e) =>
+                          handleNewUnggulanChange(
+                            index,
+                            "caption",
+                            e.target.value,
+                          )
+                        }
+                        required
+                        disabled={disableUnggulanForm}
+                        placeholder="Isi caption di sini"
+                        type="text"
+                        name="caption"
+                        className="w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4"
+                      />
+                      {index == 0 ? (
+                        <div className="flex w-full gap-2 min-md:w-min">
+                          <button
+                            disabled={disableUnggulanForm}
+                            type="button"
+                            onClick={() => handleRemoveNewUnggulan(index)}
+                            className={`flex h-min w-full justify-center rounded p-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
+                          >
+                            <MinusIcon className="h-4 w-4" />
+                          </button>
+                          <button
+                            disabled={disableUnggulanForm}
+                            type="button"
+                            onClick={handleAddUnggulan}
+                            className={`flex h-min w-full justify-center rounded p-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-500 hover:bg-green-600"}`}
+                          >
+                            <PlusIcon className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          disabled={disableUnggulanForm}
+                          type="button"
+                          onClick={() => handleRemoveNewUnggulan(index)}
+                          className={`flex h-min w-full justify-center rounded p-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
+                        >
+                          <MinusIcon className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                  </>
+                ))}
             </div>
             <button
-              onClick={() => {
-                // setDisableUnggulanForm(true)
-              }}
-              type="submit"
+              onClick={handleUnggulan}
+              type="button"
               className={`mt-3 rounded px-8 py-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
             >
               Simpan
             </button>
-          </Form>
+          </div>
         </div>
 
         <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 4 Foto</p>
