@@ -77,8 +77,6 @@ export default function AdminNews() {
   const { berita: news, pagination } = response.data;
   const fetcher = useFetcher();
   const handleDelete = (id: string) => {
-    // const formData = new FormData();
-    // formData.append("id", id);
     fetcher.submit(
       { id },
       {

@@ -7,7 +7,10 @@ import {
   ChevronRightIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/solid";
+import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
 import type { Doctor } from "~/models/Doctor";
+import type { Route } from "./+types/doctors";
+import type { Pagination } from "~/models/Pagination";
 
 interface ApiResponse {
   success: boolean;
@@ -28,98 +31,33 @@ export async function loader({
   request,
 }: {
   request: Request;
-}): Promise<ApiResponse> {
+}): Promise<LoaderResult> {
+  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
   const url = new URL(request.url);
 
   const page = url.searchParams.get("page") || "1";
   const keyword = url.searchParams.get("keyword");
-
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
   if (keyword) {
     urlRequest.pathname = "/dokter/search";
     urlRequest.searchParams.set("keyword", keyword);
   }
   urlRequest.searchParams.set("page", page);
-
-  try {
-    const response = await axios.get(urlRequest.href);
-
-    // `https://rs-balung-cp.vercel.app/dokter?page=${page}`,
-    // const data = response.data
-
-    // const data = {
-    //   success: response.data.success,
-    //   statusCode: response.data.statusCode,
-    //   message: response.data.message,
-    //   data: {
-    //     Dokter: keyword ? response.data.data : response.data.data.Dokter,
-    //     pagination: {
-    //       currentPage: response.data.data.pagination?.currentPage || 1,
-    //       pageSize: response.data.data.pagination?.pageSize || 15,
-    //       totalItems:
-    //         response.data.data.pagination?.totalItems ||
-    //         response.data.data.length,
-    //       totalPages:
-    //         response.data.data.pagination?.totalPages ||
-    //         Math.ceil(response.data.data.length / 15),
-    //     },
-    //   },
-    // };
-
-    if (!response.data.success || !response.data.data.Dokter.length) {
-      // Return empty data if no doctors are found
-      return {
-        ...response.data,
-        data: {
-          Dokter: [],
-          pagination: {
-            currentPage: 1,
-            pageSize: 12,
-            totalItems: 0,
-            totalPages: 1,
-          },
-        },
-      };
-    }
-
-    return response.data;
-  } catch (error: any) {
-    const data = {
-      ...error.response.data,
-      data: {
-        Dokter: [],
-        pagination: {
-          currentPage: 1,
-          pageSize: 12,
-          totalItems: 0,
-          totalPages: 1,
-        },
-      },
-    };
-
-    return data;
-  }
+  return handleLoader(() => axios.get(urlRequest.href));
 }
 
-export default function Doctors() {
-  const response = useLoaderData() as ApiResponse;
+export default function Doctors({ loaderData }: Route.ComponentProps) {
+  const data = loaderData.data;
 
-  const { Dokter: doctors, pagination } = response.data;
+  const { Dokter: doctors, pagination } = data as {
+    Dokter: Doctor[];
+    pagination: Pagination;
+  };
 
   // Access the data and pagination from the loader
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(pagination.currentPage || 1);
   const [isSearching, setIsSearching] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
-
-  // useEffect(() => {
-  //   if (isSearching) {
-  //     const data = response as unknown as SearchApiResponse;
-  //     setFilteredDoctors((data?.data as Doctor[]) || []); // Fallback to empty array
-  //   } else {
-  //     setFilteredDoctors(doctors); // Reset to original doctors list
-  //   }
-  // }, [isSearching, response]);
 
   const handleSearch = () => {
     if (searchKeyword.trim() === "") {
@@ -181,7 +119,7 @@ export default function Doctors() {
             </div>
           ))
         ) : (
-          <p className="text-gray-500">{response.message}</p>
+          <p className="text-gray-500">{data.message}</p>
         )}
       </section>
 

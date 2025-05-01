@@ -1,116 +1,106 @@
 import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  MagnifyingGlassIcon,
   PencilSquareIcon,
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import axios from "axios";
-import { Form, useLoaderData } from "react-router";
+import { Form, useFetcher, useLoaderData, useSearchParams } from "react-router";
 import DoctorCard from "~/components/DoctorCard";
 import type { Doctor } from "~/models/Doctor";
-import { getSession } from "~/sessions.server";
-import type { Route } from "./+types";
+import type { Route } from "./+types/index";
 import { handleAction } from "~/utils/handleAction";
+import { handleLoader } from "~/utils/handleLoader";
+import type { Pagination } from "~/models/Pagination";
+import { useState } from "react";
+import PaginationControls from "~/components/PaginationControl";
+import SearchBar from "~/components/SearchBar";
 
-interface ApiResponse {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  data: {
-    Dokter: Doctor[];
-    pagination: {
-      currentPage: number;
-      pageSize: number;
-      totalItems: number;
-      totalPages: number;
-    };
-  };
-}
-export async function loader() {
+// interface ApiResponse {
+//   success: boolean;
+//   statusCode: number;
+//   message: string;
+//   data: {
+//     Dokter: Doctor[];
+//     pagination: {
+//       currentPage: number;
+//       pageSize: number;
+//       totalItems: number;
+//       totalPages: number;
+//     };
+//   };
+// }
+export async function loader({ request }: Route.LoaderArgs) {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
-  handleAction(() => axios.get(urlRequest.href));
+  const url = new URL(request.url);
 
-  try {
-    const response = await axios.get(urlRequest.href);
-    console.log(response.data);
-
-    if (!response.data.success) {
-      return {
-        success: false,
-        statusCode: response.status,
-        message: "No data found",
-        data: {
-          Dokter: [],
-          pagination: {
-            currentPage: 1,
-            pageSize: 15,
-            totalItems: 0,
-            totalPages: 1,
-          },
-        },
-      };
-    }
-    return response.data;
-  } catch (error: any) {
-    console.log(error.response?.data);
-
-    return {
-      success: false,
-      statusCode: error.response?.status ?? 500,
-      message: error.response?.data?.message ?? "Internal Server Error",
-      data: {
-        Dokter: [],
-        pagination: {
-          currentPage: 1,
-          pageSize: 15,
-          totalItems: 0,
-          totalPages: 1,
-        },
-      },
-    };
+  const page = url.searchParams.get("page") || "1";
+  const keyword = url.searchParams.get("keyword");
+  if (keyword) {
+    urlRequest.pathname = "/dokter/search";
+    urlRequest.searchParams.set("keyword", keyword);
   }
+  urlRequest.searchParams.set("page", page);
+  return handleLoader(() => axios.get(urlRequest.href));
 }
 
 export async function action({ request }: Route.ActionArgs) {
   const method = request.method;
-  // console.log(request.url)
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
-  let formData;
+  const formData = await request.formData();
 
-  if (method === "POST" || method === "PUT" || method === "DELETE") {
-    formData = await request.formData();
-  } else {
-    return { error: "Invalid method" };
-  }
-  const session = await getSession(request.headers.get("Cookie"));
-  const token = session.get("token");
-  try {
-    let response;
-    if (!token) {
-      return { error: "Token is required" };
-    }
-    if (method === "DELETE") {
-      const idDokter = formData.get("id_dokter") as string;
-      response = await axios.delete(
-        `https://rs-balung-cp.vercel.app/dokter/${idDokter}`,
-      );
-    }
-    if (!response) {
-      return { error: "Error response" };
-    }
-
-    return { success: true, message: response.data.message };
-  } catch (error: any) {
-    return {
-      success: false,
-      statusCode: error.response?.status ?? 500,
-      message: error.response?.data?.message ?? "Internal Server Error",
-    };
+  if (method === "DELETE") {
+    const idDokter = formData.get("id") as string;
+    urlRequest.pathname = `/dokter/${idDokter}`;
+    return handleAction(() => axios.delete(urlRequest.href));
   }
 }
 
-export default function AdminDoctors() {
-  const response = useLoaderData() as ApiResponse;
-  const { Dokter: doctors } = response.data;
+export default function AdminDoctors({ loaderData }: Route.ComponentProps) {
+  const data = loaderData.data;
+  const {
+    Dokter: doctors = [],
+    pagination = { currentPage: 1, totalPages: 1, pageSize: 0, totalItems: 0 },
+  } = data as { Dokter: Doctor[]; pagination: Pagination };
+
+  const [currentPage, setCurrentPage] = useState(pagination.currentPage || 1);
+  const [searchKeyword, setSearchKeyword] = useState("");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearch = () => {
+    if (searchKeyword.trim() === "") {
+      setSearchParams({});
+      setIsSearching(false);
+    } else {
+      setSearchParams({ keyword: searchKeyword });
+      setIsSearching(true);
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    if (searchKeyword.trim() === "") {
+      setSearchParams({ page: page.toString() });
+      setIsSearching(false);
+    } else {
+      setSearchParams({ page: page.toString(), keyword: searchKeyword });
+      setIsSearching(true);
+    }
+    setCurrentPage(page);
+  };
+
+  const fetcher = useFetcher();
+  const handleDelete = (id: string) => {
+    fetcher.submit(
+      { id },
+      {
+        method: "delete",
+      },
+    );
+  };
   return (
     <>
       <a
@@ -120,6 +110,12 @@ export default function AdminDoctors() {
         <PlusIcon className="h-4 w-4" />
         <span>Tambah</span>
       </a>
+
+      <SearchBar
+        handleSearch={handleSearch}
+        onSearchChange={setSearchKeyword}
+      />
+
       <section className="flex flex-col flex-wrap justify-center gap-5 py-4 min-md:flex-row">
         {doctors.length > 0 ? (
           doctors.map((doctor, index) => (
@@ -137,30 +133,31 @@ export default function AdminDoctors() {
               <div className="flex flex-none justify-center gap-0.5">
                 <a
                   href={`/admin/dokter/edit/${doctor.id_dokter}`}
-                  className="block w-min rounded bg-green-600 p-2 text-white hover:underline"
+                  className="block h-fit w-min rounded bg-green-600 p-2 text-white hover:underline"
                 >
                   <PencilSquareIcon className="h-4 w-4" />
                 </a>
-                <Form
-                  method="delete"
-                  className="block h-min rounded bg-red-600 p-2 text-white hover:underline"
+                <button
+                  onClick={() => handleDelete(doctor.id_dokter)}
+                  className="block h-fit w-min cursor-pointer rounded bg-red-600 p-2 text-white hover:cursor-pointer"
                 >
-                  <input
-                    type="hidden"
-                    name="id_dokter"
-                    value={doctor.id_dokter}
-                  />
-                  <button className="cursor-pointer">
-                    <TrashIcon className="h-4 w-4" />
-                  </button>
-                </Form>
+                  <TrashIcon className="h-4 w-4" />
+                </button>
               </div>
             </div>
           ))
         ) : (
-          <p className="text-gray-500">{response.message}</p>
+          <p className="text-gray-500 capitalize">{loaderData.message}</p>
         )}
       </section>
+
+      <div className="flex w-full justify-center">
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </>
   );
 }

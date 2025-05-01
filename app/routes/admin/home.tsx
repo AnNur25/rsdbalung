@@ -169,7 +169,7 @@ export default function AdminHome({
     id_layanan_unggulan: unggulanData.id_layanan_unggulan,
     judul: unggulanData.judul,
     deskripsi: unggulanData.deskripsi,
-    existingImages: unggulanData.gambarCaptions.map((img) => ({
+    existingImages: unggulanData.gambarCaptions?.map((img) => ({
       id: img.id,
       caption: img.caption,
       gambar: img.gambar,
