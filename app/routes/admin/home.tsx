@@ -142,9 +142,6 @@ export default function AdminHome({
   const banners = Array.isArray(loaderData?.data?.banners)
     ? (loaderData?.data?.banners as Banner[])
     : [];
-  // const unggulan = Array.isArray(loaderData?.data?.unggulan)
-  //   ? (loaderData?.data?.unggulan as Unggulan[])
-  //   : [];
 
   // useEffect(() => {
   //   if (actionToastData?.success) toast.success(actionToastData.success);
@@ -166,7 +163,6 @@ export default function AdminHome({
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  // const unggulanData = unggulan[0];
   const unggulanData: Unggulan = loaderData?.data?.unggulan ?? {};
 
   const transformedUnggulanData: UnggulanRequest = {
@@ -180,6 +176,7 @@ export default function AdminHome({
       nama_file: img.nama_file,
     })),
   };
+
   // Layanan Unggulan Data
   const [disableUnggulanForm, setDisableUnggulanForm] = useState<boolean>(true);
   const [unggulanMethod, setUnggulanMethod] = useState<HTMLFormMethod>("put");
@@ -189,14 +186,6 @@ export default function AdminHome({
   const [unggulanDescription, setUnggulanDescription] = useState<string>(
     transformedUnggulanData?.deskripsi || "",
   );
-
-  // useEffect(() => {
-  //   if (unggulan.length > 0) {
-  //     setUnggulanMethod("put");
-  //   } else {
-  //     setUnggulanMethod("post");
-  //   }
-  // }, [unggulan]);
 
   const handleCheckboxChange = (bannerId: string) => {
     setSelectedIds((prev) =>
@@ -214,7 +203,6 @@ export default function AdminHome({
     }
     setSelectAll(!selectAll);
   };
-  // console.log("ids delete", selectedIds);
 
   const handleDeleteSelected = () => {
     const formData = new FormData();
@@ -283,6 +271,7 @@ export default function AdminHome({
   };
 
   console.log("existingImagesData", existingImagesData);
+  console.log("newImagesData", newUnggulanData);
   const handleUnggulanChange = (
     index: number,
     field: keyof ExistingImage,
@@ -292,6 +281,7 @@ export default function AdminHome({
     editedUnggulan[index][field] = value;
     setExistingImagesData(editedUnggulan);
   };
+
   const handleNewUnggulanChange = (
     index: number,
     field: keyof { caption: string },
@@ -301,6 +291,7 @@ export default function AdminHome({
     newUnggulan[index][field] = value;
     setNewUnggulanData(newUnggulan);
   };
+
   const handleUnggulan = () => {
     const formData = new FormData();
 
@@ -343,7 +334,7 @@ export default function AdminHome({
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
     }
-
+    // return;
     fetcher.submit(formData, {
       encType: "multipart/form-data",
       method: unggulanMethod,
@@ -563,7 +554,7 @@ export default function AdminHome({
                         disabled={disableUnggulanForm}
                         placeholder="Isi caption di sini"
                         type="text"
-                        name="caption"
+                        // name="caption"
                         className="w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4"
                       />
                       {/* Add / Remove Buttons */}
