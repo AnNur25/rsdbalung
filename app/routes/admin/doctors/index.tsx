@@ -6,7 +6,7 @@ import {
 import axios from "axios";
 import { Form, useLoaderData } from "react-router";
 import DoctorCard from "~/components/DoctorCard";
-import type { Doctor } from "~/routes/doctors";
+import type { Doctor } from "~/models/Doctor";
 import { getSession } from "~/sessions.server";
 import type { Route } from "./+types";
 import { handleAction } from "~/utils/handleAction";

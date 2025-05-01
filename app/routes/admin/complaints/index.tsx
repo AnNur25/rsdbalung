@@ -2,7 +2,7 @@ import axios from "axios";
 import Table from "~/components/Table";
 import type { Route } from "./+types/index";
 import { formatDate } from "~/utils/formatDate";
-import { Form } from "react-router";
+import { Form, useFetcher } from "react-router";
 import { alternatingRowColor } from "~/utils/styles";
 import { handleLoader } from "~/utils/handleLoader";
 import type { ComplaintModel } from "~/models/Complaint";
@@ -11,7 +11,7 @@ import { mapAdminResponseToCard } from "~/utils/mapTypes";
 import MessageCard from "~/components/MessageCard";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/aduan/`);
+  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/aduan/all`);
 
   return handleLoader(() => axios.get(urlRequest.href));
 }
@@ -24,14 +24,27 @@ export async function action({ request }: Route.ActionArgs) {
   const urlRequest = new URL(
     `https://rs-balung-cp.vercel.app/aduan/${formData.get("id")}`,
   );
-
-  return handleAction(() => axios.post(urlRequest.href, formData));
+  if (method === "POST") {
+    const id = formData.get("id");
+    urlRequest.pathname = `/aduan/reply/${id}`;
+    return handleAction(() => axios.post(urlRequest.href, formData));
+  }
+  if (method === "DELETE") {
+    const id = formData.get("id");
+    urlRequest.pathname = `/aduan/${id}`;
+    return handleAction(() => axios.delete(urlRequest.href));
+  }
+  if (method === "PATCH") {
+    const id = formData.get("id");
+    urlRequest.pathname = `/aduan/visible/${id}`;
+    return handleAction(() => axios.patch(urlRequest.href));
+  }
+  // return handleAction(() => axios.post(urlRequest.href, formData));
 }
 
 export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
-  const headers = ["No", "Nama", "Aduan", "Tanggal", "Status", "Aksi"];
   const dummy: ComplaintModel = {
-    dibuat_pada: formatDate(Date().toString()),
+    dibuat_pada: "30 April 2025",
     id: "1",
     message:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -42,12 +55,12 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
       {
         id: "a",
         message: "Balasan Admin A",
-        dibuat_pada: formatDate(Date().toString()),
+        dibuat_pada: "30 April 2025",
       },
       {
         id: "a",
         message: "Balasan Admin A",
-        dibuat_pada: formatDate(Date().toString()),
+        dibuat_pada: "30 April 2025",
       },
     ],
   };
@@ -62,12 +75,44 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
   }
 
   console.log("complaints", complaints);
+
+  const fetcher = useFetcher();
+
+  const handleDeleteComplaint = (id: string) => {
+    fetcher.submit(
+      { id },
+      {
+        method: "delete",
+      },
+    );
+  };
+  const handleVisibleComplaint = (id: string) => {
+    fetcher.submit(
+      { id },
+      {
+        method: "patch",
+      },
+    );
+  };
+  const handleReplyComplaint = (id: string, message: string) => {
+    fetcher.submit(
+      { id, message },
+      {
+        method: "post",
+      },
+    );
+  };
   return (
     <>
       <section className="w-full overflow-x-auto">
         {complaints?.map((complaint) => (
           <MessageCard
+            id={complaint.id}
             isAdmin={true}
+            sendOnClick={handleReplyComplaint}
+            isVisible={complaint.is_visible}
+            switchOnClick={() => handleVisibleComplaint(complaint.id)}
+            deleteOnClick={() => handleDeleteComplaint(complaint.id)}
             date={complaint.dibuat_pada}
             message={complaint.message}
             name={complaint.nama}
@@ -79,7 +124,7 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
         {complaints?.map((item, index) => (
           <div key={index}>
             <p>{item.nama}</p>
-            <p>{formatDate(item.dibuat_pada)}</p>
+            <p>{item.dibuat_pada}</p>
             <p>{item.message}</p>
             <p>
               <a
@@ -93,13 +138,7 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
               <p className="border">{respon.message}</p>
             ))}
             <Form method="post" action="/admin/aduan">
-              <input
-                hidden
-                readOnly
-                type="text"
-                name="id_aduan"
-                value={item.id}
-              />
+              <input hidden readOnly type="text" name="id" value={item.id} />
               <input className="rounded border" type="text" name="message" />
               <button>Balas</button>
             </Form>

@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import banner from "~/assets/rsdbalung.jpeg";
 import Header from "~/components/Header";
 import LayananUnggulanCard from "~/components/LayananUnggulanCard";
-import { type News } from "./news";
+import { type News } from "~/models/News";
 import axios from "axios";
 
 export default function Test() {

@@ -63,7 +63,7 @@ export default function Header({
         href: `/pelayanan/${item.id_pelayanan}`,
       })),
     },
-    { name: "Aduan", href: "#" },
+    { name: "Aduan", href: "/aduan" },
   ];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const loopedContacts = [...contacts, ...contacts, ...contacts, ...contacts];
@@ -117,8 +117,9 @@ export default function Header({
                   <ChevronDownIcon className="h-4 w-4" />
                 </PopoverButton>
                 <PopoverPanel className="ring-opacity-5 absolute left-0 z-100 mt-2 w-56  rounded-md bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none">
-                  {item.submenu.map((subitem) => (
+                  {item.submenu.map((subitem, subindex) => (
                     <a
+                      key={subindex}
                       href={subitem.href}
                       className="block w-full px-4 py-2 text-sm font-medium hover:bg-gray-100"
                     >
@@ -178,7 +179,7 @@ export default function Header({
                         className="ring-opacity-5 absolute left-0 z-100 ms-5 mt-4 w-56 origin-top-left rounded-md bg-white font-semibold shadow-2xl ring-1 ring-gray-200 focus:outline-none"
                       >
                         {item.submenu.map((subitem, subindex) => (
-                          <MenuItem>
+                          <MenuItem key={subindex}>
                             {({ active }) => (
                               <a
                                 href={subitem.href}

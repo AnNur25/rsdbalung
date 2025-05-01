@@ -8,6 +8,7 @@ import axios from "axios";
 import { useLoaderData, useSearchParams } from "react-router";
 import { useState } from "react";
 import { alternatingRowColor } from "~/utils/styles";
+import type { Pagination } from "~/models/Pagination";
 
 export interface Poli {
   id_poli: string;
@@ -39,13 +40,6 @@ export interface Schedule {
       jam_selesai: string;
     }[];
   }[];
-}
-
-export interface Pagination {
-  currentPage: number;
-  pageSize: number;
-  totalItems: number;
-  totalPages: number;
 }
 
 export interface ApiResponse {

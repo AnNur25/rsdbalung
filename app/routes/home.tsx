@@ -16,6 +16,9 @@ import pelayananNyamanIcon from "~/assets/pelayanan-nyaman.svg";
 import kualitasTerbaikIcon from "~/assets/kualitas-terbaik.svg";
 import penangananCepatIcon from "~/assets/penanganan-cepat.svg";
 import layananRamahIcon from "~/assets/layanan-ramah.svg";
+import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
+import type { News } from "~/models/News";
+import type { Pagination } from "~/models/Pagination";
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Rumah Sakit Daerah Balung" },
@@ -26,10 +29,26 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export async function loader(): Promise<NewsApiResponse> {
+export async function loader(): Promise<LoaderResult> {
+  const bannerRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
+  const newsRequest = new URL("https://rs-balung-cp.vercel.app/berita?page=1");
+
+  const bannerResponse = await handleLoader(() =>
+    axios.get(bannerRequest.href),
+  );
+  const newsResponse = await handleLoader(() => axios.get(newsRequest.href));
+
+  return {
+    success: true,
+    message: "Selesai mendapatkan data",
+    data: [bannerResponse.data, newsResponse.data],
+  };
+  return handleLoader(() =>
+    Promise.all([axios.get(newsRequest.href), axios.get(bannerRequest.href)]),
+  );
   try {
     const response = await axios.get<NewsApiResponse>(
-      `https://rs-balung-cp.vercel.app/berita?page=1`,
+      "https://rs-balung-cp.vercel.app/berita?page=1",
     );
     const data = response.data;
 
@@ -70,9 +89,11 @@ export async function loader(): Promise<NewsApiResponse> {
   }
 }
 
-export default function Home() {
-  const response = useLoaderData() as NewsApiResponse;
-  const news = response.data.berita;
+export default function Home({ loaderData }: Route.ComponentProps) {
+  const data = loaderData;
+  const banners = data.data[0];
+  const news = data.data[1].berita as News[]; //{ berita: News[]; pagination: Pagination };
+  console.log(data);
 
   return (
     <>
@@ -205,7 +226,7 @@ export default function Home() {
           menarik lainnya.
         </p>
         <div className="w-full">
-          {news.length > 0 ? (
+          {news?.length > 0 ? (
             <Slider>
               {news.map((berita, index) => (
                 <NewsCard
@@ -219,7 +240,7 @@ export default function Home() {
               ))}
             </Slider>
           ) : (
-            <p className="text-gray-500">{response.message}</p>
+            <p className="text-gray-500">{data.message}</p>
           )}
         </div>
       </section>

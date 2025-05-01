@@ -18,7 +18,7 @@ import type { Route } from "./+types/create";
 import { useState } from "react";
 import axios from "axios";
 import type { Poli, PoliApiResponse } from "~/routes/schedule";
-import type { Doctor } from "~/routes/doctors";
+import type { Doctor } from "~/models/Doctor";
 import type { Pelayanan } from "../services";
 
 export async function loader({ params }: Route.LoaderArgs) {

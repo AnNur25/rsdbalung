@@ -40,14 +40,14 @@ export async function action({ request }: Route.ActionArgs) {
   const file = formData.get("file") as File;
 
   // Check if no file uploaded
-  if (!file || file.size === 0) {
-    // Create a default image file
-    const defaultImageResponse = await fetch(defaultImageUrl); // you must have this image in your public folder
-    const blob = await defaultImageResponse.blob();
-    const defaultFile = new File([blob], "logosquare.jpg", { type: blob.type });
-    formData.delete("file");
-    formData.append("file", defaultFile);
-  }
+  // if (!file || file.size === 0) {
+  //   // Create a default image file
+  //   const defaultImageResponse = await fetch(defaultImageUrl); // you must have this image in your public folder
+  //   const blob = await defaultImageResponse.blob();
+  //   const defaultFile = new File([blob], "logosquare.jpg", { type: blob.type });
+  //   formData.delete("file");
+  //   formData.append("file", defaultFile);
+  // }
   console.log("formData", formData);
 
   const urlRequest = new URL("https://rs-balung-cp.vercel.app/dokter/");
@@ -70,7 +70,6 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
   const [selectedPoli, setSelectedPoli] = useState<Poli>(poliList[0]);
   const navigation = useNavigation();
   const [preview, setPreview] = useState<string | null>(null);
-
   const handleImagePreview = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -84,6 +83,20 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
   return (
     <div className="mx-auto max-w-xl p-6">
       <h1 className="mb-6 text-2xl font-bold">Add New Doctor</h1>
+      <Form
+        method="post"
+        className="flex flex-col gap-4"
+        encType="multipart/form-data"
+      >
+        <input type="text" name="nama" placeholder="Name" required />
+        <input readOnly type="text" name="id_poli" value={selectedPoli.id_poli} />
+        <input type="text" name="biodata_singkat" placeholder="biodata_singkat" />
+        <input type="text" name="link_facebook" placeholder="link_facebook" />
+        <input type="text" name="link_instagram" placeholder="link_instagram" />
+        <input type="text" name="link_linkedin" placeholder="link_linkedin" />
+        <input type="file" accept="image/*" name="file" />
+        <button type="submit">Save</button>
+      </Form>
       <Form method="post" encType="multipart/form-data" className="space-y-6">
         <div>
           <label className="mb-1 block font-medium">Name</label>

@@ -7,16 +7,7 @@ import {
   ChevronRightIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/solid";
-
-export interface Doctor {
-  id_dokter: string;
-  nama: string;
-  gambar: string;
-  poli: {
-    id_poli: string;
-    nama_poli: string;
-  };
-}
+import type { Doctor } from "~/models/Doctor";
 
 interface ApiResponse {
   success: boolean;

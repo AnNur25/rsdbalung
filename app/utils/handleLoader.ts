@@ -8,15 +8,34 @@ export async function handleLoader(
 ): Promise<LoaderResult> {
   try {
     const response = await fn();
-    console.log("Loader Success", response.data);
+    // console.log("Loader Success", response);
 
-    return {
+    const isArray = Array.isArray(response);
+    const data = isArray
+      ? response.map((r: any) => r.data?.data || r.data)
+      : response.data?.data || response.data || "No Data";
+
+    const message = isArray
+      ? successMessage || "Semua permintaan berhasil."
+      : response.data?.message || successMessage || "Berhasil.";
+
+    const result = {
       success: response.data?.success || response.success || true,
-      message: response.data?.message || successMessage || "Berhasil.",
-      data: response.data?.data || response.data || "No Data",
+      message,
+      data,
     };
+    console.log(result);
+    return result;
+    // return {
+    //   success: response.data?.success || response.success || true,
+    //   message: response.data?.message || successMessage || "Berhasil.",
+    //   data: response.data?.data || response.data || "No Data",
+    // };
   } catch (error: any) {
-    console.error("Loader Error:", error.response?.data || error.message || "Unknown error");
+    console.error(
+      "Loader Error:",
+      error.response?.data || error.message || "Unknown error",
+    );
 
     const message = getErrorMessage(error);
     const data = {
@@ -24,7 +43,7 @@ export async function handleLoader(
       message: message,
       data: {},
     };
-    console.log(data)
+    console.log(data);
     return data;
   }
 }

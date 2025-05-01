@@ -25,11 +25,9 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import { handleAction } from "~/utils/handleAction";
+import type { Banner } from "~/models/Banner";
 
-type Banner = {
-  id_banner: string;
-  gambar: string;
-};
+
 
 export async function loader({ params }: Route.LoaderArgs) {
   const urlRequest = new URL("https://rs-balung-cp.vercel.app/banner/");

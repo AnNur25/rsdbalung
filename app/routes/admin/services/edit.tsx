@@ -26,10 +26,10 @@ export async function action({ request, params }: Route.ActionArgs) {
       ...Object.fromEntries(formData.entries()),
       Biaya: parseInt(formData.get("Biaya") as string, 10),
     });
-    // console.log(response.data);
+    console.log(response.data);
     return response.data;
   } catch (error: any) {
-    // console.error(error.response.data.data);
+    console.error(error.response.data.data);
   }
 }
 

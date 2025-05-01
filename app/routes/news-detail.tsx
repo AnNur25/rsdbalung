@@ -3,7 +3,8 @@ import banner from "~/assets/rsdbalung.jpeg";
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import NewsBanner from "~/components/NewsBanner";
-import type { News, NewsApiResponse } from "./news";
+import type { NewsApiResponse } from "./news";
+import type { News } from "~/models/News";
 import "~/lists.css";
 import HtmlParse from "~/components/HtmlParse";
 // export async function loader({ params }: Route.LoaderArgs) {

@@ -6,7 +6,7 @@ import {
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import Table from "~/components/Table";
-import type { Pagination } from "~/routes/schedule";
+import type { Pagination } from "~/models/Pagination";
 import { alternatingRowColor } from "~/utils/styles";
 
 interface JadwalDokterResponse {
