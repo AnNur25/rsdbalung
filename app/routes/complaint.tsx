@@ -94,11 +94,11 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
           </button>
         </Form>
 
-        <div className="me-4 flex-1">
+        <div className="me-4 flex-1 ">
           <img
             src="/images/pengaduan.jpg"
             alt="Poster Aduan"
-            className="m-2 h-auto w-full"
+            className="m-2 h-auto w-full rounded-lg shadow-lg"
           />
         </div>
       </div>

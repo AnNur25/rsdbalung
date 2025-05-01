@@ -89,6 +89,7 @@ export default function AdminDoctors({ loaderData }: Route.ComponentProps) {
       },
     );
   };
+
   return (
     <>
       <a

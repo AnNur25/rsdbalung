@@ -18,7 +18,7 @@ export default function PaginationControls({
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        <ChevronLeftIcon className="h-6" />
+        <ChevronLeftIcon className="h-4" />
       </button>
       <div className="flex w-fit flex-auto gap-2 overflow-auto p-2">
         {[...Array(totalPages).keys()].map((index) => {
@@ -26,7 +26,7 @@ export default function PaginationControls({
           return (
             <button
               key={page}
-              className={`aspect-square h-12 rounded-full text-center text-white ${
+              className={`aspect-square h-8 rounded-full text-base text-center text-white ${
                 page === currentPage
                   ? "bg-persian-blue-950 shadow-md"
                   : "bg-gray-400"
@@ -43,7 +43,7 @@ export default function PaginationControls({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        <ChevronRightIcon className="h-6" />
+        <ChevronRightIcon className="h-4" />
       </button>
     </div>
   );

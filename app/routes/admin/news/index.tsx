@@ -53,6 +53,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function AdminNews({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Judul Berita", "Tanggal Dibuat", "PPID", "Aksi"];
+  
   const data = loaderData.data;
   const { berita: news = [], pagination = paginationDefault } = data as {
     berita: News[];

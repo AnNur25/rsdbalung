@@ -1,105 +1,111 @@
+import { useState } from "react";
+import { useFetcher, useSearchParams } from "react-router";
+import axios from "axios";
+
+import type { Route } from "./+types/index";
+import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
+import { handleAction } from "~/utils/handleAction";
+
+import { paginationDefault, type Pagination } from "~/models/Pagination";
+import type { Dokter } from "~/models/Schedule";
+
+import { alternatingRowColor } from "~/utils/styles";
+import Table from "~/components/Table";
+import PaginationControls from "~/components/PaginationControl";
+
 import {
   PencilSquareIcon,
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import axios from "axios";
-import { useLoaderData } from "react-router";
-import Table from "~/components/Table";
-import type { Pagination } from "~/models/Pagination";
-import { alternatingRowColor } from "~/utils/styles";
 
-interface JadwalDokterResponse {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  data: {
-    dokter: Dokter[];
-    pagination: Pagination;
-  };
-}
-
-interface Dokter {
-  id_dokter: string;
-  nama_dokter: string;
-  poli: Poli;
-  layananList: Layanan[];
-}
-
-interface Poli {
-  id: string;
-  nama_poli: string;
-}
-
-interface Layanan {
-  id_pelayanan: string;
-  nama_pelayanan: string;
-  jadwal: Hari[];
-}
-
-interface Hari {
-  hari: string;
-  jam_mulai: string;
-  jam_selesai: string;
-}
-
-export async function loader(): Promise<JadwalDokterResponse> {
+export async function loader({
+  request,
+}: Route.LoaderArgs): Promise<LoaderResult> {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/jadwal-dokter/`);
 
-  try {
-    const response = await axios.get(urlRequest.href);
+  const url = new URL(request.url);
+  const page = url.searchParams.get("page") || "1";
+  const id_poli = url.searchParams.get("id_poli");
+  const tanggal = url.searchParams.get("tanggal");
 
-    if (!response.data.success) {
-      return {
-        ...response.data,
-        data: {
-          dokter: [],
-          pagination: {
-            currentPage: 1,
-            pageSize: 10,
-            totalItems: 0,
-            totalPages: 0,
-          },
-        },
-      };
-    }
+  if (id_poli && tanggal) {
+    urlRequest.pathname = "/jadwal-dokter/search";
+    urlRequest.searchParams.set("id_poli", id_poli);
+    urlRequest.searchParams.set("tanggal", tanggal);
+  }
 
-    return response.data;
-  } catch (error: any) {
-    console.log(error.response?.data);
-    return {
-      ...error.response?.data,
-      data: {
-        dokter: [],
-        pagination: {
-          currentPage: 1,
-          pageSize: 10,
-          totalItems: 0,
-          totalPages: 0,
-        },
-      },
-    };
+  urlRequest.searchParams.set("page", page);
+
+  return handleLoader(() => axios.get(urlRequest.href));
+}
+
+export async function action({ request }: Route.ActionArgs) {
+  const method = request.method;
+  const formData = await request.formData();
+  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/jadwal-dokter/`);
+
+  if (method === "DELETE") {
+    const id = formData.get("id");
+    urlRequest.pathname = `/jadwal-dokter/${id}`;
+    return handleAction(() => axios.delete(urlRequest.href));
   }
 }
 
-export default function AdminSchedule() {
+export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Dokter", "Poli", "Layanan", "Hari", "Jam", "Aksi"];
 
-  const response = useLoaderData() as JadwalDokterResponse;
-  const { dokter: doctors, pagination } = response.data;
-  console.log(response);
+  const data = loaderData.data;
+  const { dokter: doctors = [], pagination = paginationDefault } = data as {
+    dokter: Dokter[];
+    pagination: Pagination;
+  };
+
   const flattenedSchedules = doctors.flatMap((doctor) =>
-    doctor.layananList.flatMap((layanan) =>
-      layanan.jadwal.map((hari) => ({
-        id_dokter: doctor.id_dokter,
-        dokter: doctor.nama_dokter,
-        poli: doctor.poli.nama_poli,
-        layanan: layanan.nama_pelayanan,
-        hari: hari.hari,
-        jam: `${hari.jam_mulai} - ${hari.jam_selesai}`,
-      })),
-    ),
+    doctor.layananList.map((layanan) => ({
+      id_dokter: doctor.id_dokter,
+      dokter: doctor.nama_dokter,
+      poli: doctor.poli.nama_poli,
+      layanan: layanan.nama_pelayanan,
+      jadwal: layanan.jadwal,
+    })),
   );
+
+  const [currentPage, setCurrentPage] = useState(pagination.currentPage || 1);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearch = () => {
+    if (searchKeyword.trim() === "") {
+      setSearchParams({});
+      setIsSearching(false);
+    } else {
+      setSearchParams({ keyword: searchKeyword });
+      setIsSearching(true);
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    if (searchKeyword.trim() === "") {
+      setSearchParams({ page: page.toString() });
+      setIsSearching(false);
+    } else {
+      setSearchParams({ page: page.toString(), keyword: searchKeyword });
+      setIsSearching(true);
+    }
+    setCurrentPage(page);
+  };
+
+  const fetcher = useFetcher();
+  const handleDelete = (id: string) => {
+    fetcher.submit(
+      { id },
+      {
+        method: "delete",
+      },
+    );
+  };
 
   return (
     <>
@@ -112,37 +118,77 @@ export default function AdminSchedule() {
       </a>
       <section className="w-full overflow-x-auto">
         <Table headers={headers}>
-          {flattenedSchedules.map((item, index) => (
-            <tr key={index} className={alternatingRowColor}>
-              <td className="w-min border border-gray-300 px-4 py-2 text-center">
-                {index + 1}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                {item.dokter}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">{item.poli}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                {item.layanan}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">{item.hari}</td>
-              <td className="border border-gray-300 px-4 py-2">{item.jam}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                <div className="flex justify-center gap-0.5">
-                  <a
-                    href={`/admin/jadwal-dokter/edit/${item.id_dokter}`}
-                    className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:underline"
+          {flattenedSchedules.map((doctor, index) =>
+            doctor.jadwal.map((jadwal, jIndex) => (
+              <tr key={index} className={alternatingRowColor}>
+                {jIndex === 0 && (
+                  <>
+                    <td
+                      rowSpan={doctor.jadwal.length}
+                      className="w-min border border-gray-300 px-4 py-2 text-center"
+                    >
+                      {index + 1}
+                    </td>
+                    <td
+                      rowSpan={doctor.jadwal.length}
+                      className="border border-gray-300 px-4 py-2"
+                    >
+                      {doctor.dokter}
+                    </td>
+                    <td
+                      rowSpan={doctor.jadwal.length}
+                      className="border border-gray-300 px-4 py-2"
+                    >
+                      {doctor.poli}
+                    </td>
+                    <td
+                      rowSpan={doctor.jadwal.length}
+                      className="border border-gray-300 px-4 py-2"
+                    >
+                      {doctor.layanan}
+                    </td>
+                  </>
+                )}
+                <td className="border border-gray-300 px-4 py-2">
+                  {jadwal.hari}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {jadwal.jam_mulai} - {jadwal.jam_selesai}
+                </td>
+                {jIndex === 0 && (
+                  <td
+                    rowSpan={doctor.jadwal.length}
+                    className="border border-gray-300 px-4 py-2"
                   >
-                    <PencilSquareIcon className="h-4 w-4" />
-                  </a>
-                  <a className="block w-min rounded bg-red-600 p-2 text-white hover:underline">
-                    <TrashIcon className="h-4 w-4" />
-                  </a>
-                </div>
-              </td>
-            </tr>
-          ))}
+                    <div className="flex justify-center gap-0.5">
+                      <a
+                        href={`/admin/jadwal-dokter/edit/${doctor.id_dokter}`}
+                        className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:cursor-pointer"
+                      >
+                        <PencilSquareIcon className="h-4 w-4" />
+                      </a>
+                      <button
+                        onClick={() => handleDelete(doctor.id_dokter)}
+                        className="block w-min rounded bg-red-600 p-2 text-white hover:cursor-pointer"
+                      >
+                        <TrashIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
+                )}
+              </tr>
+            )),
+          )}
         </Table>
       </section>
+
+      <div className="flex w-full justify-center">
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </>
   );
 }
