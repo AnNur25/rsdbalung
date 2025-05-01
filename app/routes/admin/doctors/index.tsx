@@ -1,37 +1,24 @@
+import { useState } from "react";
+import axios from "axios";
+import { useFetcher, useSearchParams } from "react-router";
+
+import { handleAction } from "~/utils/handleAction";
+import { handleLoader } from "~/utils/handleLoader";
+
+import type { Route } from "./+types/index";
+import type { Doctor } from "~/models/Doctor";
+import type { Pagination } from "~/models/Pagination";
+
+import PaginationControls from "~/components/PaginationControl";
+import SearchBar from "~/components/SearchBar";
+import DoctorCard from "~/components/DoctorCard";
+
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  MagnifyingGlassIcon,
   PencilSquareIcon,
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import axios from "axios";
-import { Form, useFetcher, useLoaderData, useSearchParams } from "react-router";
-import DoctorCard from "~/components/DoctorCard";
-import type { Doctor } from "~/models/Doctor";
-import type { Route } from "./+types/index";
-import { handleAction } from "~/utils/handleAction";
-import { handleLoader } from "~/utils/handleLoader";
-import type { Pagination } from "~/models/Pagination";
-import { useState } from "react";
-import PaginationControls from "~/components/PaginationControl";
-import SearchBar from "~/components/SearchBar";
 
-// interface ApiResponse {
-//   success: boolean;
-//   statusCode: number;
-//   message: string;
-//   data: {
-//     Dokter: Doctor[];
-//     pagination: {
-//       currentPage: number;
-//       pageSize: number;
-//       totalItems: number;
-//       totalPages: number;
-//     };
-//   };
-// }
 export async function loader({ request }: Route.LoaderArgs) {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
   const url = new URL(request.url);

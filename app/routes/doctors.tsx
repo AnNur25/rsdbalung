@@ -1,31 +1,20 @@
 import axios from "axios";
-import { useLoaderData, useSearchParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useSearchParams } from "react-router";
+
+import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
+
+import type { Route } from "./+types/doctors";
+import type { Doctor } from "~/models/Doctor";
+import type { Pagination } from "~/models/Pagination";
+
 import DoctorCard from "~/components/DoctorCard";
+
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/solid";
-import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
-import type { Doctor } from "~/models/Doctor";
-import type { Route } from "./+types/doctors";
-import type { Pagination } from "~/models/Pagination";
-
-interface ApiResponse {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  data: {
-    Dokter: Doctor[];
-    pagination: {
-      currentPage: number;
-      pageSize: number;
-      totalItems: number;
-      totalPages: number;
-    };
-  };
-}
 
 export async function loader({
   request,
@@ -124,7 +113,6 @@ export default function Doctors({ loaderData }: Route.ComponentProps) {
       </section>
 
       {/* Pagination Controls */}
-      {/* {!isSearching && !searchParams.get("keyword") && ( */}
       <div className="mt-4 flex w-fit max-w-full justify-center gap-2">
         <button
           className="flex-none px-4 py-2 text-black disabled:opacity-50"
@@ -156,7 +144,6 @@ export default function Doctors({ loaderData }: Route.ComponentProps) {
           <ChevronRightIcon className="h-6" />
         </button>
       </div>
-      {/* )} */}
     </main>
   );
 }
