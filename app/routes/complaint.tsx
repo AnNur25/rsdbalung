@@ -1,16 +1,17 @@
-import { Form, useFetcher } from "react-router";
-import type { Route } from "./+types/complaint";
+import { Form } from "react-router";
 import axios from "axios";
+
+import type { Route } from "./+types/complaint";
 import { handleLoader } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
-import type { ComplaintModel } from "~/models/Complaint";
-import { formatDate } from "~/utils/formatDate";
-import MessageCard from "~/components/MessageCard";
+
 import { mapAdminResponseToCard } from "~/utils/mapTypes";
+import type { ComplaintModel } from "~/models/Complaint";
 
-export async function loader({ request }: Route.LoaderArgs) {
+import MessageCard from "~/components/MessageCard";
+
+export async function loader() {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/aduan/`);
-
   return handleLoader(() => axios.get(urlRequest.href));
 }
 
@@ -18,49 +19,22 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const method = request.method;
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/aduan/`);
-  console.log(formData);
-  // return;
   if (method === "POST")
     return handleAction(() => axios.post(urlRequest.href, formData));
 }
 
 export default function Complaint({ loaderData }: Route.ComponentProps) {
-  const dummy: ComplaintModel = {
-    dibuat_pada: "30 April 2025",
-    id: "1",
-    message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    nama: "Pasien X",
-    no_wa: "1234",
-    is_visible: true,
-    responAdmin: [
-      {
-        id: "a",
-        message: "Balasan Admin A",
-        dibuat_pada: "30 April 2025",
-      },
-      {
-        id: "a",
-        message: "Balasan Admin A",
-        dibuat_pada: "30 April 2025",
-      },
-    ],
-  };
   const complaints = Array.isArray(loaderData?.data?.data_aduan)
     ? (loaderData.data.data_aduan as ComplaintModel[])
     : [];
 
-  if (complaints.length <= 0) {
-    complaints.push(dummy);
-    complaints.push(dummy);
-  }
-
-  console.log("complaints", complaints);
-
   return (
     <>
       <div className="flex items-center p-8 max-md:flex-col">
-        <Form method="post" className="flex shadow-lg border border-gray-300 rounded-xl flex-1 flex-col gap-4 p-8 m-4">
+        <Form
+          method="post"
+          className="m-4 flex flex-1 flex-col gap-4 rounded-xl border border-gray-300 p-8 shadow-lg"
+        >
           <div className="flex flex-col gap-2">
             <label htmlFor="nama" className="text-md font-semibold">
               Nama <span className="text-red-600">*</span>
@@ -73,6 +47,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
               id="nama"
             />
           </div>
+
           <div className="flex flex-col gap-2">
             <label htmlFor="no_wa" className="text-md font-semibold">
               No. Whatsapp <span className="text-red-600">*</span>
@@ -101,29 +76,31 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
               id="no_wa"
             />
           </div>
+
           <div className="flex flex-col gap-2">
             <label htmlFor="message" className="text-md font-semibold">
               Aduan <span className="text-red-600">*</span>
             </label>
             <textarea
               placeholder="Tulis aduan Anda"
-              className="rounded-lg border min-h-56 border-gray-400 px-4 py-2"
+              className="min-h-56 rounded-lg border border-gray-400 px-4 py-2"
               name="message"
               id="message"
             />
           </div>
+
           <button className="rounded bg-green-600 px-8 py-2 text-white min-md:w-min">
             Simpan
           </button>
         </Form>
-        <div className="flex-1 me-4">
 
-        <img
-          src="/images/pengaduan.jpg"
-          alt="Poster Aduan"
-          className="m-2 w-full h-auto"
+        <div className="me-4 flex-1">
+          <img
+            src="/images/pengaduan.jpg"
+            alt="Poster Aduan"
+            className="m-2 h-auto w-full"
           />
-          </div>
+        </div>
       </div>
 
       <div className="p-4">
