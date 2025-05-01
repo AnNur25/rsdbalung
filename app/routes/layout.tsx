@@ -2,7 +2,8 @@ import axios from "axios";
 import { Outlet, useLoaderData } from "react-router";
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
-import type { Pelayanan, PelayananResponse } from "./admin/services";
+import type { PelayananResponse } from "./admin/services";
+import type { Pelayanan } from "~/models/Pelayanan";
 import { useEffect } from "react";
 
 export async function loader(): Promise<PelayananResponse> {

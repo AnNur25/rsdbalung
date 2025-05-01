@@ -19,7 +19,7 @@ import { useState } from "react";
 import axios from "axios";
 import type { Poli, PoliApiResponse } from "~/routes/schedule";
 import type { Doctor } from "~/models/Doctor";
-import type { Pelayanan } from "../services";
+import type { Pelayanan } from "~/models/Pelayanan";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 
 export async function loader({ params }: Route.LoaderArgs) {
