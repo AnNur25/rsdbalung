@@ -17,7 +17,7 @@ import {
 } from "@heroicons/react/24/solid";
 import "~/scroll.css";
 import logo from "~/assets/logo.png";
-import whatsappIcon from "~/assets/whatsapp.svg";
+import whatsappIcon from "~/assets/whatsappWhite.svg";
 import phoneIcon from "~/assets/call.svg";
 
 interface PelayananResponse {
@@ -75,7 +75,7 @@ export default function Header({
           <div className="scroll-left flex w-max gap-4">
             {loopedContacts.map((contact, index) => (
               <div key={index} className="flex items-center gap-1.5">
-                <img src={contact.icon} alt="WhatsApp" />
+                <img src={contact.icon} alt={contact.name} className="fill-white" />
                 <p>
                   {contact.name}: {contact.contact}
                 </p>
