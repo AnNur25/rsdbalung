@@ -28,6 +28,7 @@ export default function AdminServices({ loaderData }: Route.ComponentProps) {
         <PlusIcon className="h-4 w-4" />
         <span>Tambah</span>
       </a>
+      
       <section className="w-full overflow-x-auto rounded-xl border-1 border-gray-300 px-12 py-8 shadow-xl">
         <Table headers={headers}>
           {pelayananList.map((item, index) => (

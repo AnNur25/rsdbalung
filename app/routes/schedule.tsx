@@ -9,11 +9,7 @@ import { useLoaderData, useSearchParams } from "react-router";
 import { useState } from "react";
 import { alternatingRowColor } from "~/utils/styles";
 import type { Pagination } from "~/models/Pagination";
-
-export interface Poli {
-  id_poli: string;
-  nama_poli: string;
-}
+import type { Poli } from "~/models/Poli";
 
 export interface PoliApiResponse {
   success: boolean;

@@ -9,7 +9,8 @@ import {
   ListboxOption,
 } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
-import type { Poli, PoliApiResponse } from "~/routes/schedule";
+import type { PoliApiResponse } from "~/routes/schedule";
+import type { Poli } from "~/models/Poli";
 import type { Route } from "./+types";
 
 export async function loader() {
@@ -89,8 +90,17 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
         encType="multipart/form-data"
       >
         <input type="text" name="nama" placeholder="Name" required />
-        <input readOnly type="text" name="id_poli" value={selectedPoli.id_poli} />
-        <input type="text" name="biodata_singkat" placeholder="biodata_singkat" />
+        <input
+          readOnly
+          type="text"
+          name="id_poli"
+          value={selectedPoli.id_poli}
+        />
+        <input
+          type="text"
+          name="biodata_singkat"
+          placeholder="biodata_singkat"
+        />
         <input type="text" name="link_facebook" placeholder="link_facebook" />
         <input type="text" name="link_instagram" placeholder="link_instagram" />
         <input type="text" name="link_linkedin" placeholder="link_linkedin" />

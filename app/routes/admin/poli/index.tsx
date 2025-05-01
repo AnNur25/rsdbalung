@@ -2,42 +2,23 @@ import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import Table from "~/components/Table";
-import type { Poli, PoliApiResponse } from "~/routes/schedule";
-import { getSession } from "~/sessions.server";
+import type { PoliApiResponse } from "~/routes/schedule";
+import type { Poli } from "~/models/Poli";
 import { alternatingRowColor } from "~/utils/styles";
 import type { Route } from "./+types";
+import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
 
 export async function loader({
   request,
-}: Route.LoaderArgs): Promise<PoliApiResponse> {
-  const session = await getSession(request.headers.get("Cookie"));
-
-  // session.get("token");
-
-  const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
-
-  try {
-    const poliResponse = await axios.get<PoliApiResponse>(poliRequest.href);
-    if (!poliResponse.data.success) {
-      poliResponse.data.data = [];
-    }
-    return poliResponse.data;
-  } catch (error: any) {
-    // console.error("Error fetching data:", error.response);
-    return {
-      success: false,
-      statusCode: error.response?.status ?? 500,
-      message: "Failed to fetch data",
-      data: [],
-    };
-  }
+}: Route.LoaderArgs): Promise<LoaderResult> {
+  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
+  return handleLoader(() => axios.get(urlRequest.href));
 }
 
-export default function AdminPoli() {
-  const data = useLoaderData() as PoliApiResponse;
-  const { data: poli } = data;
-  //   const poli: Poli[] = [];
+export default function AdminPoli({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Poli", "Aksi"];
+  const poliList = (loaderData.data as Poli[]) || [];
+
   return (
     <>
       <a
@@ -47,9 +28,10 @@ export default function AdminPoli() {
         <PlusIcon className="h-4 w-4" />
         <span>Tambah</span>
       </a>
+      
       <section className="w-full overflow-x-auto">
         <Table headers={headers}>
-          {poli.map((item, index) => (
+          {poliList.map((item, index) => (
             <tr key={index} className={alternatingRowColor}>
               <td className="w-min border border-gray-300 px-4 py-2 text-center">
                 {index + 1}
