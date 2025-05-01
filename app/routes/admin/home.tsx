@@ -467,7 +467,7 @@ export default function AdminHome({
                 required
                 type="text"
                 placeholder="Isi judul di sini"
-                className="rounded-lg border border-gray-400 px-4 py-2"
+                className={`rounded-lg border border-gray-400 px-4 py-2 ${disableUnggulanForm && "text-gray-500"}`}
                 name="judul"
                 id="judul"
                 disabled={disableUnggulanForm}
@@ -492,7 +492,7 @@ export default function AdminHome({
                 required
                 placeholder="Isi deskripsi di sini"
                 type="text"
-                className="rounded-lg border border-gray-400 px-4 py-2"
+                className={`rounded-lg border border-gray-400 px-4 py-2 ${disableUnggulanForm && "text-gray-500"}`}
                 name="deskripsi"
                 id="deskripsi"
                 disabled={disableUnggulanForm}
@@ -532,7 +532,7 @@ export default function AdminHome({
                       {/* {u.id ? ( */}
                       <img
                         src={u.gambar}
-                        className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500"}`}
+                        className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500 grayscale"}`}
                       />
                       {/* ) : (
                         <input
@@ -555,7 +555,7 @@ export default function AdminHome({
                         placeholder="Isi caption di sini"
                         type="text"
                         // name="caption"
-                        className="w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4"
+                        className={`w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4 ${disableUnggulanForm && "text-gray-500"}`}
                       />
                       {/* Add / Remove Buttons */}
                       {/* <div className="col-span-2 flex gap-2"> */}
@@ -650,7 +650,7 @@ export default function AdminHome({
                         placeholder="Isi caption di sini"
                         type="text"
                         name="caption"
-                        className="w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4"
+                        className={`w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4 ${disableUnggulanForm && "text-gray-500"}`}
                       />
                       {index == 0 && (existingImagesData ?? []).length <= 0 ? (
                         <div className="flex w-full gap-2 min-md:w-min">
