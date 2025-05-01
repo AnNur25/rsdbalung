@@ -12,6 +12,8 @@ export interface News {
   id: string;
   judul: string;
   ringkasan: string;
+  isi: string;
   gambar_sampul: string;
   tanggal_dibuat: string;
+  gambar_tambahan: [];
 }

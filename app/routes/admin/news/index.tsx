@@ -46,7 +46,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   if (method === "DELETE") {
     const newsId = formData.get("id");
-    urlRequest.pathname = `/dokter/${newsId}`;
+    urlRequest.pathname = `/berita/${newsId}`;
     return handleAction(() => axios.delete(urlRequest.href));
   }
 }

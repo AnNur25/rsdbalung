@@ -35,7 +35,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
         <h1 className="text-2xl font-extrabold text-persian-blue-950 uppercase">
           Aduan
         </h1>
-        <p className="text-gray-500">
+        <p className="text-gray-500 text-center">
           Kritik dan saran Anda sangat berarti untuk kemajuan rumah sakit kami.
           Terima kasih!
         </p>

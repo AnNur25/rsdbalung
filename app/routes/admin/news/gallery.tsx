@@ -12,6 +12,7 @@ import {
 } from "~/hooks/useToast";
 import { toast } from "react-hot-toast";
 import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
+import type { GalleryModel } from "~/models/Gallery";
 
 // Load existing gallery photos
 export async function loader({ params }: Route.LoaderArgs) {
@@ -61,14 +62,12 @@ export async function action({ request, params }: Route.ActionArgs) {
   return { error: "Method tidak dikenal." };
 }
 
-type Gallery = { id: string; url: string }[];
-
 export default function GalleryNews({
   loaderData,
   actionData,
 }: Route.ComponentProps) {
   const photos = Array.isArray(loaderData?.data)
-    ? (loaderData.data as Gallery)
+    ? (loaderData.data as GalleryModel[])
     : [];
   const fetcher = useFetcher();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
