@@ -220,16 +220,16 @@ export default function AdminHome({
     transformedUnggulanData.existingImages || [],
   );
 
-  // const [newUnggulanData, setNewUnggulanData] = useState<{ caption: string }[]>(
-  //   [
-  //     {
-  //       caption: "",
-  //     },
-  //   ],
-  // );
-  const [newUnggulanData, setNewUnggulanData] = useState<
-    { caption: string }[] | null
-  >(null);
+  const [newUnggulanData, setNewUnggulanData] = useState<{ caption: string }[]>(
+    [
+      {
+        caption: "",
+      },
+    ],
+  );
+  // const [newUnggulanData, setNewUnggulanData] = useState<
+  //   { caption: string }[] | null
+  // >(null);
 
   const handleAddUnggulan = () => {
     setNewUnggulanData([
@@ -241,7 +241,7 @@ export default function AdminHome({
   };
 
   const handleRemoveExistingUnggulan = (index: number) => {
-    if (existingImagesData.length === 1) {
+    if (existingImagesData.length <= 1) {
       // setExistingImagesData([
       //   {
       //     id: "",
@@ -326,7 +326,7 @@ export default function AdminHome({
       captionsArray.push({ caption: captionInput.value });
     });
 
-    formData.append("gambarCaptions", JSON.stringify(captionsArray));
+    formData.append("gambarCaption", JSON.stringify([...captionsArray]));
 
     console.log(formData);
 
@@ -622,13 +622,12 @@ export default function AdminHome({
                   </div> */}
                 </>
               )}
-              {(newUnggulanData ?? []).length > 0 &&
+              {(newUnggulanData ?? []).length >= 0 &&
                 (newUnggulanData ?? []).length + existingImagesData.length <=
                   4 &&
-                (newUnggulanData ?? []).map((u, index) => (
+                (newUnggulanData ?? [{ caption: "" }]).map((u, index) => (
                   <>
                     <div className="flex items-center gap-2 max-md:flex-col">
-                      n
                       <input
                         required
                         disabled={disableUnggulanForm}
@@ -653,7 +652,7 @@ export default function AdminHome({
                         name="caption"
                         className="w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4"
                       />
-                      {index == 0 ? (
+                      {index == 0 && (existingImagesData ?? []).length <= 0 ? (
                         <div className="flex w-full gap-2 min-md:w-min">
                           <button
                             disabled={disableUnggulanForm}
