@@ -20,29 +20,53 @@ import {
 } from "~/hooks/useToast";
 import { handleLoader } from "~/utils/handleLoader";
 import {
+  MinusIcon,
   PencilSquareIcon,
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import { handleAction } from "~/utils/handleAction";
 import type { Banner } from "~/models/Banner";
-
-
+import type {
+  ExistingImage,
+  ImageCaption,
+  Unggulan,
+  UnggulanRequest,
+} from "~/models/Unggulan";
 
 export async function loader({ params }: Route.LoaderArgs) {
-  const urlRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
-  return handleLoader(() => axios.get(urlRequest.href));
+  const bannerRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
+  const unggulanRequest = new URL(
+    "https://rs-balung-cp.vercel.app/layanan-unggulan/",
+  );
+  const bannerResponse = await handleLoader(() =>
+    axios.get(bannerRequest.href),
+  );
+  const unggulanResponse = await handleLoader(() =>
+    axios.get(unggulanRequest.href),
+  );
+  const data = {
+    banners: bannerResponse.data,
+    unggulan: unggulanResponse.data,
+  };
+  // console.log(data);
+  return {
+    success: true,
+    message: "Selesai mendapatkan data",
+    data,
+  };
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
-  const bannerRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
   const formData = await request.formData();
+  console.log("formData", formData);
   const method = request.method;
-
+  console.log("method", method);
   const feature = formData.get("feat");
   console.log("feature", feature);
 
   if (feature === "banner") {
+    const bannerRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
     if (method === "POST") {
       const files = formData.getAll("banner");
       if (files.length > 4) {
@@ -76,7 +100,33 @@ export async function action({ request, params }: Route.ActionArgs) {
       );
     }
   }
-  return { error: "Method tidak dikenal." };
+
+  // Action Layanan Unggulan
+  if (feature === "unggulan") {
+    const unggulanRequest = new URL(
+      "https://rs-balung-cp.vercel.app/layanan-unggulan/",
+    );
+
+    if (method === "POST") {
+      return handleAction(
+        () =>
+          axios.post(unggulanRequest.href, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          }),
+        "Berhasil",
+      );
+    }
+    if (method === "PUT") {
+      return handleAction(
+        () =>
+          axios.put(unggulanRequest.href, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          }),
+        "Berhasil",
+      );
+    }
+  }
+  return { error: "Permintaan tidak dikenal." };
 }
 
 export default function AdminHome({
@@ -88,8 +138,11 @@ export default function AdminHome({
 
   console.log("actionToastData", actionToastData);
 
-  const banners = Array.isArray(loaderData?.data)
-    ? (loaderData.data as Banner[])
+  const banners = Array.isArray(loaderData?.data?.banners)
+    ? (loaderData?.data?.banners as Banner[])
+    : [];
+  const unggulan = Array.isArray(loaderData?.data?.unggulan)
+    ? (loaderData?.data?.unggulan as Unggulan[])
     : [];
 
   useEffect(() => {
@@ -111,12 +164,35 @@ export default function AdminHome({
   // Selected Banner Data
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-
+  const unggulanData = unggulan[0];
+  const transformedUnggulanData: UnggulanRequest = {
+    id_layanan_unggulan: unggulanData.id_layanan_unggulan,
+    judul: unggulanData.judul,
+    deskripsi: unggulanData.deskripsi,
+    existingImages: unggulanData.gambarCaptions.map((img) => ({
+      id: img.id,
+      caption: img.caption,
+      gambar: img.gambar,
+      nama_file: img.nama_file,
+    })),
+  };
   // Layanan Unggulan Data
   const [disableUnggulanForm, setDisableUnggulanForm] = useState<boolean>(true);
-  const [unggulanMethod, setUnggulanMethod] = useState<string>("post");
-  const [unggulanTitle, setUnggulanTitle] = useState<string>("");
-  const [unggulanDescription, setUnggulanDescription] = useState<string>("");
+  const [unggulanMethod, setUnggulanMethod] = useState<HTMLFormMethod>("post");
+  const [unggulanTitle, setUnggulanTitle] = useState<string>(
+    unggulanData?.judul || "",
+  );
+  const [unggulanDescription, setUnggulanDescription] = useState<string>(
+    unggulanData?.deskripsi || "",
+  );
+
+  useEffect(() => {
+    if (unggulan.length > 0) {
+      setUnggulanMethod("put");
+    } else {
+      setUnggulanMethod("post");
+    }
+  }, [unggulan]);
 
   const handleCheckboxChange = (bannerId: string) => {
     setSelectedIds((prev) =>
@@ -148,6 +224,51 @@ export default function AdminHome({
     setSelectAll(false);
   };
 
+  const [existingImagesData, setExistingImagesData] = useState<ImageCaption[]>(
+    transformedUnggulanData.existingImages || [],
+  );
+  const handleAddUnggulan = () => {
+    setExistingImagesData([
+      ...existingImagesData,
+      {
+        id: "",
+        caption: "",
+        gambar: "",
+        nama_file: "",
+      },
+    ]);
+  };
+  const handleRemoveUnggulan = (index: number) => {
+    setExistingImagesData(existingImagesData.filter((_, i) => i !== index));
+  };
+  const handleUnggulanChange = (
+    index: number,
+    field: keyof ExistingImage,
+    value: string,
+  ) => {
+    const newUnggulan = [...existingImagesData];
+    newUnggulan[index][field] = value;
+    setExistingImagesData(newUnggulan);
+  };
+  const handleUnggulan = () => {
+    const formData = new FormData();
+
+    formData.append("feat", "unggulan");
+
+    formData.append("judul", unggulanTitle);
+    formData.append("deskripsi", unggulanDescription);
+    // formData.append("file", unggulanFiles as File[]);
+    const gambarCaptions: ImageCaption[] = [];
+    // formData.append("gambarCaptions", );
+
+    // console.log("form unggulan", formData);
+    fetcher.submit(formData, {
+      encType: "multipart/form-data",
+      method: unggulanMethod,
+    });
+    setDisableUnggulanForm(true);
+  };
+
   return (
     <>
       {/* Banner */}
@@ -160,8 +281,16 @@ export default function AdminHome({
             encType="multipart/form-data"
             className="flex w-full shrink gap-2"
           >
-            <input type="text" name="feat" hidden value="banner" readOnly />
             <input
+              required
+              type="text"
+              name="feat"
+              hidden
+              value="banner"
+              readOnly
+            />
+            <input
+              required
               type="file"
               name="banner"
               multiple
@@ -170,7 +299,7 @@ export default function AdminHome({
             />
             <button
               type="submit"
-              className="rounded bg-green-500 px-4 py-2 text-white"
+              className="rounded bg-green-600 px-4 py-2 text-white"
             >
               Tambah
             </button>
@@ -237,11 +366,18 @@ export default function AdminHome({
       <div className="mb-8 w-full p-4 shadow-2xl">
         <div className="flex items-center justify-center gap-2">
           <Form
-            method={unggulanMethod as HTMLFormMethod}
+            method={unggulanMethod}
             encType="multipart/form-data"
             className="flex w-full shrink flex-col gap-2"
           >
-            <input type="text" name="feat" hidden value="unggulan" readOnly />
+            <input
+              required
+              type="text"
+              name="feat"
+              hidden
+              value="unggulan"
+              readOnly
+            />
             <div className="flex flex-col gap-2">
               <label
                 htmlFor="judul"
@@ -255,15 +391,18 @@ export default function AdminHome({
                 </span>
               </label>
               <input
+                required
                 type="text"
                 placeholder="Isi judul di sini"
                 className="rounded-lg border border-gray-400 px-4 py-2"
                 name="judul"
                 id="judul"
                 disabled={disableUnggulanForm}
+                value={unggulanTitle}
+                onChange={(e) => setUnggulanTitle(e.target.value)}
               />
             </div>
-            
+
             <div className="flex flex-col gap-2">
               <label
                 htmlFor="deskripsi"
@@ -277,12 +416,15 @@ export default function AdminHome({
                 </span>
               </label>
               <input
+                required
                 placeholder="Isi deskripsi di sini"
                 type="text"
                 className="rounded-lg border border-gray-400 px-4 py-2"
                 name="deskripsi"
                 id="deskripsi"
                 disabled={disableUnggulanForm}
+                value={unggulanDescription}
+                onChange={(e) => setUnggulanDescription(e.target.value)}
               />
             </div>
 
@@ -308,33 +450,100 @@ export default function AdminHome({
                 </span>
               </h2>
             </div>
-            <div className="flex items-center gap-2 max-md:flex-col">
-              <input
-                disabled={disableUnggulanForm}
-                type="file"
-                name="file"
-                accept="image/*"
-                className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500"}`}
-              />
-              <input
-                disabled={disableUnggulanForm}
-                placeholder="Isi caption di sini"
-                type="text"
-                name="caption"
-                className="w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4"
-              />
+            <div className="flex flex-col gap-2">
+              {(existingImagesData ?? []).length > 0 ? (
+                existingImagesData.map((u, index) => (
+                  <>
+                    <div className="flex items-center gap-2 max-md:flex-col">
+                      {u.id ? (
+                        <img
+                          src={u.gambar}
+                          className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500"}`}
+                        />
+                      ) : (
+                        <input
+                          required
+                          disabled={disableUnggulanForm}
+                          type="file"
+                          name="file"
+                          accept="image/*"
+                          className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500"}`}
+                        />
+                      )}
 
-              <button
-                disabled={disableUnggulanForm}
-                className={`flex h-min w-full justify-center rounded p-1.5 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-500"}`}
-              >
-                <PlusIcon className="h-4 w-4" />
-              </button>
+                      <input
+                        value={u.caption}
+                        onChange={(e) =>
+                          handleUnggulanChange(index, "caption", e.target.value)
+                        }
+                        required
+                        disabled={disableUnggulanForm}
+                        placeholder="Isi caption di sini"
+                        type="text"
+                        name="caption"
+                        className="w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4"
+                      />
+                      {/* Add / Remove Buttons */}
+                      <div className="col-span-2 flex gap-2">
+                        {index == 0 ? (
+                          <button
+                            disabled={disableUnggulanForm}
+                            type="button"
+                            onClick={handleAddUnggulan}
+                            className={`flex h-min w-full justify-center rounded p-1.5 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-500 hover:bg-green-600"}`}
+                          >
+                            <PlusIcon className="h-4 w-4" />
+                          </button>
+                        ) : (
+                          <button
+                            disabled={disableUnggulanForm}
+                            type="button"
+                            onClick={() => handleRemoveUnggulan(index)}
+                            className={`flex h-min w-full justify-center rounded p-1.5 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
+                          >
+                            <MinusIcon className="h-4 w-4" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                ))
+              ) : (
+                <>
+                  <div className="flex items-center gap-2 max-md:flex-col">
+                    <input
+                      required
+                      disabled={disableUnggulanForm}
+                      type="file"
+                      name="file"
+                      accept="image/*"
+                      className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500"}`}
+                    />
+                    <input
+                      required
+                      disabled={disableUnggulanForm}
+                      placeholder="Isi caption di sini"
+                      type="text"
+                      name="caption"
+                      className="w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4"
+                    />
+
+                    <button
+                      disabled={disableUnggulanForm}
+                      className={`flex h-min w-full justify-center rounded p-1.5 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
+                    >
+                      <PlusIcon className="h-4 w-4" />
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
-
             <button
-              onClick={() => setDisableUnggulanForm(true)}
-              className={`rounded px-8 py-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-500"}`}
+              onClick={() => {
+                // setDisableUnggulanForm(true)
+              }}
+              type="submit"
+              className={`rounded px-8 py-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
             >
               Simpan
             </button>

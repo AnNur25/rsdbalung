@@ -20,6 +20,7 @@ import axios from "axios";
 import type { Poli, PoliApiResponse } from "~/routes/schedule";
 import type { Doctor } from "~/models/Doctor";
 import type { Pelayanan } from "../services";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const doctorId = params.id;
@@ -261,17 +262,17 @@ export default function EditSchedule({ loaderData }: Route.ComponentProps) {
                 <button
                   type="button"
                   onClick={handleAddSchedule}
-                  className="w-full rounded-md bg-green-500 p-2 text-white hover:bg-green-600"
+                  className="h-fit w-fit rounded-md bg-green-500 p-2 text-white hover:bg-green-600"
                 >
-                  +
+                  <PlusIcon className="h-4 w-4" />
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={() => handleRemoveSchedule(index)}
-                  className="w-full rounded-md bg-red-500 p-2 text-white hover:bg-red-600"
+                  className="h-fit w-fit rounded-md bg-red-500 p-2 text-white hover:bg-red-600"
                 >
-                  -
+                  <MinusIcon className="h-4 w-4" />
                 </button>
               )}
             </div>
