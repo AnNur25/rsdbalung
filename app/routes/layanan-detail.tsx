@@ -1,21 +1,14 @@
 import axios from "axios";
 import { useLoaderData } from "react-router";
+import type { PelayananDetail } from "~/models/Pelayanan";
 
 interface LayananDetailResponse {
   success: boolean;
   statusCode: number;
   message: string;
-  data: LayananDetail;
+  data: PelayananDetail;
 }
 
-interface LayananDetail {
-  id_pelayanan: string;
-  nama_pelayanan: string;
-  Persyaratan: string;
-  Prosedur: string;
-  JangkaWaktu: string;
-  Biaya: number;
-}
 export async function loader({
   params,
 }: {
@@ -30,7 +23,7 @@ export async function loader({
       pelayananRequest.href,
     );
     if (!response.data.success) {
-      response.data.data = {} as LayananDetail;
+      response.data.data = {} as PelayananDetail;
     }
     return response.data;
   } catch (error: any) {
@@ -39,7 +32,7 @@ export async function loader({
       success: false,
       statusCode: error.response?.status ?? 500,
       message: "Failed to fetch data",
-      data: {} as LayananDetail,
+      data: {} as PelayananDetail,
     };
   }
 }
@@ -62,17 +55,17 @@ export default function LayananDetail() {
 
       {/* Jangka Waktu & Biaya  */}
       <div className="m-4 mx-auto flex flex-col gap-4 px-4 min-md:flex-row">
-        <section className="flex-1 rounded-md h-fit text-center shadow-md">
+        <section className="h-fit flex-1 rounded-md text-center shadow-md">
           <h2 className="rounded-t-md bg-sky-700 p-1 text-lg font-bold text-white">
             Jangka Waktu
           </h2>
           <p className="h-min w-max p-2 px-8 text-center">{JangkaWaktu}</p>
         </section>
-        <section className="flex-1 h-fit rounded-md text-center shadow-md">
+        <section className="h-fit flex-1 rounded-md text-center shadow-md">
           <h2 className="rounded-t-md bg-sky-700 p-1 text-lg font-bold text-white">
             Biaya
           </h2>
-          <p className="h-min w-max mx-auto p-2 px-8 text-center">{Biaya}</p>
+          <p className="mx-auto h-min w-max p-2 px-8 text-center">{Biaya}</p>
         </section>
       </div>
 

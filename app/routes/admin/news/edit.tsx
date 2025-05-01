@@ -7,7 +7,6 @@ import axios from "axios";
 import { handleAction } from "~/utils/handleAction";
 import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
 import type { News } from "~/models/News";
-import type { GalleryModel } from "~/models/Gallery";
 
 export async function loader({
   request,
@@ -41,10 +40,10 @@ export async function action({ request, params }: Route.ActionArgs) {
 export default function EditNews({ loaderData }: Route.ComponentProps) {
   const news: News = loaderData.data;
 
-  const [title, setTitle] = React.useState<string>(news.judul || "");
-  const [summary, setSummary] = React.useState<string>(news.ringkasan || "");
-  const [content, setContent] = React.useState<string>(news.isi || "");
-  const [imageCover, setimageCover] = React.useState<string>(
+  const [title, setTitle] = useState<string>(news.judul || "");
+  const [summary, setSummary] = useState<string>(news.ringkasan || "");
+  const [content, setContent] = useState<string>(news.isi || "");
+  const [imageCover, setimageCover] = useState<string>(
     news.gambar_sampul || "",
   );
 
