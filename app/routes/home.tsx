@@ -1,6 +1,5 @@
 import type { Route } from "./+types/home";
 import axios from "axios";
-import type { NewsApiResponse } from "./news";
 import { useLoaderData } from "react-router";
 
 import Banner from "~/components/Banner";
@@ -38,55 +37,14 @@ export async function loader(): Promise<LoaderResult> {
   );
   const newsResponse = await handleLoader(() => axios.get(newsRequest.href));
 
+  // return handleLoader(() =>
+  //   Promise.all([axios.get(newsRequest.href), axios.get(bannerRequest.href)]),
+  // );
   return {
     success: true,
     message: "Selesai mendapatkan data",
     data: [bannerResponse.data, newsResponse.data],
   };
-  return handleLoader(() =>
-    Promise.all([axios.get(newsRequest.href), axios.get(bannerRequest.href)]),
-  );
-  try {
-    const response = await axios.get<NewsApiResponse>(
-      "https://rs-balung-cp.vercel.app/berita?page=1",
-    );
-    const data = response.data;
-
-    if (!data.success || !data.data.berita.length) {
-      // Return empty data if no doctors are found
-      return {
-        ...data,
-        data: {
-          berita: [],
-          pagination: {
-            currentPage: 1,
-            pageSize: 15,
-            totalItems: 0,
-            totalPages: 1,
-          },
-        },
-      };
-    }
-
-    return data; // Return the full API response
-  } catch (error: any) {
-    const errorResponse = error.response?.data || {};
-    const data = {
-      success: errorResponse.success || false,
-      statusCode: errorResponse.statusCode || 400,
-      message: errorResponse.message || "Error",
-      data: {
-        berita: [],
-        pagination: {
-          currentPage: 1,
-          pageSize: 9,
-          totalItems: 0,
-          totalPages: 1,
-        },
-      },
-    };
-    return data;
-  }
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {

@@ -122,7 +122,6 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
           />
         ))}
       </section>
-      <div className="p-0.5"></div>
     </>
   );
 }

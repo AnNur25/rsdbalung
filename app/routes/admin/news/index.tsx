@@ -1,3 +1,19 @@
+import { useState } from "react";
+import { useFetcher, useSearchParams } from "react-router";
+import axios from "axios";
+
+import type { Route } from "./+types";
+import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
+import { handleAction } from "~/utils/handleAction";
+
+import { alternatingRowColor } from "~/utils/styles";
+import type { News } from "~/models/News";
+import { paginationDefault, type Pagination } from "~/models/Pagination";
+
+import Table from "~/components/Table";
+import SearchBar from "~/components/SearchBar";
+import PaginationControls from "~/components/PaginationControl";
+
 import {
   PaperAirplaneIcon,
   PencilSquareIcon,
@@ -5,76 +21,44 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import axios from "axios";
-import { useFetcher, useLoaderData } from "react-router";
-import Table from "~/components/Table";
-import type { NewsApiResponse } from "~/routes/news";
-import type { Route } from "./+types";
-import { alternatingRowColor } from "~/utils/styles";
 
 export async function loader({
   request,
-}: Route.LoaderArgs): Promise<NewsApiResponse> {
+}: Route.LoaderArgs): Promise<LoaderResult> {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/berita`);
 
-  try {
-    const response = await axios.get<NewsApiResponse>(urlRequest.href);
-    if (!response.data.success || !response.data.data.berita.length) {
-      return {
-        ...response.data,
-        data: {
-          berita: [],
-          pagination: {
-            currentPage: 1,
-            pageSize: 15,
-            totalItems: 0,
-            totalPages: 1,
-          },
-        },
-      };
-    }
+  const url = new URL(request.url);
+  const page = url.searchParams.get("page") || "1";
+  const keyword = url.searchParams.get("keyword");
 
-    return response.data;
-  } catch (error: any) {
-    return {
-      // ...error.response.data,
-      success: false,
-      statusCode: error.response?.status ?? 500,
-      message: error.response?.data?.message ?? "Internal Server Error",
-      data: {
-        berita: [],
-        pagination: {
-          currentPage: 1,
-          pageSize: 10,
-          totalItems: 0,
-          totalPages: 1,
-        },
-      },
-    };
+  if (keyword) {
+    urlRequest.pathname = "/berita/search";
+    urlRequest.searchParams.set("keyword", keyword);
   }
+  urlRequest.searchParams.set("page", page);
+
+  return handleLoader(() => axios.get(urlRequest.href));
 }
 export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
   const method = request.method;
+  const formData = await request.formData();
+  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/berita`);
 
   if (method === "DELETE") {
-    try {
-      const newsId = formData.get("id");
-      const urlRequest = new URL(
-        `https://rs-balung-cp.vercel.app/berita/${newsId}`,
-      );
-      const response = await axios.delete(urlRequest.href);
-      console.log("res delete", response);
-    } catch (error: any) {
-      console.log(error);
-    }
+    const newsId = formData.get("id");
+    urlRequest.pathname = `/dokter/${newsId}`;
+    return handleAction(() => axios.delete(urlRequest.href));
   }
 }
 
-export default function AdminNews() {
+export default function AdminNews({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Judul Berita", "Tanggal Dibuat", "PPID", "Aksi"];
-  const response = useLoaderData() as NewsApiResponse;
-  const { berita: news, pagination } = response.data;
+  const data = loaderData.data;
+  const { berita: news = [], pagination = paginationDefault } = data as {
+    berita: News[];
+    pagination: Pagination;
+  };
+
   const fetcher = useFetcher();
   const handleDelete = (id: string) => {
     fetcher.submit(
@@ -83,6 +67,30 @@ export default function AdminNews() {
         method: "delete",
       },
     );
+  };
+
+  const [currentPage, setCurrentPage] = useState(pagination?.currentPage || 1);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearch = () => {
+    if (searchKeyword.trim() === "") {
+      setSearchParams({});
+      setIsSearching(false);
+    } else {
+      setSearchParams({ keyword: searchKeyword });
+      setIsSearching(true);
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    if (searchKeyword.trim() !== "") {
+      setSearchParams({ keyword: searchKeyword, page: page.toString() });
+    } else {
+      setSearchParams({ page: page.toString() });
+    }
+    setCurrentPage(page);
   };
 
   return (
@@ -94,6 +102,12 @@ export default function AdminNews() {
         <PlusIcon className="h-4 w-4" />
         <span>Tambah</span>
       </a>
+
+      <SearchBar
+        handleSearch={handleSearch}
+        onSearchChange={setSearchKeyword}
+      />
+
       <section className="w-full overflow-x-auto text-base">
         <Table headers={headers}>
           {news.map((item, index) => (
@@ -136,6 +150,14 @@ export default function AdminNews() {
           ))}
         </Table>
       </section>
+
+      <div className="flex w-full justify-center">
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </>
   );
 }

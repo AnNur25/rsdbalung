@@ -697,8 +697,6 @@ export default function AdminHome({
 
         <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 4 Foto</p>
       </div>
-
-      <div className="p-0.5" />
     </>
   );
 }

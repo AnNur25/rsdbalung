@@ -7,7 +7,7 @@ import { handleLoader } from "~/utils/handleLoader";
 
 import type { Route } from "./+types/index";
 import type { Doctor } from "~/models/Doctor";
-import type { Pagination } from "~/models/Pagination";
+import { paginationDefault, type Pagination } from "~/models/Pagination";
 
 import PaginationControls from "~/components/PaginationControl";
 import SearchBar from "~/components/SearchBar";
@@ -21,15 +21,17 @@ import {
 
 export async function loader({ request }: Route.LoaderArgs) {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
-  const url = new URL(request.url);
 
+  const url = new URL(request.url);
   const page = url.searchParams.get("page") || "1";
   const keyword = url.searchParams.get("keyword");
+
   if (keyword) {
     urlRequest.pathname = "/dokter/search";
     urlRequest.searchParams.set("keyword", keyword);
   }
   urlRequest.searchParams.set("page", page);
+
   return handleLoader(() => axios.get(urlRequest.href));
 }
 
@@ -47,10 +49,10 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function AdminDoctors({ loaderData }: Route.ComponentProps) {
   const data = loaderData.data;
-  const {
-    Dokter: doctors = [],
-    pagination = { currentPage: 1, totalPages: 1, pageSize: 0, totalItems: 0 },
-  } = data as { Dokter: Doctor[]; pagination: Pagination };
+  const { Dokter: doctors = [], pagination = paginationDefault } = data as {
+    Dokter: Doctor[];
+    pagination: Pagination;
+  };
 
   const [currentPage, setCurrentPage] = useState(pagination.currentPage || 1);
   const [searchKeyword, setSearchKeyword] = useState("");

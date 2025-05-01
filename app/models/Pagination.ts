@@ -4,3 +4,10 @@ export interface Pagination {
   totalItems: number;
   totalPages: number;
 }
+
+export const paginationDefault: Pagination = {
+  currentPage: 1,
+  totalPages: 1,
+  pageSize: 0,
+  totalItems: 0,
+};

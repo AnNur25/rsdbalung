@@ -28,6 +28,7 @@ export default function AdminLayout() {
       <AdminSidebar />
       <main className="grow p-8 lg:px-14">
         <Outlet />
+        <div className="mt-8 p-0.5"></div>
       </main>
     </div>
   );

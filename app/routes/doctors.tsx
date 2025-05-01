@@ -6,7 +6,7 @@ import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
 
 import type { Route } from "./+types/doctors";
 import type { Doctor } from "~/models/Doctor";
-import type { Pagination } from "~/models/Pagination";
+import { paginationDefault, type Pagination } from "~/models/Pagination";
 
 import DoctorCard from "~/components/DoctorCard";
 
@@ -33,10 +33,10 @@ export async function loader({
 
 export default function Doctors({ loaderData }: Route.ComponentProps) {
   const data = loaderData.data;
-  const {
-    Dokter: doctors = [],
-    pagination = { currentPage: 1, totalPages: 1, pageSize: 0, totalItems: 0 },
-  } = data as { Dokter: Doctor[]; pagination: Pagination };
+  const { Dokter: doctors = [], pagination = paginationDefault } = data as {
+    Dokter: Doctor[];
+    pagination: Pagination;
+  };
 
   // Access the data and pagination from the loader
   const [currentPage, setCurrentPage] = useState(pagination.currentPage || 1);
