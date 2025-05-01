@@ -16,9 +16,9 @@ export default function SearchBar({
         <input
           className="max-w-[60vw] rounded-md border-1 border-gray-300 py-2 ps-10 pe-2 focus:border-green-600 focus:outline-none lg:w-2xl"
           type="search"
-          placeholder="Cari Nama Dokter"
-          name="doctor"
-          id="doctor-search"
+          placeholder="Cari"
+          name="search"
+          id="search"
           onChange={(e) => onSearchChange(e.target.value)}
         />
       </div>
