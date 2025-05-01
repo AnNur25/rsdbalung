@@ -60,7 +60,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <div className="flex items-center p-8 max-md:flex-col">
-        <Form method="post" className="flex flex-1 flex-col gap-4 p-12">
+        <Form method="post" className="flex shadow-lg border border-gray-300 rounded-xl flex-1 flex-col gap-4 p-8 m-4">
           <div className="flex flex-col gap-2">
             <label htmlFor="nama" className="text-md font-semibold">
               Nama <span className="text-red-600">*</span>
@@ -105,10 +105,9 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
             <label htmlFor="message" className="text-md font-semibold">
               Aduan <span className="text-red-600">*</span>
             </label>
-            <input
-              type="text"
+            <textarea
               placeholder="Tulis aduan Anda"
-              className="rounded-lg border border-gray-400 px-4 py-2"
+              className="rounded-lg border min-h-56 border-gray-400 px-4 py-2"
               name="message"
               id="message"
             />
@@ -117,11 +116,14 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
             Simpan
           </button>
         </Form>
+        <div className="flex-1 me-4">
+
         <img
           src="/images/pengaduan.jpg"
           alt="Poster Aduan"
-          className="m-2 w-full min-md:h-90 min-md:w-auto"
-        />
+          className="m-2 w-full h-auto"
+          />
+          </div>
       </div>
 
       <div className="p-4">

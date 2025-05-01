@@ -104,7 +104,7 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
   };
   return (
     <>
-      <section className="w-full overflow-x-auto">
+      <section className="mb-4 w-full overflow-x-auto">
         {complaints?.map((complaint) => (
           <MessageCard
             id={complaint.id}
@@ -121,30 +121,8 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
             )}
           />
         ))}
-        {complaints?.map((item, index) => (
-          <div key={index}>
-            <p>{item.nama}</p>
-            <p>{item.dibuat_pada}</p>
-            <p>{item.message}</p>
-            <p>
-              <a
-                target="__blank"
-                href={`https://api.whatsapp.com/send/?phone=${item.no_wa}`}
-              >
-                WA
-              </a>
-            </p>
-            {item.responAdmin.map((respon) => (
-              <p className="border">{respon.message}</p>
-            ))}
-            <Form method="post" action="/admin/aduan">
-              <input hidden readOnly type="text" name="id" value={item.id} />
-              <input className="rounded border" type="text" name="message" />
-              <button>Balas</button>
-            </Form>
-          </div>
-        ))}
       </section>
+      <div className="p-0.5"></div>
     </>
   );
 }
