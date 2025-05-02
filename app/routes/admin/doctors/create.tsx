@@ -1,4 +1,10 @@
-import { Form, useLoaderData, useNavigation, redirect } from "react-router";
+import {
+  Form,
+  useLoaderData,
+  useNavigation,
+  redirect,
+  useNavigate,
+} from "react-router";
 import { useState } from "react";
 import axios from "axios";
 
@@ -9,29 +15,14 @@ import {
   ListboxOption,
 } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
-import type { PoliApiResponse } from "~/routes/schedule";
 import type { Poli } from "~/models/Poli";
 import type { Route } from "./+types";
+import { handleLoader } from "~/utils/handleLoader";
+import { handleAction } from "~/utils/handleAction";
 
 export async function loader() {
   const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
-
-  try {
-    const poliResponse = await axios.get<PoliApiResponse>(poliRequest.href);
-    if (!poliResponse.data.success) {
-      poliResponse.data.data = [];
-    }
-    return poliResponse.data;
-  } catch (error: any) {
-    // console.error("Error fetching data:", error.response);
-    // return [];
-    return {
-      success: false,
-      statusCode: error.response?.status ?? 500,
-      message: "Failed to fetch data",
-      data: [],
-    };
-  }
+  return handleLoader(() => axios.get(poliRequest.href));
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -52,21 +43,16 @@ export async function action({ request }: Route.ActionArgs) {
   console.log("formData", formData);
 
   const urlRequest = new URL("https://rs-balung-cp.vercel.app/dokter/");
-  try {
-    const response = await axios.post(urlRequest.href, formData, {
+  return handleAction(() =>
+    axios.post(urlRequest.href, formData, {
       headers: { "Content-Type": "multipart/form-data" },
-    });
-    console.log(response);
-    // return redirect("/admin/doctors");
-  } catch (error: any) {
-    // console.error("Failed to create doctor", error.response.data.message);
-    // throw new Response("Submission failed", { status: 500 });
-  }
+    }),
+  );
 }
 
 export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
-  const { data: poli } = loaderData as PoliApiResponse;
-  const poliList = poli || [];
+  const poliList: Poli[] = loaderData.data || [];
+  const navigate = useNavigate();
 
   const [selectedPoli, setSelectedPoli] = useState<Poli>(poliList[0]);
   const navigation = useNavigation();
@@ -82,105 +68,141 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
   };
 
   return (
-    <div className="mx-auto max-w-xl p-6">
-      <h1 className="mb-6 text-2xl font-bold">Add New Doctor</h1>
-      <Form
-        method="post"
-        className="flex flex-col gap-4"
-        encType="multipart/form-data"
-      >
-        <input type="text" name="nama" placeholder="Name" required />
-        <input
-          readOnly
-          type="text"
-          name="id_poli"
-          value={selectedPoli.id_poli}
-        />
-        <input
-          type="text"
-          name="biodata_singkat"
-          placeholder="biodata_singkat"
-        />
-        <input type="text" name="link_facebook" placeholder="link_facebook" />
-        <input type="text" name="link_instagram" placeholder="link_instagram" />
-        <input type="text" name="link_linkedin" placeholder="link_linkedin" />
-        <input type="file" accept="image/*" name="file" />
-        <button type="submit">Save</button>
-      </Form>
-      <Form method="post" encType="multipart/form-data" className="space-y-6">
-        <div>
-          <label className="mb-1 block font-medium">Name</label>
-          <input
-            name="nama"
-            type="text"
-            required
-            className="w-full rounded border p-2"
-          />
-        </div>
-
-        {/* Hidden input to pass selected poliId */}
-        <input type="hidden" name="id_poli" value={selectedPoli.id_poli} />
-        <div>
-          <label className="mb-1 block font-medium">Poli</label>
-          <Listbox value={selectedPoli} onChange={setSelectedPoli}>
-            <div className="relative">
-              <ListboxButton className="flex w-full items-center justify-between rounded border p-2">
-                <span>{selectedPoli.nama_poli}</span>
-                <ChevronDownIcon className="h-4 w-4 text-gray-500" />
-              </ListboxButton>
-              <ListboxOptions
-                anchor="bottom"
-                className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded border bg-white shadow-lg"
-              >
-                {poliList.map((poli) => (
-                  <ListboxOption
-                    key={poli.id_poli}
-                    value={poli}
-                    className="cursor-pointer px-4 py-2 data-[focus]:bg-blue-100 data-[selected]:bg-blue-50"
-                  >
-                    {({ selected }) => (
-                      <div className="flex items-center justify-between">
-                        <span>{poli.nama_poli}</span>
-                        {selected && (
-                          <CheckIcon className="h-4 w-4 text-blue-600" />
-                        )}
-                      </div>
-                    )}
-                  </ListboxOption>
-                ))}
-              </ListboxOptions>
-            </div>
-          </Listbox>
-        </div>
-
-        <div>
-          <label className="mb-1 block font-medium">Profile Picture</label>
-          <input
-            type="file"
-            name="file"
-            accept="image/*"
-            onChange={handleImagePreview}
-            className="block"
-          />
-          {preview && (
-            <img
-              src={preview}
-              alt="Preview"
-              className="mt-2 h-24 rounded object-cover"
+    <>
+      <h1 className="mb-6 text-2xl font-bold uppercase">
+        Form Pengisian Daftar Dokter
+      </h1>
+      <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
+        <Form method="post" encType="multipart/form-data">
+          <div className="mb-4">
+            <label htmlFor="file" className="text-lg font-bold">
+              Gambar Dokter <span className="text-red-600">*</span>
+            </label>
+            {preview && (
+              <img
+                src={preview}
+                alt="Preview"
+                className="my-2 h-24 rounded object-cover"
+              />
+            )}
+            <input
+              id="file"
+              type="file"
+              name="file"
+              accept="image/*"
+              onChange={handleImagePreview}
+              required
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
-          )}
-        </div>
+          </div>
 
-        <button
-          type="submit"
-          disabled={navigation.state === "submitting"}
-          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        >
-          {navigation.state === "submitting"
-            ? "Submitting..."
-            : "Create Doctor"}
-        </button>
-      </Form>
-    </div>
+          <div className="mb-4">
+            <label htmlFor="biodata_singkat" className="text-lg font-bold">
+              Biodata Singkat <span className="text-red-600">*</span>
+            </label>
+            <textarea
+              name="biodata_singkat"
+              id="biodata_singkat"
+              placeholder="Isi biodata singkat di sini"
+              required
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            ></textarea>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="id_poli" className="text-lg font-bold">
+              Poli <span className="text-red-600">*</span>
+            </label>
+            <select
+              required
+              name="id_poli"
+              id="id_poli"
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              {poliList.map((poli, index) => (
+                <option key={index} value={poli.id_poli}>
+                  {poli.nama_poli}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="nama" className="text-lg font-bold">
+              Nama <span className="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Isi nama dokter di sini"
+              name="nama"
+              id="nama"
+              required
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="link_instagram" className="text-lg font-bold">
+              Link Instagram <span className="text-red-600">*</span>
+            </label>
+
+            <input
+              type="text"
+              name="link_instagram"
+              id="link_instagram"
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Isi link instagram di sini"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="link_linkedin" className="text-lg font-bold">
+              Link LinkendIn <span className="text-red-600">*</span>
+            </label>
+
+            <input
+              type="text"
+              name="link_linkedin"
+              id="link_linkedin"
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Isi link linkedin di sini"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="link_facebook" className="text-lg font-bold">
+              Link Facebook <span className="text-red-600">*</span>
+            </label>
+
+            <input
+              type="text"
+              name="link_facebook"
+              id="link_facebook"
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Isi link facebook di sini"
+            />
+          </div>
+
+          <div className="mt-4 flex gap-2">
+            <button
+              type="submit"
+              className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+            >
+              Simpan
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/admin/dokter")}
+              className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+            >
+              Batal
+            </button>
+          </div>
+        </Form>
+        {/* 
+      <button
+        type="submit"
+        disabled={navigation.state === "submitting"}
+        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+      >
+        {navigation.state === "submitting" ? "Submitting..." : "Create Doctor"}
+      </button> */}
+      </div>
+    </>
   );
 }

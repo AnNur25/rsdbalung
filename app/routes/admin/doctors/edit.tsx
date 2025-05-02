@@ -1,33 +1,32 @@
 import axios from "axios";
 import type { Route } from "./+types";
-import { Form } from "react-router";
+import { Form, useNavigate } from "react-router";
 import { useState } from "react";
 import type { Doctor } from "~/models/Doctor";
+import { handleLoader } from "~/utils/handleLoader";
+import { handleAction } from "~/utils/handleAction";
+import type { Poli } from "~/models/Poli";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const doctorId = params.id;
   const urlRequest = new URL(
     `https://rs-balung-cp.vercel.app/dokter/${doctorId}`,
   );
-
-  try {
-    const response = await axios.get(urlRequest.href);
-    const data = response.data;
-    console.log(data.data.dokter.poli);
-    return data;
-  } catch (error: any) {
-    console.error("Error fetching doctor data:", error);
-    return {
-      success: false,
-      statusCode: error.response?.status ?? 500,
-      message: error.response?.data?.message ?? "Internal Server Error",
-      data: null,
-    };
-  }
+  const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
+  const poliResponse = await handleLoader(() => axios.get(poliRequest.href));
+  const doctorResponse = await handleLoader(() => axios.get(urlRequest.href));
+  const data = {
+    poli: poliResponse.data,
+    doctor: doctorResponse.data,
+  };
+  return {
+    success: true,
+    message: "Selesai mendapatkan data",
+    data,
+  };
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
-  console.log(params.id);
   const formData = await request.formData();
   const defaultImageUrl = formData.get("gambar") as string;
   console.log("formData", formData);
@@ -47,75 +46,184 @@ export async function action({ request, params }: Route.ActionArgs) {
   const urlRequest = new URL(
     `https://rs-balung-cp.vercel.app/dokter/${params.id}`,
   );
-  try {
-    const response = await axios.put(urlRequest.href, formData, {
+  return handleAction(() =>
+    axios.put(urlRequest.href, formData, {
       headers: { "Content-Type": "multipart/form-data" },
-    });
-    console.log(response);
-    // return redirect("/admin/doctors");
-  } catch (error: any) {
-    console.error("Failed to create doctor", error.response);
-    // throw new Response("Submission failed", { status: 500 });
-  }
+    }),
+  );
 }
 
 export default function EditDoctor({ loaderData }: Route.ComponentProps) {
-  const { data } = loaderData;
-  const dokter = data.dokter as Doctor;
-  console.log(dokter);
+  const dokter: Doctor = loaderData.data.doctor.dokter;
+  const poliList: Poli[] = loaderData.data.poli || [];
+  const navigate = useNavigate();
+
   const [doctorName, setDoctorName] = useState(dokter.nama);
   const [doctorImage, setDoctorImage] = useState(dokter.gambar);
   const [doctorBiodata, setDoctorBiodata] = useState(dokter.biodata_singkat);
   const [doctorLinkedIn, setDoctorLinkedIn] = useState(dokter.link_linkedin);
   const [doctorInstagram, setDoctorInstagram] = useState(dokter.link_instagram);
   const [doctorFacebook, setDoctorFacebook] = useState(dokter.link_facebook);
-  const [poli, setPoli] = useState(dokter.poli);
+  const [poli, setPoli] = useState(dokter.poli.id_poli);
+
+  const [preview, setPreview] = useState<string | null>(doctorImage);
+  const handleImagePreview = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+    console.log(file);
+  };
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">Edit Doctor</h1>
-      <Form
-        method="post"
-        className="flex flex-col gap-4"
-        encType="multipart/form-data"
+    <>
+      <h1 className="mb-6 text-2xl font-bold uppercase">
+        Form Pengisian Daftar Dokter
+      </h1>
+      <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
+        <Form method="post" encType="multipart/form-data">
+          <div className="mb-4">
+            <label htmlFor="file" className="text-lg font-bold">
+              Gambar Dokter <span className="text-red-600">*</span>
+            </label>
+            {preview && (
+              <img
+                src={preview}
+                alt="Preview"
+                className="my-2 h-24 rounded object-cover"
+              />
+            )}
+            <input
+              id="file"
+              type="file"
+              name="file"
+              accept="image/*"
+              onChange={handleImagePreview}
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="biodata_singkat" className="text-lg font-bold">
+              Biodata Singkat <span className="text-red-600">*</span>
+            </label>
+            <textarea
+              value={doctorBiodata}
+              onChange={(e) => setDoctorBiodata(e.target.value)}
+              name="biodata_singkat"
+              id="biodata_singkat"
+              placeholder="Isi biodata singkat di sini"
+              required
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            ></textarea>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="id_poli" className="text-lg font-bold">
+              Poli <span className="text-red-600">*</span>
+            </label>
+            <select
+              value={poli}
+              onChange={(e) => setPoli(e.target.value)}
+              required
+              name="id_poli"
+              id="id_poli"
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              {poliList.map((poli, index) => (
+                <option key={index} value={poli.id_poli}>
+                  {poli.nama_poli}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="nama" className="text-lg font-bold">
+              Nama <span className="text-red-600">*</span>
+            </label>
+            <input
+              value={doctorName}
+              onChange={(e) => setDoctorName(e.target.value)}
+              type="text"
+              placeholder="Isi nama dokter di sini"
+              name="nama"
+              id="nama"
+              required
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="link_instagram" className="text-lg font-bold">
+              Link Instagram <span className="text-red-600">*</span>
+            </label>
+
+            <input
+              value={doctorInstagram}
+              onChange={(e) => setDoctorInstagram(e.target.value)}
+              type="text"
+              name="link_instagram"
+              id="link_instagram"
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Isi link instagram di sini"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="link_linkedin" className="text-lg font-bold">
+              Link LinkendIn <span className="text-red-600">*</span>
+            </label>
+
+            <input
+              value={doctorLinkedIn}
+              onChange={(e) => setDoctorLinkedIn(e.target.value)}
+              type="text"
+              name="link_linkedin"
+              id="link_linkedin"
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Isi link linkedin di sini"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="link_facebook" className="text-lg font-bold">
+              Link Facebook <span className="text-red-600">*</span>
+            </label>
+
+            <input
+              value={doctorFacebook}
+              onChange={(e) => setDoctorFacebook(e.target.value)}
+              type="text"
+              name="link_facebook"
+              id="link_facebook"
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Isi link facebook di sini"
+            />
+          </div>
+
+          <div className="mt-4 flex gap-2">
+            <button
+              type="submit"
+              className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+            >
+              Simpan
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/admin/dokter")}
+              className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+            >
+              Batal
+            </button>
+          </div>
+        </Form>
+        {/* 
+      <button
+        type="submit"
+        disabled={navigation.state === "submitting"}
+        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
       >
-        <input
-          type="text"
-          name="nama"
-          placeholder="Name"
-          required
-          value={doctorName}
-          onChange={(e) => setDoctorName(e.target.value)}
-        />
-        <input name="id_poli" value={poli.id_poli} type="text" />
-        <input type="text" name="gambar" value={doctorImage} />
-        <input
-          type="text"
-          name="biodata_singkat"
-          value={doctorBiodata}
-          onChange={(e) => setDoctorBiodata(e.target.value)}
-        />
-        <input
-          onChange={(e) => setDoctorFacebook(e.target.value)}
-          type="text"
-          value={doctorFacebook}
-          name="link_facebook"
-        />
-        <input
-          onChange={(e) => setDoctorInstagram(e.target.value)}
-          type="text"
-          value={doctorInstagram}
-          name="link_instagram"
-        />
-        <input
-          onChange={(e) => setDoctorLinkedIn(e.target.value)}
-          type="text"
-          value={doctorLinkedIn}
-          name="link_linkedin"
-        />
-        <input type="file" accept="image/*" name="file" />
-        <button type="submit">Save</button>
-      </Form>
-    </div>
+        {navigation.state === "submitting" ? "Submitting..." : "Create Doctor"}
+      </button> */}
+      </div>
+    </>
   );
 }
