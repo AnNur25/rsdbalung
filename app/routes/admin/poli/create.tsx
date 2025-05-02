@@ -1,66 +1,71 @@
-import { Form, useActionData } from "react-router";
+import { Form, useActionData, useNavigate } from "react-router";
 import axios from "axios";
 import type { Route } from "./+types/create";
-import { getSession } from "~/sessions.server";
+import { handleAction } from "~/utils/handleAction";
 
 export async function action({ request }: Route.ActionArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/poli`);
 
   let formData = await request.formData();
   let namaPoli = formData.get("nama_poli");
-  const token = session.get("token");
 
-  if (!namaPoli || typeof namaPoli !== "string") {
-    return { error: "Nama Poli is required" };
-  }
-
-  try {
-    const response = await axios.post(urlRequest.href, { nama_poli: namaPoli });
-
-    return { success: true, nama_poli: response.data.nama_poli };
-  } catch (error: any) {
-    // console.error("Error creating Poli:", error.response);
-    return { error: error.response?.data?.message || "Failed to create Poli" };
-  }
+  // if (!namaPoli || typeof namaPoli !== "string") {
+  //   return { error: "Nama Poli is required" };
+  // }
+  return handleAction(() =>
+    axios.post(urlRequest.href, { nama_poli: namaPoli }),
+  );
 }
 
 export default function CreatePoli({ actionData }: Route.ComponentProps) {
-  return (
-    <div className="mx-auto mt-10 max-w-md rounded-md bg-white p-6 shadow-md">
-      <h1 className="mb-6 text-center text-2xl font-bold">Create Poli</h1>
-      <Form method="post" className="space-y-4">
-        <div>
-          <label
-            htmlFor="nama_poli"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Nama Poli
-          </label>
-          <input
-            type="text"
-            name="nama_poli"
-            id="nama_poli"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none sm:text-sm"
-          />
-        </div>
+  const navigate = useNavigate();
 
-        <button
-          type="submit"
-          className="w-full rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none"
-        >
-          Submit
-        </button>
-      </Form>
-      {actionData?.error && (
-        <p className="mt-4 text-sm text-red-600">{actionData.error}</p>
-      )}
-      {actionData?.success && (
-        <p className="mt-4 text-sm text-green-600">
-          Poli "{actionData.nama_poli}" created successfully!
-        </p>
-      )}
-    </div>
+  return (
+    <>
+      <h1 className="mb-6 text-2xl font-bold uppercase">
+        Form Pengisian Poli/Klinik
+      </h1>
+      <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
+        <Form method="post">
+          <div className="mb-4">
+            <label htmlFor="nama_poli" className="text-lg font-bold">
+              Nama Poli <span className="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Isi nama layanan di sini"
+              name="nama_poli"
+              id="nama_poli"
+              required
+              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+
+          <div className="mt-4 flex gap-2">
+            <button
+              type="submit"
+              className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+            >
+              Simpan
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/admin/poli")}
+              className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+            >
+              Batal
+            </button>
+          </div>
+        </Form>
+        {/* {actionData?.error && (
+          <p className="mt-4 text-sm text-red-600">{actionData.error}</p>
+        )}
+        {actionData?.success && (
+          <p className="mt-4 text-sm text-green-600">
+            Poli "{actionData.nama_poli}" created successfully!
+          </p>
+        )} */}
+      </div>
+    </>
   );
 }
