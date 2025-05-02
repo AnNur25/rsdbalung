@@ -134,6 +134,7 @@ export default function Schedule({ loaderData }: Route.ComponentProps) {
           <input
             className="flex-1 rounded-md border-1 border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none lg:max-w-2xl"
             type="date"
+            lang="id-ID"
             placeholder="Pilih Tanggal"
             name="date"
             id="schedule-date-search"

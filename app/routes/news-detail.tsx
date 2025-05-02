@@ -3,7 +3,7 @@ import banner from "~/assets/rsdbalung.jpeg";
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import NewsBanner from "~/components/NewsBanner";
-import type { NewsApiResponse } from "./news";
+// import type { NewsApiResponse } from "./news";
 import type { News } from "~/models/News";
 import "~/lists.css";
 import HtmlParse from "~/components/HtmlParse";
@@ -63,7 +63,7 @@ export async function loader({
       throw new Error(data.message || "Failed to fetch news detail");
     }
 
-    const responseAll = await axios.get<NewsApiResponse>(
+    const responseAll = await axios.get(
       `https://rs-balung-cp.vercel.app/berita?page=1`,
     );
 
@@ -110,7 +110,7 @@ export default function NewsDetail() {
           <img
             src={gambar_sampul}
             alt={judul}
-            className="mx-auto my-8 h-auto w-full object-cover"
+            className="mx-auto my-8 h-auto w-full object-cover aspect-video rounded-sm"
           />
           <h1 className="text-2xl font-bold lg:text-3xl">{judul}</h1>
           <p className="my-4">{ringkasan}</p>

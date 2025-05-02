@@ -14,6 +14,7 @@ export default [
     route("profile", "routes/profile.tsx"),
     route("berita/", "routes/news.tsx"),
     route("dokter", "routes/doctors.tsx"),
+    route("dokter/:id", "routes/doctor-detail.tsx"),
     route("jadwal-dokter", "routes/schedule.tsx"),
     route("berita/:id", "routes/news-detail.tsx"),
     route("pelayanan/:id", "routes/layanan-detail.tsx"),

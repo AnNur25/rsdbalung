@@ -14,7 +14,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="mt-16 bg-sky-700 text-white bottom-0">
+    <footer className="bottom-0 mt-16 bg-sky-700 text-white">
       <div className="flex flex-col justify-between gap-8 px-10 py-8 lg:flex-row">
         <div className="flex-1">
           <img src={logo} className="w-30" />

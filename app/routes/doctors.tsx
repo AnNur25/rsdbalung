@@ -78,8 +78,9 @@ export default function Doctors({ loaderData }: Route.ComponentProps) {
       <section className="flex flex-col flex-wrap justify-center gap-10 p-6 min-md:flex-row">
         {doctors.length > 0 ? (
           doctors.map((doctor, index) => (
-            <div className="w-min">
+            <div className="relative w-min">
               <DoctorCard
+                id={doctor.id_dokter}
                 key={index}
                 name={doctor.nama}
                 specialty={doctor.poli.nama_poli}
