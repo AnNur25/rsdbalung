@@ -86,32 +86,32 @@ export default function MessageCard({
               </div>
             ))}
 
-            {isAdmin && (
-              <div className="mt-2 flex items-center gap-2">
-                <input
-                  placeholder="Balas"
-                  type="text"
-                  name="message"
-                  value={reply}
-                  onChange={(e) => setReply(e.target.value)}
-                  className="w-full rounded border border-gray-400 px-2 py-1.5"
-                />
-
-                <button
-                  onClick={handleSend}
-                  className="h-fit w-fit rounded bg-blue-600 p-2 text-white"
-                >
-                  <PaperAirplaneIcon className="h-4 w-4" />
-                </button>
-                <a
-                  target="__blank"
-                  href={`https://api.whatsapp.com/send/?phone=${phoneNumber}`}
-                >
-                  <img src={whatsAppIcon} className="h-8 w-8" />
-                </a>
-              </div>
-            )}
           </>
+        )}
+        {isAdmin && (
+          <div className="mt-2 flex items-center gap-2">
+            <input
+              placeholder="Balas"
+              type="text"
+              name="message"
+              value={reply}
+              onChange={(e) => setReply(e.target.value)}
+              className="w-full rounded border border-gray-400 px-2 py-1.5"
+            />
+
+            <button
+              onClick={handleSend}
+              className="h-fit w-fit rounded bg-blue-600 p-2 text-white"
+            >
+              <PaperAirplaneIcon className="h-4 w-4" />
+            </button>
+            <a
+              target="__blank"
+              href={`https://api.whatsapp.com/send/?phone=${phoneNumber}`}
+            >
+              <img src={whatsAppIcon} className="h-8 w-8" />
+            </a>
+          </div>
         )}
       </div>
     </div>
