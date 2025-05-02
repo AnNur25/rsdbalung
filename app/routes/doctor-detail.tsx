@@ -139,7 +139,7 @@ export default function DoctorDetail({ loaderData }: Route.ComponentProps) {
             </section>
           </div>
         </div>
-        <section className="flex flex-col flex-wrap justify-center gap-10 p-6 min-md:flex-row">
+        <section className="flex flex-col flex-wrap items-center justify-center gap-10 p-6 min-md:flex-row">
           {doctors.length > 0 ? (
             doctors.map((doctor, index) => (
               <div className="relative w-min">
