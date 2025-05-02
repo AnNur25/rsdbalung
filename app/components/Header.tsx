@@ -41,7 +41,7 @@ export default function Header({
   pelayanan?: Pelayanan[];
 }) {
   const navigation = [
-    { name: "Home", href: "/" },
+    { name: "Beranda", href: "/" },
     { name: "Profil", href: "/profile" },
     { name: "Berita", href: "/berita" },
     {

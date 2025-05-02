@@ -6,6 +6,10 @@ import kualitasTerbaikIcon from "~/assets/kualitas-terbaik.svg";
 import penangananCepatIcon from "~/assets/penanganan-cepat.svg";
 import layananRamahIcon from "~/assets/layanan-ramah.svg";
 
+import shortcutDokterIcon from "~/assets/shortcut-dokter.svg";
+import shortcutJadwalIcon from "~/assets/shortcut-jadwal-dokter.svg";
+import shortcutAduanIcon from "~/assets/shortcut-aduan.svg";
+
 import Banner from "~/components/Banner";
 import MapsEmbed from "~/components/MapsEmbed";
 import InstagramEmbed from "~/components/InstagramEmbed";
@@ -73,7 +77,41 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <Banner bannersSrc={bannerList} />
-
+      <section className="mt-8 flex flex-col items-center">
+        <p className="text-xl text-blue-400">Selamat Datang di</p>
+        <h1 className="text-4xl font-black text-persian-blue-950 uppercase">
+          RSD Balung
+        </h1>
+        <div className="flex flex-wrap gap-2 p-6 h-auto">
+          <a
+            href="/dokter"
+            className="flex text-sm flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4"
+          >
+            <img src={shortcutDokterIcon} alt="" className="h-8 w-8" />
+            <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
+              Daftar Dokter
+            </p>
+          </a>
+          <a
+            href="/jadwal-dokter"
+            className="flex text-sm flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4"
+          >
+            <img src={shortcutJadwalIcon} alt="" className="h-8 w-8" />
+            <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
+              Jadwal Dokter
+            </p>
+          </a>
+          <a
+            href="/dokter"
+            className="flex text-sm flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4"
+          >
+            <img src={shortcutAduanIcon} alt="" className="h-8 w-8" />
+            <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
+              Aduan
+            </p>
+          </a>
+        </div>
+      </section>
       <section className="mt-8 flex flex-col items-center">
         <TextWithRect>KAMI BERKOMITMEN</TextWithRect>
         <div className="grid grid-cols-1 gap-6 p-8 lg:max-w-2/3 lg:grid-cols-2 lg:grid-rows-2">
