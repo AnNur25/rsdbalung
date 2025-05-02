@@ -82,7 +82,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <h1 className="text-4xl font-black text-persian-blue-950 uppercase">
           RSD Balung
         </h1>
-        <div className="flex flex-wrap gap-2 p-6 h-auto">
+        
+        {/* <div className="flex flex-wrap gap-2 p-6 h-auto">
           <a
             href="/dokter"
             className="flex text-sm flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4"
@@ -110,7 +111,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               Aduan
             </p>
           </a>
-        </div>
+        </div> */}
       </section>
       <section className="mt-8 flex flex-col items-center">
         <TextWithRect>KAMI BERKOMITMEN</TextWithRect>
