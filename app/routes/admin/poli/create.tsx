@@ -2,6 +2,7 @@ import { Form, useActionData, useNavigate } from "react-router";
 import axios from "axios";
 import type { Route } from "./+types/create";
 import { handleAction } from "~/utils/handleAction";
+// import { ActionToast, LoaderToast } from "~/hooks/toastHandler";
 
 export async function action({ request }: Route.ActionArgs) {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/poli`);
@@ -19,6 +20,9 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function CreatePoli({ actionData }: Route.ComponentProps) {
   const navigate = useNavigate();
+
+  // ActionToast();
+  // LoaderToast();
 
   return (
     <>

@@ -18,7 +18,7 @@ import {
   useToastFromAction,
   useToastFromLoader,
 } from "~/hooks/useToast";
-import { handleLoader } from "~/utils/handleLoader";
+import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
 import {
   MinusIcon,
   PencilSquareIcon,
@@ -33,6 +33,7 @@ import type {
   Unggulan,
   UnggulanRequest,
 } from "~/models/Unggulan";
+import { ActionToast, LoaderToast } from "~/hooks/toastHandler";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const bannerRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
@@ -134,30 +135,47 @@ export default function AdminHome({
   loaderData,
   actionData,
 }: Route.ComponentProps) {
-  const loaderToastData = getDataForToast(loaderData);
+  // const loaderToastData = getDataForToast(loaderData);
   const actionToastData = actionData as { error?: string; success?: string };
-
-  console.log("actionToastData", actionToastData);
+  // useToastFromAction();
+  // useToastFromLoader();
+  // console.log("actionToastData", actionToastData);
 
   const banners = Array.isArray(loaderData?.data?.banners)
     ? (loaderData?.data?.banners as BannerModel[])
     : [];
 
-  // useEffect(() => {
-  //   if (actionToastData?.success) toast.success(actionToastData.success);
-  //   if (actionToastData?.error) toast.error(actionToastData.error);
-  // }, [actionToastData]);
+  // ActionToast();
+  // LoaderToast();
 
   // useEffect(() => {
-  //   if (loaderToastData?.success) toast.success(loaderToastData.success);
-  //   if (loaderToastData?.error) toast.error(loaderToastData.error);
-  // }, []);
+  //   if (actionData?.success) {
+  //     toast.success(actionData.success);
+  //   }
+  //   if (actionToastData?.error) toast.error(actionToastData.error);
+  // }, [actionData]);
+
+  // useEffect(() => {
+  //   if (loaderData?.success) toast.success(loaderData.message);
+  //   else toast.error(loaderData.message);
+  // }, [loaderData]);
 
   // const showToast = (message?: string) => {
   //   toast.success(message || "Default");
   // };
 
   const fetcher = useFetcher();
+  console.log("fetcher", fetcher.data);
+  const fetcherData = fetcher.data || { message: "", success: false };
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
 
   // Selected Banner Data
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -339,17 +357,18 @@ export default function AdminHome({
       encType: "multipart/form-data",
       method: unggulanMethod,
     });
-    // setDisableUnggulanForm(true);
+    fetcher.load(window.location.pathname);
+    setDisableUnggulanForm(true);
   };
 
   return (
     <>
       {/* Banner */}
-      <div className="w-full p-4 shadow-2xl">
-        <h2 className="mb-4 w-max text-2xl font-bold">Banner</h2>
-
+      <h2 className="mb-4 w-max text-2xl font-bold uppercase">Banner</h2>
+      <div className="w-full rounded-lg border border-gray-400/50 p-4 shadow-2xl">
         <div className="flex items-center justify-center gap-2 lg:max-w-3/5">
-          <Form
+          <fetcher.Form
+            // onSubmit={() => fetcher.load(window.location.pathname)}
             method="post"
             encType="multipart/form-data"
             className="flex w-full shrink gap-2"
@@ -376,7 +395,7 @@ export default function AdminHome({
             >
               Tambah
             </button>
-          </Form>
+          </fetcher.Form>
         </div>
         <div className="mt-6 flex w-full">
           {banners?.length > 0 && (

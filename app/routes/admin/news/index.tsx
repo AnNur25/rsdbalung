@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFetcher, useSearchParams } from "react-router";
 import axios from "axios";
 
@@ -21,6 +21,7 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
+import toast from "react-hot-toast";
 
 export async function loader({
   request,
@@ -53,7 +54,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function AdminNews({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Judul Berita", "Tanggal Dibuat", "PPID", "Aksi"];
-  
+
   const data = loaderData.data;
   const { berita: news = [], pagination = paginationDefault } = data as {
     berita: News[];
@@ -61,6 +62,16 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
   };
 
   const fetcher = useFetcher();
+  const fetcherData = fetcher.data || { message: "", success: false };
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
   const handleDelete = (id: string) => {
     fetcher.submit(
       { id },
@@ -69,6 +80,22 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
       },
     );
   };
+  console.log(loaderData);
+  const hasShownLoaderToastRef = useRef(false);
+  useEffect(() => {
+    if (!hasShownLoaderToastRef.current && loaderData?.message) {
+      if (loaderData.success) {
+        toast.success(loaderData.message);
+      } else {
+        toast.error(loaderData.message);
+      }
+      hasShownLoaderToastRef.current = true;
+    }
+  }, [loaderData]);
+  // useEffect(() => {
+  //   if (loaderData?.success) toast.success(loaderData.message);
+  //   else toast.error(loaderData.message);
+  // }, []);
 
   const [currentPage, setCurrentPage] = useState(pagination?.currentPage || 1);
   const [searchKeyword, setSearchKeyword] = useState("");

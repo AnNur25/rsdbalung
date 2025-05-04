@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getErrorMessage } from "./handleError";
 
-type ActionResult = { success: string } | { error: string };
+export type ActionResult = { message: string; success: boolean };
 
 export async function handleAction(
   fn: () => Promise<any>,
@@ -11,12 +11,15 @@ export async function handleAction(
     const response = await fn();
     console.log("Handle Action Success", response.data);
 
-    return { success: response.data?.message || successMessage || "Berhasil." };
+    return {
+      success: response.data?.success || true,
+      message: response.data?.message || successMessage || "Berhasil.",
+    };
   } catch (error: any) {
     console.error("Action Error:", error.response?.data || error.message);
 
     const message = getErrorMessage(error);
 
-    return { error: message };
+    return { success: false, message };
   }
 }

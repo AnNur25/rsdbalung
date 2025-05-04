@@ -2,16 +2,16 @@ import axios from "axios";
 import { Outlet, useLoaderData } from "react-router";
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
-import type { PelayananResponse } from "./admin/services";
+// import type { PelayananResponse } from "./admin/services";
 import type { Pelayanan } from "~/models/Pelayanan";
 import { useEffect } from "react";
 
-export async function loader(): Promise<PelayananResponse> {
+export async function loader() {
   const pelayananRequest = new URL(
     `https://rs-balung-cp.vercel.app/pelayanan/`,
   );
   try {
-    const response = await axios.get<PelayananResponse>(pelayananRequest.href);
+    const response = await axios.get(pelayananRequest.href);
 
     if (!response.data.success || !response.data.data.length) {
       // response.data.data = [];
@@ -45,7 +45,7 @@ export default function Layout() {
       localStorage.setItem("nVisits", (nVisitsInt + 1).toString());
     }
   }, []);
-  const data = useLoaderData() as PelayananResponse;
+  const data = useLoaderData();
   const pelayanan = data.data ?? [];
 
   return (

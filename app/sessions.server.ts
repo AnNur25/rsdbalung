@@ -5,8 +5,9 @@ type SessionData = {
   refreshToken: string;
 };
 
-type SessionFlashData = {
-  error: string;
+export type SessionFlashData = {
+  message: string;
+  success: boolean;
 };
 
 const { getSession, commitSession, destroySession } =
