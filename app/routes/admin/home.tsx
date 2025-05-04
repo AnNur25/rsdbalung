@@ -455,7 +455,7 @@ export default function AdminHome({
           <PencilSquareIcon className="h-4 w-4" />
         </button>
       </div>
-      <div className="mb-8 w-full p-4 shadow-2xl">
+      <div className="mb-8 w-full rounded-lg border border-gray-400/50 p-4 shadow-2xl">
         <div className="flex items-center justify-center gap-2">
           <div
             // method={unggulanMethod}

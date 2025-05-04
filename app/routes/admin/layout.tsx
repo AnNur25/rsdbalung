@@ -3,6 +3,7 @@ import AdminSidebar from "~/components/AdminSidebar";
 import type { Route } from "./+types/layout";
 import { getSession } from "~/sessions.server";
 import axios from "axios";
+
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const token = session.get("token");

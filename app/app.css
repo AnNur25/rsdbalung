@@ -20,6 +20,10 @@ input::file-selector-button {
   margin-inline-end: 12px;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 /* html,
 body {
   @apply bg-white dark:bg-gray-950;

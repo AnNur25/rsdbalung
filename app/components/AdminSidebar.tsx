@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Dialog, DialogPanel } from "@headlessui/react";
+import {
+  Description,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
 import {
   Bars3Icon,
   XMarkIcon,
@@ -36,6 +41,12 @@ const navigation = [
 
 export default function AdminSidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+
+  const handleLogout = () => {
+    console.log("Logout");
+    setLogoutDialogOpen(false);
+  };
 
   return (
     <>
@@ -75,7 +86,10 @@ export default function AdminSidebar() {
                 {item.name}
               </NavLink>
             ))}
-            <button className="mt-4 flex w-full items-center gap-3 rounded-md bg-red-500 px-3 py-2 text-sm font-medium text-white hover:bg-red-600">
+            <button
+              onClick={() => setLogoutDialogOpen(true)}
+              className="mt-4 flex w-full items-center gap-3 rounded-md bg-red-500 px-3 py-2 text-sm font-medium text-white hover:bg-red-600"
+            >
               <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
               Keluar
             </button>
@@ -106,11 +120,46 @@ export default function AdminSidebar() {
             </NavLink>
           ))}
         </nav>
-        <button className="mt-6 flex items-center gap-3 rounded-md bg-red-500 px-3 py-2 text-sm font-medium hover:bg-red-600">
+        <button
+          onClick={() => setLogoutDialogOpen(true)}
+          className="mt-6 flex items-center gap-3 rounded-md bg-red-500 px-3 py-2 text-sm font-medium hover:cursor-pointer hover:bg-red-600"
+        >
           <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />
           Keluar
         </button>
       </aside>
+      {/* Logout Confirmation Dialog */}
+      <Dialog
+        open={logoutDialogOpen}
+        onClose={() => setLogoutDialogOpen(false)}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 bg-gray-600/50" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg">
+            <DialogTitle className="text-lg font-bold text-gray-900">
+              Konfirmasi Keluar
+            </DialogTitle>
+            <Description className="mt-2 text-sm text-gray-600">
+              Apakah Anda yakin ingin keluar?
+            </Description>
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setLogoutDialogOpen(false)}
+                className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleLogout}
+                className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+              >
+                Keluar
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
 
       {/* Offset for content */}
       <div className="lg:ml-54" />
