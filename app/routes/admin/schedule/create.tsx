@@ -29,6 +29,8 @@ import type { Pelayanan } from "~/models/Pelayanan";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 import { handleAction } from "~/utils/handleAction";
+import { handleLoader } from "~/utils/handleLoader";
+import { isSuccess } from "~/utils/extractResponses";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
@@ -39,27 +41,31 @@ export async function loader({ params }: Route.LoaderArgs) {
     `https://rs-balung-cp.vercel.app/pelayanan/`,
   );
 
-  try {
-    const [poliResponse, doctorResponse, pelayananResponse] = await Promise.all(
-      [
-        axios.get(poliRequest.href),
-        axios.get(doctorRequest.href),
-        axios.get(pelayananRequest.href),
-      ],
-    );
+  const poliResponse = await handleLoader(() => axios.get(poliRequest.href));
+  const doctorResponse = await handleLoader(() =>
+    axios.get(doctorRequest.href),
+  );
+  const pelayananResponse = await handleLoader(() =>
+    axios.get(pelayananRequest.href),
+  );
 
-    if (!poliResponse.data.success) {
-      poliResponse.data.data = [];
-    }
+  const responseSuccess = isSuccess([
+    poliResponse,
+    doctorResponse,
+    pelayananResponse,
+  ]);
 
-    return {
-      poli: poliResponse.data.data,
-      doctors: doctorResponse.data.data.Dokter,
-      layananList: pelayananResponse.data.data,
-    };
-  } catch (error: any) {
-    return error;
-  }
+  const data = {
+    poli: poliResponse.data,
+    doctors: doctorResponse.data.Dokter,
+    layananList: pelayananResponse.data,
+  };
+
+  return {
+    success: responseSuccess ?? false,
+    message: "Selesai mendapatkan data",
+    data,
+  };
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -106,12 +112,6 @@ export async function action({ request }: Route.ActionArgs) {
     layananList: Array.from(layananMap.values()),
   };
   return handleAction(() => axios.post(urlRequest.href, data));
-  // try {
-  //   const response = await axios.post(urlRequest.href, data);
-  //   console.log("action res", response);
-  // } catch (error: any) {
-  //   // console.error("action err", error);
-  // }
 }
 
 type ScheduleItem = {
@@ -125,11 +125,13 @@ type ScheduleItem = {
 export default function CreateSchedule({ loaderData }: Route.ComponentProps) {
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
   const [selectedPoli, setSelectedPoli] = useState<string>("");
-  const { poli, doctors, layananList } = loaderData as {
+  const { poli, doctors, layananList } = loaderData.data as {
     poli: Poli[];
     doctors: Doctor[];
     layananList: Pelayanan[];
   };
+
+  // console.log(loaderData);
 
   const doctorsByPoli = doctors.filter(
     (doctor) => doctor.poli.id_poli === selectedPoli,
@@ -190,19 +192,30 @@ export default function CreateSchedule({ loaderData }: Route.ComponentProps) {
     <>
       {!selectedPoli ? (
         // Select Poli
+        <>
+          <h1 className="w-max text-2xl font-bold uppercase">
+            Poli Jadwal Praktek
+          </h1>
 
-        <div className="grid w-full grid-cols-1 gap-2 min-md:grid-cols-3">
-          {poli.map((poli, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => setSelectedPoli(poli.id_poli)}
-              className="rounded-lg bg-persian-blue-950 p-6 text-white"
-            >
-              {poli.nama_poli}
-            </button>
-          ))}
-        </div>
+          <p className="text-gray-600 mt-1">
+            Silakan pilih poli/klinik untuk melihat atau mengelola jadwal
+            praktek
+          </p>
+          <div className="w-full rounded-xl border-1 border-gray-300 p-8 shadow-xl mt-4">
+            <div className="grid w-full grid-cols-1 gap-8 min-md:grid-cols-3">
+              {poli.map((poli, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setSelectedPoli(poli.id_poli)}
+                  className="min-h-36 rounded-2xl bg-sky-800 p-6 text-white"
+                >
+                  {poli.nama_poli}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
       ) : (
         // Form Create
         <>
