@@ -153,6 +153,7 @@ export default function AdminDoctors({ loaderData }: Route.ComponentProps) {
                 >
                   <div className="flex-1">
                     <DoctorCard
+                      isAdmin
                       id={doctor.id_dokter}
                       name={doctor.nama}
                       specialty={doctor.poli.nama_poli}

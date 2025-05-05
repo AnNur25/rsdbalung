@@ -11,8 +11,8 @@ export default function Table({
 }: TableProps): ReactNode {
   const nCols = headers.length;
   return (
-    <table className="w-full table-auto divide-x divide-y divide-gray-500">
-      <thead className="divide-x divide-y divide-gray-300">
+    <table className="w-full table-auto divide-y divide-gray-500">
+      <thead className="divide-y divide-gray-300">
         <tr className="bg-sky-700 text-white">
           {headers.map((header, index) => (
             <th

@@ -105,7 +105,7 @@ export default function NewsDetail() {
         description={ringkasan}
         date={tanggal}
       />
-      <section className="flex flex-col lg:flex-row lg:gap-8">
+      <section className="flex flex-col lg:flex-row lg:gap-8 min-md:p-4">
         <article className="flex-6 px-8 text-justify">
           <img
             src={gambar_sampul}
@@ -129,7 +129,7 @@ export default function NewsDetail() {
           </div>
         </article>
 
-        <aside className="flex flex-2 flex-col items-center gap-4 p-4">
+        <aside className="flex flex-2 flex-col items-center gap-4 p-8 min-md:pl-4 min-md:pr-8">
           <h2 className="text-2xl font-bold">Berita Lainnya</h2>
           <div className="flex flex-col gap-4">
             {/* Berita lainnya */}
