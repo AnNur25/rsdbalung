@@ -141,17 +141,17 @@ export default function AdminHome({
   loaderData,
   actionData,
 }: Route.ComponentProps) {
-  const hasShownLoaderToastRef = useRef(false);
-  useEffect(() => {
-    if (!hasShownLoaderToastRef.current && loaderData?.message) {
-      if (loaderData.success) {
-        toast.success(loaderData.message);
-      } else {
-        toast.error(loaderData.message);
-      }
-      hasShownLoaderToastRef.current = true;
-    }
-  }, [loaderData]);
+  // const hasShownLoaderToastRef = useRef(false);
+  // useEffect(() => {
+  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
+  //     if (loaderData.success) {
+  //       toast.success(loaderData.message);
+  //     } else {
+  //       toast.error(loaderData.message);
+  //     }
+  //     hasShownLoaderToastRef.current = true;
+  //   }
+  // }, [loaderData]);
 
   const banners = Array.isArray(loaderData?.data?.banners)
     ? (loaderData?.data?.banners as BannerModel[])

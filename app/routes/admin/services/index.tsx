@@ -20,17 +20,17 @@ export async function loader(): Promise<LoaderResult> {
 export default function AdminServices({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Layanan", "Aksi"];
   const pelayananList = (loaderData.data as Pelayanan[]) || [];
-  const hasShownLoaderToastRef = useRef(false);
-  useEffect(() => {
-    if (!hasShownLoaderToastRef.current && loaderData?.message) {
-      if (loaderData.success) {
-        toast.success(loaderData.message);
-      } else {
-        toast.error(loaderData.message);
-      }
-      hasShownLoaderToastRef.current = true;
-    }
-  }, [loaderData]);
+  // const hasShownLoaderToastRef = useRef(false);
+  // useEffect(() => {
+  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
+  //     if (loaderData.success) {
+  //       toast.success(loaderData.message);
+  //     } else {
+  //       toast.error(loaderData.message);
+  //     }
+  //     hasShownLoaderToastRef.current = true;
+  //   }
+  // }, [loaderData]);
   return (
     <>
       <div className="mb-4 flex items-center justify-between">

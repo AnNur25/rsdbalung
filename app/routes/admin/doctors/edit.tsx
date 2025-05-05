@@ -77,17 +77,17 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
     console.log(file);
   };
 
-  const hasShownLoaderToastRef = useRef(false);
-  useEffect(() => {
-    if (!hasShownLoaderToastRef.current && loaderData?.message) {
-      if (loaderData.success) {
-        toast.success(loaderData.message);
-      } else {
-        toast.error(loaderData.message);
-      }
-      hasShownLoaderToastRef.current = true;
-    }
-  }, [loaderData]);
+  // const hasShownLoaderToastRef = useRef(false);
+  // useEffect(() => {
+  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
+  //     if (loaderData.success) {
+  //       toast.success(loaderData.message);
+  //     } else {
+  //       toast.error(loaderData.message);
+  //     }
+  //     hasShownLoaderToastRef.current = true;
+  //   }
+  // }, [loaderData]);
 
   const navigate = useNavigate();
   const fetcher = useFetcher();

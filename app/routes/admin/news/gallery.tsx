@@ -79,17 +79,17 @@ export default function GalleryNews({
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  const hasShownLoaderToastRef = useRef(false);
-  useEffect(() => {
-    if (!hasShownLoaderToastRef.current && loaderData?.message) {
-      if (loaderData.success) {
-        toast.success(loaderData.message);
-      } else {
-        toast.error(loaderData.message);
-      }
-      hasShownLoaderToastRef.current = true;
-    }
-  }, [loaderData]);
+  // const hasShownLoaderToastRef = useRef(false);
+  // useEffect(() => {
+  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
+  //     if (loaderData.success) {
+  //       toast.success(loaderData.message);
+  //     } else {
+  //       toast.error(loaderData.message);
+  //     }
+  //     hasShownLoaderToastRef.current = true;
+  //   }
+  // }, [loaderData]);
 
   const fetcherData = fetcher.data || { message: "", success: false };
   useEffect(() => {

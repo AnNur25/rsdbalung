@@ -19,17 +19,17 @@ export async function loader({
 export default function AdminPoli({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Poli", "Aksi"];
   const poliList = (loaderData.data as Poli[]) || [];
-  const hasShownLoaderToastRef = useRef(false);
-  useEffect(() => {
-    if (!hasShownLoaderToastRef.current && loaderData?.message) {
-      if (loaderData.success) {
-        toast.success(loaderData.message);
-      } else {
-        toast.error(loaderData.message);
-      }
-      hasShownLoaderToastRef.current = true;
-    }
-  }, [loaderData]);
+  // const hasShownLoaderToastRef = useRef(false);
+  // useEffect(() => {
+  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
+  //     if (loaderData.success) {
+  //       toast.success(loaderData.message);
+  //     } else {
+  //       toast.error(loaderData.message);
+  //     }
+  //     hasShownLoaderToastRef.current = true;
+  //   }
+  // }, [loaderData]);
   return (
     <>
       <div className="mb-4 flex items-center justify-between">

@@ -54,17 +54,17 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
   const complaints = Array.isArray(loaderData?.data?.data_aduan)
     ? (loaderData.data.data_aduan as ComplaintModel[])
     : [];
-  const hasShownLoaderToastRef = useRef(false);
-  useEffect(() => {
-    if (!hasShownLoaderToastRef.current && loaderData?.message) {
-      if (loaderData.success) {
-        toast.success(loaderData.message);
-      } else {
-        toast.error(loaderData.message);
-      }
-      hasShownLoaderToastRef.current = true;
-    }
-  }, [loaderData]);
+  // const hasShownLoaderToastRef = useRef(false);
+  // useEffect(() => {
+  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
+  //     if (loaderData.success) {
+  //       toast.success(loaderData.message);
+  //     } else {
+  //       toast.error(loaderData.message);
+  //     }
+  //     hasShownLoaderToastRef.current = true;
+  //   }
+  // }, [loaderData]);
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
   useEffect(() => {

@@ -35,17 +35,17 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
   const extractedPoliName = poli.nama_poli.split(" ").slice(2).join(" ") || "";
   const [poliName, setPoliName] = useState(extractedPoliName || "");
 
-  const hasShownLoaderToastRef = useRef(false);
-  useEffect(() => {
-    if (!hasShownLoaderToastRef.current && loaderData?.message) {
-      if (loaderData.success) {
-        toast.success(loaderData.message);
-      } else {
-        toast.error(loaderData.message);
-      }
-      hasShownLoaderToastRef.current = true;
-    }
-  }, [loaderData]);
+  // const hasShownLoaderToastRef = useRef(false);
+  // useEffect(() => {
+  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
+  //     if (loaderData.success) {
+  //       toast.success(loaderData.message);
+  //     } else {
+  //       toast.error(loaderData.message);
+  //     }
+  //     hasShownLoaderToastRef.current = true;
+  //   }
+  // }, [loaderData]);
 
   const navigate = useNavigate();
   const fetcher = useFetcher();
