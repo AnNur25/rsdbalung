@@ -77,16 +77,20 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <Banner bannersSrc={bannerList} />
-      <section className="mt-8 flex flex-col items-center">
-        <p className="text-xl text-blue-400">Selamat Datang di</p>
-        <h1 className="text-4xl font-black text-persian-blue-950 uppercase">
-          RSD Balung
-        </h1>
+      <section className="mt-8 flex flex-col items-center justify-center gap-4 min-md:flex-row">
+        <div className="flex flex-col items-center ps-6 min-md:items-start">
+          <p className="text-xl text-blue-400 min-md:text-2xl">
+            Selamat Datang di
+          </p>
+          <h1 className="text-4xl font-black text-persian-blue-950 uppercase min-md:text-5xl">
+            RSD Balung
+          </h1>
+        </div>
 
         <div className="flex h-auto flex-wrap gap-2 p-6">
           <a
             href="/dokter"
-            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm"
+            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm min-md:w-40"
           >
             <img src={shortcutDokterIcon} alt="" className="h-8 w-8" />
             <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
@@ -95,7 +99,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </a>
           <a
             href="/jadwal-dokter"
-            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm"
+            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm min-md:w-40"
           >
             <img src={shortcutJadwalIcon} alt="" className="h-8 w-8" />
             <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
@@ -104,7 +108,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </a>
           <a
             href="/dokter"
-            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm"
+            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm min-md:w-40"
           >
             <img src={shortcutAduanIcon} alt="" className="h-8 w-8" />
             <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
@@ -257,23 +261,32 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           )}
         </div>
       </section>
-      <div className="flex flex-col items-center justify-center gap-3 p-4 min-md:flex-row">
-        <section className="mt-2 flex flex-col gap-2 p-1 text-sm lg:font-semibold">
+      <div className="mt-2 flex flex-col items-center justify-center gap-4 p-4 min-md:flex-row min-md:px-10 lg:mx-10">
+        <section className="flex flex-1 flex-col gap-4 text-sm lg:font-semibold">
           <div className="rounded-lg bg-gradient-to-r from-blue-900 to-blue-300 px-8 py-4 text-white">
             <div className="text-white">
-              <TextWithRect textColor="white">ALAMAT KAMI</TextWithRect>
+              <TextWithRect
+                textColor="white"
+                fontSize="min-md:text-2xl text-xl"
+              >
+                ALAMAT KAMI
+              </TextWithRect>
             </div>
-            <p>
+            <p className="font-light min-md:text-lg">
               Jl. Rambipuji, Kebonsari, Balung Lor, Kec. Balung, Jember, Jawa
               Timur 68161
             </p>
           </div>
           <div className="rounded-lg bg-gradient-to-r from-blue-900 to-blue-300 px-8 py-4 text-white">
-            <TextWithRect textColor="white">EMAIL KAMI</TextWithRect>
-            <p>rsd.balung@jemberkab.go.id</p>
+            <TextWithRect textColor="white" fontSize="min-md:text-2xl text-xl">
+              EMAIL KAMI
+            </TextWithRect>
+            <p className="font-light min-md:text-lg">
+              rsd.balung@jemberkab.go.id
+            </p>
           </div>
         </section>
-        <div className="w-fit overflow-hidden rounded-lg border border-gray-300/80 shadow min-md:w-2/5">
+        <div className="h-full w-full flex-1 grow overflow-hidden rounded-lg border border-gray-300/80 shadow min-md:min-w-2/5">
           <MapsEmbed />
         </div>
       </div>
