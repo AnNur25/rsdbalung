@@ -17,6 +17,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import toast from "react-hot-toast";
+import ConfirmDialog from "~/components/ConfirmDialog";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/aduan/all`);
@@ -71,8 +72,7 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
     if (fetcherData.message) {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
-        setTimeout(() => {
-        }, 2000);
+        setTimeout(() => {}, 2000);
       } else {
         toast.error(fetcherData.message);
       }
@@ -137,7 +137,17 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
           ))}
         </section>
       </div>
-      <Dialog
+      <ConfirmDialog
+        isOpen={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        cancelOnClick={() => setDeleteDialogOpen(false)}
+        confirmOnClick={handleDelete}
+        // title="Konfirmasi Hapus"
+        description="Apakah Anda yakin ingin menghapus data ini?"
+        cancelLabel="Batal"
+        confirmLabel="Hapus"
+      />
+      {/* <Dialog
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
         className="relative z-50"
@@ -167,7 +177,7 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
             </div>
           </DialogPanel>
         </div>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 }

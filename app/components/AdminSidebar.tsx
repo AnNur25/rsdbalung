@@ -23,6 +23,7 @@ import {
 import logo from "~/assets/logo-text-white.png";
 import logoBlack from "~/assets/logo-black.png";
 import { NavLink, redirect, useNavigate } from "react-router";
+import ConfirmDialog from "./ConfirmDialog";
 
 const navigation = [
   { name: "Beranda", href: "/admin/home", icon: HomeIcon },
@@ -130,7 +131,17 @@ export default function AdminSidebar() {
         </button>
       </aside>
       {/* Logout Confirmation Dialog */}
-      <Dialog
+      <ConfirmDialog
+        isOpen={logoutDialogOpen}
+        onClose={() => setLogoutDialogOpen(false)}
+        cancelOnClick={() => setLogoutDialogOpen(false)}
+        confirmOnClick={handleLogout}
+        // title="Konfirmasi Keluar"
+        description="Apakah Anda yakin ingin keluar?"
+        cancelLabel="Batal"
+        confirmLabel="Keluar"
+      />
+      {/* <Dialog
         open={logoutDialogOpen}
         onClose={() => setLogoutDialogOpen(false)}
         className="relative z-50"
@@ -160,7 +171,7 @@ export default function AdminSidebar() {
             </div>
           </DialogPanel>
         </div>
-      </Dialog>
+      </Dialog> */}
 
       {/* Offset for content */}
       <div className="lg:ml-54" />

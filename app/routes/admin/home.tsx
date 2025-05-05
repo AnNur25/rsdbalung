@@ -157,25 +157,6 @@ export default function AdminHome({
     ? (loaderData?.data?.banners as BannerModel[])
     : [];
 
-  // ActionToast();
-  // LoaderToast();
-
-  // useEffect(() => {
-  //   if (actionData?.success) {
-  //     toast.success(actionData.success);
-  //   }
-  //   if (actionToastData?.error) toast.error(actionToastData.error);
-  // }, [actionData]);
-
-  // useEffect(() => {
-  //   if (loaderData?.success) toast.success(loaderData.message);
-  //   else toast.error(loaderData.message);
-  // }, [loaderData]);
-
-  // const showToast = (message?: string) => {
-  //   toast.success(message || "Default");
-  // };
-
   // console.log("fetcher", fetcher.data);
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
@@ -265,12 +246,20 @@ export default function AdminHome({
   // >(null);
 
   const handleAddUnggulan = () => {
-    setNewUnggulanData([
-      ...(newUnggulanData || []),
-      {
-        caption: "",
-      },
-    ]);
+    const max = 4;
+    const nExisting = existingImagesData.length;
+    const nNew = newUnggulanData.length;
+    const total = nExisting + nNew;
+    if (total < 4) {
+      setNewUnggulanData([
+        ...(newUnggulanData || []),
+        {
+          caption: "",
+        },
+      ]);
+    } else {
+      toast.error("Maksimal 4")
+    }
   };
 
   const handleRemoveExistingUnggulan = (index: number) => {

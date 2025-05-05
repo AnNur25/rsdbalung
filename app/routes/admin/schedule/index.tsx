@@ -27,6 +27,7 @@ import {
 } from "@headlessui/react";
 import type { Poli } from "~/models/Poli";
 import toast from "react-hot-toast";
+import ConfirmDialog from "~/components/ConfirmDialog";
 
 export async function loader({
   request,
@@ -294,7 +295,17 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
           />
         </div>
       </div>
-      <Dialog
+      <ConfirmDialog
+        isOpen={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        cancelOnClick={() => setDeleteDialogOpen(false)}
+        confirmOnClick={handleDelete}
+        // title="Konfirmasi Hapus"
+        description="Apakah Anda yakin ingin menghapus data ini?"
+        cancelLabel="Batal"
+        confirmLabel="Hapus"
+      />
+      {/* <Dialog
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
         className="relative z-50"
@@ -324,7 +335,7 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
             </div>
           </DialogPanel>
         </div>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 }

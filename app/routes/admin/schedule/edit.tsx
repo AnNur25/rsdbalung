@@ -14,7 +14,7 @@
 // get layanan
 
 import { Form, useFetcher, useNavigate } from "react-router";
-import type { Route } from "./+types/create";
+import type { Route } from "./+types/edit";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import type { Poli } from "~/models/Poli";
