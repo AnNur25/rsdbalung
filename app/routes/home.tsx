@@ -72,7 +72,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const news = (data.news?.berita as News[]) || []; //{ berita: News[]; pagination: Pagination };
   console.log(data.unggulan);
 
-  const bannerList = banners.map((b) => b.gambar);
+  const bannerList = Array.isArray(banners) ? banners.map((b) => b.gambar) : [];
 
   return (
     <>
@@ -82,11 +82,11 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <h1 className="text-4xl font-black text-persian-blue-950 uppercase">
           RSD Balung
         </h1>
-        
-        {/* <div className="flex flex-wrap gap-2 p-6 h-auto">
+
+        <div className="flex h-auto flex-wrap gap-2 p-6">
           <a
             href="/dokter"
-            className="flex text-sm flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4"
+            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm"
           >
             <img src={shortcutDokterIcon} alt="" className="h-8 w-8" />
             <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
@@ -95,7 +95,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </a>
           <a
             href="/jadwal-dokter"
-            className="flex text-sm flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4"
+            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm"
           >
             <img src={shortcutJadwalIcon} alt="" className="h-8 w-8" />
             <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
@@ -104,14 +104,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </a>
           <a
             href="/dokter"
-            className="flex text-sm flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4"
+            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm"
           >
             <img src={shortcutAduanIcon} alt="" className="h-8 w-8" />
             <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
               Aduan
             </p>
           </a>
-        </div> */}
+        </div>
       </section>
       <section className="mt-8 flex flex-col items-center">
         <TextWithRect>KAMI BERKOMITMEN</TextWithRect>
@@ -257,7 +257,27 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           )}
         </div>
       </section>
-
+      <div className="flex flex-col items-center justify-center gap-3 p-4 min-md:flex-row">
+        <section className="mt-2 flex flex-col gap-2 p-1 text-sm lg:font-semibold">
+          <div className="rounded-lg bg-gradient-to-r from-blue-900 to-blue-300 px-8 py-4 text-white">
+            <div className="text-white">
+              <TextWithRect textColor="white">ALAMAT KAMI</TextWithRect>
+            </div>
+            <p>
+              Jl. Rambipuji, Kebonsari, Balung Lor, Kec. Balung, Jember, Jawa
+              Timur 68161
+            </p>
+          </div>
+          <div className="rounded-lg bg-gradient-to-r from-blue-900 to-blue-300 px-8 py-4 text-white">
+            <TextWithRect textColor="white">EMAIL KAMI</TextWithRect>
+            <p>rsd.balung@jemberkab.go.id</p>
+          </div>
+        </section>
+        <div className="w-fit overflow-hidden rounded-lg border border-gray-300/80 shadow min-md:w-2/5">
+          <MapsEmbed />
+        </div>
+      </div>
+      {/* 
       <h2 className="mt-4 mb-2 text-center text-2xl font-extrabold text-persian-blue-950 uppercase lg:text-3xl">
         Maps
       </h2>
@@ -272,7 +292,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </p>
 
         <p>rsd.balung@jemberkab.go.id</p>
-      </section>
+      </section> */}
     </>
   );
 }

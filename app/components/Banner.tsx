@@ -19,7 +19,7 @@ export default function Banner({ bannersSrc }: BannerProps) {
           ))}
         </Slider>
       ) : (
-        <div className="h-48 w-screen lg:h-96">
+        <div className="h-48 w-full lg:h-96">
           <img src={bannerUrl} className="h-full w-full object-cover" />
         </div>
       )}

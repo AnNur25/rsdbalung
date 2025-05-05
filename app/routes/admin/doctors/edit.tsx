@@ -1,11 +1,12 @@
 import axios from "axios";
 import type { Route } from "./+types";
-import { Form, useNavigate } from "react-router";
-import { useState } from "react";
+import { Form, useFetcher, useNavigate } from "react-router";
+import { useEffect, useRef, useState } from "react";
 import type { Doctor } from "~/models/Doctor";
 import { handleLoader } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
 import type { Poli } from "~/models/Poli";
+import toast from "react-hot-toast";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const doctorId = params.id;
@@ -56,7 +57,6 @@ export async function action({ request, params }: Route.ActionArgs) {
 export default function EditDoctor({ loaderData }: Route.ComponentProps) {
   const dokter: Doctor = loaderData.data.doctor.dokter;
   const poliList: Poli[] = loaderData.data.poli || [];
-  const navigate = useNavigate();
 
   const [doctorName, setDoctorName] = useState(dokter.nama);
   const [doctorImage, setDoctorImage] = useState(dokter.gambar);
@@ -77,13 +77,41 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
     console.log(file);
   };
 
+  const hasShownLoaderToastRef = useRef(false);
+  useEffect(() => {
+    if (!hasShownLoaderToastRef.current && loaderData?.message) {
+      if (loaderData.success) {
+        toast.success(loaderData.message);
+      } else {
+        toast.error(loaderData.message);
+      }
+      hasShownLoaderToastRef.current = true;
+    }
+  }, [loaderData]);
+
+  const navigate = useNavigate();
+  const fetcher = useFetcher();
+  const fetcherData = fetcher.data || { message: "", success: false };
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+        setTimeout(() => {
+          navigate("/admin/dokter");
+        }, 2000);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
+
   return (
     <>
       <h1 className="mb-6 text-2xl font-bold uppercase">
         Form Pengisian Daftar Dokter
       </h1>
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
-        <Form method="post" encType="multipart/form-data">
+        <fetcher.Form method="post" encType="multipart/form-data">
           <div className="mb-4">
             <label htmlFor="file" className="text-lg font-bold">
               Gambar Dokter <span className="text-red-600">*</span>
@@ -101,8 +129,21 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
               name="file"
               accept="image/*"
               onChange={handleImagePreview}
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             />
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
 
           <div className="mb-4">
@@ -116,8 +157,21 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
               id="biodata_singkat"
               placeholder="Isi biodata singkat di sini"
               required
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             ></textarea>
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
           <div className="mb-4">
             <label htmlFor="id_poli" className="text-lg font-bold">
@@ -129,7 +183,11 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
               required
               name="id_poli"
               id="id_poli"
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             >
               {poliList.map((poli, index) => (
                 <option key={index} value={poli.id_poli}>
@@ -137,6 +195,15 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
                 </option>
               ))}
             </select>
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
           <div className="mb-4">
             <label htmlFor="nama" className="text-lg font-bold">
@@ -150,12 +217,25 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
               name="nama"
               id="nama"
               required
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             />
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
           <div className="mb-4">
             <label htmlFor="link_instagram" className="text-lg font-bold">
-              Link Instagram <span className="text-red-600">*</span>
+              Link Instagram
             </label>
 
             <input
@@ -170,7 +250,7 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
           </div>
           <div className="mb-4">
             <label htmlFor="link_linkedin" className="text-lg font-bold">
-              Link LinkendIn <span className="text-red-600">*</span>
+              Link LinkendIn
             </label>
 
             <input
@@ -185,7 +265,7 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
           </div>
           <div className="mb-4">
             <label htmlFor="link_facebook" className="text-lg font-bold">
-              Link Facebook <span className="text-red-600">*</span>
+              Link Facebook
             </label>
 
             <input
@@ -214,7 +294,7 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
               Batal
             </button>
           </div>
-        </Form>
+        </fetcher.Form>
         {/* 
       <button
         type="submit"

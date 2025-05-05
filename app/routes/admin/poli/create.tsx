@@ -1,7 +1,9 @@
-import { Form, useActionData, useNavigate } from "react-router";
+import { Form, useActionData, useFetcher, useNavigate } from "react-router";
 import axios from "axios";
 import type { Route } from "./+types/create";
 import { handleAction } from "~/utils/handleAction";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 // import { ActionToast, LoaderToast } from "~/hooks/toastHandler";
 
 export async function action({ request }: Route.ActionArgs) {
@@ -20,17 +22,27 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function CreatePoli({ actionData }: Route.ComponentProps) {
   const navigate = useNavigate();
-
-  // ActionToast();
-  // LoaderToast();
-
+  const fetcher = useFetcher();
+  const fetcherData = fetcher.data || { message: "", success: false };
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+        setTimeout(() => {
+          navigate("/admin/poli");
+        }, 2000);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
   return (
     <>
       <h1 className="mb-6 text-2xl font-bold uppercase">
         Form Pengisian Poli/Klinik
       </h1>
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
-        <Form method="post">
+        <fetcher.Form method="post">
           <div className="mb-4">
             <label htmlFor="nama_poli" className="text-lg font-bold">
               Nama Poli <span className="text-red-600">*</span>
@@ -41,8 +53,21 @@ export default function CreatePoli({ actionData }: Route.ComponentProps) {
               name="nama_poli"
               id="nama_poli"
               required
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             />
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
 
           <div className="mt-4 flex gap-2">
@@ -60,7 +85,7 @@ export default function CreatePoli({ actionData }: Route.ComponentProps) {
               Batal
             </button>
           </div>
-        </Form>
+        </fetcher.Form>
         {/* {actionData?.error && (
           <p className="mt-4 text-sm text-red-600">{actionData.error}</p>
         )}

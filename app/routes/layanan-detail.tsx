@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import type { PelayananDetail } from "~/models/Pelayanan";
+import formatDigits from "~/utils/formatDigits";
 
 interface LayananDetailResponse {
   success: boolean;
@@ -65,7 +66,9 @@ export default function LayananDetail() {
           <h2 className="rounded-t-md bg-sky-700 p-1 text-lg font-bold text-white">
             Biaya
           </h2>
-          <p className="mx-auto h-min w-max p-2 px-8 text-center">{Biaya}</p>
+          <p className="mx-auto h-min w-max p-2 px-8 text-center">
+            Rp{formatDigits(Biaya.toString())}
+          </p>
         </section>
       </div>
 

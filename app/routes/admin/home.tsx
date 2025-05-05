@@ -12,7 +12,7 @@ import {
 } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   getDataForToast,
   useToastFromAction,
@@ -34,6 +34,12 @@ import type {
   UnggulanRequest,
 } from "~/models/Unggulan";
 import { ActionToast, LoaderToast } from "~/hooks/toastHandler";
+import {
+  Description,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const bannerRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
@@ -71,14 +77,14 @@ export async function action({ request, params }: Route.ActionArgs) {
     if (method === "POST") {
       const files = formData.getAll("banner");
       if (files.length > 4) {
-        return { error: "Maksimal upload 4 foto." };
+        return { success: false, message: "Maksimal upload 4 foto." };
       }
-      // console.log(files);
+      console.log(files);
       if (
         files.length === 0 ||
         files.every((file) => !(file instanceof File) || file.size === 0)
       ) {
-        return { error: "Mohon upload minimal 1 foto" };
+        return { success: false, message: "Mohon upload minimal 1 foto" };
       }
 
       return handleAction(
@@ -135,11 +141,17 @@ export default function AdminHome({
   loaderData,
   actionData,
 }: Route.ComponentProps) {
-  // const loaderToastData = getDataForToast(loaderData);
-  const actionToastData = actionData as { error?: string; success?: string };
-  // useToastFromAction();
-  // useToastFromLoader();
-  // console.log("actionToastData", actionToastData);
+  const hasShownLoaderToastRef = useRef(false);
+  useEffect(() => {
+    if (!hasShownLoaderToastRef.current && loaderData?.message) {
+      if (loaderData.success) {
+        toast.success(loaderData.message);
+      } else {
+        toast.error(loaderData.message);
+      }
+      hasShownLoaderToastRef.current = true;
+    }
+  }, [loaderData]);
 
   const banners = Array.isArray(loaderData?.data?.banners)
     ? (loaderData?.data?.banners as BannerModel[])
@@ -164,8 +176,8 @@ export default function AdminHome({
   //   toast.success(message || "Default");
   // };
 
+  // console.log("fetcher", fetcher.data);
   const fetcher = useFetcher();
-  console.log("fetcher", fetcher.data);
   const fetcherData = fetcher.data || { message: "", success: false };
   useEffect(() => {
     if (fetcherData.message) {
@@ -222,6 +234,8 @@ export default function AdminHome({
     setSelectAll(!selectAll);
   };
 
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
   const handleDeleteSelected = () => {
     const formData = new FormData();
     selectedIds.forEach((id) => formData.append("ids", id));
@@ -232,6 +246,7 @@ export default function AdminHome({
     });
     setSelectedIds([]);
     setSelectAll(false);
+    setDeleteDialogOpen(false);
   };
 
   const [existingImagesData, setExistingImagesData] = useState<ImageCaption[]>(
@@ -313,7 +328,7 @@ export default function AdminHome({
   const handleUnggulan = () => {
     const formData = new FormData();
 
-    formData.append("id", transformedUnggulanData.id_layanan_unggulan);
+    formData.append("id", unggulanData.id_layanan_unggulan);
     formData.append("feat", "unggulan");
 
     formData.append("judul", unggulanTitle);
@@ -355,9 +370,9 @@ export default function AdminHome({
     // return;
     fetcher.submit(formData, {
       encType: "multipart/form-data",
-      method: unggulanMethod,
+      method: "put",
     });
-    fetcher.load(window.location.pathname);
+    // fetcher.load(window.location.pathname);
     setDisableUnggulanForm(true);
   };
 
@@ -412,7 +427,7 @@ export default function AdminHome({
 
           <button
             disabled={selectedIds.length <= 0}
-            onClick={handleDeleteSelected}
+            onClick={() => setDeleteDialogOpen(true)}
             className={`ms-auto me-2 flex items-center rounded px-2 py-1.5 text-white ${selectedIds.length <= 0 ? "bg-gray-500" : "bg-red-600"}`}
           >
             <TrashIcon className="h-4 w-4" />
@@ -716,6 +731,37 @@ export default function AdminHome({
 
         <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 4 Foto</p>
       </div>
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 bg-gray-600/50" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg">
+            <DialogTitle className="text-lg font-bold text-gray-900">
+              Konfirmasi Hapus
+            </DialogTitle>
+            <Description className="mt-2 text-sm text-gray-600">
+              Apakah Anda yakin ingin menghapus?
+            </Description>
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setDeleteDialogOpen(false)}
+                className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleDeleteSelected}
+                className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+              >
+                Hapus
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
     </>
   );
 }

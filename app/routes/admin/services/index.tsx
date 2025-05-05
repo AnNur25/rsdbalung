@@ -9,6 +9,8 @@ import type { Pelayanan } from "~/models/Pelayanan";
 import Table from "~/components/Table";
 
 import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { useRef, useEffect } from "react";
+import toast from "react-hot-toast";
 
 export async function loader(): Promise<LoaderResult> {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/pelayanan`);
@@ -18,22 +20,34 @@ export async function loader(): Promise<LoaderResult> {
 export default function AdminServices({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Layanan", "Aksi"];
   const pelayananList = (loaderData.data as Pelayanan[]) || [];
-
+  const hasShownLoaderToastRef = useRef(false);
+  useEffect(() => {
+    if (!hasShownLoaderToastRef.current && loaderData?.message) {
+      if (loaderData.success) {
+        toast.success(loaderData.message);
+      } else {
+        toast.error(loaderData.message);
+      }
+      hasShownLoaderToastRef.current = true;
+    }
+  }, [loaderData]);
   return (
     <>
-      <a
-        href="/admin/pelayanan/create"
-        className="ms-auto mb-6 flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
-      >
-        <PlusIcon className="h-4 w-4" />
-        <span>Tambah</span>
-      </a>
-      
-      <section className="w-full overflow-x-auto rounded-xl border-1 border-gray-300 px-12 py-8 shadow-xl">
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="w-max text-2xl font-bold uppercase">Layanan RS</h1>
+        <a
+          href="/admin/pelayanan/create"
+          className="flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
+        >
+          <PlusIcon className="h-4 w-4" />
+          <span>Tambah</span>
+        </a>
+      </div>
+      <section className="w-full overflow-x-auto rounded-xl border-1 border-gray-300 p-5 shadow-xl">
         <Table headers={headers}>
           {pelayananList.map((item, index) => (
             <tr key={index} className={alternatingRowColor}>
-              <td className="w-min border border-gray-300 px-4 py-2 text-center">
+              <td className="w-min border-gray-300 px-4 py-2 text-center">
                 {index + 1}
               </td>
               <td className="border border-gray-300 px-4 py-2">

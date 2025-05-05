@@ -9,6 +9,14 @@ import { mapAdminResponseToCard } from "~/utils/mapTypes";
 import type { ComplaintModel } from "~/models/Complaint";
 
 import MessageCard from "~/components/MessageCard";
+import { useEffect, useRef, useState } from "react";
+import {
+  Description,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
+import toast from "react-hot-toast";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/aduan/all`);
@@ -46,16 +54,46 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
   const complaints = Array.isArray(loaderData?.data?.data_aduan)
     ? (loaderData.data.data_aduan as ComplaintModel[])
     : [];
-
+  const hasShownLoaderToastRef = useRef(false);
+  useEffect(() => {
+    if (!hasShownLoaderToastRef.current && loaderData?.message) {
+      if (loaderData.success) {
+        toast.success(loaderData.message);
+      } else {
+        toast.error(loaderData.message);
+      }
+      hasShownLoaderToastRef.current = true;
+    }
+  }, [loaderData]);
   const fetcher = useFetcher();
+  const fetcherData = fetcher.data || { message: "", success: false };
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+        setTimeout(() => {
+        }, 2000);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteComplaintId, setDeleteComplaintId] = useState("");
 
-  const handleDeleteComplaint = (id: string) => {
+  const deleteOnClick = (id: string) => {
+    setDeleteComplaintId(id);
+    console.log(deleteComplaintId);
+    setDeleteDialogOpen(true);
+  };
+  const handleDelete = () => {
     fetcher.submit(
-      { id },
+      { id: deleteComplaintId },
       {
         method: "delete",
       },
     );
+    setDeleteDialogOpen(false);
   };
 
   const handleVisibleComplaint = (id: string) => {
@@ -78,24 +116,58 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <section className="mb-4 w-full overflow-x-auto">
-        {complaints?.map((complaint) => (
-          <MessageCard
-            id={complaint.id}
-            isAdmin={true}
-            sendOnClick={handleReplyComplaint}
-            isVisible={complaint.is_visible}
-            switchOnClick={() => handleVisibleComplaint(complaint.id)}
-            deleteOnClick={() => handleDeleteComplaint(complaint.id)}
-            date={complaint.dibuat_pada}
-            message={complaint.message}
-            name={complaint.nama}
-            replies={complaint.responAdmin?.map((res) =>
-              mapAdminResponseToCard(res),
-            )}
-          />
-        ))}
-      </section>
+      <h1 className="mb-4 w-max text-2xl font-bold uppercase">Aduan</h1>
+      <div className="w-full overflow-x-auto rounded-lg border-1 border-gray-300 p-1 shadow-xl">
+        <section className="mb-4 w-full overflow-x-auto">
+          {complaints?.map((complaint) => (
+            <MessageCard
+              id={complaint.id}
+              isAdmin={true}
+              sendOnClick={handleReplyComplaint}
+              isVisible={complaint.is_visible}
+              switchOnClick={() => handleVisibleComplaint(complaint.id)}
+              deleteOnClick={() => deleteOnClick(complaint.id)}
+              date={complaint.dibuat_pada}
+              message={complaint.message}
+              name={complaint.nama}
+              replies={complaint.responAdmin?.map((res) =>
+                mapAdminResponseToCard(res),
+              )}
+            />
+          ))}
+        </section>
+      </div>
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 bg-gray-600/90" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg">
+            <DialogTitle className="text-lg font-bold text-gray-900">
+              Konfirmasi Hapus
+            </DialogTitle>
+            <Description className="mt-2 text-sm text-gray-600">
+              Apakah Anda yakin ingin menghapus?
+            </Description>
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setDeleteDialogOpen(false)}
+                className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleDelete}
+                className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+              >
+                Hapus
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
     </>
   );
 }

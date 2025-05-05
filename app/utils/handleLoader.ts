@@ -32,10 +32,10 @@ export async function handleLoader(
     //   data: response.data?.data || response.data || "No Data",
     // };
   } catch (error: any) {
-    console.error(
-      "Loader Error:",
-      error.response?.data || error.message || "Unknown error",
-    );
+    // console.error(
+    //   "Loader Error:",
+    //   error.response?.data || error.message || "Unknown error",
+    // );
 
     const message = getErrorMessage(error);
     const data = {

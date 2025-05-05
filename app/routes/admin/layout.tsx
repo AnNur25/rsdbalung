@@ -27,7 +27,7 @@ export default function AdminLayout() {
   return (
     <div className="flex h-screen max-w-screen flex-col lg:flex-row">
       <AdminSidebar />
-      <main className="grow p-8 lg:px-14">
+      <main className="grow p-5 lg:px-7">
         <Outlet />
         <div className="mt-8 p-0.5"></div>
       </main>

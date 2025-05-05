@@ -22,6 +22,12 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
+import {
+  Description,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
 
 export async function loader({
   request,
@@ -72,13 +78,24 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
       }
     }
   }, [fetcherData]);
-  const handleDelete = (id: string) => {
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteNewsId, setDeleteNewsId] = useState("");
+
+  const deleteOnClick = (id: string) => {
+    setDeleteNewsId(id);
+    console.log(deleteNewsId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDelete = () => {
     fetcher.submit(
-      { id },
+      { id: deleteNewsId },
       {
         method: "delete",
       },
     );
+    setDeleteDialogOpen(false);
   };
   console.log(loaderData);
   const hasShownLoaderToastRef = useRef(false);
@@ -123,69 +140,106 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <a
-        href="/admin/berita/create"
-        className="ms-auto mb-6 flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
-      >
-        <PlusIcon className="h-4 w-4" />
-        <span>Tambah</span>
-      </a>
-
-      <SearchBar
-        handleSearch={handleSearch}
-        onSearchChange={setSearchKeyword}
-      />
-
-      <section className="w-full overflow-x-auto text-base">
-        <Table headers={headers}>
-          {news.map((item, index) => (
-            <tr key={index} className={alternatingRowColor}>
-              <td className="w-min border border-gray-300 px-4 py-2 text-center">
-                {index + 1}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">{item.judul}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                {item.tanggal_dibuat}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                <div className="mx-auto w-fit rounded bg-blue-600 p-2 text-white">
-                  <PaperAirplaneIcon className="h-4 w-4" />
-                </div>
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                <div className="flex justify-center gap-0.5">
-                  <a
-                    href={`/admin/berita/galeri/${item.id}`}
-                    className="block w-min rounded bg-blue-600 p-2 text-white"
-                  >
-                    <PhotoIcon className="h-4 w-4" />
-                  </a>
-                  <a
-                    href={`/admin/berita/edit/${item.id}`}
-                    className="block w-min rounded bg-green-600 p-2 text-white"
-                  >
-                    <PencilSquareIcon className="h-4 w-4" />
-                  </a>
-                  <button
-                    onClick={() => handleDelete(item.id)}
-                    className="block w-min rounded bg-red-600 p-2 text-white hover:cursor-pointer"
-                  >
-                    <TrashIcon className="h-4 w-4" />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </Table>
-      </section>
-
-      <div className="flex w-full justify-center">
-        <PaginationControls
-          currentPage={currentPage}
-          totalPages={pagination.totalPages}
-          onPageChange={handlePageChange}
-        />
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="w-max text-2xl font-bold uppercase">Berita</h1>
+        <a
+          href="/admin/berita/create"
+          className="flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
+        >
+          <PlusIcon className="h-4 w-4" />
+          <span>Tambah</span>
+        </a>
       </div>
+
+      <div className="w-full overflow-x-auto rounded-lg border-1 border-gray-300 px-6 py-4 shadow-xl">
+        <SearchBar
+          handleSearch={handleSearch}
+          onSearchChange={setSearchKeyword}
+        />
+        <section className="w-full overflow-x-auto text-base">
+          <Table headers={headers}>
+            {news.map((item, index) => (
+              <tr key={index} className={alternatingRowColor}>
+                <td className="w-min border border-gray-300 px-4 py-2 text-center">
+                  {index + 1}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {item.judul}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {item.tanggal_dibuat}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  <div className="mx-auto w-fit rounded bg-blue-600 p-2 text-white">
+                    <PaperAirplaneIcon className="h-4 w-4" />
+                  </div>
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  <div className="flex justify-center gap-0.5">
+                    <a
+                      href={`/admin/berita/galeri/${item.id}`}
+                      className="block w-min rounded bg-blue-600 p-2 text-white"
+                    >
+                      <PhotoIcon className="h-4 w-4" />
+                    </a>
+                    <a
+                      href={`/admin/berita/edit/${item.id}`}
+                      className="block w-min rounded bg-green-600 p-2 text-white"
+                    >
+                      <PencilSquareIcon className="h-4 w-4" />
+                    </a>
+                    <button
+                      onClick={() => deleteOnClick(item.id)}
+                      className="block w-min rounded bg-red-600 p-2 text-white hover:cursor-pointer"
+                    >
+                      <TrashIcon className="h-4 w-4" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </Table>
+        </section>
+
+        <div className="flex w-full justify-center">
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      </div>
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 bg-gray-600/90" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg">
+            <DialogTitle className="text-lg font-bold text-gray-900">
+              Konfirmasi Hapus
+            </DialogTitle>
+            <Description className="mt-2 text-sm text-gray-600">
+              Apakah Anda yakin ingin menghapus?
+            </Description>
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setDeleteDialogOpen(false)}
+                className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleDelete}
+                className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+              >
+                Hapus
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
     </>
   );
 }

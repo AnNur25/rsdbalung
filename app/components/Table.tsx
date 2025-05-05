@@ -11,25 +11,32 @@ export default function Table({
 }: TableProps): ReactNode {
   const nCols = headers.length;
   return (
-    <table className="w-full border-collapse border border-gray-300">
-      <thead>
+    <table className="w-full table-auto divide-x divide-y divide-gray-500">
+      <thead className="divide-x divide-y divide-gray-300">
         <tr className="bg-sky-700 text-white">
           {headers.map((header, index) => (
-            <th key={index} className="w-min border border-gray-300 px-4 py-2">
+            <th
+              key={index}
+              className="px-4 py-2 first:rounded-tl-lg last:rounded-tr-lg"
+              // className={`w-min ${index === 0 && "rounded-tl-lg"} ${index === headers.length - 1 && "rounded-tr-lg"} px-4 py-2 ring-1 ring-black`}
+            >
               {header}
             </th>
           ))}
         </tr>
       </thead>
-      <tbody>
+      <tbody className="divide-gray-300">
         {children.length > 0 ? (
-          children
-        ) : (
-          <tr>
+          <>
+            {children}
             <td
               colSpan={nCols}
-              className="border border-gray-300 px-4 py-2 text-center"
-            >
+              className="rounded-b-lg bg-blue-200 px-4 py-2 text-center"
+            ></td>
+          </>
+        ) : (
+          <tr className="rounded-b-lg">
+            <td colSpan={nCols} className="px-4 py-2 text-center">
               Tidak ada data
             </td>
           </tr>

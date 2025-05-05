@@ -1,9 +1,10 @@
 import axios from "axios";
 import type { Route } from "./+types/edit";
-import { Form, useNavigate } from "react-router";
-import { useState } from "react";
+import { Form, useFetcher, useNavigate } from "react-router";
+import { useEffect, useRef, useState } from "react";
 import { handleLoader } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
+import toast from "react-hot-toast";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const urlRequest = new URL(
@@ -34,7 +35,33 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
   const extractedPoliName = poli.nama_poli.split(" ").slice(2).join(" ") || "";
   const [poliName, setPoliName] = useState(extractedPoliName || "");
 
+  const hasShownLoaderToastRef = useRef(false);
+  useEffect(() => {
+    if (!hasShownLoaderToastRef.current && loaderData?.message) {
+      if (loaderData.success) {
+        toast.success(loaderData.message);
+      } else {
+        toast.error(loaderData.message);
+      }
+      hasShownLoaderToastRef.current = true;
+    }
+  }, [loaderData]);
+
   const navigate = useNavigate();
+  const fetcher = useFetcher();
+  const fetcherData = fetcher.data || { message: "", success: false };
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+        setTimeout(() => {
+          navigate("/admin/poli");
+        }, 2000);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
 
   return (
     <>
@@ -42,7 +69,7 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
         Form Pengisian Poli/Klinik
       </h1>
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
-        <Form method="post">
+        <fetcher.Form method="post">
           <div className="mb-4">
             <label htmlFor="nama_poli" className="text-lg font-bold">
               Nama Poli <span className="text-red-600">*</span>
@@ -55,8 +82,21 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
               name="nama_poli"
               id="nama_poli"
               required
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             />
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
 
           <div className="mt-4 flex gap-2">
@@ -74,7 +114,7 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
               Batal
             </button>
           </div>
-        </Form>
+        </fetcher.Form>
         {/* {actionData?.error && (
           <p className="mt-4 text-sm text-red-600">{actionData.error}</p>
         )}

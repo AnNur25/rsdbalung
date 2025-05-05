@@ -1,12 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import type { Editor as TinyMCEEditor } from "tinymce";
-import { Form, redirect, useNavigate } from "react-router";
+import { Form, redirect, useFetcher, useNavigate } from "react-router";
 import type { Route } from "./+types";
 import axios from "axios";
 import { handleAction } from "~/utils/handleAction";
 import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
 import type { News } from "~/models/News";
+import toast from "react-hot-toast";
 
 export async function loader({
   request,
@@ -47,8 +48,33 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
     news.gambar_sampul || "",
   );
 
-  const navigate = useNavigate();
+  const hasShownLoaderToastRef = useRef(false);
+  useEffect(() => {
+    if (!hasShownLoaderToastRef.current && loaderData?.message) {
+      if (loaderData.success) {
+        toast.success(loaderData.message);
+      } else {
+        toast.error(loaderData.message);
+      }
+      hasShownLoaderToastRef.current = true;
+    }
+  }, [loaderData]);
 
+  const navigate = useNavigate();
+  const fetcher = useFetcher();
+  const fetcherData = fetcher.data || { message: "", success: false };
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+        setTimeout(() => {
+          navigate("/admin/berita");
+        }, 2000);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const handleEditorChange = () => {
     if (editorRef.current) {
@@ -63,24 +89,39 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <h1 className="mb-6 text-2xl font-bold uppercase">Form Pengisian Berita</h1>
+      <h1 className="mb-6 text-2xl font-bold uppercase">
+        Form Pengisian Berita
+      </h1>
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
-        <Form method="post" encType="multipart/form-data">
+        <fetcher.Form method="post" encType="multipart/form-data">
           <div className="mb-4">
             <label htmlFor="gambar_sampul" className="text-lg font-bold">
               Gambar Sampul <span className="text-red-600">*</span>
             </label>
             <img
               src={imageCover}
-              className="my-2 aspect-video h-48 object-cover rounded-sm w-auto"
+              className="my-2 aspect-video h-48 w-auto rounded-sm object-cover"
             />
             <input
               name="gambar_sampul"
               id="gambar_sampul"
               type="file"
               accept="image/*"
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             />
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
           <div className="mb-4">
             <label htmlFor="judul" className="text-lg font-bold">
@@ -93,8 +134,21 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
               id="judul"
               type="text"
               required
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             />
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
           <div className="mb-4">
             <label htmlFor="ringkasan" className="text-lg font-bold">
@@ -107,8 +161,21 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
               id="ringkasan"
               type="text"
               required
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             />
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
 
           <input hidden type="textarea" readOnly name="isi" value={content} />
@@ -116,43 +183,59 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
           <label className="text-lg font-bold">
             Isi Berita <span className="text-red-600">*</span>
           </label>
-          <Editor
-            onChange={handleEditorChange}
-            tinymceScriptSrc="/tinymce/tinymce.min.js"
-            licenseKey=""
-            onInit={(_evt, editor) => (editorRef.current = editor)}
-            initialValue={content}
-            init={{
-              height: 500,
-              menubar: false,
-              plugins: [
-                "advlist",
-                "autolink",
-                "lists",
-                "link",
-                "charmap",
-                "anchor",
-                "searchreplace",
-                "visualblocks",
-                "fullscreen",
-                "insertdatetime",
-                "table",
-                "preview",
-                "help",
-                "wordcount",
-              ],
-              toolbar:
-                "undo redo | blocks | " +
-                "bold italic forecolor | alignleft aligncenter " +
-                "alignright alignjustify | bullist numlist outdent indent | " +
-                "removeformat | help",
-              content_style:
-                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-            }}
-          />
-
+          <div
+            className={`${
+              fetcherData.message && !fetcherData.success
+                ? "border-red-500 focus:outline-red-500"
+                : "border-gray-300 focus:outline-blue-500"
+            } w-full rounded-lg border border-gray-300`}
+          >
+            <Editor
+              onChange={handleEditorChange}
+              tinymceScriptSrc="/tinymce/tinymce.min.js"
+              licenseKey=""
+              onInit={(_evt, editor) => (editorRef.current = editor)}
+              initialValue={content}
+              init={{
+                height: 500,
+                menubar: false,
+                plugins: [
+                  "advlist",
+                  "autolink",
+                  "lists",
+                  "link",
+                  "charmap",
+                  "anchor",
+                  "searchreplace",
+                  "visualblocks",
+                  "fullscreen",
+                  "insertdatetime",
+                  "table",
+                  "preview",
+                  "help",
+                  "wordcount",
+                ],
+                toolbar:
+                  "undo redo | blocks | " +
+                  "bold italic forecolor | alignleft aligncenter " +
+                  "alignright alignjustify | bullist numlist outdent indent | " +
+                  "removeformat | help",
+                content_style:
+                  "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+              }}
+            />
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
+          </div>
           {/* <button onClick={log}>Log editor content</button> */}
-          
+
           <div className="mt-4 flex gap-2">
             <button
               type="submit"
@@ -168,7 +251,7 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
               Batal
             </button>
           </div>
-        </Form>
+        </fetcher.Form>
       </div>
     </>
   );

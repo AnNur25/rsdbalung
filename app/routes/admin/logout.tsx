@@ -1,8 +1,8 @@
 import { Form, Link, redirect } from "react-router";
-import { getSession, destroySession } from "../../sessions.server";
+import { getSession, destroySession } from "~/sessions.server";
 import type { Route } from "./+types/logout";
 
-export async function action({ request }: Route.ActionArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   return redirect("/admin/login", {
     headers: {
@@ -11,14 +11,14 @@ export async function action({ request }: Route.ActionArgs) {
   });
 }
 
-export default function LogoutRoute() {
-  return (
-    <>
-      <p>Are you sure you want to log out?</p>
-      <Form method="post">
-        <button>Logout</button>
-      </Form>
-      <Link to="/">Never mind</Link>
-    </>
-  );
-}
+// export default function LogoutRoute() {
+//   return (
+//     <>
+//       {/* <p>Are you sure you want to log out?</p>
+//       <Form method="post">
+//         <button>Logout</button>
+//       </Form>
+//       <Link to="/">Never mind</Link> */}
+//     </>
+//   );
+// }

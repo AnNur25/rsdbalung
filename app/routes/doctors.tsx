@@ -89,7 +89,9 @@ export default function Doctors({ loaderData }: Route.ComponentProps) {
             </div>
           ))
         ) : (
-          <p className="text-gray-500">{data.message}</p>
+          <p className="text-gray-500 first-letter:capitalize">
+            {loaderData.message}
+          </p>
         )}
       </section>
 

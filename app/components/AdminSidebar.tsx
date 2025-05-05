@@ -22,7 +22,7 @@ import {
 } from "@heroicons/react/24/solid";
 import logo from "~/assets/logo-text-white.png";
 import logoBlack from "~/assets/logo-black.png";
-import { NavLink } from "react-router";
+import { NavLink, redirect, useNavigate } from "react-router";
 
 const navigation = [
   { name: "Beranda", href: "/admin/home", icon: HomeIcon },
@@ -42,8 +42,9 @@ const navigation = [
 export default function AdminSidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
-
+  const navigate = useNavigate();
   const handleLogout = () => {
+    navigate("/admin/logout");
     console.log("Logout");
     setLogoutDialogOpen(false);
   };

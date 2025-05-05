@@ -1,4 +1,4 @@
-import { Form } from "react-router";
+import { Form, useFetcher } from "react-router";
 import axios from "axios";
 
 import type { Route } from "./+types/complaint";
@@ -10,6 +10,8 @@ import type { ComplaintModel } from "~/models/Complaint";
 
 import MessageCard from "~/components/MessageCard";
 import TextWithRect from "~/components/TextWithRect";
+import { useEffect, useRef } from "react";
+import toast from "react-hot-toast";
 
 export async function loader() {
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/aduan/`);
@@ -29,13 +31,36 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
     ? (loaderData.data.data_aduan as ComplaintModel[])
     : [];
 
+  const hasShownLoaderToastRef = useRef(false);
+  useEffect(() => {
+    if (!hasShownLoaderToastRef.current && loaderData?.message) {
+      if (loaderData.success) {
+        toast.success(loaderData.message);
+      } else {
+        toast.error(loaderData.message);
+      }
+      hasShownLoaderToastRef.current = true;
+    }
+  }, [loaderData]);
+
+  const fetcher = useFetcher();
+  const fetcherData = fetcher.data || { message: "", success: false };
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
   return (
     <>
       <div className="mt-8 flex flex-col items-center">
         <h1 className="text-2xl font-extrabold text-persian-blue-950 uppercase">
           Aduan
         </h1>
-        <p className="text-gray-500 text-center">
+        <p className="text-center text-gray-500">
           Kritik dan saran Anda sangat berarti untuk kemajuan rumah sakit kami.
           Terima kasih!
         </p>
@@ -47,7 +72,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
           </TextWithRect>
         </div>
         <div className="flex items-center max-md:flex-col">
-          <Form
+          <fetcher.Form
             method="post"
             className="m-4 flex flex-1 flex-col gap-4 rounded-xl border border-gray-300 p-8 shadow-lg"
           >
@@ -58,10 +83,23 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
               <input
                 type="text"
                 placeholder="Masukkan nama Anda"
-                className="rounded-lg border border-gray-400 px-4 py-2"
+                className={`${
+                  fetcherData.message && !fetcherData.success
+                    ? "border-red-500 focus:outline-red-500"
+                    : "outline-gray-300 focus:outline-green-600"
+                } rounded-lg border border-gray-400 px-4 py-2`}
                 name="nama"
                 id="nama"
               />
+              {fetcherData.message && (
+                <p
+                  className={`text-sm ${
+                    fetcherData.success ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {fetcherData.message}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -86,11 +124,24 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 }}
                 type="text"
                 inputMode="numeric"
-                placeholder="Masukkan No. Whatsapp Anda"
-                className="rounded-lg border border-gray-400 px-4 py-2"
+                placeholder="cth. 628xxxxxxxxxx"
+                className={`${
+                  fetcherData.message && !fetcherData.success
+                    ? "border-red-500 focus:outline-red-500"
+                    : "outline-gray-300 focus:outline-green-600"
+                } rounded-lg border border-gray-400 px-4 py-2`}
                 name="no_wa"
                 id="no_wa"
               />
+              {fetcherData.message && (
+                <p
+                  className={`text-sm ${
+                    fetcherData.success ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {fetcherData.message}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -99,16 +150,29 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
               </label>
               <textarea
                 placeholder="Tulis aduan Anda"
-                className="min-h-56 rounded-lg border border-gray-400 px-4 py-2"
+                className={`${
+                  fetcherData.message && !fetcherData.success
+                    ? "border-red-500 focus:outline-red-500"
+                    : "outline-gray-300 focus:outline-green-600"
+                } min-h-56 rounded-lg border border-gray-400 px-4 py-2`}
                 name="message"
                 id="message"
               />
+              {fetcherData.message && (
+                <p
+                  className={`text-sm ${
+                    fetcherData.success ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {fetcherData.message}
+                </p>
+              )}
             </div>
 
             <button className="rounded bg-green-600 px-8 py-2 text-white min-md:w-min">
               Simpan
             </button>
-          </Form>
+          </fetcher.Form>
 
           <div className="me-4 flex-1">
             <img
@@ -125,17 +189,21 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
           <TextWithRect>Aduan</TextWithRect>
         </div>
         <div className="px-2">
-          {complaints?.map((complaint, index) => (
-            <MessageCard
-              key={index}
-              date={complaint.dibuat_pada}
-              message={complaint.message}
-              name={complaint.nama}
-              replies={complaint.responAdmin?.map((res) =>
-                mapAdminResponseToCard(res),
-              )}
-            />
-          ))}
+          {complaints?.length > 0 ? (
+            complaints?.map((complaint, index) => (
+              <MessageCard
+                key={index}
+                date={complaint.dibuat_pada}
+                message={complaint.message}
+                name={complaint.nama}
+                replies={complaint.responAdmin?.map((res) =>
+                  mapAdminResponseToCard(res),
+                )}
+              />
+            ))
+          ) : (
+            <p className="ms-6 mt-2 text-gray-600">Tidak ada data</p>
+          )}
         </div>
       </div>
     </>

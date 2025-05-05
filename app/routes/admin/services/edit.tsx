@@ -1,10 +1,12 @@
 import axios from "axios";
 import type { Route } from "./+types/edit";
-import { Form, useNavigate } from "react-router";
+import { Form, useFetcher, useNavigate } from "react-router";
 import { handleLoader } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
 import type { PelayananDetail } from "~/models/Pelayanan";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import formatDigits from "~/utils/formatDigits";
+import toast from "react-hot-toast";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const urlRequest = new URL(
@@ -30,23 +32,52 @@ export async function action({ request, params }: Route.ActionArgs) {
 export default function EditService({ loaderData }: Route.ComponentProps) {
   console.log(loaderData);
   const pelayanan: PelayananDetail = loaderData.data;
-  const navigate = useNavigate();
 
   const [name, setName] = useState<string>(pelayanan.nama_pelayanan || "");
   const [duration, setDuration] = useState<string>(pelayanan.JangkaWaktu || "");
   const [cost, setCost] = useState<number>(pelayanan.Biaya || 0);
+  const [displayValue, setDisplayValue] = useState(
+    formatDigits(cost.toString()) || "",
+  );
   const [requirement, setRequirement] = useState<string>(
     pelayanan.Persyaratan || "",
   );
   const [procedure, setProcedure] = useState<string>(pelayanan.Prosedur || "");
 
+  const hasShownLoaderToastRef = useRef(false);
+  useEffect(() => {
+    if (!hasShownLoaderToastRef.current && loaderData?.message) {
+      if (loaderData.success) {
+        toast.success(loaderData.message);
+      } else {
+        toast.error(loaderData.message);
+      }
+      hasShownLoaderToastRef.current = true;
+    }
+  }, [loaderData]);
+
+  const navigate = useNavigate();
+  const fetcher = useFetcher();
+  const fetcherData = fetcher.data || { message: "", success: false };
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+        setTimeout(() => {
+          navigate("/admin/pelayanan");
+        }, 2000);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
   return (
     <>
       <h1 className="mb-6 text-2xl font-bold uppercase">
         Form Pengisian Layanan RS
       </h1>
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
-        <Form method="put">
+        <fetcher.Form method="put">
           <div className="mb-4">
             <label htmlFor="nama_pelayanan" className="text-lg font-bold">
               Nama Pelayanan <span className="text-red-600">*</span>
@@ -59,8 +90,21 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
               name="nama_pelayanan"
               id="nama_pelayanan"
               required
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             />
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
 
           <div className="mb-4">
@@ -74,11 +118,61 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
               id="JangkaWaktu"
               placeholder="Isi jangka waktu di sini"
               required
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             ></textarea>
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
 
           <div className="mb-4">
+            <label htmlFor="Biaya" className="text-lg font-bold">
+              Biaya <span className="text-red-600">*</span>
+            </label>
+            <div className="relative flex items-center">
+              <p className="absolute left-3">Rp</p>
+              <input
+                onInput={(e) => {
+                  const input = e.currentTarget;
+                  input.value = input.value.replace(/\D/g, "");
+                  const formatted = formatDigits(input.value);
+                  setDisplayValue(formatted);
+                  setCost(input.value ? parseInt(input.value, 10) : 0);
+                }}
+                value={displayValue}
+                type="text"
+                placeholder="Isi jumlah biaya di sini"
+                id="Biaya"
+                required
+                className={`${
+                  fetcherData.message && !fetcherData.success
+                    ? "border-red-500 focus:outline-red-500"
+                    : "border-gray-300 focus:outline-blue-500"
+                } w-full rounded border border-gray-300 py-2 ps-8`}
+              />
+            </div>
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
+            <input type="number" name="Biaya" hidden readOnly value={cost} />
+          </div>
+          {/* <div className="mb-4">
             <label htmlFor="Biaya" className="text-lg font-bold">
               Biaya <span className="text-red-600">*</span>
             </label>
@@ -92,7 +186,7 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
               required
               className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
-          </div>
+          </div> */}
           <div className="mb-4">
             <label htmlFor="Persyaratan" className="text-lg font-bold">
               Persyaratan <span className="text-red-600">*</span>
@@ -104,8 +198,21 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
               id="Persyaratan"
               placeholder="Isi persyaratan di sini"
               required
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             ></textarea>
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
 
           <div className="mb-4">
@@ -119,8 +226,21 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
               id="Prosedur"
               placeholder="Isi prosedur di sini"
               required
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded border border-gray-300 p-2`}
             ></textarea>
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
           </div>
 
           <div className="mt-4 flex gap-2">
@@ -138,7 +258,7 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
               Batal
             </button>
           </div>
-        </Form>
+        </fetcher.Form>
       </div>
     </>
   );
