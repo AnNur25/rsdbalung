@@ -10,7 +10,8 @@ import { data, Form, redirect, useActionData, useFetcher } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { ActionToast, LoaderToast } from "~/hooks/toastHandler";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -120,8 +121,8 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
   // LoaderToast();
   // ActionToast();
   // const actionData = useActionData();
+  // console.log("fetcher", fetcher.data);
   const fetcher = useFetcher();
-  console.log("fetcher", fetcher.data);
   const fetcherData = fetcher.data || { message: "", success: false };
   useEffect(() => {
     if (fetcherData.message) {
@@ -132,6 +133,7 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
       }
     }
   }, [fetcherData]);
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <>
       <div className="flex min-h-screen items-center justify-center">
@@ -199,7 +201,7 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                   </div>
                 </div>
                 <div className="mt-2">
-                  <input
+                  {/* <input
                     id="password"
                     name="password"
                     type="password"
@@ -210,7 +212,32 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                         ? "outline-red-500 focus:outline-red-500"
                         : "outline-gray-300 focus:outline-blue-600"
                     } placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6`}
-                  />
+                  /> */}
+                  <div className="relative">
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      required
+                      autoComplete="current-password"
+                      className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 ${
+                        fetcherData.message && !fetcherData.success
+                          ? "outline-red-500 focus:outline-red-500"
+                          : "outline-gray-300 focus:outline-blue-600"
+                      } placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-2 flex items-center text-sm text-gray-600 hover:text-gray-900"
+                    >
+                      {showPassword ? (
+                        <EyeSlashIcon className="h-4 w-4" />
+                      ) : (
+                        <EyeIcon className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
                   {fetcherData.message && (
                     <p
                       className={`text-sm ${
