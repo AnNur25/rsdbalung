@@ -21,27 +21,9 @@ import { useEffect, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { handleAction } from "~/utils/handleAction";
 
-export async function loader({ request, params }: Route.LoaderArgs) {
-  // const session = await getSession(request.headers.get("Cookie"));
-  // const flashMessage: SessionFlashData = await getFlashMessage(request);
-  // session.get("token");
-  // const message = session.get("message");
-  // const success = session.get("success");
-  // if (session.has("token")) {
-  // Redirect to the home page if they are already signed in.
-  // return redirect("/admin/");
-  // }
-  // return data(
-  //   { message, success },
-  //   {
-  //     headers: {
-  //       "Set-Cookie": await commitSession(session),
-  //     },
-  //   },
-  // );
-}
+export async function loader({ request, params }: Route.LoaderArgs) {}
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request, pa   }: Route.ActionArgs) {
   console.log("action");
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/profil`);
   const formData = await request.formData();
@@ -50,7 +32,7 @@ export async function action({ request }: Route.ActionArgs) {
   const token = url.searchParams.get("token");
   console.log("token", token);
   if (token) {
-    urlRequest.pathname = "/reset-password";
+    urlRequest.pathname = `/reset-password?token=${token}`;
     const newPassw = formData.get("newPassw");
     const confirmPassw = formData.get("confirmPassw");
     console.log(formData);
@@ -75,62 +57,6 @@ export async function action({ request }: Route.ActionArgs) {
     urlRequest.pathname = "/profil";
     return handleAction(() => axios.post(urlRequest.href, { email }));
   }
-  // try {
-  //   const response = await axios.post(urlRequest.href, { email });
-
-  // Extract cookies from the response headers
-  // const setCookieHeader = response.headers["set-cookie"];
-
-  // if (setCookieHeader) {
-  //   const refreshTokenCookie = setCookieHeader.find((cookie: string) =>
-  //     cookie.startsWith("refreshToken="),
-  //   );
-  //   if (refreshTokenCookie) {
-  //     const refreshToken = refreshTokenCookie.split(";")[0].split("=")[1];
-  //
-  //     session.set("refreshToken", refreshToken);
-  //   }
-  // }
-
-  //   const data = response.data;
-
-  //   if (data.success) {
-  //     session.set("token", data.data.token);
-  //     const getToken = session.get("token");
-  //     axios.defaults.headers.common["Authorization"] = `Bearer ${getToken}`;
-  //     session.flash("message", "Login berhasil!");
-  //     session.flash("success", data.success);
-  //     return redirect("/admin/", {
-  //       headers: {
-  //         "Set-Cookie": await commitSession(session),
-  //       },
-  //     });
-  //     // return redirect("/admin/");
-  //   } else {
-  //     session.flash("message", data.message);
-  //     session.flash("success", data.success);
-  //     console.log("fail success");
-  //     console.error(data.message);
-  //   }
-  // } catch (error: any) {
-  //   console.log("action err");
-  //   if (axios.isAxiosError(error)) {
-  //     const message = error.response?.data.message;
-  //     session.flash("success", false);
-  //     session.flash("message", error.response?.data.message);
-  //     console.log(error.response?.data.message);
-  //     return { success: false, message };
-
-  //     // return toast.error(error.response?.data.message);
-  //   } else {
-  //     session.flash("success", false);
-  //     session.flash("message", error.response?.data.message);
-  //     console.log("action ue");
-
-  //     // return toast.error("Terjadi kesalahan pada server");
-  //   }
-  // }
-  // return null;
 }
 
 export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
