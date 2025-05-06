@@ -8,10 +8,11 @@ import {
 import { getSession } from "~/sessions.server";
 import type { Route } from "./+types";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { handleAction } from "~/utils/handleAction";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
+import ConfirmDialog from "~/components/ConfirmDialog";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -53,12 +54,22 @@ export default function AdminAccount({
     if (fetcherData.message) {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
+        setVisibleChangeForm(false);
       } else {
         toast.error(fetcherData.message);
       }
     }
   }, [fetcherData]);
+  const formRef = useRef(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const handleChangePassword = () => {
+    if (!formRef.current) return;
+
+    const formData = new FormData(formRef.current);
+    fetcher.submit(formData, { method: "PUT" });
+    setDialogOpen(false);
+  };
   return (
     <>
       <div className="flex h-full items-center justify-center">
@@ -98,6 +109,7 @@ export default function AdminAccount({
             <>
               <h1 className="text-2xl font-extrabold">Isi Password Anda!</h1>
               <fetcher.Form
+                ref={formRef}
                 className="flex w-full flex-col items-center gap-4"
                 method="PUT"
               >
@@ -176,8 +188,8 @@ export default function AdminAccount({
                 <div className="flex gap-2">
                   <button
                     className="min-w-30 rounded-lg border bg-green-700 px-6 py-3 text-white shadow"
-                    // onClick={() => setVisibleChangeForm(false)}
-                    type="submit"
+                    onClick={() => setDialogOpen(true)}
+                    type="button"
                   >
                     Simpan
                   </button>
@@ -194,6 +206,18 @@ export default function AdminAccount({
           )}
         </div>
       </div>
+      <ConfirmDialog
+        isOpen={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        cancelOnClick={() => setDialogOpen(false)}
+        confirmOnClick={handleChangePassword}
+        // title="Konfirmasi Keluar"
+        description="Apakah Anda yakin ingin mengubah password?"
+        cancelLabel="Batal"
+        confirmLabel="Simpan"
+        cancelBtnStyle="bg-red-500 hover:bg-red-600"
+        confirmBtnStyle="bg-green-600 hover:bg-green-700"
+      />
     </>
   );
 }

@@ -7,7 +7,7 @@ import {
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
 
 interface ConfirmDialogProps {
-//   title: string;
+  //   title: string;
   description: string;
   cancelLabel: string;
   confirmLabel: string;
@@ -15,9 +15,11 @@ interface ConfirmDialogProps {
   onClose: () => void;
   cancelOnClick: () => void;
   confirmOnClick: () => void;
+  cancelBtnStyle?: string;
+  confirmBtnStyle?: string;
 }
 export default function ConfirmDialog({
-//   title,
+  //   title,
   description,
   cancelLabel,
   confirmLabel,
@@ -25,29 +27,31 @@ export default function ConfirmDialog({
   onClose,
   cancelOnClick,
   confirmOnClick,
+  cancelBtnStyle = "bg-gray-200 hover:bg-gray-300",
+  confirmBtnStyle = "bg-red-500 hover:bg-red-600",
 }: ConfirmDialogProps) {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-gray-600/50" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <DialogPanel className="w-full flex flex-col items-center justify-center max-w-[22rem] rounded-lg bg-white p-6 shadow-lg">
+        <DialogPanel className="flex w-full max-w-[22rem] flex-col items-center justify-center rounded-lg bg-white p-6 shadow-lg">
           <QuestionMarkCircleIcon className="h-17 w-17 text-gray-400" />
           {/* <DialogTitle className="text-lg font-bold text-gray-900">
             {title}
           </DialogTitle> */}
-          <Description className="mt-2 text-sm text-center text-gray-600">
+          <Description className="mt-2 text-center text-sm text-gray-600">
             {description}
           </Description>
           <div className="mt-4 flex gap-2">
             <button
               onClick={cancelOnClick}
-              className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+              className={`rounded-md ${cancelBtnStyle} px-4 py-2 text-sm font-medium text-gray-700`}
             >
               {cancelLabel}
             </button>
             <button
               onClick={confirmOnClick}
-              className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+              className={`${confirmBtnStyle} rounded-md px-4 py-2 text-sm font-medium text-white`}
             >
               {confirmLabel}
             </button>
