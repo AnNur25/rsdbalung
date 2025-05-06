@@ -193,7 +193,7 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                   </label>
                   <div className="text-sm">
                     <a
-                      href="#"
+                      href="/admin/reset-password"
                       className="font-semibold text-blue-600 hover:text-blue-500"
                     >
                       Lupa password?
