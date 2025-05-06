@@ -69,15 +69,15 @@ export default function Schedule({ loaderData }: Route.ComponentProps) {
 
   const { dokter: doctors = [], pagination = paginationDefault } = scheduleData;
 
-  const flattenedSchedules = doctors.flatMap((doctor) =>
-    doctor.layananList.map((layanan) => ({
-      id_dokter: doctor.id_dokter,
-      dokter: doctor.nama_dokter,
-      poli: doctor.poli.nama_poli,
-      layanan: layanan.nama_pelayanan,
-      jadwal: layanan.jadwal,
-    })),
-  );
+  // const flattenedSchedules = doctors.flatMap((doctor) =>
+  //   doctor.layananList.map((layanan) => ({
+  //     id_dokter: doctor.id_dokter,
+  //     dokter: doctor.nama_dokter,
+  //     poli: doctor.poli.nama_poli,
+  //     layanan: layanan.nama_pelayanan,
+  //     jadwal: layanan.jadwal,
+  //   })),
+  // );
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(pagination?.currentPage || 1);
@@ -153,43 +153,65 @@ export default function Schedule({ loaderData }: Route.ComponentProps) {
 
       <section className="max-w-[90vw] overflow-auto">
         <Table headers={headers}>
-          {flattenedSchedules.map((doctor, index) =>
-            doctor.jadwal.map((jadwal, jIndex) => (
-              <tr key={index} className={alternatingRowColor}>
-                {jIndex === 0 && (
-                  <>
+          {doctors.map((doctor, index) => {
+            // Total number of schedule rows for this doctor
+            const totalRows = doctor.layananList.reduce(
+              (sum, layanan) => sum + layanan.jadwal.length,
+              0,
+            );
+
+            return doctor.layananList.map((layanan, lIndex) =>
+              layanan.jadwal.map((jadwal, jIndex) => (
+                <tr
+                  key={`${index}-${lIndex}-${jIndex}`}
+                  className={alternatingRowColor}
+                >
+                  {lIndex === 0 && jIndex === 0 && (
+                    <>
+                      <td
+                        rowSpan={totalRows}
+                        className="border border-gray-300 px-4 py-2 text-center"
+                      >
+                        {index + 1}
+                      </td>
+                      <td
+                        rowSpan={totalRows}
+                        className="border border-gray-300 px-4 py-2"
+                      >
+                        {doctor.nama_dokter}
+                      </td>
+                      {/* <td
+                        rowSpan={totalRows}
+                        className="border border-gray-300 px-4 py-2"
+                      >
+                        {doctor.poli.nama_poli}
+                      </td> */}
+                    </>
+                  )}
+
+                  {jIndex === 0 && (
                     <td
-                      rowSpan={doctor.jadwal.length}
-                      className="w-min border border-gray-300 px-4 py-2 text-center"
-                    >
-                      {index + 1}
-                    </td>
-                    <td
-                      rowSpan={doctor.jadwal.length}
+                      rowSpan={layanan.jadwal.length}
                       className="border border-gray-300 px-4 py-2"
                     >
-                      {doctor.dokter}
+                      {layanan.nama_pelayanan}
                     </td>
-                    <td
-                      rowSpan={doctor.jadwal.length}
-                      className="border border-gray-300 px-4 py-2"
-                    >
-                      {doctor.poli}
-                    </td>
-                  </>
-                )}
-                <td className="border border-gray-300 px-4 py-2">
-                  {jadwal.hari}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {jadwal.jam_mulai} - {jadwal.jam_selesai}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 capitalize">
-                  {jadwal.sesi}
-                </td>
-              </tr>
-            )),
-          )}
+                  )}
+
+                  {/* Hari & Jam */}
+                  <td className="border border-gray-300 px-4 py-2">
+                    {jadwal.hari}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {jadwal.jam_mulai} - {jadwal.jam_selesai}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 capitalize">
+                    {jadwal.sesi}
+                  </td>
+                </tr>
+              )),
+            );
+          })}
         </Table>
       </section>
 

@@ -90,15 +90,6 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
 
   const { dokter: doctors = [], pagination = paginationDefault } = scheduleData;
 
-  const flattenedSchedules = doctors.flatMap((doctor) =>
-    doctor.layananList.map((layanan) => ({
-      id_dokter: doctor.id_dokter,
-      dokter: doctor.nama_dokter,
-      poli: doctor.poli.nama_poli,
-      layanan: layanan.nama_pelayanan,
-      jadwal: layanan.jadwal,
-    })),
-  );
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(pagination?.currentPage || 1);
@@ -223,67 +214,85 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
 
         <section className="w-full overflow-x-auto">
           <Table headers={headers}>
-            {flattenedSchedules.map((doctor, index) =>
-              doctor.jadwal.map((jadwal, jIndex) => (
-                <tr key={index} className={alternatingRowColor}>
-                  {jIndex === 0 && (
-                    <>
-                      <td
-                        rowSpan={doctor.jadwal.length}
-                        className="w-min border border-gray-300 px-4 py-2 text-center"
-                      >
-                        {index + 1}
-                      </td>
-                      <td
-                        rowSpan={doctor.jadwal.length}
-                        className="border border-gray-300 px-4 py-2"
-                      >
-                        {doctor.dokter}
-                      </td>
-                      <td
-                        rowSpan={doctor.jadwal.length}
-                        className="border border-gray-300 px-4 py-2"
-                      >
-                        {doctor.poli}
-                      </td>
-                      <td
-                        rowSpan={doctor.jadwal.length}
-                        className="border border-gray-300 px-4 py-2"
-                      >
-                        {doctor.layanan}
-                      </td>
-                    </>
-                  )}
-                  <td className="border border-gray-300 px-4 py-2">
-                    {jadwal.hari}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {jadwal.jam_mulai} - {jadwal.jam_selesai}
-                  </td>
-                  {jIndex === 0 && (
-                    <td
-                      rowSpan={doctor.jadwal.length}
-                      className="border border-gray-300 px-4 py-2"
-                    >
-                      <div className="flex justify-center gap-0.5">
-                        <a
-                          href={`/admin/jadwal-dokter/edit/${doctor.id_dokter}`}
-                          className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:cursor-pointer"
+            {doctors.map((doctor, index) => {
+              // Total number of schedule rows for this doctor
+              const totalRows = doctor.layananList.reduce(
+                (sum, layanan) => sum + layanan.jadwal.length,
+                0,
+              );
+
+              return doctor.layananList.map((layanan, lIndex) =>
+                layanan.jadwal.map((jadwal, jIndex) => (
+                  <tr
+                    key={`${index}-${lIndex}-${jIndex}`}
+                    className={alternatingRowColor}
+                  >
+                    {lIndex === 0 && jIndex === 0 && (
+                      <>
+                        <td
+                          rowSpan={totalRows}
+                          className="border border-gray-300 px-4 py-2 text-center"
                         >
-                          <PencilSquareIcon className="h-4 w-4" />
-                        </a>
-                        <button
-                          onClick={() => deleteOnClick(doctor.id_dokter)}
-                          className="block w-min rounded bg-red-600 p-2 text-white hover:cursor-pointer"
+                          {index + 1}
+                        </td>
+                        <td
+                          rowSpan={totalRows}
+                          className="border border-gray-300 px-4 py-2"
                         >
-                          <TrashIcon className="h-4 w-4" />
-                        </button>
-                      </div>
+                          {doctor.nama_dokter}
+                        </td>
+                        <td
+                          rowSpan={totalRows}
+                          className="border border-gray-300 px-4 py-2"
+                        >
+                          {doctor.poli.nama_poli}
+                        </td>
+                      </>
+                    )}
+
+                    {jIndex === 0 && (
+                      <td
+                        rowSpan={layanan.jadwal.length}
+                        className="border border-gray-300 px-4 py-2"
+                      >
+                        {layanan.nama_pelayanan}
+                      </td>
+                    )}
+
+                    {/* Hari & Jam */}
+                    <td className="border border-gray-300 px-4 py-2">
+                      {jadwal.hari}
                     </td>
-                  )}
-                </tr>
-              )),
-            )}
+                    <td className="border border-gray-300 px-4 py-2">
+                      {jadwal.jam_mulai} - {jadwal.jam_selesai}
+                    </td>
+
+                    {/* Actions */}
+                    {lIndex === 0 && jIndex === 0 && (
+                      <td
+                        rowSpan={totalRows}
+                        className="border border-gray-300 px-4 py-2"
+                      >
+                        <div className="flex justify-center gap-0.5">
+                          <a
+                            href={`/admin/jadwal-dokter/edit/${doctor.id_dokter}`}
+                            className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:cursor-pointer"
+                          >
+                            <PencilSquareIcon className="h-4 w-4" />
+                          </a>
+                          <button
+                            onClick={() => deleteOnClick(doctor.id_dokter)}
+                            className="block w-min rounded bg-red-600 p-2 text-white hover:cursor-pointer"
+                          >
+                            <TrashIcon className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    )}
+                  </tr>
+                )),
+              );
+            })}
           </Table>
         </section>
 
