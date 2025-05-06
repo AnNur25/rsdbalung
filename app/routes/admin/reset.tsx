@@ -25,7 +25,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {}
 
 export async function action({ request, pa   }: Route.ActionArgs) {
   console.log("action");
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/profil`);
+  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/`);
   const formData = await request.formData();
   // const session = await getSession(request.headers.get("Cookie"));
   const url = new URL(request.url);
@@ -37,7 +37,6 @@ export async function action({ request, pa   }: Route.ActionArgs) {
     const confirmPassw = formData.get("confirmPassw");
     console.log(formData);
     console.log("token", token);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
     return handleAction(() =>
       axios.post(
@@ -46,7 +45,6 @@ export async function action({ request, pa   }: Route.ActionArgs) {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
         },
       ),
