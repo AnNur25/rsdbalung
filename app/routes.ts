@@ -19,12 +19,12 @@ export default [
     route("berita/:id", "routes/news-detail.tsx"),
     route("pelayanan/:id", "routes/layanan-detail.tsx"),
     route("aduan", "routes/complaint.tsx"),
+    route("reset-password", "routes/admin/reset.tsx"),
   ]),
 
   // Admin routes
   ...prefix("admin", [
     route("login", "routes/admin/login.tsx"),
-    route("reset-password", "routes/admin/reset.tsx"),
     route("logout", "routes/admin/logout.tsx"),
     layout("routes/admin/layout.tsx", [
       index("routes/admin/index.tsx"),
