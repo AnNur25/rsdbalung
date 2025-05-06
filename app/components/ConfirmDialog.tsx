@@ -27,8 +27,8 @@ export default function ConfirmDialog({
   onClose,
   cancelOnClick,
   confirmOnClick,
-  cancelBtnStyle = "bg-gray-200 hover:bg-gray-300",
-  confirmBtnStyle = "bg-red-500 hover:bg-red-600",
+  cancelBtnStyle = "bg-gray-200 hover:bg-gray-300 text-gray-700",
+  confirmBtnStyle = "bg-red-500 hover:bg-red-600 text-white",
 }: ConfirmDialogProps) {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
@@ -45,13 +45,13 @@ export default function ConfirmDialog({
           <div className="mt-4 flex gap-2">
             <button
               onClick={cancelOnClick}
-              className={`rounded-md ${cancelBtnStyle} px-4 py-2 text-sm font-medium text-gray-700`}
+              className={`rounded-md ${cancelBtnStyle} px-4 py-2 text-sm font-medium`}
             >
               {cancelLabel}
             </button>
             <button
               onClick={confirmOnClick}
-              className={`${confirmBtnStyle} rounded-md px-4 py-2 text-sm font-medium text-white`}
+              className={`${confirmBtnStyle} rounded-md px-4 py-2 text-sm font-medium`}
             >
               {confirmLabel}
             </button>

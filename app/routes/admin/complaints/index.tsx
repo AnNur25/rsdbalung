@@ -121,6 +121,7 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
         <section className="mb-4 w-full overflow-x-auto">
           {complaints?.map((complaint) => (
             <MessageCard
+              phoneNumber={complaint.no_wa}
               id={complaint.id}
               isAdmin={true}
               sendOnClick={handleReplyComplaint}

@@ -13,6 +13,7 @@ import { handleAction } from "~/utils/handleAction";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 import ConfirmDialog from "~/components/ConfirmDialog";
+import logo from "~/assets/logoonly.png";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -72,13 +73,30 @@ export default function AdminAccount({
   };
   return (
     <>
-      <div className="flex h-full items-center justify-center">
-        <div className="m-auto flex w-full flex-1 flex-col items-center justify-center gap-4 rounded-2xl px-8 pt-8 pb-6 shadow-lg min-md:max-w-96 lg:px-12">
+      <h1 className="w-max text-2xl font-bold uppercase">Informasi Akun</h1>
+      <div className="mt-8 flex h-fit w-full flex-col items-center justify-center gap-4 min-md:flex-row">
+        {/* <div className="flex w-full h-full flex-col items-center justify-center gap-4 rounded-2xl px-8 pt-8 pb-6 shadow-lg min-md:max-w-56 lg:px-12"> */}
+        <div className="flex w-full flex-none flex-col items-center justify-center rounded-lg border border-gray-400 px-6 py-6 shadow-lg min-md:min-h-86 min-md:max-w-63">
+          <div className="my-4 w-fit rounded-full border bg-white p-8">
+            <img
+              className="w-20"
+              src={logo}
+              alt="Logo Rumah Sakit Daerah Balung"
+            />
+          </div>
+          <h2 className="text-xl font-bold uppercase">RSD Balung</h2>
+        </div>
+        <div className="flex w-full flex-1 grow flex-col items-center justify-center gap-4 rounded-lg border border-gray-400 px-8 pt-8 pb-6 shadow-lg min-md:max-w-96 lg:px-12">
           {!visibleChangeForm ? (
             <>
-              <h1 className="text-2xl font-extrabold">Halo Admin!</h1>
+              <div>
+                <h2 className="text-center text-xl font-bold">Halo Admin!</h2>
+                <p className="text-center text-sm text-gray-500">
+                  Kelola informasi pribadi Anda dengan mudah melalui halaman ini
+                </p>
+              </div>
               <div className="flex w-full flex-col">
-                <label className="text-lg font-semibold">Nama</label>
+                <label className="text-md font-semibold">Nama</label>
                 <input
                   type="text"
                   readOnly
@@ -88,7 +106,7 @@ export default function AdminAccount({
                 />
               </div>
               <div className="flex w-full flex-col">
-                <label className="text-lg font-semibold">Email</label>
+                <label className="text-md font-semibold">Email</label>
                 <input
                   type="text"
                   readOnly
@@ -107,14 +125,19 @@ export default function AdminAccount({
             </>
           ) : (
             <>
-              <h1 className="text-2xl font-extrabold">Isi Password Anda!</h1>
+              <div>
+                <h2 className="text-center text-xl font-bold">Ubah Password</h2>
+                <p className="text-center text-sm text-gray-500">
+                  Ubah password Anda dengan mengisi data di bawah ini
+                </p>
+              </div>
               <fetcher.Form
                 ref={formRef}
                 className="flex w-full flex-col items-center gap-4"
                 method="PUT"
               >
                 <div className="flex w-full flex-col">
-                  <label className="text-lg font-semibold">Password Lama</label>
+                  <label className="text-md font-semibold">Password Lama</label>
                   <div className="relative">
                     <input
                       id="password"
@@ -150,7 +173,7 @@ export default function AdminAccount({
                   )}
                 </div>
                 <div className="flex w-full flex-col">
-                  <label className="text-lg font-semibold">Password Baru</label>
+                  <label className="text-md font-semibold">Password Baru</label>
                   <div className="relative">
                     <input
                       id="password"
@@ -215,8 +238,8 @@ export default function AdminAccount({
         description="Apakah Anda yakin ingin mengubah password?"
         cancelLabel="Batal"
         confirmLabel="Simpan"
-        cancelBtnStyle="bg-red-500 hover:bg-red-600"
-        confirmBtnStyle="bg-green-600 hover:bg-green-700"
+        cancelBtnStyle="bg-red-500 hover:bg-red-600 text-white"
+        confirmBtnStyle="bg-green-600 hover:bg-green-700 text-white"
       />
     </>
   );
