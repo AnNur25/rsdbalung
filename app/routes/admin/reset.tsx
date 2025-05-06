@@ -23,7 +23,7 @@ import { handleAction } from "~/utils/handleAction";
 
 export async function loader({ request, params }: Route.LoaderArgs) {}
 
-export async function action({ request, pa   }: Route.ActionArgs) {
+export async function action({ request }: Route.ActionArgs) {
   console.log("action");
   const urlRequest = new URL(`https://rs-balung-cp.vercel.app/`);
   const formData = await request.formData();
@@ -32,7 +32,7 @@ export async function action({ request, pa   }: Route.ActionArgs) {
   const token = url.searchParams.get("token");
   console.log("token", token);
   if (token) {
-    urlRequest.pathname = `/reset-password?token=${token}`;
+    const resetRequest = `https://rs-balung-cp.vercel.app/reset-password?token=${token}`;
     const newPassw = formData.get("newPassw");
     const confirmPassw = formData.get("confirmPassw");
     console.log(formData);
@@ -40,7 +40,7 @@ export async function action({ request, pa   }: Route.ActionArgs) {
 
     return handleAction(() =>
       axios.post(
-        urlRequest.href,
+        resetRequest,
         { newPassw, confirmPassw },
         {
           headers: {
