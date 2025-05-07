@@ -11,3 +11,6 @@
 **/secrets.ts
 
 /public/tinymce/
+
+.vscode/
+

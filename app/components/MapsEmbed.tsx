@@ -13,7 +13,7 @@ export default function MapsEmbed() {
       // height={height}
       // width="100%"
       // height="100%"
-      className="aspect-[18/7] h-full w-full"
+      className="h-full min-h-[200px] w-full rounded-lg shadow"
       style={{ border: 0 }}
       allowFullScreen={false}
       loading="lazy"

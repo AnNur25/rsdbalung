@@ -261,8 +261,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           )}
         </div>
       </section>
-      <div className="mt-2 flex flex-col items-center justify-center gap-4 p-4 min-md:flex-row min-md:px-10 lg:mx-10">
-        <section className="flex flex-1 flex-col gap-4 text-sm lg:font-semibold">
+
+        <div className="flex w-full flex-col justify-between gap-4 p-4 min-md:flex-row min-md:px-20">
+        <div className="flex flex-1 flex-col justify-between gap-4">
           <div className="rounded-lg bg-gradient-to-r from-blue-900 to-blue-300 px-8 py-4 text-white">
             <div className="text-white">
               <TextWithRect
@@ -285,8 +286,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               rsd.balung@jemberkab.go.id
             </p>
           </div>
-        </section>
-        <div className="h-full w-full flex-1 grow overflow-hidden rounded-lg border border-gray-300/80 shadow min-md:min-w-2/5">
+        </div>
+        <div className="flex-1">
           <MapsEmbed />
         </div>
       </div>
