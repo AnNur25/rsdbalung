@@ -1,123 +1,163 @@
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-import { useEffect, useRef } from "react";
-// import Quill from "quill";
-// import "quill/dist/quill.snow.css";
-import banner from "~/assets/rsdbalung.jpeg";
-import Header from "~/components/Header";
-import LayananUnggulanCard from "~/components/LayananUnggulanCard";
-import { type News } from "~/models/News";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useFetcher } from "react-router";
+import toast from "react-hot-toast";
+import type { Route } from "./+types/test";
+import { handleAction } from "~/utils/handleAction";
+// import { ReCAPTCHA } from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
+// import { default as ReCAPTCHA } from "react-google-recaptcha";
+
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+
+  console.log(formData);
+  const captchaValue = formData.get("captchaValue");
+  const response = await axios.post("http://localhost:3000/verify", {
+    captchaValue,
+  });
+  console.log(response.data);
+  return response.data;
+  // return handleAction(() =>
+  //   axios.post("http://localhost:3000/verify", formData),
+  // );
+}
 
 export default function Test() {
-  //   const editorRef = useRef<HTMLDivElement>(null);
+  //  useEffect(() => {
+  //    import("react-google-recaptcha").then((mod) => {
+  //      setReCAPTCHA(mod.default);
+  //    });
+  //  }, []);
+  const recaptcha = useRef(null);
+  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+  const fetcher = useFetcher();
+  const fetcherData = fetcher.data || { message: "", success: false };
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
 
-  // useEffect(() => {
-  // new Quill("#editor", {
-  //   theme: "snow",
-  // });
-  // }, []);
-  // const response = {
-  //   success: true,
-  //   statusCode: 200,
-  //   message: "Berhasil",
-  //   data: {
-  //     berita: [
-  //       {
-  //         id: "1",
-  //         judul: "Berita 1",
-  //         isi: "Isi berita 1",
-  //         gambar_sampul: banner,
-  //         tanggal_dibuat: "2023-10-01",
-  //       },
-  //       {
-  //         id: "2",
-  //         judul: "Berita 2",
-  //         isi: "Isi berita 2",
-  //         gambar_sampul: banner,
-  //         tanggal_dibuat: "2023-10-02",
-  //       },
-  //     ],
-  //     pagination: {
-  //       currentPage: 1,
-  //       pageSize: 10,
-  //       totalItems: 20,
-  //       totalPages: 2,
-  //     },
-  //   },
-  // };
+  console.log(fetcher.data);
+  // console.log("All env variables:", import.meta.env);
+  console.log("sitekey", import.meta.env.VITE_SITE_KEY);
 
-  // const news: News[] = response.data.berita;
-  // const nCols = Object.keys({
-  //   id: "",
-  //   judul: "Berita 1",
-  //   isi: "Isi berita 1",
-  //   gambar_sampul: "",
-  //   tanggal_dibuat: "2023-10-01",
-  // }).length;
+  function onChangeHandler(value: any) {
+    console.log("Captcha value:", value);
+  }
+  async function loadCaptcha() {
+    setRecaptchaLoaded(true);
+    console.log("load", recaptcha);
+  }
+  async function submitForm(event: React.FormEvent<HTMLFormElement>) {}
+  // async function submitForm(event: React.FormEvent<HTMLFormElement>) {
+  //   // event.preventDefault();
+  //   const captchaValueGet = recaptcha.current?.getValue();
+  //   console.log("cget", captchaValueGet);
+  //   const captchaValue = await recaptcha.current
+  //     ?.executeAsync()
+  //     .then((value) => {
+  //       console.log("executeAsync promise - Captcha value:", value);
+  //     });
+  //   console.log("captcha", captchaValue);
+  //   const formData = new FormData(event.target as HTMLFormElement);
+  //   if (!captchaValue) {
+  //     alert("Please verify the reCAPTCHA!");
+  //   } else {
+  //     // fetcher.submit(
+  //     //     { captchaValue },
+  //     //     {
+  //     //       method: "post",
+  //     //     },
+  //     //   );
+  //     // const res = await axios.post("http://localhost:3000/verify", {
+  //     //   captchaValue,
+  //     // });
+
+  //     // const data = res.data;
+  //     console.log("c data", captchaValue);
+  //     // if (data.success) {
+  //     fetcher.submit(
+  //       { captchaValue },
+  //       {
+  //         method: "post",
+  //       },
+  //     );
+  //     //   toast.success("Form submission successful!");
+  //     // } else {
+  //     //   toast.error("reCAPTCHA validation failed!");
+  //     // }
+  //   }
+  // }
 
   return (
     <>
-      {/* <Header /> */}
-      {/* <ChevronLeftIcon className="h-6" />
-      <table className="w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border border-gray-300 px-4 py-2">ID</th>
-            <th className="border border-gray-300 px-4 py-2">Name</th>
-            <th className="border border-gray-300 px-4 py-2">Description</th>
-            <th className="border border-gray-300 px-4 py-2">Image</th>
-            <th className="border border-gray-300 px-4 py-2">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {news.length > 0 ? (
-            news.map((item, index) => (
-              <tr key={index} className="hover:bg-gray-50">
-                <td className="border border-gray-300 px-4 py-2">{item.id}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {item.judul}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">{item.isi}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {item.gambar_sampul}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {item.tanggal_dibuat}
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td
-                colSpan={nCols}
-                className="border border-gray-300 px-4 py-2 text-center"
-              >
-                No data available
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table> */}
-      {/* <div ref={editorRef}></div> */}
-      {/* <div id="editor">
-        <p>Core build with no theme, formatting, non-essential modules</p>
-      </div> */}
-      {/* <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script> */}
-      {/* <link
-        href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
-        rel="stylesheet"
-      /> */}
-
-      {/* <div id="editor">
-        <h2>Demo Content</h2>
-        <p>
-          Preset build with <code>snow</code> theme, and some common formats.
-        </p>
-      </div> */}
-
-      {/* <ImageGradientCard /> */}
-
-      {/* <ImageSlider /> */}
+      <fetcher.Form
+        onSubmit={submitForm}
+        method="post"
+        className="mx-auto flex max-w-md flex-col space-y-4 p-6"
+      >
+        <div
+          className="g-recaptcha"
+          data-sitekey={import.meta.env.VITE_SITE_KEY}
+          data-callback={submitForm}
+          data-size="invisible"
+        ></div>
+        {/* <input
+          type="text"
+          name="name"
+          className="rounded-md border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Name"
+        /> */}
+        {/* <input
+          type="text"
+          name="name"
+          className="rounded-md border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Name"
+        />
+        <input
+          type="text"
+          name="email"
+          className="rounded-md border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Email"
+        />
+        <input
+          type="password"
+          name="password"
+          className="rounded-md border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Password"
+        /> */}
+        {/* {ReCAPTCHA && (
+          <ReCAPTCHA
+            ref={recaptcha}
+            size="invisible"
+            sitekey="YOUR_SITE_KEY"
+          />
+        )} */}
+        {/* <ReCAPTCHA
+          badge="inline"
+          // asyncScriptOnLoad={loadCaptcha}
+          ref={recaptcha}
+          // onChange={onChangeHandler}
+          size="invisible"
+          sitekey={import.meta.env.VITE_SITE_KEY}
+          className="mt-4"
+        /> */}
+        <button
+          onClick={() => {
+            // recaptcha.current?.execute();
+          }}
+          type="submit"
+          className="rounded-md bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600"
+        >
+          Submit
+        </button>
+      </fetcher.Form>
     </>
   );
 }

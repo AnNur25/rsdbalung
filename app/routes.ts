@@ -62,8 +62,8 @@ export default [
       ]),
       ...prefix("aduan", [
         index("routes/admin/complaints/index.tsx"),
-        route("create", "routes/admin/complaints/create.tsx"),
-        route("edit/:id", "routes/admin/complaints/edit.tsx"),
+        // route("create", "routes/admin/complaints/create.tsx"),
+        // route("edit/:id", "routes/admin/complaints/edit.tsx"),
       ]),
     ]),
   ]),

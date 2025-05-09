@@ -93,6 +93,7 @@ export default function CreateNews() {
             <input
               name="judul"
               id="judul"
+              onInput={(e) => sanitizeInput(e.currentTarget)}
               type="text"
               required
               className={`${
@@ -119,6 +120,7 @@ export default function CreateNews() {
             <input
               name="ringkasan"
               id="ringkasan"
+              onInput={(e) => sanitizeInput(e.currentTarget)}
               type="text"
               required
               className={`${

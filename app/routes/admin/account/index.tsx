@@ -140,6 +140,7 @@ export default function AdminAccount({
                   <label className="text-md font-semibold">Password Lama</label>
                   <div className="relative">
                     <input
+                      onInput={(e) => sanitizeInput(e.currentTarget)}
                       id="password"
                       name="oldPassword"
                       type={showPassword ? "text" : "password"}
@@ -176,6 +177,7 @@ export default function AdminAccount({
                   <label className="text-md font-semibold">Password Baru</label>
                   <div className="relative">
                     <input
+                      onInput={(e) => sanitizeInput(e.currentTarget)}
                       id="password"
                       name="newPassword"
                       type={showPassword ? "text" : "password"}

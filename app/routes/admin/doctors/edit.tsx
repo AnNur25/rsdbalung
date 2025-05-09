@@ -114,7 +114,7 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
         <fetcher.Form method="post" encType="multipart/form-data">
           <div className="mb-4">
             <label htmlFor="file" className="text-lg font-bold">
-              Gambar Dokter <span className="text-red-600">*</span>
+              Gambar Dokter
             </label>
             {preview && (
               <img
@@ -151,6 +151,7 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
               Biodata Singkat <span className="text-red-600">*</span>
             </label>
             <textarea
+              onInput={(e) => sanitizeInput(e.currentTarget)}
               value={doctorBiodata}
               onChange={(e) => setDoctorBiodata(e.target.value)}
               name="biodata_singkat"

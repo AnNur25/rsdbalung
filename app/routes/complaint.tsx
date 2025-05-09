@@ -54,6 +54,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
       }
     }
   }, [fetcherData]);
+
   return (
     <>
       <div className="mt-8 flex flex-col items-center">
@@ -81,6 +82,14 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 Nama <span className="text-red-600">*</span>
               </label>
               <input
+                onInput={(e) => {
+                  const input = e.currentTarget;
+                  // Prevent leading zeros
+                  if (input.value === " " || input.value === "0") {
+                    // Disallow "0" as the only input
+                    input.value = "";
+                  }
+                }}
                 type="text"
                 placeholder="Masukkan nama Anda"
                 className={`${

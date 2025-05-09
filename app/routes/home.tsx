@@ -70,7 +70,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const banners: BannerModel[] = data.banners || [];
   const unggulanData: Unggulan = loaderData?.data?.unggulan ?? {};
   const news = (data.news?.berita as News[]) || []; //{ berita: News[]; pagination: Pagination };
-  console.log(data.unggulan);
 
   const bannerList = Array.isArray(banners) ? banners.map((b) => b.gambar) : [];
 
@@ -262,7 +261,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </section>
 
-        <div className="flex w-full flex-col justify-between gap-4 p-4 min-md:flex-row min-md:px-20">
+      <div className="flex w-full flex-col justify-between gap-4 p-4 min-md:flex-row min-md:px-20">
         <div className="flex flex-1 flex-col justify-between gap-4">
           <div className="rounded-lg bg-gradient-to-r from-blue-900 to-blue-300 px-8 py-4 text-white">
             <div className="text-white">

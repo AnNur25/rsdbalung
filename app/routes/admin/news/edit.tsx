@@ -129,6 +129,7 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
             </label>
             <input
               value={title}
+              onInput={(e) => sanitizeInput(e.currentTarget)}
               onChange={(e) => setTitle(e.target.value)}
               name="judul"
               id="judul"
@@ -156,6 +157,7 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
             </label>
             <input
               value={summary}
+              onInput={(e) => sanitizeInput(e.currentTarget)}
               onChange={(e) => setSummary(e.target.value)}
               name="ringkasan"
               id="ringkasan"

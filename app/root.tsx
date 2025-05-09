@@ -30,6 +30,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
       <head>
+        
+        <script
+          src="https://www.google.com/recaptcha/api.js"
+          async
+          defer
+        ></script>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Rumah Sakit Daerah Balung</title>

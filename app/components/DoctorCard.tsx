@@ -24,7 +24,7 @@ export default function DoctorCard({
         src={image}
       />
       <p className="flex-1 content-center bg-green-600 p-1 text-center text-xs text-white uppercase">
-        Spesialis {specialty}
+        {specialty}
       </p>
       {!isAdmin && (
         <a

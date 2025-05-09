@@ -67,7 +67,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
     }
     console.log(file);
   };
-  
+
   const navigate = useNavigate();
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
@@ -93,7 +93,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
         <fetcher.Form method="post" encType="multipart/form-data">
           <div className="mb-4">
             <label htmlFor="file" className="text-lg font-bold">
-              Gambar Dokter <span className="text-red-600">*</span>
+              Gambar Dokter
             </label>
             {preview && (
               <img
@@ -108,7 +108,6 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
               name="file"
               accept="image/*"
               onChange={handleImagePreview}
-              required
               className={`${
                 fetcherData.message && !fetcherData.success
                   ? "border-red-500 focus:outline-red-500"
@@ -131,6 +130,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
               Biodata Singkat <span className="text-red-600">*</span>
             </label>
             <textarea
+              onInput={(e) => sanitizeInput(e.currentTarget)}
               name="biodata_singkat"
               id="biodata_singkat"
               placeholder="Isi biodata singkat di sini"
@@ -186,6 +186,9 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
               Nama <span className="text-red-600">*</span>
             </label>
             <input
+              onInput={(e) => {
+                const input = e.currentTarget;
+              }}
               type="text"
               placeholder="Isi nama dokter di sini"
               name="nama"
@@ -213,6 +216,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
             </label>
 
             <input
+              onInput={(e) => sanitizeInput(e.currentTarget)}
               type="text"
               name="link_instagram"
               id="link_instagram"
@@ -226,6 +230,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
             </label>
 
             <input
+              onInput={(e) => sanitizeInput(e.currentTarget)}
               type="text"
               name="link_linkedin"
               id="link_linkedin"
@@ -239,6 +244,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
             </label>
 
             <input
+              onInput={(e) => sanitizeInput(e.currentTarget)}
               type="text"
               name="link_facebook"
               id="link_facebook"
