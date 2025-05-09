@@ -40,6 +40,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
+import ConfirmDialog from "~/components/ConfirmDialog";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const bannerRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
@@ -258,7 +259,7 @@ export default function AdminHome({
         },
       ]);
     } else {
-      toast.error("Maksimal 4")
+      toast.error("Maksimal 4");
     }
   };
 
@@ -720,7 +721,17 @@ export default function AdminHome({
 
         <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 4 Foto</p>
       </div>
-      <Dialog
+      <ConfirmDialog
+        isOpen={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        cancelOnClick={() => setDeleteDialogOpen(false)}
+        confirmOnClick={handleDeleteSelected}
+        // title="Konfirmasi Keluar"
+        description="Apakah Anda yakin ingin menghapus data ini?"
+        cancelLabel="Batal"
+        confirmLabel="Hapus"
+      />
+      {/* <Dialog
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
         className="relative z-50"
@@ -750,7 +761,7 @@ export default function AdminHome({
             </div>
           </DialogPanel>
         </div>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 }
