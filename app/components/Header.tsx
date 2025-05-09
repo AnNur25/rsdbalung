@@ -48,8 +48,11 @@ export default function Header({
       name: "Informasi RS",
       submenu: [
         { name: "Dokter", href: "/dokter" },
-        { name: "Ketersediaan Tempat Tidur", href: "#" },
         { name: "Jadwal Praktek", href: "/jadwal-dokter" },
+        {
+          name: "Ketersediaan Tempat Tidur",
+          href: "https://rsdbalung.simkeskhanza.com/index.php?act=FasilitasKamar",
+        },
       ],
     },
     {
@@ -71,7 +74,11 @@ export default function Header({
           <div className="scroll-left flex w-max gap-4">
             {loopedContacts.map((contact, index) => (
               <div key={index} className="flex items-center gap-1.5">
-                <img src={contact.icon} alt={contact.name} className="fill-white" />
+                <img
+                  src={contact.icon}
+                  alt={contact.name}
+                  className="fill-white"
+                />
                 <p>
                   {contact.name}: {contact.contact}
                 </p>
@@ -112,7 +119,7 @@ export default function Header({
                   {item.name}
                   <ChevronDownIcon className="h-4 w-4" />
                 </PopoverButton>
-                <PopoverPanel className="ring-opacity-5 absolute left-0 z-100 mt-2 w-56  rounded-md bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none">
+                <PopoverPanel className="ring-opacity-5 absolute left-0 z-100 mt-2 w-56 rounded-md bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none">
                   {item.submenu.map((subitem, subindex) => (
                     <a
                       key={subindex}
