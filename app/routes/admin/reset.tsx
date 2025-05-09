@@ -214,6 +214,12 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                         id="email"
                         name="email"
                         type="email"
+                        onInput={(e) => {
+                          const input = e.currentTarget;
+                          if (input.value === " " || input.value === "0") {
+                            input.value = "";
+                          }
+                        }}
                         required
                         autoComplete="email"
                         className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 ${

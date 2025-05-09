@@ -49,6 +49,12 @@ export default function CreateService() {
             </label>
             <input
               type="text"
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               placeholder="Isi nama layanan di sini"
               name="nama_pelayanan"
               id="nama_pelayanan"
@@ -77,6 +83,12 @@ export default function CreateService() {
             <textarea
               name="JangkaWaktu"
               id="JangkaWaktu"
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               placeholder="Isi jangka waktu di sini"
               required
               className={`${
@@ -149,6 +161,12 @@ export default function CreateService() {
               id="Persyaratan"
               placeholder="Isi persyaratan di sini"
               required
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               className={`${
                 fetcherData.message && !fetcherData.success
                   ? "border-red-500 focus:outline-red-500"
@@ -173,6 +191,12 @@ export default function CreateService() {
             <textarea
               name="Prosedur"
               id="Prosedur"
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               placeholder="Isi prosedur di sini"
               required
               className={`${

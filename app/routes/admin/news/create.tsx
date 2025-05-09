@@ -93,7 +93,12 @@ export default function CreateNews() {
             <input
               name="judul"
               id="judul"
-              onInput={(e) => sanitizeInput(e.currentTarget)}
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               type="text"
               required
               className={`${
@@ -120,7 +125,12 @@ export default function CreateNews() {
             <input
               name="ringkasan"
               id="ringkasan"
-              onInput={(e) => sanitizeInput(e.currentTarget)}
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               type="text"
               required
               className={`${

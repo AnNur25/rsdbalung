@@ -89,6 +89,12 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
               placeholder="Isi nama layanan di sini"
               name="nama_pelayanan"
               id="nama_pelayanan"
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               required
               className={`${
                 fetcherData.message && !fetcherData.success
@@ -113,6 +119,12 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
             </label>
             <textarea
               value={duration}
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               onChange={(e) => setDuration(e.target.value)}
               name="JangkaWaktu"
               id="JangkaWaktu"
@@ -193,6 +205,12 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
             </label>
             <textarea
               value={requirement}
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               onChange={(e) => setRequirement(e.target.value)}
               name="Persyaratan"
               id="Persyaratan"
@@ -221,6 +239,12 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
             </label>
             <textarea
               value={procedure}
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               onChange={(e) => setProcedure(e.target.value)}
               name="Prosedur"
               id="Prosedur"

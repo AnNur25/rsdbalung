@@ -48,6 +48,12 @@ export default function CreatePoli({ actionData }: Route.ComponentProps) {
               Nama Poli <span className="text-red-600">*</span>
             </label>
             <input
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               type="text"
               placeholder="Isi nama layanan di sini"
               name="nama_poli"

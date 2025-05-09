@@ -130,7 +130,12 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
               Biodata Singkat <span className="text-red-600">*</span>
             </label>
             <textarea
-              onInput={(e) => sanitizeInput(e.currentTarget)}
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               name="biodata_singkat"
               id="biodata_singkat"
               placeholder="Isi biodata singkat di sini"
@@ -188,6 +193,9 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
             <input
               onInput={(e) => {
                 const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
               }}
               type="text"
               placeholder="Isi nama dokter di sini"
@@ -216,7 +224,12 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
             </label>
 
             <input
-              onInput={(e) => sanitizeInput(e.currentTarget)}
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               type="text"
               name="link_instagram"
               id="link_instagram"
@@ -230,7 +243,12 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
             </label>
 
             <input
-              onInput={(e) => sanitizeInput(e.currentTarget)}
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               type="text"
               name="link_linkedin"
               id="link_linkedin"
@@ -244,7 +262,12 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
             </label>
 
             <input
-              onInput={(e) => sanitizeInput(e.currentTarget)}
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               type="text"
               name="link_facebook"
               id="link_facebook"

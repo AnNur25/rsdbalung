@@ -160,6 +160,12 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                 </label>
                 <div className="mt-2">
                   <input
+                    onInput={(e) => {
+                      const input = e.currentTarget;
+                      if (input.value === " " || input.value === "0") {
+                        input.value = "";
+                      }
+                    }}
                     id="email"
                     name="email"
                     type="email"

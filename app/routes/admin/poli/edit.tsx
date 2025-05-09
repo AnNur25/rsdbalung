@@ -75,6 +75,12 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
               Nama Poli <span className="text-red-600">*</span>
             </label>
             <input
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               value={poliName}
               onChange={(e) => setPoliName(e.target.value)}
               type="text"

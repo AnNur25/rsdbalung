@@ -158,6 +158,13 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 Aduan <span className="text-red-600">*</span>
               </label>
               <textarea
+                onInput={(e) => {
+                  const input = e.currentTarget;
+                  if (input.value === " " || input.value === "0") {
+                    input.value = "";
+                  }
+                }}
+                required
                 placeholder="Tulis aduan Anda"
                 className={`${
                   fetcherData.message && !fetcherData.success

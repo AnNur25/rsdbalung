@@ -151,7 +151,12 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
               Biodata Singkat <span className="text-red-600">*</span>
             </label>
             <textarea
-              onInput={(e) => sanitizeInput(e.currentTarget)}
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               value={doctorBiodata}
               onChange={(e) => setDoctorBiodata(e.target.value)}
               name="biodata_singkat"
@@ -211,6 +216,12 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
               Nama <span className="text-red-600">*</span>
             </label>
             <input
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               value={doctorName}
               onChange={(e) => setDoctorName(e.target.value)}
               type="text"
@@ -240,6 +251,12 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
             </label>
 
             <input
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               value={doctorInstagram}
               onChange={(e) => setDoctorInstagram(e.target.value)}
               type="text"
@@ -255,6 +272,12 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
             </label>
 
             <input
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               value={doctorLinkedIn}
               onChange={(e) => setDoctorLinkedIn(e.target.value)}
               type="text"
@@ -270,6 +293,12 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
             </label>
 
             <input
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               value={doctorFacebook}
               onChange={(e) => setDoctorFacebook(e.target.value)}
               type="text"

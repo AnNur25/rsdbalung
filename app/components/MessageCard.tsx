@@ -85,13 +85,18 @@ export default function MessageCard({
                 <p className="py-1 text-justify font-semibold">{r.message}</p>
               </div>
             ))}
-
           </>
         )}
         {isAdmin && (
           <div className="mt-2 flex items-center gap-2">
             <input
               placeholder="Balas"
+              onInput={(e) => {
+                const input = e.currentTarget;
+                if (input.value === " " || input.value === "0") {
+                  input.value = "";
+                }
+              }}
               type="text"
               name="message"
               value={reply}

@@ -19,7 +19,9 @@ export async function loader({ params }: Route.LoaderArgs) {
   const doctorResponse = await handleLoader(() =>
     axios.get(doctorRequest.href),
   );
-  const allDoctorRequest = new URL(`https://rs-balung-cp.vercel.app/dokter?pageSize=8`);
+  const allDoctorRequest = new URL(
+    `https://rs-balung-cp.vercel.app/dokter?pageSize=8`,
+  );
   const allDoctorResponse = await handleLoader(() =>
     axios.get(allDoctorRequest.href),
   );
@@ -63,12 +65,12 @@ export default function DoctorDetail({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex flex-col  justify-center gap-8 p-8 min-md:flex-row">
-          <div className="flex w-fit flex-col items-center">
+        <div className="flex flex-col justify-center gap-8 p-8 min-md:flex-row">
+        <div className="flex w-fit flex-col items-center">
             <img
               onError={imageErrorHandler}
               className="aspect-[9/12] h-auto w-full rounded-sm object-cover min-md:w-64"
-              src={schedule.gambar}
+              src={schedule.gambar || "https://example.com"}
               alt={`Foto ${schedule.nama}`}
             />
             <div className="flex w-fit flex-col items-center">
