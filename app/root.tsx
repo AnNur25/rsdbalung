@@ -12,6 +12,7 @@ import "./app.css";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
+import { GoogleReCaptchaProvider } from "@google-recaptcha/react";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -30,12 +31,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
       <head>
-        
-        <script
-          src="https://www.google.com/recaptcha/api.js"
-          async
-          defer
-        ></script>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Rumah Sakit Daerah Balung</title>
@@ -43,7 +38,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="flex min-h-screen flex-col justify-between">
+        {/* <GoogleReCaptchaProvider
+          explicit={{ badge: "bottomright" }}
+          type="v2-invisible"
+          siteKey={import.meta.env.VITE_SITE_KEY}
+          scriptProps={{
+            async: true,
+            defer: true,
+            appendTo: "body",
+          }}
+        > */}
         {children}
+        {/* </GoogleReCaptchaProvider> */}
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -61,8 +67,51 @@ export default function App() {
 
   return (
     <>
-      {isClient && <Toaster position="top-right" />}
-      <Outlet />
+      {isClient && (
+        <GoogleReCaptchaProvider
+          explicit={{ badge: "bottomright" }}
+          type="v2-invisible"
+          siteKey={import.meta.env.VITE_SITE_KEY}
+          scriptProps={{
+            async: true,
+            defer: true,
+            appendTo: "body",
+          }}
+          onLoad={() => {
+            console.log("reCAPTCHA script loaded!");
+            // THIS IS FOR DIAGNOSTIC PURPOSES
+            if (typeof (window as any).grecaptcha !== "undefined") {
+              console.log("grecaptcha global object IS available.");
+              if (typeof (window as any).grecaptcha.ready === "function") {
+                (window as any).grecaptcha.ready(() => {
+                  console.log("grecaptcha.ready callback fired!");
+                  // Try to explicitly render a dummy widget here (for v2, even invisible)
+                  // This is a direct test of the client
+                  // It might throw if no client exists, but it will give more insight
+                  try {
+                    console.log("Dummy reCAPTCHA widget rendered with ID:");
+                    // Immediately expire it if not needed, or remove the div
+                    // (window as any).grecaptcha.reset(widgetId);
+                  } catch (e) {
+                    console.error("Error trying to render dummy widget:", e);
+                  }
+                });
+              } else {
+                console.log("grecaptcha.ready function NOT available.");
+              }
+            } else {
+              console.error(
+                "grecaptcha global object is NOT available after script load.",
+              );
+            }
+          }}
+        >
+          <>
+            <Toaster position="top-right" />
+            <Outlet />
+          </>
+        </GoogleReCaptchaProvider>
+      )}
     </>
   );
 }

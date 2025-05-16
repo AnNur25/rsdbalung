@@ -186,7 +186,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
             </div>
 
             <button className="rounded bg-green-600 px-8 py-2 text-white min-md:w-min">
-              Simpan
+              Kirim
             </button>
           </fetcher.Form>
 

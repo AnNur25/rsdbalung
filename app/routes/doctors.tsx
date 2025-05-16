@@ -23,16 +23,19 @@ export async function loader({
 
   const page = url.searchParams.get("page") || "1";
   const keyword = url.searchParams.get("keyword");
+
   if (keyword) {
     urlRequest.pathname = "/dokter/search";
     urlRequest.searchParams.set("keyword", keyword);
   }
+
   urlRequest.searchParams.set("page", page);
   return handleLoader(() => axios.get(urlRequest.href));
 }
 
 export default function Doctors({ loaderData }: Route.ComponentProps) {
   const data = loaderData.data;
+
   const { Dokter: doctors = [], pagination = paginationDefault } = data as {
     Dokter: Doctor[];
     pagination: Pagination;

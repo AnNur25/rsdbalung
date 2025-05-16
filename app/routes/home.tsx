@@ -117,7 +117,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </section>
       <section className="mt-8 flex flex-col items-center">
-        <TextWithRect>KAMI BERKOMITMEN</TextWithRect>
+        S<TextWithRect>KAMI BERKOMITMEN</TextWithRect>
         <div className="grid grid-cols-1 gap-6 p-8 lg:max-w-2/3 lg:grid-cols-2 lg:grid-rows-2">
           {[
             {
@@ -173,45 +173,22 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
 
         <div className="bg-sky-0 w-full overflow-hidden lg:flex-1">
-          <Slider>
-            {/* [
-               Slide 1
-               [
-               "Menggunakan Media Tes Mata Terbaik",
-               "Menggunakan Alat-Alat yang Canggih",
-               ],
-               Slide 2
-               [
-               "Ditangani Dokter Spesialis Berpengalaman",
-               "Pelayanan Cepat, Tepat, dan Nyaman",
-               ],
-               Slide 3
-               [
-               "Konsultasi Sesuai Standar Medis Terkini",
-               "Fasilitas Lengkap untuk Semua Kebutuhan Mata",
-               ],
-             ]
-                 .map((description, index) => (
-                 <div className="flex gap-2">
-                   <LayananUnggulanCard
-                     description={description[0]}
-                     image={`/images/layanan-unggulan/layanan-unggulan${index + 1}.jpg`}
-                   />
-                   <LayananUnggulanCard
-                     description={description[1]}
-                     image={`/images/layanan-unggulan/layanan-unggulan${index + 2}.jpg`}
-                   />
-                 </div>
-               )) */}
-            {unggulanData.gambarCaptions.map((item, index) => (
-              <LayananUnggulanCard
-                key={index}
-                description={item.caption}
-                image={item.gambar}
-                // image={`/images/layanan-unggulan/layanan-unggulan${index + 1}.jpg`}
-              />
-            ))}
-          </Slider>
+          {Array.isArray(unggulanData?.gambarCaptions) &&
+          unggulanData.gambarCaptions.length > 0 ? (
+            <Slider>
+              {unggulanData.gambarCaptions.map((item, index) => (
+                <LayananUnggulanCard
+                  key={index}
+                  description={item.caption}
+                  image={item.gambar}
+                />
+              ))}
+            </Slider>
+          ) : (
+              <p className="text-gray-500">
+                Belum ada layanan unggulan tersedia.
+              </p>
+          )}
         </div>
       </section>
 

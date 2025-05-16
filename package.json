@@ -11,6 +11,7 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@google-recaptcha/react": "^2.2.0",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@react-router/node": "^7.3.0",
@@ -23,7 +24,6 @@
     "quill": "^2.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-google-recaptcha": "^3.1.0",
     "react-hot-toast": "^2.5.2",
     "react-router": "^7.3.0",
     "tinymce": "^7.8.0"
@@ -37,7 +37,6 @@
     "@types/node": "^20",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.1",
-    "@types/react-google-recaptcha": "^2.1.9",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "react-router-devtools": "^1.1.0",

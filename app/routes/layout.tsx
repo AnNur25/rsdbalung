@@ -5,6 +5,7 @@ import Header from "~/components/Header";
 // import type { PelayananResponse } from "./admin/services";
 import type { Pelayanan } from "~/models/Pelayanan";
 import { useEffect } from "react";
+import { GoogleReCaptchaProvider } from "@google-recaptcha/react";
 
 export async function loader() {
   const pelayananRequest = new URL(
@@ -51,7 +52,18 @@ export default function Layout() {
   return (
     <>
       <Header pelayanan={pelayanan} />
-      <Outlet />
+      {/* <GoogleReCaptchaProvider
+        explicit={{ badge: "bottomright" }}
+        type="v2-invisible"
+        siteKey={import.meta.env.VITE_SITE_KEY}
+        scriptProps={{
+          async: true,
+          defer: true,
+          appendTo: "body",
+        }}
+      > */}
+        <Outlet />
+      {/* </GoogleReCaptchaProvider> */}
       <Footer />
     </>
   );
