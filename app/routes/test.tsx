@@ -58,7 +58,7 @@ export default function Test() {
   }, [fetcherData]);
 
   console.log(fetcher.data);
-  console.log("sitekey", import.meta.env.VITE_SITE_KEY);
+  // console.log("sitekey", import.meta.env.VITE_SITE_KEY);
 
   async function submitForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
