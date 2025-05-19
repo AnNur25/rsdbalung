@@ -32,8 +32,8 @@ export async function action({ request }: Route.ActionArgs) {
         ? setCookieHeader.join("; ")
         : setCookieHeader || "";
       console.log("cookie", cookie);
-      axios.defaults.headers.common["Authorization"] =
-        `Bearer ${data.data.aksesToken}`;
+      // axios.defaults.headers.common["Authorization"] =
+      //   `Bearer ${data.data.aksesToken}`;
 
       return redirectWithCookie("/admin", cookie);
       // return redirect(
