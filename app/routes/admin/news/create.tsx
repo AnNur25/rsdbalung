@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import redirectDelay from "~/utils/redirectDelay";
 
 export async function action({ request }: Route.ActionArgs) {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/berita`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/berita`);
   const formData = await request.formData();
 
   const headers = {

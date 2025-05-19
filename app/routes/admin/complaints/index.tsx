@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 import ConfirmDialog from "~/components/ConfirmDialog";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/aduan/all`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/all`);
   return handleLoader(() => axios.get(urlRequest.href));
 }
 
@@ -29,7 +29,7 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
 
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/aduan/${formData.get("id")}`,
+    `${import.meta.env.VITE_API_URL}/aduan/${formData.get("id")}`,
   );
 
   if (method === "POST") {

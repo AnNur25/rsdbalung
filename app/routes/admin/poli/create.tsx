@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 // import { ActionToast, LoaderToast } from "~/hooks/toastHandler";
 
 export async function action({ request }: Route.ActionArgs) {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/poli`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/poli`);
 
   let formData = await request.formData();
   let namaPoli = formData.get("nama_poli");

@@ -8,14 +8,14 @@ import toast from "react-hot-toast";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/poli/${params.id}`,
+    `${import.meta.env.VITE_API_URL}/poli/${params.id}`,
   );
 
   return handleLoader(() => axios.get(urlRequest.href));
 }
 
 export async function action({ params, request }: Route.ActionArgs) {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
 
   let formData = await request.formData();
   const idPoli = params.id;

@@ -9,7 +9,7 @@ import { GoogleReCaptchaProvider } from "@google-recaptcha/react";
 
 export async function loader() {
   const pelayananRequest = new URL(
-    `https://rs-balung-cp.vercel.app/pelayanan/`,
+    `${import.meta.env.VITE_API_URL}/pelayanan/`,
   );
   try {
     const response = await axios.get(pelayananRequest.href);
@@ -62,7 +62,7 @@ export default function Layout() {
           appendTo: "body",
         }}
       > */}
-        <Outlet />
+      <Outlet />
       {/* </GoogleReCaptchaProvider> */}
       <Footer />
     </>

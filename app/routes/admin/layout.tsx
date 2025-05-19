@@ -1,25 +1,39 @@
 import { Outlet, redirect } from "react-router";
 import AdminSidebar from "~/components/AdminSidebar";
 import type { Route } from "./+types/layout";
-import { getSession } from "~/sessions.server";
+// import { getSession } from "~/sessions.server";
 import axios from "axios";
+import { clearAuthCookies, hasAuthCookies } from "~/utils/auth-cookie";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-  const token = session.get("token");
-  if (!token) {
-    return redirect("/admin/login");
-  }
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/profil`);
+  // const session = await getSession(request.headers.get("Cookie"));
+  // const token = session.get("token");
+  // if (!token) {
+  //   return redirect("/admin/login");
+  // }
+  // const isAuthenticated = await hasAuthCookies(request);
+
+  // if (!isAuthenticated) {
+  //   return redirect("/admin/login");
+  // }
+
+  // const client = await createAuthenticatedClient(request);
+
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
   try {
     const response = await axios.get(urlRequest.href);
+    console.log("response", response.headers);
     const data = response.data;
-    if (!data.success) {
-      return redirect("/admin/login");
-    }
+    // if (!data.success) {
+    //   await clearAuthCookies();
+    //   return redirect("/admin/login");
+    // }
   } catch (error: any) {
+    // await clearAuthCookies();
+
     console.error("Error fetching data:", error.response);
-    return redirect("/admin/login");
+    // return redirect("/admin/login");
   }
 }
 

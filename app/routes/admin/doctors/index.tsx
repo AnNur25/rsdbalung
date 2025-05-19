@@ -28,7 +28,7 @@ import toast from "react-hot-toast";
 import ConfirmDialog from "~/components/ConfirmDialog";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/dokter`);
 
   const url = new URL(request.url);
   const page = url.searchParams.get("page") || "1";
@@ -45,7 +45,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
   const method = request.method;
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/dokter`);
   const formData = await request.formData();
 
   if (method === "DELETE") {

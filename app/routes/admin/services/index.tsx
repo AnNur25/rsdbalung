@@ -13,7 +13,7 @@ import { useRef, useEffect } from "react";
 import toast from "react-hot-toast";
 
 export async function loader(): Promise<LoaderResult> {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/pelayanan`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/pelayanan`);
   return handleLoader(() => axios.get(urlRequest.href));
 }
 

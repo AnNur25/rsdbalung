@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
 
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/pelayanan`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/pelayanan`);
   return handleAction(() =>
     axios.post(urlRequest.href, {
       ...Object.fromEntries(formData.entries()),

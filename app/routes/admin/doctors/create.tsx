@@ -23,7 +23,7 @@ import { handleAction } from "~/utils/handleAction";
 import toast from "react-hot-toast";
 
 export async function loader() {
-  const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
+  const poliRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
   return handleLoader(() => axios.get(poliRequest.href));
 }
 
@@ -44,7 +44,7 @@ export async function action({ request }: Route.ActionArgs) {
   // }
   console.log("formData", formData);
 
-  const urlRequest = new URL("https://rs-balung-cp.vercel.app/dokter/");
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/dokter/`);
   return handleAction(() =>
     axios.post(urlRequest.href, formData, {
       headers: { "Content-Type": "multipart/form-data" },

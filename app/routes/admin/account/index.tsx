@@ -5,7 +5,7 @@ import {
   useLoaderData,
   type LoaderFunctionArgs,
 } from "react-router";
-import { getSession } from "~/sessions.server";
+import { getSession } from "~/utils/sessions.server";
 import type { Route } from "./+types";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -21,7 +21,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (!token) {
     return redirect("/admin/login");
   }
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/profil`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
   try {
     const response = await axios.get(urlRequest.href);
     const data = response.data;
@@ -32,7 +32,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 }
 export async function action({ request }: Route.ActionArgs) {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/profil`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
   const formData = await request.formData();
 
   return handleAction(() => axios.put(urlRequest.href, formData), "Berhasil");

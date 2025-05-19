@@ -10,14 +10,14 @@ import toast from "react-hot-toast";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/pelayanan/${params.id}`,
+    `${import.meta.env.VITE_API_URL}/pelayanan/${params.id}`,
   );
   return handleLoader(() => axios.get(urlRequest.href));
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/pelayanan/${params.id}`,
+    `${import.meta.env.VITE_API_URL}/pelayanan/${params.id}`,
   );
 
   const formData = await request.formData();

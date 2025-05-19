@@ -68,6 +68,7 @@ export default function Test() {
       return;
     } else {
       const token = await executeV2Invisible();
+      console.log("token", token);
       if (typeof token === "string") {
         console.log("token", token);
         const formData = new FormData(event.target as HTMLFormElement);

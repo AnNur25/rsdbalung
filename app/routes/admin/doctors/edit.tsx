@@ -11,9 +11,9 @@ import toast from "react-hot-toast";
 export async function loader({ params }: Route.LoaderArgs) {
   const doctorId = params.id;
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/dokter/${doctorId}`,
+    `${import.meta.env.VITE_API_URL}/dokter/${doctorId}`,
   );
-  const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
+  const poliRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
   const poliResponse = await handleLoader(() => axios.get(poliRequest.href));
   const doctorResponse = await handleLoader(() => axios.get(urlRequest.href));
   const data = {
@@ -45,7 +45,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   console.log("formData", formData);
 
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/dokter/${params.id}`,
+    `${import.meta.env.VITE_API_URL}/dokter/${params.id}`,
   );
   return handleAction(() =>
     axios.put(urlRequest.href, formData, {

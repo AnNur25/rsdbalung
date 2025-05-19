@@ -14,14 +14,14 @@ import { useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 
 export async function loader() {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/aduan/`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/`);
   return handleLoader(() => axios.get(urlRequest.href));
 }
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const method = request.method;
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/aduan/`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/`);
   if (method === "POST")
     return handleAction(() => axios.post(urlRequest.href, formData));
 }

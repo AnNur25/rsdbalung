@@ -27,10 +27,10 @@ import { handleAction } from "~/utils/handleAction";
 export async function loader({ params }: Route.LoaderArgs) {
   const doctorId = params.id;
   const doctorScheduleReq = new URL(
-    `https://rs-balung-cp.vercel.app/jadwal-dokter/${doctorId}`,
+    `${import.meta.env.VITE_API_URL}/jadwal-dokter/${doctorId}`,
   );
   const pelayananRequest = new URL(
-    "https://rs-balung-cp.vercel.app/pelayanan/",
+    `${import.meta.env.VITE_API_URL}/pelayanan/`,
   );
 
   try {
@@ -96,7 +96,7 @@ export async function action({ request }: Route.ActionArgs) {
   };
 
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/jadwal-dokter/${idDokter}`,
+    `${import.meta.env.VITE_API_URL}/jadwal-dokter/${idDokter}`,
   );
   return handleAction(() => axios.put(urlRequest.href, data));
   // let data = {

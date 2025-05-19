@@ -43,9 +43,9 @@ import {
 import ConfirmDialog from "~/components/ConfirmDialog";
 
 export async function loader({ params }: Route.LoaderArgs) {
-  const bannerRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
+  const bannerRequest = new URL(`${import.meta.env.VITE_API_URL}/banner/`);
   const unggulanRequest = new URL(
-    "https://rs-balung-cp.vercel.app/layanan-unggulan/",
+    `${import.meta.env.VITE_API_URL}/layanan-unggulan/`,
   );
   const bannerResponse = await handleLoader(() =>
     axios.get(bannerRequest.href),
@@ -74,7 +74,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   console.log("feature", feature);
 
   if (feature === "banner") {
-    const bannerRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
+    const bannerRequest = new URL(`${import.meta.env.VITE_API_URL}/banner/`);
     if (method === "POST") {
       const files = formData.getAll("banner");
       if (files.length > 4) {
@@ -112,7 +112,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   // Action Layanan Unggulan
   if (feature === "unggulan") {
     const unggulanRequest = new URL(
-      "https://rs-balung-cp.vercel.app/layanan-unggulan/",
+      `${import.meta.env.VITE_API_URL}/layanan-unggulan/`,
     );
 
     if (method === "POST") {
@@ -731,7 +731,7 @@ export default function AdminHome({
         cancelLabel="Batal"
         confirmLabel="Hapus"
       />
-      
+
       {/* <Dialog
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}

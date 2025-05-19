@@ -18,7 +18,7 @@ export async function loader({
 }: {
   request: Request;
 }): Promise<LoaderResult> {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/dokter`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/dokter`);
   const url = new URL(request.url);
 
   const page = url.searchParams.get("page") || "1";

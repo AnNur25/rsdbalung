@@ -33,7 +33,7 @@ import ConfirmDialog from "~/components/ConfirmDialog";
 export async function loader({
   request,
 }: Route.LoaderArgs): Promise<LoaderResult> {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/berita`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/berita`);
 
   const url = new URL(request.url);
   const page = url.searchParams.get("page") || "1";
@@ -50,7 +50,7 @@ export async function loader({
 export async function action({ request }: Route.ActionArgs) {
   const method = request.method;
   const formData = await request.formData();
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/berita`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/berita`);
 
   if (method === "DELETE") {
     const newsId = formData.get("id");

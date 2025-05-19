@@ -1,127 +1,91 @@
 import type { Route } from "./+types/login";
 import loginImage from "~/assets/loginimage.jpg";
-
-import {
-  getSession,
-  commitSession,
-  type SessionFlashData,
-} from "../../sessions.server";
 import { data, Form, redirect, useActionData, useFetcher } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { ActionToast, LoaderToast } from "~/hooks/toastHandler";
 import { useEffect, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import { setAuthCookies } from "~/utils/auth-cookie";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-  // const flashMessage: SessionFlashData = await getFlashMessage(request);
-  // session.get("token");
-  const message = session.get("message");
-  const success = session.get("success");
-  if (session.has("token")) {
-    // Redirect to the home page if they are already signed in.
-    // return redirect("/admin/");
-  }
-
-  return data(
-    { message, success },
-    {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    },
-  );
+  console.log("load cookie", request.headers.get("Cookie"));
 }
 
 export async function action({ request }: Route.ActionArgs) {
   console.log("action");
-  const session = await getSession(request.headers.get("Cookie"));
 
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
 
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/auth/login`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/auth/login`);
 
   try {
     const response = await axios.post(urlRequest.href, { email, password });
-
-    // Extract cookies from the response headers
-    // const setCookieHeader = response.headers["set-cookie"];
-
-    // if (setCookieHeader) {
-    //   const refreshTokenCookie = setCookieHeader.find((cookie: string) =>
-    //     cookie.startsWith("refreshToken="),
-    //   );
-    //   if (refreshTokenCookie) {
-    //     const refreshToken = refreshTokenCookie.split(";")[0].split("=")[1];
-    //
-    //     session.set("refreshToken", refreshToken);
-    //   }
-    // }
-
+    // console.log("response", response);
     const data = response.data;
 
     if (data.success) {
-      session.set("token", data.data.token);
-      const getToken = session.get("token");
-      axios.defaults.headers.common["Authorization"] = `Bearer ${getToken}`;
-      session.flash("message", "Login berhasil!");
-      session.flash("success", data.success);
-      return redirect("/admin/", {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      });
-      // return redirect("/admin/");
-    } else {
-      session.flash("message", data.message);
-      session.flash("success", data.success);
-      console.log("fail success");
-      console.error(data.message);
+      // Extract cookies from the response headers
+      // const setCookieHeader = response.headers["set-cookie"];
+
+      // console.log("setCookieHeader", setCookieHeader);
+      // const cookieValue = Array.isArray(setCookieHeader)
+      //   ? setCookieHeader.join("; ")
+      //   : setCookieHeader || "";
+
+      // if (setCookieHeader) {
+      //   const refreshTokenCookie = setCookieHeader.find((cookie: string) =>
+      //     cookie.startsWith("refreshToken="),
+      //   );
+
+      //   const aksesTokenCookie = setCookieHeader.find((cookie: string) =>
+      //     cookie.startsWith("aksesToken="),
+      //   );
+
+      //   if (refreshTokenCookie && aksesTokenCookie) {
+      //     const refreshToken = refreshTokenCookie.split(";")[0].split("=")[1];
+      //     console.log("refreshToken", refreshToken);
+      //     const aksesToken = aksesTokenCookie.split(";")[0].split("=")[1];
+      //     console.log("aksesToken", aksesToken);
+
+      //     const setCookieHeaders = await setAuthCookies(
+      //       aksesToken,
+      //       refreshToken,
+      //     );
+
+      //     console.log("cookieValue", cookieValue);
+      //     console.log("setCookieHeaders", setCookieHeaders);
+      return redirect("/admin");
+      // return redirect("/admin/", {
+      //   headers: {
+      //     Authorization: `Bearer ${data.data.aksesToken}`,
+      //     "Set-Cookie": Array.isArray(setCookieHeaders)
+      //       ? setCookieHeaders.join("; ")
+      //       : setCookieHeaders,
+      //   },
+      // });
     }
   } catch (error: any) {
-    console.log("action err");
-    if (axios.isAxiosError(error)) {
-      const message = error.response?.data.message;
-      session.flash("success", false);
-      session.flash("message", error.response?.data.message);
-      console.log(error.response?.data.message);
-      return { success: false, message };
-
-      // return toast.error(error.response?.data.message);
-    } else {
-      session.flash("success", false);
-      session.flash("message", error.response?.data.message);
-      console.log("action ue");
-
-      // return toast.error("Terjadi kesalahan pada server");
-    }
+    // axios.defaults.headers.common["Authorization"] =
+    //   `Bearer ${data.data.aksesToken}`;
+    // const authCookies = await setAuthCookies(
+    //   data.data.aksesToken,
+    //   data.data.refreshToken,
+    // );
+    // return redirect("/admin/", {
+    //   headers: {
+    //     Authorization: `Bearer ${data.data.aksesToken}`,
+    //     Cookie: Array.isArray(authCookies)
+    //       ? authCookies.join("; ")
+    //       : authCookies,
+    //   },
+    // });
   }
-  return null;
+  // return null;
 }
 
 export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
-  // const { message, success }: SessionFlashData = {
-  //   message: loaderData.message || "",
-  //   success: loaderData.success || false,
-  // };
-  // console.log(message);
-  // useEffect(() => {
-  //   if (actionData?.success) {
-  //     toast.success(actionData.success);
-  //   }
-  //   if (actionToastData?.error) toast.error(actionToastData.error);
-  // }, [actionData]);
-  // useEffect(() => {
-  //   if (success) toast.success(message);
-  //   else toast.error(message);
-  // }, [message]);
-  // LoaderToast();
-  // ActionToast();
-  // const actionData = useActionData();
-  // console.log("fetcher", fetcher.data);
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
   useEffect(() => {

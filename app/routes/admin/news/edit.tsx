@@ -16,7 +16,7 @@ export async function loader({
   const newsId = params.id;
 
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/berita/${newsId}`,
+    `${import.meta.env.VITE_API_URL}/berita/${newsId}`,
   );
   return handleLoader(() => axios.get(urlRequest.href));
 }
@@ -25,7 +25,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   const newsId = params.id;
 
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/berita/${newsId}`,
+    `${import.meta.env.VITE_API_URL}/berita/${newsId}`,
   );
 
   const headers = {

@@ -33,12 +33,12 @@ import { handleLoader } from "~/utils/handleLoader";
 import { isSuccess } from "~/utils/extractResponses";
 
 export async function loader({ params }: Route.LoaderArgs) {
-  const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
+  const poliRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
   const doctorRequest = new URL(
-    `https://rs-balung-cp.vercel.app/dokter?pageSize=999`,
+    `${import.meta.env.VITE_API_URL}/dokter?pageSize=999`,
   );
   const pelayananRequest = new URL(
-    `https://rs-balung-cp.vercel.app/pelayanan/`,
+    `${import.meta.env.VITE_API_URL}/pelayanan/`,
   );
 
   const poliResponse = await handleLoader(() => axios.get(poliRequest.href));
@@ -69,7 +69,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export async function action({ request }: Route.ActionArgs) {
-  const urlRequest = new URL("https://rs-balung-cp.vercel.app/jadwal-dokter/");
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/jadwal-dokter/`);
   const formData = await request.formData();
   console.log("action form", formData);
 
@@ -197,11 +197,11 @@ export default function CreateSchedule({ loaderData }: Route.ComponentProps) {
             Poli Jadwal Praktek
           </h1>
 
-          <p className="text-gray-600 mt-1">
+          <p className="mt-1 text-gray-600">
             Silakan pilih poli/klinik untuk melihat atau mengelola jadwal
             praktek
           </p>
-          <div className="w-full rounded-xl border-1 border-gray-300 p-8 shadow-xl mt-4">
+          <div className="mt-4 w-full rounded-xl border-1 border-gray-300 p-8 shadow-xl">
             <div className="grid w-full grid-cols-1 gap-8 min-md:grid-cols-3">
               {poli.map((poli, index) => (
                 <button

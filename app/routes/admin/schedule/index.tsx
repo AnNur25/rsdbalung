@@ -32,14 +32,14 @@ import ConfirmDialog from "~/components/ConfirmDialog";
 export async function loader({
   request,
 }: Route.LoaderArgs): Promise<LoaderResult> {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/jadwal-dokter/`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/jadwal-dokter/`);
 
   const url = new URL(request.url);
   const page = url.searchParams.get("page") || "1";
   const poli = url.searchParams.get("poli") ?? "";
   const date = url.searchParams.get("date") ?? "";
 
-  const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
+  const poliRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
 
   if (poli) {
     urlRequest.pathname = "/jadwal-dokter/search";
@@ -69,7 +69,7 @@ export async function loader({
 export async function action({ request }: Route.ActionArgs) {
   const method = request.method;
   const formData = await request.formData();
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/jadwal-dokter/`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/jadwal-dokter/`);
 
   if (method === "DELETE") {
     const id = formData.get("id");
@@ -89,7 +89,6 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
   } = loaderData.data.schedules;
 
   const { dokter: doctors = [], pagination = paginationDefault } = scheduleData;
-
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(pagination?.currentPage || 1);

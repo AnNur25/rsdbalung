@@ -35,11 +35,11 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader(): Promise<LoaderResult> {
-  const bannerRequest = new URL("https://rs-balung-cp.vercel.app/banner/");
+  const bannerRequest = new URL(`${import.meta.env.VITE_API_URL}/banner/`);
   const unggulanRequest = new URL(
-    "https://rs-balung-cp.vercel.app/layanan-unggulan/",
+    `${import.meta.env.VITE_API_URL}/layanan-unggulan/`,
   );
-  const newsRequest = new URL("https://rs-balung-cp.vercel.app/berita?page=1");
+  const newsRequest = new URL(`${import.meta.env.VITE_API_URL}/berita?page=1`);
 
   const bannerResponse = await handleLoader(() =>
     axios.get(bannerRequest.href),
@@ -185,9 +185,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               ))}
             </Slider>
           ) : (
-              <p className="text-gray-500">
-                Belum ada layanan unggulan tersedia.
-              </p>
+            <p className="text-gray-500">
+              Belum ada layanan unggulan tersedia.
+            </p>
           )}
         </div>
       </section>

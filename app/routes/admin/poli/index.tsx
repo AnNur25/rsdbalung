@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 export async function loader({
   request,
 }: Route.LoaderArgs): Promise<LoaderResult> {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
   return handleLoader(() => axios.get(urlRequest.href));
 }
 

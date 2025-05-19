@@ -25,8 +25,12 @@ const { getSession, commitSession, destroySession } =
       httpOnly: true,
       // maxAge: 60,
       // path: "/",
-      sameSite: "lax",
-      // secrets: ["s3cret1"],
+      sameSite: "none",
+      secrets: [
+        import.meta.env.VITE_JWT_SECRET,
+        import.meta.env.VITE_REFRESH_SECRET_KEY,
+        import.meta.env.VITE_COOKIE_SECRET,
+      ],
       secure: true,
     },
   });

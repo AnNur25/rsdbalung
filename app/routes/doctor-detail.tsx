@@ -14,19 +14,19 @@ import Slider from "~/components/Slider";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const doctorRequest = new URL(
-    `https://rs-balung-cp.vercel.app/dokter/${params.id}`,
+    `${import.meta.env.VITE_API_URL}/dokter/${params.id}`,
   );
   const doctorResponse = await handleLoader(() =>
     axios.get(doctorRequest.href),
   );
   const allDoctorRequest = new URL(
-    `https://rs-balung-cp.vercel.app/dokter?pageSize=8`,
+    `${import.meta.env.VITE_API_URL}/dokter?pageSize=8`,
   );
   const allDoctorResponse = await handleLoader(() =>
     axios.get(allDoctorRequest.href),
   );
   const doctorScheduleRequest = new URL(
-    `https://rs-balung-cp.vercel.app/jadwal-dokter/${params.id}`,
+    `${import.meta.env.VITE_API_URL}/jadwal-dokter/${params.id}`,
   );
   const doctorScheduleResponse = await handleLoader(() =>
     axios.get(doctorScheduleRequest.href),
@@ -66,7 +66,7 @@ export default function DoctorDetail({ loaderData }: Route.ComponentProps) {
     <>
       <div className="flex flex-col">
         <div className="flex flex-col justify-center gap-8 p-8 min-md:flex-row">
-        <div className="flex w-fit flex-col items-center">
+          <div className="flex w-fit flex-col items-center">
             <img
               onError={imageErrorHandler}
               className="aspect-[9/12] h-auto w-full rounded-sm object-cover min-md:w-64"

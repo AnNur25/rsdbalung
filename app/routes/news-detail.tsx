@@ -54,7 +54,7 @@ export async function loader({
 
   try {
     const response = await axios.get<NewsDetailApiResponse>(
-      `https://rs-balung-cp.vercel.app/berita/${id}`,
+      `${import.meta.env.VITE_API_URL}/berita/${id}`,
     );
     ``;
     const data = response.data;
@@ -64,7 +64,7 @@ export async function loader({
     }
 
     const responseAll = await axios.get(
-      `https://rs-balung-cp.vercel.app/berita?page=1`,
+      `${import.meta.env.VITE_API_URL}/berita?page=1`,
     );
 
     const dataAll = responseAll.data;
@@ -105,12 +105,12 @@ export default function NewsDetail() {
         description={ringkasan}
         date={tanggal}
       />
-      <section className="flex flex-col lg:flex-row lg:gap-8 min-md:p-4">
+      <section className="flex flex-col min-md:p-4 lg:flex-row lg:gap-8">
         <article className="flex-6 px-8 text-justify">
           <img
             src={gambar_sampul}
             alt={judul}
-            className="mx-auto my-8 h-auto w-full object-cover aspect-video rounded-sm"
+            className="mx-auto my-8 aspect-video h-auto w-full rounded-sm object-cover"
           />
           <h1 className="text-2xl font-bold lg:text-3xl">{judul}</h1>
           <p className="my-4">{ringkasan}</p>
@@ -129,7 +129,7 @@ export default function NewsDetail() {
           </div>
         </article>
 
-        <aside className="flex flex-2 flex-col items-center gap-4 p-8 min-md:pl-4 min-md:pr-8">
+        <aside className="flex flex-2 flex-col items-center gap-4 p-8 min-md:pr-8 min-md:pl-4">
           <h2 className="text-2xl font-bold">Berita Lainnya</h2>
           <div className="flex flex-col gap-4">
             {/* Berita lainnya */}

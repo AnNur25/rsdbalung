@@ -23,14 +23,14 @@ import {
 // Load existing gallery photos
 export async function loader({ params }: Route.LoaderArgs) {
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/berita/${params.id}/galeri-berita`,
+    `${import.meta.env.VITE_API_URL}/berita/${params.id}/galeri-berita`,
   );
   return handleLoader(() => axios.get(urlRequest.href));
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
   const urlRequest = new URL(
-    `https://rs-balung-cp.vercel.app/berita/${params.id}/galeri-berita`,
+    `${import.meta.env.VITE_API_URL}/berita/${params.id}/galeri-berita`,
   );
   const formData = await request.formData();
   const method = request.method;

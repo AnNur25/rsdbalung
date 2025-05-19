@@ -25,14 +25,14 @@ export async function loader({ request, params }: Route.LoaderArgs) {}
 
 export async function action({ request }: Route.ActionArgs) {
   console.log("action");
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/`);
   const formData = await request.formData();
   // const session = await getSession(request.headers.get("Cookie"));
   const url = new URL(request.url);
   const token = url.searchParams.get("token");
   console.log("token", token);
   if (token) {
-    const resetRequest = `https://rs-balung-cp.vercel.app/reset-password?token=${token}`;
+    const resetRequest = `${import.meta.env.VITE_API_URL}/reset-password?token=${token}`;
     const newPassw = formData.get("newPassw");
     const confirmPassw = formData.get("confirmPassw");
     console.log(formData);
@@ -53,7 +53,8 @@ export async function action({ request }: Route.ActionArgs) {
     const email = formData.get("email");
 
     urlRequest.pathname = "/profil";
-    return handleAction(() => axios.post(urlRequest.href, { email }));
+    console.log("urlRequest", urlRequest.href);
+    return handleAction(() => axios.post("/profil", { email }));
   }
 }
 

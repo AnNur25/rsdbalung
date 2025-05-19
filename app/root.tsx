@@ -59,6 +59,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   axios.defaults.headers.common["Content-Type"] = "application/json";
+  axios.defaults.withCredentials = true;
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL;
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {

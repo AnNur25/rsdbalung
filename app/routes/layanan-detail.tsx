@@ -17,7 +17,7 @@ export async function loader({
 }): Promise<LayananDetailResponse> {
   const { id } = params;
   const pelayananRequest = new URL(
-    `https://rs-balung-cp.vercel.app/pelayanan/${id}`,
+    `${import.meta.env.VITE_API_URL}/pelayanan/${id}`,
   );
   try {
     const response = await axios.get<LayananDetailResponse>(

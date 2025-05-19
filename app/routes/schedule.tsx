@@ -23,14 +23,14 @@ import PaginationControls from "~/components/PaginationControl";
 export async function loader({
   request,
 }: Route.LoaderArgs): Promise<LoaderResult> {
-  const urlRequest = new URL(`https://rs-balung-cp.vercel.app/jadwal-dokter/`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/jadwal-dokter/`);
 
   const url = new URL(request.url);
   const page = url.searchParams.get("page") || "1";
   const poli = url.searchParams.get("poli") ?? "";
   const date = url.searchParams.get("date") ?? "";
 
-  const poliRequest = new URL(`https://rs-balung-cp.vercel.app/poli/`);
+  const poliRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
 
   if (poli) {
     urlRequest.pathname = "/jadwal-dokter/search";
