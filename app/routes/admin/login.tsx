@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { setAuthCookies } from "~/utils/auth-cookie";
+import redirectWithCookie from "~/utils/redirectWithCookie";
 
 export async function loader({ request }: Route.LoaderArgs) {
   console.log("load cookie", request.headers.get("Cookie"));
@@ -34,16 +35,17 @@ export async function action({ request }: Route.ActionArgs) {
       axios.defaults.headers.common["Authorization"] =
         `Bearer ${data.data.aksesToken}`;
 
-      return redirect(
-        "/admin",
-        cookie
-          ? {
-              headers: {
-                "Set-Cookie": cookie,
-              },
-            }
-          : {},
-      );
+      return redirectWithCookie("/admin", cookie);
+      // return redirect(
+      //   "/admin",
+      //   cookie
+      //     ? {
+      //         headers: {
+      //           "Set-Cookie": cookie,
+      //         },
+      //       }
+      //     : {},
+      // );
       // return redirect("/admin/", {
       //   headers: {
       //     Authorization: `Bearer ${data.data.aksesToken}`,
