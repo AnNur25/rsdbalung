@@ -31,14 +31,18 @@ export async function action({ request }: Route.ActionArgs) {
         ? setCookieHeader.join("; ")
         : setCookieHeader || "";
       console.log("cookie", cookie);
+      axios.defaults.headers.common["Authorization"] =
+        `Bearer ${data.data.aksesToken}`;
+
       return redirect(
         "/admin",
-        cookie ? {
-          headers: {
-            Authorization: `Bearer ${data.data.aksesToken}`,
-            "Set-Cookie": cookie
-          }
-        } : {},
+        cookie
+          ? {
+              headers: {
+                "Set-Cookie": cookie,
+              },
+            }
+          : {},
       );
       // return redirect("/admin/", {
       //   headers: {
