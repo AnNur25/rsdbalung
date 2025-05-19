@@ -31,11 +31,12 @@ export async function action({ request }: Route.ActionArgs) {
       const cookie = Array.isArray(setCookieHeader)
         ? setCookieHeader.join("; ")
         : setCookieHeader || "";
-      console.log("cookie", cookie);
+      console.log("cookie join", setCookieHeader?.join("; "));
+
       // axios.defaults.headers.common["Authorization"] =
       //   `Bearer ${data.data.aksesToken}`;
-
-      return redirectWithCookie("/admin", cookie);
+      // return;
+      return redirectWithCookie("/admin", setCookieHeader ?? "");
     }
   } catch (error: any) {}
 }

@@ -17,7 +17,9 @@ import logo from "~/assets/logoonly.png";
 export async function loader({ request }: Route.LoaderArgs) {
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
   try {
-    const response = await axios.get(urlRequest.href);
+    const response = await axios.get(urlRequest.href, {
+      // headers: { "Set-Cookie": request.headers.get("cookie") },
+    });
     const data = response.data;
     return data;
   } catch (error: any) {
