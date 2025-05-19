@@ -22,41 +22,24 @@ export async function action({ request }: Route.ActionArgs) {
 
   try {
     const response = await axios.post(urlRequest.href, { email, password });
-    // console.log("response", response);
+    console.log("response", response.headers);
     const data = response.data;
 
     if (data.success) {
-      // Extract cookies from the response headers
-      // const setCookieHeader = response.headers["set-cookie"];
-
-      // console.log("setCookieHeader", setCookieHeader);
-      // const cookieValue = Array.isArray(setCookieHeader)
-      //   ? setCookieHeader.join("; ")
-      //   : setCookieHeader || "";
-
-      // if (setCookieHeader) {
-      //   const refreshTokenCookie = setCookieHeader.find((cookie: string) =>
-      //     cookie.startsWith("refreshToken="),
-      //   );
-
-      //   const aksesTokenCookie = setCookieHeader.find((cookie: string) =>
-      //     cookie.startsWith("aksesToken="),
-      //   );
-
-      //   if (refreshTokenCookie && aksesTokenCookie) {
-      //     const refreshToken = refreshTokenCookie.split(";")[0].split("=")[1];
-      //     console.log("refreshToken", refreshToken);
-      //     const aksesToken = aksesTokenCookie.split(";")[0].split("=")[1];
-      //     console.log("aksesToken", aksesToken);
-
-      //     const setCookieHeaders = await setAuthCookies(
-      //       aksesToken,
-      //       refreshToken,
-      //     );
-
-      //     console.log("cookieValue", cookieValue);
-      //     console.log("setCookieHeaders", setCookieHeaders);
-      return redirect("/admin");
+      const setCookieHeader = response.headers["set-cookie"];
+      const cookie = Array.isArray(setCookieHeader)
+        ? setCookieHeader.join("; ")
+        : setCookieHeader || "";
+      console.log("cookie", cookie);
+      return redirect(
+        "/admin",
+        cookie ? {
+          headers: {
+            Authorization: `Bearer ${data.data.aksesToken}`,
+            "Set-Cookie": cookie
+          }
+        } : {},
+      );
       // return redirect("/admin/", {
       //   headers: {
       //     Authorization: `Bearer ${data.data.aksesToken}`,
@@ -66,23 +49,7 @@ export async function action({ request }: Route.ActionArgs) {
       //   },
       // });
     }
-  } catch (error: any) {
-    // axios.defaults.headers.common["Authorization"] =
-    //   `Bearer ${data.data.aksesToken}`;
-    // const authCookies = await setAuthCookies(
-    //   data.data.aksesToken,
-    //   data.data.refreshToken,
-    // );
-    // return redirect("/admin/", {
-    //   headers: {
-    //     Authorization: `Bearer ${data.data.aksesToken}`,
-    //     Cookie: Array.isArray(authCookies)
-    //       ? authCookies.join("; ")
-    //       : authCookies,
-    //   },
-    // });
-  }
-  // return null;
+  } catch (error: any) {}
 }
 
 export default function LoginAdmin({ loaderData }: Route.ComponentProps) {

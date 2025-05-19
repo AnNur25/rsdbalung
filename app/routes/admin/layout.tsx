@@ -19,11 +19,14 @@ export async function loader({ request }: Route.LoaderArgs) {
   // }
 
   // const client = await createAuthenticatedClient(request);
-
+  const cookie = request.headers.get("cookie");
+  console.log("cookie", cookie);
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
   try {
-    const response = await axios.get(urlRequest.href);
-    console.log("response", response.headers);
+    const response = await axios.get(urlRequest.href, {
+      headers: { "Set-Cookie": cookie },
+    });
+    // console.log("response", response.data);
     const data = response.data;
     // if (!data.success) {
     //   await clearAuthCookies();
