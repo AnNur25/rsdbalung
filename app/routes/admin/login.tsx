@@ -36,24 +36,6 @@ export async function action({ request }: Route.ActionArgs) {
       //   `Bearer ${data.data.aksesToken}`;
 
       return redirectWithCookie("/admin", cookie);
-      // return redirect(
-      //   "/admin",
-      //   cookie
-      //     ? {
-      //         headers: {
-      //           "Set-Cookie": cookie,
-      //         },
-      //       }
-      //     : {},
-      // );
-      // return redirect("/admin/", {
-      //   headers: {
-      //     Authorization: `Bearer ${data.data.aksesToken}`,
-      //     "Set-Cookie": Array.isArray(setCookieHeaders)
-      //       ? setCookieHeaders.join("; ")
-      //       : setCookieHeaders,
-      //   },
-      // });
     }
   } catch (error: any) {}
 }

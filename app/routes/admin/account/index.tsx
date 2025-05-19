@@ -5,7 +5,6 @@ import {
   useLoaderData,
   type LoaderFunctionArgs,
 } from "react-router";
-import { getSession } from "~/utils/sessions.server";
 import type { Route } from "./+types";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -16,11 +15,6 @@ import ConfirmDialog from "~/components/ConfirmDialog";
 import logo from "~/assets/logoonly.png";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-  const token = session.get("token");
-  if (!token) {
-    return redirect("/admin/login");
-  }
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
   try {
     const response = await axios.get(urlRequest.href);
