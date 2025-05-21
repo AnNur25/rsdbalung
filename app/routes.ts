@@ -10,6 +10,7 @@ export default [
   // Public routes
   layout("routes/layout.tsx", [
     route("test", "routes/test.tsx"),
+    route("api/v1", "routes/testoauth.tsx"),
     index("routes/home.tsx"),
     route("profile", "routes/profile.tsx"),
     route("berita/", "routes/news.tsx"),
