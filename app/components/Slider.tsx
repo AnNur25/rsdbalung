@@ -2,10 +2,15 @@ import { useState, useEffect, useRef, type ReactNode } from "react";
 
 interface SliderProps {
   navInside?: boolean;
+  overlapSize?: number;
   children: ReactNode[]; // Accept an array of ReactNode as slides
 }
 
-export default function Slider({ navInside = false, children }: SliderProps) {
+export default function Slider({
+  navInside = false,
+  overlapSize = 0,
+  children,
+}: SliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [childWidth, setChildWidth] = useState(0);
@@ -65,7 +70,7 @@ export default function Slider({ navInside = false, children }: SliderProps) {
     touchStartX.current = null;
     touchEndX.current = null;
   };
-
+  const overlapEm = overlapSize * 4 || 0;
   return (
     <div
       className="relative max-w-full overflow-hidden"
@@ -78,13 +83,16 @@ export default function Slider({ navInside = false, children }: SliderProps) {
       {/* Content Track - Flexbox for showing next content dynamically */}
       <div
         ref={sliderRef}
-        className="mb-12 flex transition-transform duration-500 ease-in-out"
+        className="mb-12 flex w-fit transition-transform duration-500 ease-in-out"
         style={{
-          transform: `translateX(-${currentIndex * childWidth}px)`, // Move the track dynamically
+          transform: `translateX(-${currentIndex * (childWidth - overlapEm)}px)`, // Move the track dynamically
         }}
       >
         {children.map((child, index) => (
-          <div key={index} className="flex-shrink-0">
+          <div
+            key={index}
+            className={`flex-shrink-0 ${overlapSize ? `-mr-${overlapSize?.toString()}` : ""}`}
+          >
             {child}
           </div>
         ))}

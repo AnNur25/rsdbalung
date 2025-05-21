@@ -5,7 +5,6 @@ const secrets = [
   // import.meta.env.VITE_JWT_SECRET,
   // import.meta.env.VITE_REFRESH_SECRET_KEY,
 ];
-console.log("secrets", secrets);
 export const aksesTokenCookie = createCookie("aksesToken", {
   httpOnly: true,
   secure: true,

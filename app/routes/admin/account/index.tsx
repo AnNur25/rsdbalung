@@ -18,6 +18,8 @@ export async function loader({ request }: Route.LoaderArgs) {
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
   try {
     const response = await axios.get(urlRequest.href, {
+      withCredentials: true,
+      headers: { Cookie: request.headers.get("cookie") ?? "" },
       // headers: { "Set-Cookie": request.headers.get("cookie") },
     });
     const data = response.data;

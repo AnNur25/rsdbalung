@@ -10,6 +10,8 @@ import shortcutDokterIcon from "~/assets/shortcut-dokter.svg";
 import shortcutJadwalIcon from "~/assets/shortcut-jadwal-dokter.svg";
 import shortcutAduanIcon from "~/assets/shortcut-aduan.svg";
 
+import waveImage from "~/assets/waves.svg";
+
 import Banner from "~/components/Banner";
 import MapsEmbed from "~/components/MapsEmbed";
 import InstagramEmbed from "~/components/InstagramEmbed";
@@ -23,6 +25,7 @@ import type { BannerModel } from "~/models/Banner";
 
 import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
 import type { Unggulan } from "~/models/Unggulan";
+import HomeShortcut from "~/components/HomeShortcut";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -76,7 +79,17 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <Banner bannersSrc={bannerList} />
+      {/* <img
+        src={waveImage}
+        className="absolute bottom-0 z-10 h-full w-full object-cover"
+        alt="Waves"
+      /> */}
       <section className="mt-8 flex flex-col items-center justify-center gap-4 min-md:flex-row">
+        {/* <img
+          src={waveImage}
+          className="absolute z-10 h-full w-full object-cover"
+          alt="Waves"
+        /> */}
         <div className="flex flex-col items-center ps-6 min-md:items-start">
           <p className="text-xl text-blue-400 min-md:text-2xl">
             Selamat Datang di
@@ -87,37 +100,26 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
 
         <div className="flex h-auto flex-wrap gap-2 p-6">
-          <a
-            href="/dokter"
-            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm min-md:w-40"
-          >
-            <img src={shortcutDokterIcon} alt="" className="h-8 w-8" />
-            <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
-              Daftar Dokter
-            </p>
-          </a>
-          <a
-            href="/jadwal-dokter"
-            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm min-md:w-40"
-          >
-            <img src={shortcutJadwalIcon} alt="" className="h-8 w-8" />
-            <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
-              Jadwal Dokter
-            </p>
-          </a>
-          <a
-            href="/dokter"
-            className="flex flex-1 flex-col items-center gap-2 rounded-lg bg-blue-900 p-4 text-sm min-md:w-40"
-          >
-            <img src={shortcutAduanIcon} alt="" className="h-8 w-8" />
-            <p className="w-max text-center font-bold text-white uppercase min-md:w-max">
-              Aduan
-            </p>
-          </a>
+          {[
+            { icon: shortcutDokterIcon, name: "Dokter", url: "/dokter" },
+            {
+              icon: shortcutJadwalIcon,
+              name: "Jadwal Dokter",
+              url: "/jadwal-dokter",
+            },
+            { icon: shortcutAduanIcon, name: "Aduan", url: "/aduan" },
+          ].map((item, index) => (
+            <HomeShortcut
+              key={index}
+              icon={item.icon}
+              name={item.name}
+              url={item.url}
+            />
+          ))}
         </div>
       </section>
       <section className="mt-8 flex flex-col items-center">
-        S<TextWithRect>KAMI BERKOMITMEN</TextWithRect>
+        <TextWithRect>KAMI BERKOMITMEN</TextWithRect>
         <div className="grid grid-cols-1 gap-6 p-8 lg:max-w-2/3 lg:grid-cols-2 lg:grid-rows-2">
           {[
             {
@@ -192,14 +194,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </section>
 
-      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-16">
-        <div className="lg:flex-1">
-          <TextWithRect>INSTAGRAM</TextWithRect>
-          <h2 className="text-2xl font-black text-persian-blue-950 lg:text-4xl">
+      <section className="flex flex-col items-center bg-gradient-to-b from-dark-blue-900 to-dark-blue-950 p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-16">
+        <div className="h-full lg:flex-1">
+          <TextWithRect textColor="text-white">INSTAGRAM</TextWithRect>
+          <h2 className="text-2xl font-black text-white lg:text-4xl">
             Informasi Seputar Kesehatan dan Momen Lainnya
           </h2>
 
-          <p className="text-justify text-sm text-gray-600 lg:text-lg">
+          <p className="text-justify text-sm text-white lg:text-lg">
             Ikuti kami di Instagram untuk mendapatkan informasi seputar
             kesehatan, layanan terbaru, dan momen menarik lainnya.
           </p>
@@ -208,19 +210,18 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         {/* Slider cannot move the embed */}
         <div className="bg-sky-0 flex w-full items-center gap-2 overflow-x-auto lg:flex-1">
           <InstagramEmbed url="https://www.instagram.com/p/DILIx7czwOo/" />
-          <InstagramEmbed url="https://www.instagram.com/p/DILNKUKTwV2/" />
+          <InstagramEmbed url="https://www.instagram.com/p/DILIx7czwOo/" />
         </div>
       </section>
 
       <section className="p-5 lg:p-16">
         <TextWithRect>BERITA</TextWithRect>
         <p className="text-justify text-sm text-gray-600 lg:text-lg">
-          Dapatkan informasi seputar kesehatan, layanan terbaru, dan informasi
-          menarik lainnya.
+          Warta RSD Balung: Mengabari, Melayani, Menginspirasi
         </p>
         <div className="w-full">
           {news?.length > 0 ? (
-            <Slider>
+            <Slider overlapSize={16}>
               {news.map((berita, index) => (
                 <NewsCard
                   key={index}

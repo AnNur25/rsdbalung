@@ -14,7 +14,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bottom-0 mt-16 bg-sky-700 text-white">
+    <footer className="bottom-0 mt-16 bg-dark-blue-900 text-white">
       <div className="flex flex-col justify-between gap-8 px-10 py-8 lg:flex-row">
         <div className="flex-1">
           <img src={logo} className="w-30" />
@@ -149,7 +149,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="bg-sky-950 px-2 py-3 text-center text-sm">
+      <div className="bg-dark-blue-950 px-2 py-3 text-center text-sm">
         &copy; {new Date().getFullYear()} Rumah Sakit Daerah Balung Kabupaten
         Jember.
       </div>

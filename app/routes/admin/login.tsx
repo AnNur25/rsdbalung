@@ -36,7 +36,7 @@ export async function action({ request }: Route.ActionArgs) {
       // axios.defaults.headers.common["Authorization"] =
       //   `Bearer ${data.data.aksesToken}`;
       // return;
-      return redirectWithCookie("/admin", setCookieHeader ?? "");
+      return redirectWithCookie("/humasbalung", setCookieHeader ?? "");
     }
   } catch (error: any) {}
 }

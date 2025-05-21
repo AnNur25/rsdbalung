@@ -67,9 +67,9 @@ export default function Header({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const loopedContacts = [...contacts, ...contacts, ...contacts, ...contacts];
 
-  return (
+return (
     <header className="sticky inset-x-0 top-0 z-50 bg-white shadow-md">
-      <div className="flex w-full overflow-x-hidden bg-rsd-blue-900 p-2 text-white">
+      <div className="flex w-full overflow-x-hidden bg-dark-blue-900 p-2 text-white">
         <div className="flex gap-4">
           <div className="scroll-left flex w-max gap-4">
             {loopedContacts.map((contact, index) => (

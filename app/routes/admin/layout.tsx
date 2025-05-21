@@ -18,15 +18,21 @@ export async function loader({ request }: Route.LoaderArgs) {
   //   return redirect("/admin/login");
   // }
 
-  // const client = await createAuthenticatedClient(request);
+  const client = await createAuthenticatedClient(request);
   const cookie = request.headers.get("cookie");
   console.log("cookie", cookie);
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
   try {
-    const response = await axios.get(urlRequest.href, {
-      headers: { "Set-Cookie": cookie },
-    });
-    // console.log("response", response.data);
+    const response = await client.get(
+      urlRequest.href,
+      // const response = await axios.get(urlRequest.href, {
+      // withCredentials: true,
+      // headers: { Cookie: request.headers.get("cookie") ?? "" },
+
+      // headers: { "Set-Cookie": cookie },
+      // headers: { "Set-Cookie": cookie },
+    );
+    console.log("response", response.data);
     const data = response.data;
     // if (!data.success) {
     //   await clearAuthCookies();
