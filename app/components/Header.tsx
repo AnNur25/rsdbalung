@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Dialog,
   DialogPanel,
@@ -148,12 +149,12 @@ export default function Header({
           <div className="w-48">
             <SearchBar />
           </div>
-          <a
-            href="/login"
+          <Link
+            to="/humasbalung/login"
             className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium whitespace-nowrap text-white shadow-sm hover:bg-blue-700"
           >
             Masuk/Daftar
-          </a>
+          </Link>
         </div>
       </nav>
       <Dialog

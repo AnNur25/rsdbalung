@@ -129,40 +129,70 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         className="absolute bottom-0 z-10 h-full w-full object-cover"
         alt="Waves"
       /> */}
-      <section className="mt-8 flex flex-col items-center justify-center gap-4 min-md:flex-row">
-        {/* <img
-          src={waveImage}
-          className="absolute z-10 h-full w-full object-cover"
-          alt="Waves"
-        /> */}
-        <div className="flex flex-col items-center ps-6 min-md:items-start">
-          <p className="text-xl text-blue-400 min-md:text-2xl">
-            Selamat Datang di
-          </p>
-          <h1 className="text-4xl font-black text-persian-blue-950 uppercase min-md:text-5xl">
-            RSD Balung
-          </h1>
+      <section className="relative mx-auto mt-24 flex max-w-screen-xl flex-col items-center overflow-hidden px-4 py-8 md:flex-row md:gap-1 md:px-24 md:py-12">
+        {/* Background decoration */}
+        <div className="absolute -top-20 -left-20 z-0 h-1/2 rotate-[15deg] overflow-hidden opacity-10">
+          <img
+            src="../assets/wave-pattern.svg"
+            alt=""
+            className="h-full w-full object-cover"
+            aria-hidden="true"
+          />
         </div>
 
-        <div className="flex h-auto flex-wrap gap-2 p-6">
-          {[
-            { icon: shortcutDokterIcon, name: "Dokter", url: "/dokter" },
-            {
-              icon: shortcutJadwalIcon,
-              name: "Jadwal Dokter",
-              url: "/jadwal-dokter",
-            },
-            { icon: shortcutAduanIcon, name: "Aduan", url: "/aduan" },
-          ].map((item, index) => (
-            <HomeShortcut
-              key={index}
-              icon={item.icon}
-              name={item.name}
-              url={item.url}
+        {/* Staff image */}
+        <div className="z-10 flex w-full justify-center md:w-1/2">
+          <div className="max-w-md overflow-hidden rounded-lg">
+            <img
+              src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=800&q=80"
+              alt="Staff RSD Balung"
+              className="max-h-[450px] w-full object-cover object-center"
             />
-          ))}
+          </div>
+        </div>
+
+        {/* Text content */}
+        <div className="z-10 flex w-full flex-col justify-center gap-4 px-4 text-center md:w-1/2 md:items-start md:text-left">
+          <div>
+            <p className="text-xl text-blue-400 md:text-2xl">
+              Selamat Datang di
+            </p>
+            <h1 className="text-4xl font-black text-persian-blue-950 uppercase md:text-5xl">
+              RSD Balung
+            </h1>
+          </div>
+          <p className="text-sm leading-relaxed text-gray-700 md:text-base">
+            Rumah Sakit Daerah (RSD) Balung merupakan fasilitas pelayanan
+            kesehatan milik Pemerintah Kabupaten Jember yang berlokasi di Jalan
+            Rambipuji No. 19, Balung, Kabupaten Jember, Jawa Timur. Rumah sakit
+            ini berperan penting dalam memberikan pelayanan kesehatan kepada
+            masyarakat di wilayah selatan Jember, dengan berbagai layanan medis,
+            penunjang diagnostik, serta tenaga medis yang profesional dan
+            berkompeten
+          </p>
+
+          {/* icon */}
+          <div className="flex flex-wrap gap-2 p-4">
+            {[
+              { icon: shortcutDokterIcon, name: "Dokter", url: "/dokter" },
+              {
+                icon: shortcutJadwalIcon,
+                name: "Jadwal Dokter",
+                url: "/jadwal-dokter",
+              },
+              { icon: shortcutAduanIcon, name: "Aduan", url: "/aduan" },
+            ].map((item, index) => (
+              <HomeShortcut
+                key={index}
+                icon={item.icon}
+                name={item.name}
+                url={item.url}
+              />
+            ))}
+          </div>
         </div>
       </section>
+
       <section className="my-16 flex flex-col items-center px-4">
         <div className="mb-17 flex flex-col items-center">
           <div className="mb-1 text-yellow-400">!</div>
@@ -189,6 +219,120 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </section>
 
+      <section className="mt-20">
+        <div className="flex w-full flex-col md:flex-row">
+          {/* Blue Panel */}
+          <div className="relative bg-blue-600 p-8 text-white md:w-1/3 md:p-12">
+            <div className="max-w-md">
+              <TextWithRect
+                fontSize="text-xl"
+                fontWeight="font-bold"
+                textColor="text-yellow-300"
+              >
+                POLI MATA
+              </TextWithRect>
+
+              <h2 className="mt-4 mb-6 text-3xl font-bold">
+                Layanan Unggulan Kami
+              </h2>
+
+              <p className="mb-12">
+                Poli Mata di RSD Balung merupakan layanan unggulan yang
+                menghadirkan pelayanan kesehatan mata berkualitas dengan tenaga
+                medis berpengalaman dan peralatan modern.
+              </p>
+
+              {/* Navigation Dots and Arrow */}
+              <div className="absolute bottom-8 left-8 flex items-center md:left-12">
+                <div className="mr-4 flex space-x-2">
+                  <div className="h-1.5 w-6 rounded-full bg-white"></div>
+                  <div className="h-1.5 w-1.5 rounded-full bg-white/60"></div>
+                  <div className="h-1.5 w-1.5 rounded-full bg-white/60"></div>
+                  <div className="h-1.5 w-1.5 rounded-full bg-white/60"></div>
+                </div>
+
+                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9 5L16 12L9 19"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Image Panels */}
+          <div className="flex flex-col md:w-2/3 md:flex-row">
+            <div className="relative h-64 md:h-auto md:w-1/2">
+              <img
+                src="https://images.pexels.com/photos/5752287/pexels-photo-5752287.jpeg"
+                alt="Eye examination with an ophthalmologist"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute right-0 bottom-0 left-0 bg-black/30 p-4 text-center text-white">
+                <p>
+                  Menggunakan Media
+                  <br />
+                  Tes Mata Terbaik
+                </p>
+              </div>
+            </div>
+
+            <div className="relative h-64 md:h-auto md:w-1/2">
+              <img
+                src="https://images.pexels.com/photos/5752281/pexels-photo-5752281.jpeg"
+                alt="Patient using trial lens frame for vision test"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute right-0 bottom-0 left-0 bg-black/30 p-4 text-center text-white">
+                <p>
+                  Menggunakan Media
+                  <br />
+                  Tes Mata Terbaik
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="p-5 lg:p-16">
+        <TextWithRect>BERITA</TextWithRect>
+        <p className="text-justify text-sm text-gray-600 lg:text-lg">
+          Warta RSD Balung: Mengabari, Melayani, Menginspirasi
+        </p>
+        <div className="w-full">
+          {news?.length > 0 ? (
+            <Slider overlapSize={16}>
+              {news.map((berita, index) => (
+                <NewsCard
+                  key={index}
+                  id={berita.id}
+                  title={berita.judul}
+                  description={berita.ringkasan}
+                  image={berita.gambar_sampul}
+                  date={berita.tanggal_dibuat}
+                />
+              ))}
+            </Slider>
+          ) : (
+            <p className="text-gray-500">{data.message}</p>
+          )}
+        </div>
+      </section>
+      
+
+      {/* embed */}
       <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-16">
         <div className="lg:flex-1">
           <TextWithRect>{unggulanData.judul}</TextWithRect>
@@ -221,6 +365,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </section>
 
+      {/* alamat */}
       <section className="flex flex-col items-center bg-gradient-to-b from-dark-blue-900 to-dark-blue-950 p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-16">
         <div className="h-full lg:flex-1">
           <TextWithRect textColor="text-white">INSTAGRAM</TextWithRect>
@@ -238,31 +383,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <div className="bg-sky-0 flex w-full items-center gap-2 overflow-x-auto lg:flex-1">
           <InstagramEmbed url="https://www.instagram.com/p/DILIx7czwOo/" />
           <InstagramEmbed url="https://www.instagram.com/p/DILIx7czwOo/" />
-        </div>
-      </section>
-
-      <section className="p-5 lg:p-16">
-        <TextWithRect>BERITA</TextWithRect>
-        <p className="text-justify text-sm text-gray-600 lg:text-lg">
-          Warta RSD Balung: Mengabari, Melayani, Menginspirasi
-        </p>
-        <div className="w-full">
-          {news?.length > 0 ? (
-            <Slider overlapSize={16}>
-              {news.map((berita, index) => (
-                <NewsCard
-                  key={index}
-                  id={berita.id}
-                  title={berita.judul}
-                  description={berita.ringkasan}
-                  image={berita.gambar_sampul}
-                  date={berita.tanggal_dibuat}
-                />
-              ))}
-            </Slider>
-          ) : (
-            <p className="text-gray-500">{data.message}</p>
-          )}
         </div>
       </section>
 

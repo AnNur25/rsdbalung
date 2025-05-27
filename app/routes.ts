@@ -24,7 +24,7 @@ export default [
   route("reset-password", "routes/admin/reset.tsx"),
 
   // Admin routes
-  ...prefix("humasbalung", [
+  ...prefix("humasbalung", [ //humasbalung/login
     route("login", "routes/admin/login.tsx"),
     route("logout", "routes/admin/logout.tsx"),
     layout("routes/admin/layout.tsx", [
