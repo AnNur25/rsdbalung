@@ -1,23 +1,12 @@
-import NewsCard from "~/components/NewsCard";
-import banner from "~/assets/rsdbalung.jpeg";
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import NewsBanner from "~/components/NewsBanner";
-// import type { NewsApiResponse } from "./news";
 import type { News } from "~/models/News";
 import "~/lists.css";
 import HtmlParse from "~/components/HtmlParse";
-// export async function loader({ params }: Route.LoaderArgs) {
-//   return { id: params.id };
-// }
-
-// export async function action({ params }: Route.ActionArgs) {
-//   return { id: params.id };
-// }
-
-// export default function News({ loaderData }: Route.ComponentProps) {
-//   return <h1>News {loaderData?.id ?? "not found"}</h1>;
-// }
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import TextWithRect from "~/components/TextWithRect";
 interface NewsDetail {
   id: string;
   judul: string;
@@ -45,6 +34,21 @@ interface NewsDetailApiResponse {
   data: NewsDetail;
 }
 
+//komentar
+interface Komentar {
+  id: string;
+  nama: string;
+  no_wa: string;
+  isi_komentar: string;
+  tanggal_komentar: string;
+  replies: Komentar[];
+}
+
+interface KomentarApiResponse {
+  success: boolean;
+  data: Komentar[];
+}
+
 export async function loader({
   params,
 }: {
@@ -56,7 +60,7 @@ export async function loader({
     const response = await axios.get<NewsDetailApiResponse>(
       `${import.meta.env.VITE_API_URL}/berita/${id}`,
     );
-    ``;
+
     const data = response.data;
 
     if (!data.success) {
@@ -82,8 +86,10 @@ export async function loader({
     );
   }
 }
+
 export default function NewsDetail() {
   const response = useLoaderData() as NewsDetailAndAll;
+  const { id } = useParams<{ id: string }>();
   const {
     judul,
     ringkasan,
@@ -94,8 +100,112 @@ export default function NewsDetail() {
     berita: news,
   } = response;
   // const cleanHtml = DOMPurify.sanitize(isi);
+  console.log("Response detail:", response);
 
-  const tanggal = tanggal_dibuat.split(" pukul")[0];
+  const tanggal = tanggal_dibuat
+    ? tanggal_dibuat.split(" pukul")[0]
+    : "Tanggal tidak tersedia";
+
+  // State komentar
+  const [komentar, setKomentar] = useState<Komentar[]>([]);
+  const [loadingKomentar, setLoadingKomentar] = useState(false);
+
+  // State form komentar
+  const [nama, setNama] = useState("");
+  const [noWa, setNoWa] = useState("");
+  const [isiKomentar, setIsiKomentar] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  // Fungsi fetch komentar
+  async function fetchKomentar() {
+    setLoadingKomentar(true);
+    try {
+      const res = await axios.get<KomentarApiResponse>(
+        `https://rs-balung-cp.vercel.app/api/v1/berita/${id}/komentar/visible`,
+      );
+      if (res.data.success) {
+        setKomentar(res.data.data);
+      }
+    } catch (error) {
+      console.error("Gagal fetch komentar:", error);
+    } finally {
+      setLoadingKomentar(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchKomentar();
+  }, [id]);
+
+  function RenderKomentarList({ komentarList }: { komentarList: Komentar[] }) {
+    return (
+      <ul>
+        {komentarList.map((item) => (
+          <li
+            key={item.id}
+            className="mb-4 rounded-xl border border-gray-300 bg-white p-6 shadow-md"
+          >
+            <div className="flex items-center justify-between">
+              <p className="font-semibold text-green-700">{item.nama}</p>
+              <p className="text-sm text-gray-500">
+                {item.tanggal_komentar?.split(" pukul")[0] ||
+                  "Tanggal tidak tersedia"}
+              </p>
+            </div>
+            <p className="mt-2 text-gray-800">{item.isi_komentar}</p>
+
+            {/* Render replies jika ada */}
+            {item.replies && item.replies.length > 0 && (
+              <div className="mt-4 ml-6 border-l-2 border-gray-300 pl-4">
+                <RenderKomentarList komentarList={item.replies} />
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  // Fungsi submit komentar
+  async function handleSubmitKomentar(e: React.FormEvent) {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const res = await axios.post(
+        `https://rs-balung-cp.vercel.app/api/v1/berita/${id}/komentar`,
+        {
+          nama,
+          no_wa: noWa,
+          isi_komentar: isiKomentar,
+        },
+      );
+
+      // DEBUG: tampilkan isi response dari server
+      console.log("Response submit komentar:", res.data);
+
+      if (res.data.success) {
+        // Reset form
+        setNama("");
+        setNoWa("");
+        setIsiKomentar("");
+        // Refresh komentar
+        fetchKomentar();
+      } else {
+        // Kalau ada field success tapi false
+        alert("Gagal mengirim komentar (respon gagal)");
+        console.warn("Response success=false:", res.data);
+      }
+    } catch (error: any) {
+      // DEBUG: tampilkan error detail
+      console.error(
+        "Error submit komentar:",
+        error.response?.data || error.message,
+      );
+      alert("Gagal mengirim komentar");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <main>
@@ -135,14 +245,6 @@ export default function NewsDetail() {
             {/* Berita lainnya */}
             {news.length > 0 ? (
               news.slice(0, 5).map((berita, index) => (
-                // <NewsCard
-                //   key={index}
-                //   id={berita.id}
-                //   title={berita.judul}
-                //   description={berita.isi}
-                //   image={berita.gambar_sampul}
-                //   date={berita.tanggal_dibuat}
-                // />
                 <article className="relative flex items-center gap-2">
                   <img
                     src={berita.gambar_sampul}
@@ -168,6 +270,77 @@ export default function NewsDetail() {
             )}
           </div>
         </aside>
+      </section>
+
+      {/* form komentar */}
+      <section className="px-8 py-6 lg:max-w-3/4">
+        <div className="ms-8">
+          <TextWithRect>Silahkan tulis Komentar Anda di bawah ini</TextWithRect>
+        </div>
+
+        <form
+          onSubmit={handleSubmitKomentar}
+          className="m-4 flex max-w-2xl flex-col gap-6 rounded-xl border border-gray-300 p-8 shadow-lg"
+        >
+          <div className="flex flex-col gap-2">
+            <label htmlFor="nama" className="text-md font-semibold">
+              Nama <span className="text-red-600">*</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Masukkan nama Anda"
+              value={nama}
+              onChange={(e) => setNama(e.target.value)}
+              required
+              className="rounded-lg border border-gray-400 px-4 py-2 outline-gray-300 focus:outline-green-600"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="no_wa" className="text-md font-semibold">
+              No. Whatsapp <span className="text-red-600">*</span>
+            </label>
+            <input
+              type="tel"
+              placeholder="cth. 628xxxxxxxxxx"
+              value={noWa}
+              onChange={(e) => setNoWa(e.target.value)}
+              required
+              className="rounded-lg border border-gray-400 px-4 py-2 outline-gray-300 focus:outline-green-600"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="isi_komentar" className="text-md font-semibold">
+              Komentar <span className="text-red-600">*</span>
+            </label>
+            <textarea
+              placeholder="Tulis komentar Anda"
+              value={isiKomentar}
+              onChange={(e) => setIsiKomentar(e.target.value)}
+              required
+              rows={4}
+              className="min-h-40 rounded-lg border border-gray-400 px-4 py-2 outline-gray-300 focus:outline-green-600"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-fit rounded bg-green-600 px-8 py-2 text-white disabled:opacity-50"
+          >
+            {submitting ? "Mengirim..." : "Kirim Komentar"}
+          </button>
+        </form>
+
+        {/* List komentar */}
+        {loadingKomentar ? (
+          <p className="text-gray-500">Memuat komentar...</p>
+        ) : komentar.length === 0 ? (
+          <p className="text-gray-600">Belum ada komentar.</p>
+        ) : (
+          <RenderKomentarList komentarList={komentar} />
+        )}
       </section>
     </main>
   );

@@ -16,6 +16,8 @@
     "@heroicons/react": "^2.2.0",
     "@react-router/node": "^7.3.0",
     "@react-router/serve": "^7.3.0",
+    "@remix-run/node": "^2.16.7",
+    "@remix-run/react": "^2.16.7",
     "@tinymce/tinymce-react": "^6.1.0",
     "axios": "^1.8.3",
     "dompurify": "^3.2.5",
