@@ -26,18 +26,26 @@ import { NavLink, redirect, useNavigate } from "react-router";
 import ConfirmDialog from "./ConfirmDialog";
 
 const navigation = [
-  { name: "Beranda", href: "/admin/home", icon: HomeIcon },
-  { name: "Akun", href: "/admin/akun", icon: UserIcon },
-  { name: "Berita", href: "/admin/berita", icon: NewspaperIcon },
-  { name: "Layanan RS", href: "/admin/pelayanan", icon: BuildingOffice2Icon },
-  { name: "Daftar Dokter", href: "/admin/dokter", icon: UserGroupIcon },
-  { name: "Poli/Klinik", href: "/admin/poli", icon: BuildingLibraryIcon },
+  { name: "Beranda", href: "/humasbalung/home", icon: HomeIcon },
+  { name: "Akun", href: "/humasbalung/akun", icon: UserIcon },
+  { name: "Berita", href: "/humasbalung/berita", icon: NewspaperIcon },
+  {
+    name: "Layanan RS",
+    href: "/humasbalung/pelayanan",
+    icon: BuildingOffice2Icon,
+  },
+  { name: "Daftar Dokter", href: "/humasbalung/dokter", icon: UserGroupIcon },
+  { name: "Poli/Klinik", href: "/humasbalung/poli", icon: BuildingLibraryIcon },
   {
     name: "Jadwal Praktek",
-    href: "/admin/jadwal-dokter",
+    href: "/humasbalung/jadwal-dokter",
     icon: CalendarDaysIcon,
   },
-  { name: "Aduan", href: "/admin/aduan", icon: ChatBubbleBottomCenterTextIcon },
+  {
+    name: "Aduan",
+    href: "/humasbalung/aduan",
+    icon: ChatBubbleBottomCenterTextIcon,
+  },
 ];
 
 export default function AdminSidebar() {
@@ -45,7 +53,7 @@ export default function AdminSidebar() {
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const navigate = useNavigate();
   const handleLogout = () => {
-    navigate("/admin/logout");
+    navigate("/");
     console.log("Logout");
     setLogoutDialogOpen(false);
   };
