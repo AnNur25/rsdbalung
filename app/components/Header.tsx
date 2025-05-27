@@ -150,7 +150,7 @@ export default function Header({
             <SearchBar />
           </div>
           <Link
-            to="/humasbalung/login"
+            to="/login"
             className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium whitespace-nowrap text-white shadow-sm hover:bg-blue-700"
           >
             Masuk/Daftar

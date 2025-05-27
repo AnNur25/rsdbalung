@@ -124,11 +124,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <Banner bannersSrc={bannerList} />
-      {/* <img
-        src={waveImage}
-        className="absolute bottom-0 z-10 h-full w-full object-cover"
-        alt="Waves"
-      /> */}
+     
       <section className="relative mx-auto mt-24 flex max-w-screen-xl flex-col items-center overflow-hidden px-4 py-8 md:flex-row md:gap-1 md:px-24 md:py-12">
         {/* Background decoration */}
         <div className="absolute -top-20 -left-20 z-0 h-1/2 rotate-[15deg] overflow-hidden opacity-10">

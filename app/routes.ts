@@ -21,11 +21,11 @@ export default [
     route("pelayanan/:id", "routes/layanan-detail.tsx"),
     route("aduan", "routes/complaint.tsx"),
   ]),
+  route("login", "routes/login.tsx"),
   route("reset-password", "routes/admin/reset.tsx"),
 
   // Admin routes
   ...prefix("humasbalung", [ //humasbalung/login
-    route("login", "routes/admin/login.tsx"),
     route("logout", "routes/admin/logout.tsx"),
     layout("routes/admin/layout.tsx", [
       index("routes/admin/index.tsx"),
