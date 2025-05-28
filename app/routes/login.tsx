@@ -1,18 +1,20 @@
 import type { Route } from "./+types/login";
-import type { LoginResponse } from "~/models/auth";
 import loginImage from "~/assets/loginimage.jpg";
+import { data, Form, redirect, useActionData, useFetcher } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import { setAuthCookies } from "~/utils/auth-cookie";
 import redirectWithCookie from "~/utils/redirectWithCookie";
-import { useFetcher } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
   console.log("load cookie", request.headers.get("Cookie"));
 }
 
 export async function action({ request }: Route.ActionArgs) {
+  console.log("action");
+
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -24,26 +26,26 @@ export async function action({ request }: Route.ActionArgs) {
     const data = response.data;
 
     if (data.success) {
-      const role = data.data?.user?.role || "USER";
       const setCookieHeader = response.headers["set-cookie"];
       const cookie = Array.isArray(setCookieHeader)
         ? setCookieHeader.join("; ")
         : setCookieHeader || "";
 
-      let redirectPath = "/";
+      
+      const role = data.data.user.role;
+
+    
+      let redirectUrl = "/";
       if (role === "ADMIN") {
-        redirectPath = "/humasbalung/home";
+        redirectUrl = "/humasbalung/home";
+      } else if (role === "USER") {
+        redirectUrl = "/";
       }
 
-      return redirectWithCookie(redirectPath, cookie);
-    } else {
-      return { success: false, message: data.message || "Login gagal" };
+      return redirectWithCookie(redirectUrl, setCookieHeader ?? "");
     }
   } catch (error: any) {
-    return {
-      success: false,
-      message: error?.response?.data?.message || "Terjadi kesalahan server",
-    };
+    console.error("Login error", error);
   }
 }
 
@@ -133,6 +135,18 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                   </div>
                 </div>
                 <div className="mt-2">
+                  {/* <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    autoComplete="current-password"
+                    className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 ${
+                      fetcherData.message && !fetcherData.success
+                        ? "outline-red-500 focus:outline-red-500"
+                        : "outline-gray-300 focus:outline-blue-600"
+                    } placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6`}
+                  /> */}
                   <div className="relative">
                     <input
                       id="password"
@@ -172,29 +186,6 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
 
               <button className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:cursor-pointer hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                 Masuk
-              </button>
-              <div className="relative mt-6">
-                <div
-                  className="absolute inset-0 flex items-center"
-                  aria-hidden="true"
-                >
-                  <div className="w-full border-t border-gray-300" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="bg-white px-2 text-gray-500">atau</span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-600 focus:ring-offset-1 focus:outline-none"
-              >
-                <img
-                  src="https://www.svgrepo.com/show/475656/google-color.svg"
-                  alt="Google logo"
-                  className="h-5 w-5"
-                />
-                Masuk dengan Google
               </button>
             </fetcher.Form>
           </div>

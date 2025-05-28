@@ -149,39 +149,6 @@ export default function AdminSidebar() {
         cancelLabel="Batal"
         confirmLabel="Keluar"
       />
-      {/* <Dialog
-        open={logoutDialogOpen}
-        onClose={() => setLogoutDialogOpen(false)}
-        className="relative z-50"
-      >
-        <div className="fixed inset-0 bg-gray-600/50" />
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg">
-            <DialogTitle className="text-lg font-bold text-gray-900">
-              Konfirmasi Keluar
-            </DialogTitle>
-            <Description className="mt-2 text-sm text-gray-600">
-              Apakah Anda yakin ingin keluar?
-            </Description>
-            <div className="mt-4 flex gap-2">
-              <button
-                onClick={() => setLogoutDialogOpen(false)}
-                className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Batal
-              </button>
-              <button
-                onClick={handleLogout}
-                className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-              >
-                Keluar
-              </button>
-            </div>
-          </DialogPanel>
-        </div>
-      </Dialog> */}
-
-      {/* Offset for content */}
       <div className="lg:ml-54" />
     </>
   );
