@@ -23,6 +23,7 @@ export default [
     route("aduan", "routes/complaint.tsx"),
   ]),
   route("login", "routes/login.tsx"),
+  route("register", "routes/register.tsx"),
   route("reset-password", "routes/admin/reset.tsx"),
 
   // Admin routes
