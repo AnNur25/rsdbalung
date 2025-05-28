@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "postinstall": "node ./postinstall.js",
+    "prebuild": "npm install --legacy-peer-deps",
     "build": "react-router build",
     "dev": "react-router dev",
     "host": "react-router dev --host",
