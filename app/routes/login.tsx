@@ -1,4 +1,5 @@
 import type { Route } from "./+types/login";
+
 import loginImage from "~/assets/loginimage.jpg";
 import { data, Form, redirect, useActionData, useFetcher } from "react-router";
 import axios from "axios";
@@ -7,14 +8,14 @@ import { useEffect, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { setAuthCookies } from "~/utils/auth-cookie";
 import redirectWithCookie from "~/utils/redirectWithCookie";
+import { FcGoogle } from "react-icons/fc";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 export async function loader({ request }: Route.LoaderArgs) {
   console.log("load cookie", request.headers.get("Cookie"));
 }
 
 export async function action({ request }: Route.ActionArgs) {
-  console.log("action");
-
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -27,14 +28,8 @@ export async function action({ request }: Route.ActionArgs) {
 
     if (data.success) {
       const setCookieHeader = response.headers["set-cookie"];
-      const cookie = Array.isArray(setCookieHeader)
-        ? setCookieHeader.join("; ")
-        : setCookieHeader || "";
-
-      
       const role = data.data.user.role;
 
-    
       let redirectUrl = "/";
       if (role === "ADMIN") {
         redirectUrl = "/humasbalung/home";
@@ -50,18 +45,47 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
+  const [showPassword, setShowPassword] = useState(false);
+
   useEffect(() => {
-    if (fetcherData.message) {
-      if (fetcherData.success) {
-        toast.success(fetcherData.message);
-      } else {
-        toast.error(fetcherData.message);
+    async function setCookieFromToken() {
+      const aksesToken = searchParams.get("aksesToken");
+      const refreshToken = searchParams.get("refreshToken");
+
+      if (!aksesToken || !refreshToken) return;
+
+      try {
+        await axios.post(
+          `${import.meta.env.VITE_API_URL}/auth/set-cookie`,
+          { aksesToken, refreshToken },
+          { withCredentials: true },
+        );
+
+        // Hapus token dari URL
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname,
+        );
+
+        toast.success("Login berhasil");
+
+        window.location.replace("/");
+      } catch (error) {
+        toast.error("Gagal set cookie login");
+        console.error(error);
       }
     }
-  }, [fetcherData]);
-  const [showPassword, setShowPassword] = useState(false);
+
+    if (searchParams.get("aksesToken") && searchParams.get("refreshToken")) {
+      setCookieFromToken();
+    }
+  }, [searchParams]);
+
   return (
     <>
       <div className="flex min-h-screen items-center justify-center">
@@ -188,6 +212,17 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                 Masuk
               </button>
             </fetcher.Form>
+            {/* Tombol login via Google */}
+            <button
+              type="button"
+              onClick={() => {
+                window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+              }}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none"
+            >
+              <FcGoogle className="h-5 w-5" />
+              <span>Masuk dengan Google</span>
+            </button>
           </div>
         </div>
       </div>
