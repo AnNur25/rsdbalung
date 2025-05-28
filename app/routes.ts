@@ -13,6 +13,7 @@ export default [
     route("api/v1", "routes/testoauth.tsx"),
     index("routes/home.tsx"),
     route("profile", "routes/profile.tsx"),
+    route("account", "routes/account.tsx"),
     route("berita/", "routes/news.tsx"),
     route("dokter", "routes/doctors.tsx"),
     route("dokter/:id", "routes/doctor-detail.tsx"),
