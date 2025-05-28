@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  Description,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
+import { Dialog, DialogPanel } from "@headlessui/react";
 import {
   Bars3Icon,
   XMarkIcon,
@@ -22,7 +17,7 @@ import {
 } from "@heroicons/react/24/solid";
 import logo from "~/assets/logo-text-white.png";
 import logoBlack from "~/assets/logo-black.png";
-import { NavLink, redirect, useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import ConfirmDialog from "./ConfirmDialog";
 
 const navigation = [
@@ -52,10 +47,20 @@ export default function AdminSidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const navigate = useNavigate();
-  const handleLogout = () => {
-    navigate("/");
-    console.log("Logout");
-    setLogoutDialogOpen(false);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:3000/api/v1/auth/logout", {
+        method: "POST",
+        credentials: "include", // penting supaya cookie juga dikirim & dihapus
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Bisa tambahkan notifikasi error di sini jika mau
+    } finally {
+      setLogoutDialogOpen(false);
+      navigate("/"); // redirect ke halaman utama
+    }
   };
 
   return (
@@ -84,7 +89,7 @@ export default function AdminSidebar() {
                 onClick={() => setSidebarOpen(false)}
                 key={item.name}
                 to={item.href}
-                className={({ isActive }: { isActive: boolean }) =>
+                className={({ isActive }) =>
                   `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
                     isActive
                       ? "bg-blue-100 text-blue-800"
@@ -138,17 +143,18 @@ export default function AdminSidebar() {
           Keluar
         </button>
       </aside>
+
       {/* Logout Confirmation Dialog */}
       <ConfirmDialog
         isOpen={logoutDialogOpen}
         onClose={() => setLogoutDialogOpen(false)}
         cancelOnClick={() => setLogoutDialogOpen(false)}
         confirmOnClick={handleLogout}
-        // title="Konfirmasi Keluar"
         description="Apakah Anda yakin ingin keluar?"
         cancelLabel="Batal"
         confirmLabel="Keluar"
       />
+
       <div className="lg:ml-54" />
     </>
   );
