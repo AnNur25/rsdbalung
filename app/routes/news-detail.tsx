@@ -7,6 +7,8 @@ import HtmlParse from "~/components/HtmlParse";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import TextWithRect from "~/components/TextWithRect";
+import ReCAPTCHA from "react-google-recaptcha";
+const RECAPTCHA_SITE_KEY = "6LcgaUwrAAAAAJwD5ZwcEKVln37VJXMMkdelbVdS";
 interface NewsDetail {
   id: string;
   judul: string;
@@ -89,6 +91,7 @@ export async function loader({
 
 export default function NewsDetail() {
   const response = useLoaderData() as NewsDetailAndAll;
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const { id } = useParams<{ id: string }>();
   const {
     judul,
@@ -121,7 +124,7 @@ export default function NewsDetail() {
     setLoadingKomentar(true);
     try {
       const res = await axios.get<KomentarApiResponse>(
-        `https://rs-balung-cp.vercel.app/api/v1/berita/${id}/komentar/visible`,
+        `${import.meta.env.VITE_API_URL}/berita/${id}/komentar/visible`,
       );
       if (res.data.success) {
         setKomentar(res.data.data);
@@ -169,38 +172,34 @@ export default function NewsDetail() {
   // Fungsi submit komentar
   async function handleSubmitKomentar(e: React.FormEvent) {
     e.preventDefault();
+
+    if (!recaptchaToken) {
+      alert("Tolong centang reCAPTCHA terlebih dahulu.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const res = await axios.post(
-        `https://rs-balung-cp.vercel.app/api/v1/berita/${id}/komentar`,
+        `${import.meta.env.VITE_API_URL}/berita/${id}/komentar`,
         {
           nama,
           no_wa: noWa,
           isi_komentar: isiKomentar,
+          recaptcha_token: recaptchaToken, // kirim token ke backend
         },
       );
 
-      // DEBUG: tampilkan isi response dari server
-      console.log("Response submit komentar:", res.data);
-
       if (res.data.success) {
-        // Reset form
         setNama("");
         setNoWa("");
         setIsiKomentar("");
-        // Refresh komentar
+        setRecaptchaToken(null);
         fetchKomentar();
       } else {
-        // Kalau ada field success tapi false
-        alert("Gagal mengirim komentar (respon gagal)");
-        console.warn("Response success=false:", res.data);
+        alert("Gagal mengirim komentar");
       }
-    } catch (error: any) {
-      // DEBUG: tampilkan error detail
-      console.error(
-        "Error submit komentar:",
-        error.response?.data || error.message,
-      );
+    } catch (error) {
       alert("Gagal mengirim komentar");
     } finally {
       setSubmitting(false);
@@ -323,6 +322,21 @@ export default function NewsDetail() {
               className="min-h-40 rounded-lg border border-gray-400 px-4 py-2 outline-gray-300 focus:outline-green-600"
             />
           </div>
+
+          <ReCAPTCHA
+            sitekey={RECAPTCHA_SITE_KEY}
+            onChange={(token) => {
+              console.log("reCAPTCHA token:", token);
+              setRecaptchaToken(token);
+            }}
+            onExpired={() => {
+              console.warn("reCAPTCHA expired");
+              setRecaptchaToken(null);
+            }}
+            onErrored={() => {
+              console.error("reCAPTCHA failed to load or verify");
+            }}
+          />
 
           <button
             type="submit"
