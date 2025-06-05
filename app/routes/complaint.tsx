@@ -1,17 +1,18 @@
 import { Form, useFetcher } from "react-router";
 import axios from "axios";
+import { useEffect, useRef, useState } from "react"; // Tambahkan useState
+import toast from "react-hot-toast";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import type { Route } from "./+types/complaint";
 import { handleLoader } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
-
 import { mapAdminResponseToCard } from "~/utils/mapTypes";
 import type { ComplaintModel } from "~/models/Complaint";
-
 import MessageCard from "~/components/MessageCard";
 import TextWithRect from "~/components/TextWithRect";
-import { useEffect, useRef } from "react";
-import toast from "react-hot-toast";
+
+const RECAPTCHA_SITE_KEY = "6LcgaUwrAAAAAJwD5ZwcEKVln37VJXMMkdelbVdS";
 
 export async function loader() {
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/`);
@@ -33,15 +34,34 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
 
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
+
+  // State untuk reCAPTCHA - TAMBAHAN BARU
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+
   useEffect(() => {
     if (fetcherData.message) {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
+        // Reset reCAPTCHA setelah berhasil submit - TAMBAHAN BARU
+        setRecaptchaToken(null);
+        if (recaptchaRef.current) {
+          recaptchaRef.current.reset();
+        }
       } else {
         toast.error(fetcherData.message);
       }
     }
   }, [fetcherData]);
+
+  // Handler untuk submit form dengan validasi reCAPTCHA - TAMBAHAN BARU
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (!recaptchaToken) {
+      e.preventDefault();
+      toast.error("Tolong centang reCAPTCHA terlebih dahulu.");
+      return;
+    }
+  };
 
   return (
     <>
@@ -63,6 +83,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
         <div className="flex items-center max-md:flex-col">
           <fetcher.Form
             method="post"
+            onSubmit={handleSubmit} // TAMBAHAN BARU
             className="m-4 flex flex-1 flex-col gap-4 rounded-xl border border-gray-300 p-8 shadow-lg"
           >
             <div className="flex flex-col gap-2">
@@ -72,9 +93,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
               <input
                 onInput={(e) => {
                   const input = e.currentTarget;
-                  // Prevent leading zeros
                   if (input.value === " " || input.value === "0") {
-                    // Disallow "0" as the only input
                     input.value = "";
                   }
                 }}
@@ -87,16 +106,8 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 } rounded-lg border border-gray-400 px-4 py-2`}
                 name="nama"
                 id="nama"
+                required
               />
-              {fetcherData.message && (
-                <p
-                  className={`text-sm ${
-                    fetcherData.success ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {fetcherData.message}
-                </p>
-              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -104,19 +115,13 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 No. Whatsapp <span className="text-red-600">*</span>
               </label>
               <input
-                pattern="[1-9]\d*|0" // for HTML5 validation
+                pattern="[1-9]\d*|0"
                 onInput={(e) => {
                   const input = e.currentTarget;
-                  // Prevent leading zeros
                   if (input.value === "0") {
-                    // Disallow "0" as the only input
                     input.value = "";
                   }
-
-                  // Replace leading zeros with 62
                   input.value = input.value.replace(/^0+(?!$)/, "62");
-
-                  // Remove non-digit characters
                   input.value = input.value.replace(/[^\d]/g, "");
                 }}
                 type="text"
@@ -129,16 +134,8 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 } rounded-lg border border-gray-400 px-4 py-2`}
                 name="no_wa"
                 id="no_wa"
+                required
               />
-              {fetcherData.message && (
-                <p
-                  className={`text-sm ${
-                    fetcherData.success ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {fetcherData.message}
-                </p>
-              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -162,19 +159,39 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 name="message"
                 id="message"
               />
-              {fetcherData.message && (
-                <p
-                  className={`text-sm ${
-                    fetcherData.success ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {fetcherData.message}
-                </p>
-              )}
             </div>
 
-            <button className="rounded bg-green-600 px-8 py-2 text-white min-md:w-min">
-              Kirim
+            {/* TAMBAHAN BARU - Komponen reCAPTCHA */}
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={RECAPTCHA_SITE_KEY}
+              onChange={(token) => {
+                console.log("reCAPTCHA token:", token);
+                setRecaptchaToken(token);
+              }}
+              onExpired={() => {
+                console.warn("reCAPTCHA expired");
+                setRecaptchaToken(null);
+              }}
+              onErrored={() => {
+                console.error("reCAPTCHA failed to load or verify");
+                setRecaptchaToken(null);
+              }}
+            />
+
+            {/* Hidden input untuk mengirim recaptcha token */}
+            <input
+              type="hidden"
+              name="recaptcha_token"
+              value={recaptchaToken || ""}
+            />
+
+            <button
+              type="submit"
+              disabled={fetcher.state === "submitting"} // TAMBAHAN BARU
+              className="rounded bg-green-600 px-8 py-2 text-white disabled:opacity-50 min-md:w-min"
+            >
+              {fetcher.state === "submitting" ? "Mengirim..." : "Kirim"}
             </button>
           </fetcher.Form>
 

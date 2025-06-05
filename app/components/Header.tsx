@@ -37,7 +37,7 @@ function LoginStatus() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/v1/profil", {
+    fetch(`${import.meta.env.VITE_API_URL}/profil`, {
       method: "GET",
       credentials: "include",
     })
@@ -64,7 +64,7 @@ function LoginStatus() {
   }, []);
 
   const handleLogout = async () => {
-    await fetch("http://localhost:3000/api/v1/auth/logout", {
+    await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
       method: "POST",
       credentials: "include",
     }).catch(console.error);
