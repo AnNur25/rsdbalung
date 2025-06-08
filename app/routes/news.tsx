@@ -21,7 +21,7 @@ export async function loader({
   const keyword = url.searchParams.get("keyword");
 
   if (keyword) {
-    urlRequest.pathname = "/berita/search";
+    urlRequest.pathname = "/api/v1/berita/search";
     urlRequest.searchParams.set("keyword", keyword);
   }
   urlRequest.searchParams.set("page", page);

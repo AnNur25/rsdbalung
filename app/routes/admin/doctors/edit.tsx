@@ -7,6 +7,7 @@ import { handleLoader } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
 import type { Poli } from "~/models/Poli";
 import toast from "react-hot-toast";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const doctorId = params.id;
@@ -28,6 +29,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
   const formData = await request.formData();
   const defaultImageUrl = formData.get("gambar") as string;
   console.log("formData", formData);
@@ -48,7 +50,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     `${import.meta.env.VITE_API_URL}/dokter/${params.id}`,
   );
   return handleAction(() =>
-    axios.put(urlRequest.href, formData, {
+    client.put(urlRequest.href, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     }),
   );
@@ -97,7 +99,7 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
         setTimeout(() => {
-          navigate("/admin/dokter");
+          navigate("/humasbalung/dokter");
         }, 2000);
       } else {
         toast.error(fetcherData.message);
@@ -318,7 +320,7 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/admin/dokter")}
+              onClick={() => navigate("/humasbalung/dokter")}
               className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
             >
               Batal

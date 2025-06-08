@@ -25,7 +25,7 @@ export async function loader({
   const keyword = url.searchParams.get("keyword");
 
   if (keyword) {
-    urlRequest.pathname = "/dokter/search";
+    urlRequest.pathname = "/api/v1/dokter/search";
     urlRequest.searchParams.set("keyword", keyword);
   }
 

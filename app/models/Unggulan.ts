@@ -2,7 +2,7 @@ export interface Unggulan {
   id_layanan_unggulan: string;
   judul: string;
   deskripsi: string;
-  gambarCaptions: ImageCaption[];
+  gambar_captions: ImageCaption[];
   existingImages?: ExistingImage[] | [];
 }
 

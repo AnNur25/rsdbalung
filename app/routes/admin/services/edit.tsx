@@ -7,6 +7,7 @@ import type { PelayananDetail } from "~/models/Pelayanan";
 import { useEffect, useRef, useState } from "react";
 import formatDigits from "~/utils/formatDigits";
 import toast from "react-hot-toast";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const urlRequest = new URL(
@@ -16,13 +17,15 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const urlRequest = new URL(
     `${import.meta.env.VITE_API_URL}/pelayanan/${params.id}`,
   );
 
   const formData = await request.formData();
   return handleAction(() =>
-    axios.put(urlRequest.href, {
+    client.put(urlRequest.href, {
       ...Object.fromEntries(formData.entries()),
       Biaya: parseInt(formData.get("Biaya") as string, 10),
     }),
@@ -64,7 +67,7 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
         setTimeout(() => {
-          navigate("/admin/pelayanan");
+          navigate("/humasbalung/pelayanan");
         }, 2000);
       } else {
         toast.error(fetcherData.message);
@@ -276,7 +279,7 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/admin/pelayanan")}
+              onClick={() => navigate("/humasbalung/pelayanan")}
               className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
             >
               Batal

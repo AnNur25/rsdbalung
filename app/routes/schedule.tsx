@@ -33,11 +33,11 @@ export async function loader({
   const poliRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
 
   if (poli) {
-    urlRequest.pathname = "/jadwal-dokter/search";
+    urlRequest.pathname = "/api/v1/jadwal-dokter/search";
     urlRequest.searchParams.set("id_poli", poli);
   }
   if (date) {
-    urlRequest.pathname = "/jadwal-dokter/search";
+    urlRequest.pathname = "/api/v1/jadwal-dokter/search";
     urlRequest.searchParams.set("tanggal", date);
   }
   urlRequest.searchParams.set("page", page);

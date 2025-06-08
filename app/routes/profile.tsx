@@ -2,6 +2,7 @@ import type { Route } from "./+types/profile";
 import logo from "~/assets/logoonly.png";
 import strukturImg from "~/assets/struktur-organisasi.png";
 import Footer from "~/components/Footer";
+import PageBanner from "~/components/PageBanner";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -16,6 +17,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Profile() {
   return (
     <>
+      <PageBanner banner={strukturImg} title="Struktur Organisasi" />
       <main className="mx-auto lg:max-w-3/4">
         <div className="mx-auto my-4 w-fit rounded-full bg-white p-8">
           <img
@@ -42,7 +44,7 @@ export default function Profile() {
           <h2 className="rounded-t-md bg-sky-700 p-2 text-2xl font-bold text-white">
             Sejarah
           </h2>
-          <article className="p-4 text-justify flex-col gap-2 flex">
+          <article className="flex flex-col gap-2 p-4 text-justify">
             <p>
               Rumah Sakit Daerah (RSD) Balung diresmikan sebagai Rumah Sakit
               Kelas C oleh Bupati Jember pada tanggal 2 Januari 2002. RSD Balung
@@ -88,7 +90,7 @@ export default function Profile() {
               menetapkan Nomer Kode Rumah Sakit untuk Rumah Sakit Daerah Balung.
               Nomor : IR.01.01.1.1.2941 sebagai berikut :
             </p>
-            <ol className="list-decimal ms-4">
+            <ol className="ms-4 list-decimal">
               <li>Nama: RSUD Balung</li>
               <li>Alamat: Kabupaten Jember Jawa Timur</li>
               <li>

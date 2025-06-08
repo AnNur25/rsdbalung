@@ -13,6 +13,8 @@ import {
 import {
   Bars3Icon,
   ChevronDownIcon,
+  MagnifyingGlassIcon,
+  UserCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 import "~/scroll.css";
@@ -20,6 +22,7 @@ import logo from "~/assets/logo.png";
 import whatsappIcon from "~/assets/whatsappWhite.svg";
 import phoneIcon from "~/assets/call.svg";
 import type { Pelayanan } from "~/models/Pelayanan";
+import HeaderSearch from "./HeaderSearch";
 
 interface PelayananResponse {
   success: boolean;
@@ -37,9 +40,12 @@ const contacts = [
 
 export default function Header({
   pelayanan = [],
+  isLogin = false,
 }: {
   pelayanan?: Pelayanan[];
+  isLogin?: boolean;
 }) {
+  const redirectUrl = "http://localhost:5173/google";
   const navigation = [
     { name: "Beranda", href: "/" },
     { name: "Profil", href: "/profile" },
@@ -67,7 +73,7 @@ export default function Header({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const loopedContacts = [...contacts, ...contacts, ...contacts, ...contacts];
 
-return (
+  return (
     <header className="sticky inset-x-0 top-0 z-50 bg-white shadow-md">
       <div className="flex w-full overflow-x-hidden bg-dark-blue-900 p-2 text-white">
         <div className="flex gap-4">
@@ -112,10 +118,10 @@ return (
             item.submenu ? (
               <Popover
                 as="div"
-                className="relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer hover:bg-gray-50"
+                className="relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer hover:text-dark-blue-900"
                 key={index}
               >
-                <PopoverButton className="flex items-center gap-2 outline-none hover:cursor-pointer">
+                <PopoverButton className="flex w-max items-center gap-2 outline-none hover:cursor-pointer">
                   {item.name}
                   <ChevronDownIcon className="h-4 w-4" />
                 </PopoverButton>
@@ -124,7 +130,7 @@ return (
                     <a
                       key={subindex}
                       href={subitem.href}
-                      className="block w-full px-4 py-2 text-sm font-medium hover:bg-gray-100"
+                      className="block w-full px-4 py-2 text-sm font-medium hover:text-dark-blue-950"
                     >
                       {subitem.name}
                     </a>
@@ -135,11 +141,31 @@ return (
               <a
                 key={index}
                 href={item.href}
-                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:text-dark-blue-950"
               >
                 {item.name}
               </a>
             ),
+          )}
+
+          <HeaderSearch />
+
+          {isLogin ? (
+            <>
+              <a href="/akun">
+                <UserCircleIcon className="h-8 w-8 text-gray-700 hover:text-dark-blue-900" />
+              </a>
+            </>
+          ) : (
+            <>
+              <a
+                href={`${import.meta.env.VITE_API_URL}/auth/google?redirect=${redirectUrl}`}
+                target="_blank"
+                className="font-semibold hover:text-dark-blue-900"
+              >
+                Masuk/Daftar
+              </a>
+            </>
           )}
         </div>
       </nav>
@@ -167,15 +193,42 @@ return (
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
+                <HeaderSearch />
+
+                {isLogin ? (
+                  <>
+                    <a
+                      href="/akun"
+                      className="-mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gradient-to-b hover:text-white"
+                    >
+                      Akun
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <a
+                      href={`${import.meta.env.VITE_API_URL}/auth/google`}
+                      target="_blank"
+                      className="-mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gradient-to-b hover:text-white"
+                    >
+                      Masuk/Daftar
+                    </a>
+                  </>
+                )}
+
                 {navigation.map((item, index) =>
                   item.submenu ? (
                     <Menu
                       as="div"
-                      className="relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer hover:bg-gray-50"
+                      className="group relative -mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer hover:bg-gradient-to-b hover:text-white"
                       key={index}
                     >
-                      <MenuButton className="text-base font-semibold text-gray-900 hover:bg-gray-50">
+                      <MenuButton
+                        // className="flex w-max items-center gap-2 outline-none hover:cursor-pointer"
+                        className="flex w-full items-center justify-between gap-2 from-dark-blue-900 to-dark-blue-950 text-base font-semibold text-gray-900 group-hover:text-white hover:bg-gradient-to-b"
+                      >
                         {item.name}
+                        <ChevronDownIcon className="h-4 w-4" />
                       </MenuButton>
                       <MenuItems
                         anchor="bottom"
@@ -201,7 +254,7 @@ return (
                     <a
                       key={index}
                       href={item.href}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                      className="-mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gradient-to-b hover:text-white"
                     >
                       {item.name}
                     </a>

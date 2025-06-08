@@ -26,6 +26,7 @@ import {
 } from "@headlessui/react";
 import toast from "react-hot-toast";
 import ConfirmDialog from "~/components/ConfirmDialog";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/dokter`);
@@ -35,7 +36,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const keyword = url.searchParams.get("keyword");
 
   if (keyword) {
-    urlRequest.pathname = "/dokter/search";
+    urlRequest.pathname = "/api/v1/dokter/search";
     urlRequest.searchParams.set("keyword", keyword);
   }
   urlRequest.searchParams.set("page", page);
@@ -44,14 +45,16 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export async function action({ request }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const method = request.method;
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/dokter`);
   const formData = await request.formData();
 
   if (method === "DELETE") {
     const idDokter = formData.get("id") as string;
-    urlRequest.pathname = `/dokter/${idDokter}`;
-    return handleAction(() => axios.delete(urlRequest.href));
+    urlRequest.pathname = `/api/v1/dokter/${idDokter}`;
+    return handleAction(() => client.delete(`/dokter/${idDokter}`));
   }
 }
 
@@ -131,7 +134,7 @@ export default function AdminDoctors({ loaderData }: Route.ComponentProps) {
       <div className="mb-4 flex items-center justify-between">
         <h1 className="w-max text-2xl font-bold uppercase">Daftar Dokter</h1>
         <a
-          href="/admin/dokter/create"
+          href="/humasbalung/dokter/create"
           className="flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
         >
           <PlusIcon className="h-4 w-4" />
@@ -163,7 +166,7 @@ export default function AdminDoctors({ loaderData }: Route.ComponentProps) {
                   </div>
                   <div className="flex flex-none justify-center gap-0.5">
                     <a
-                      href={`/admin/dokter/edit/${doctor.id_dokter}`}
+                      href={`/humasbalung/dokter/edit/${doctor.id_dokter}`}
                       className="block h-fit w-min rounded bg-green-600 p-2 text-white hover:underline"
                     >
                       <PencilSquareIcon className="h-4 w-4" />

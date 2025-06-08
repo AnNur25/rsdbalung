@@ -2,7 +2,7 @@ import type { Route } from "./+types/logout";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const headers = new Headers({
-    Location: "/humasbalung/login",
+    Location: "/",
   });
   headers.append(
     "Set-Cookie",

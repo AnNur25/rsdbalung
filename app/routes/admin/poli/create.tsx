@@ -4,9 +4,12 @@ import type { Route } from "./+types/create";
 import { handleAction } from "~/utils/handleAction";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 // import { ActionToast, LoaderToast } from "~/hooks/toastHandler";
 
 export async function action({ request }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/poli`);
 
   let formData = await request.formData();
@@ -16,7 +19,7 @@ export async function action({ request }: Route.ActionArgs) {
   //   return { error: "Nama Poli is required" };
   // }
   return handleAction(() =>
-    axios.post(urlRequest.href, { nama_poli: namaPoli }),
+    client.post(urlRequest.href, { nama_poli: namaPoli }),
   );
 }
 
@@ -29,7 +32,7 @@ export default function CreatePoli({ actionData }: Route.ComponentProps) {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
         setTimeout(() => {
-          navigate("/admin/poli");
+          navigate("/humasbalung/poli");
         }, 2000);
       } else {
         toast.error(fetcherData.message);
@@ -85,7 +88,7 @@ export default function CreatePoli({ actionData }: Route.ComponentProps) {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/admin/poli")}
+              onClick={() => navigate("/humasbalung/poli")}
               className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
             >
               Batal

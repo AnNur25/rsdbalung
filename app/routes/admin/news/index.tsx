@@ -29,6 +29,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import ConfirmDialog from "~/components/ConfirmDialog";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader({
   request,
@@ -40,7 +41,7 @@ export async function loader({
   const keyword = url.searchParams.get("keyword");
 
   if (keyword) {
-    urlRequest.pathname = "/berita/search";
+    urlRequest.pathname = "/api/v1/berita/search";
     urlRequest.searchParams.set("keyword", keyword);
   }
   urlRequest.searchParams.set("page", page);
@@ -48,19 +49,21 @@ export async function loader({
   return handleLoader(() => axios.get(urlRequest.href));
 }
 export async function action({ request }: Route.ActionArgs) {
+    const client = await createAuthenticatedClient(request);
+  
   const method = request.method;
   const formData = await request.formData();
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/berita`);
 
   if (method === "DELETE") {
     const newsId = formData.get("id");
-    urlRequest.pathname = `/berita/${newsId}`;
-    return handleAction(() => axios.delete(urlRequest.href));
+    urlRequest.pathname = `/api/v1/berita/${newsId}`;
+    return handleAction(() => client.delete(urlRequest.href));
   }
 }
 
 export default function AdminNews({ loaderData }: Route.ComponentProps) {
-  const headers = ["No", "Judul Berita", "Tanggal Dibuat", "PPID", "Aksi"];
+  const headers = ["No", "Judul Berita", "Tanggal Dibuat", "Aksi"];
 
   const data = loaderData.data;
   const { berita: news = [], pagination = paginationDefault } = data as {
@@ -144,7 +147,7 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
       <div className="mb-4 flex items-center justify-between">
         <h1 className="w-max text-2xl font-bold uppercase">Berita</h1>
         <a
-          href="/admin/berita/create"
+          href="/humasbalung/berita/create"
           className="flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
         >
           <PlusIcon className="h-4 w-4" />
@@ -170,21 +173,21 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
                 <td className="border border-gray-300 px-4 py-2">
                   {item.tanggal_dibuat}
                 </td>
-                <td className="border border-gray-300 px-4 py-2">
+                {/* <td className="border border-gray-300 px-4 py-2">
                   <div className="mx-auto w-fit rounded bg-blue-600 p-2 text-white">
                     <PaperAirplaneIcon className="h-4 w-4" />
                   </div>
-                </td>
+                </td> */}
                 <td className="border border-gray-300 px-4 py-2">
                   <div className="flex justify-center gap-0.5">
                     <a
-                      href={`/admin/berita/galeri/${item.id}`}
+                      href={`/humasbalung/berita/galeri/${item.id}`}
                       className="block w-min rounded bg-blue-600 p-2 text-white"
                     >
                       <PhotoIcon className="h-4 w-4" />
                     </a>
                     <a
-                      href={`/admin/berita/edit/${item.id}`}
+                      href={`/humasbalung/berita/edit/${item.id}`}
                       className="block w-min rounded bg-green-600 p-2 text-white"
                     >
                       <PencilSquareIcon className="h-4 w-4" />

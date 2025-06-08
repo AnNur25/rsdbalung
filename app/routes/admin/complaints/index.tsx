@@ -18,6 +18,7 @@ import {
 } from "@headlessui/react";
 import toast from "react-hot-toast";
 import ConfirmDialog from "~/components/ConfirmDialog";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/all`);
@@ -25,6 +26,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export async function action({ request }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const method = request.method;
   const formData = await request.formData();
 
@@ -34,20 +37,20 @@ export async function action({ request }: Route.ActionArgs) {
 
   if (method === "POST") {
     const id = formData.get("id");
-    urlRequest.pathname = `/aduan/reply/${id}`;
-    return handleAction(() => axios.post(urlRequest.href, formData));
+    urlRequest.pathname = `/api/v1/aduan/reply/${id}`;
+    return handleAction(() => client.post(urlRequest.href, formData));
   }
 
   if (method === "DELETE") {
     const id = formData.get("id");
-    urlRequest.pathname = `/aduan/${id}`;
-    return handleAction(() => axios.delete(urlRequest.href));
+    urlRequest.pathname = `/api/v1/aduan/${id}`;
+    return handleAction(() => client.delete(urlRequest.href));
   }
 
   if (method === "PATCH") {
     const id = formData.get("id");
-    urlRequest.pathname = `/aduan/visible/${id}`;
-    return handleAction(() => axios.patch(urlRequest.href));
+    urlRequest.pathname = `/api/v1/aduan/visible/${id}`;
+    return handleAction(() => client.patch(urlRequest.href));
   }
 }
 

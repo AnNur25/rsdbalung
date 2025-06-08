@@ -10,6 +10,8 @@
 
 export interface News {
   id: string;
+  tanggal_berita: string;
+  tanggal_default: string;
   judul: string;
   ringkasan: string;
   isi: string;

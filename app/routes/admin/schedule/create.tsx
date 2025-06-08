@@ -31,6 +31,7 @@ import toast from "react-hot-toast";
 import { handleAction } from "~/utils/handleAction";
 import { handleLoader } from "~/utils/handleLoader";
 import { isSuccess } from "~/utils/extractResponses";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const poliRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
@@ -69,6 +70,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export async function action({ request }: Route.ActionArgs) {
+    const client = await createAuthenticatedClient(request);
+  
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/jadwal-dokter/`);
   const formData = await request.formData();
   console.log("action form", formData);
@@ -111,7 +114,7 @@ export async function action({ request }: Route.ActionArgs) {
     id_dokter: idDokter,
     layananList: Array.from(layananMap.values()),
   };
-  return handleAction(() => axios.post(urlRequest.href, data));
+  return handleAction(() => client.post(urlRequest.href, data));
 }
 
 type ScheduleItem = {
@@ -181,7 +184,7 @@ export default function CreateSchedule({ loaderData }: Route.ComponentProps) {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
         setTimeout(() => {
-          navigate("/admin/jadwal-dokter");
+          navigate("/humasbalung/jadwal-dokter");
         }, 2000);
       } else {
         toast.error(fetcherData.message);
@@ -384,7 +387,7 @@ export default function CreateSchedule({ loaderData }: Route.ComponentProps) {
                 </button>
                 <button
                   type="button"
-                  onClick={() => navigate("/admin/jadwal-dokter")}
+                  onClick={() => navigate("/humasbalung/jadwal-dokter")}
                   className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
                 >
                   Batal

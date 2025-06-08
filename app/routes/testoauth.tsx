@@ -15,7 +15,22 @@ export async function loader({ request }: Route.LoaderArgs) {
   // https://rs-balung-cp.vercel.app/api/v1/auth/google/callback
   // https://rs-balung-cp.vercel.app/api/v1/auth/google?redirect=http://localhost:5173
   const setCookieHeader = request.headers.get("cookie");
+  const headers = new Headers({
+    Location: "/api/v1",
+  });
 
+  if (Array.isArray(setCookieHeader)) {
+    for (const cookie of setCookieHeader) {
+      headers.append("Set-Cookie", cookie);
+    }
+  } else {
+    headers.set("Set-Cookie", setCookieHeader ?? "");
+  }
+
+  return new Response(null, {
+    status: 302,
+    headers,
+  });
   console.log("user cookie", setCookieHeader);
   const urlCallback = "https://rs-balung-cp.vercel.app/api/v1/profil";
 

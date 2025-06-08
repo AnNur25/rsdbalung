@@ -1,12 +1,24 @@
 import NewsCard from "~/components/NewsCard";
 import banner from "~/assets/rsdbalung.jpeg";
 import axios from "axios";
-import { useLoaderData } from "react-router";
+import { useFetcher, useLoaderData } from "react-router";
 import NewsBanner from "~/components/NewsBanner";
 // import type { NewsApiResponse } from "./news";
 import type { News } from "~/models/News";
 import "~/lists.css";
 import HtmlParse from "~/components/HtmlParse";
+import {
+  GoogleReCaptchaCheckbox,
+  GoogleReCaptchaProvider,
+} from "@google-recaptcha/react";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
+import type { Route } from "./+types/news-detail";
+import { handleAction } from "~/utils/handleAction";
+import { handleLoader } from "~/utils/handleLoader";
+import type { Comment } from "~/models/Comment";
+import { createAuthenticatedClient } from "~/utils/auth-client";
+import MessageCard from "~/components/MessageCard";
 // export async function loader({ params }: Route.LoaderArgs) {
 //   return { id: params.id };
 // }
@@ -45,11 +57,7 @@ interface NewsDetailApiResponse {
   data: NewsDetail;
 }
 
-export async function loader({
-  params,
-}: {
-  params: { id: string };
-}): Promise<NewsDetailAndAll> {
+export async function loader({ params }: Route.LoaderArgs) {
   const { id } = params;
 
   try {
@@ -59,44 +67,94 @@ export async function loader({
     ``;
     const data = response.data;
 
-    if (!data.success) {
-      throw new Error(data.message || "Failed to fetch news detail");
-    }
-
     const responseAll = await axios.get(
       `${import.meta.env.VITE_API_URL}/berita?page=1`,
     );
 
+    const commentsResponse = await handleLoader(() =>
+      axios.get(
+        `${import.meta.env.VITE_API_URL}/berita/${id}/komentar/visible`,
+      ),
+    );
+    // console.log(commentsResponse.data);
     const dataAll = responseAll.data;
     if (!dataAll.success || !dataAll.data.berita.length) {
       return {
         ...data.data,
         berita: [],
+        comments: [],
       };
     }
 
-    return { ...data.data, berita: dataAll.data.berita };
+    return {
+      ...data.data,
+      berita: dataAll.data.berita as News[],
+      comments: commentsResponse.data as Comment[],
+    };
   } catch (error: any) {
     throw new Error(
       error.response?.data?.message || "Failed to fetch news detail",
     );
   }
 }
-export default function NewsDetail() {
-  const response = useLoaderData() as NewsDetailAndAll;
-  const {
-    judul,
-    ringkasan,
-    isi,
-    gambar_sampul,
-    tanggal_dibuat,
-    gambar_tambahan,
-    berita: news,
-  } = response;
-  // const cleanHtml = DOMPurify.sanitize(isi);
 
+export async function action({ request, params }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+  const { id } = params;
+  console.log(params);
+
+  const urlRequest = new URL(
+    `${import.meta.env.VITE_API_URL}/berita/${id}/komentar/`,
+  );
+
+  const formData = await request.formData();
+  console.log(formData);
+  const localVerify = await handleAction(() =>
+    axios.post("http://localhost:3000/api/verify", formData),
+  );
+  console.log("localVerify", localVerify);
+  const captcha = formData.get("g-recaptcha-response");
+  formData.delete("g-recaptcha-response");
+  if (captcha) {
+    formData.delete("g-recaptcha-response");
+    formData.append("recaptcha_token", captcha);
+    return handleAction(() => client.post(urlRequest.href, formData));
+  } else {
+    return {
+      success: false,
+      message: "Captcha diperlukan untuk mengirim aduan",
+    };
+  }
+}
+
+export default function NewsDetail({ loaderData }: Route.ComponentProps) {
+  const data = loaderData ?? {};
+  const {
+    judul = "",
+    ringkasan = "",
+    isi = "",
+    gambar_sampul = "",
+    tanggal_dibuat = "",
+    gambar_tambahan = [],
+    berita: news = [],
+    comments = [],
+  } = data || {};
+  // const cleanHtml = DOMPurify.sanitize(isi);
+  
+  const komentarList: Comment[] = Array.isArray(data.comments) && data.comments.length > 0 ? data.comments : [];
   const tanggal = tanggal_dibuat.split(" pukul")[0];
 
+  const fetcher = useFetcher();
+  const fetcherData = fetcher.data || { message: "", success: false };
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
   return (
     <main>
       <NewsBanner
@@ -106,6 +164,7 @@ export default function NewsDetail() {
         date={tanggal}
       />
       <section className="flex flex-col min-md:p-4 lg:flex-row lg:gap-8">
+        {/* <section> */}
         <article className="flex-6 px-8 text-justify">
           <img
             src={gambar_sampul}
@@ -127,7 +186,146 @@ export default function NewsDetail() {
               />
             ))}
           </div>
+
+          <h3 className="py-2 text-2xl font-bold">Form Komentar</h3>
+          <fetcher.Form
+            method="post"
+            className="flex flex-1 flex-col gap-4 rounded-xl border border-gray-300 p-8 shadow-lg"
+          >
+            <div className="flex flex-col gap-2">
+              <label htmlFor="nama" className="text-md font-semibold">
+                Nama <span className="text-red-600">*</span>
+              </label>
+              <input
+                onInput={(e) => {
+                  const input = e.currentTarget;
+                  // Prevent leading zeros
+                  if (input.value === " " || input.value === "0") {
+                    // Disallow "0" as the only input
+                    input.value = "";
+                  }
+                }}
+                type="text"
+                placeholder="Masukkan nama Anda"
+                className={`${
+                  fetcherData.message && !fetcherData.success
+                    ? "border-red-500 focus:outline-red-500"
+                    : "outline-gray-300 focus:outline-green-600"
+                } rounded-lg border border-gray-400 px-4 py-2`}
+                name="nama"
+                id="nama"
+              />
+              {fetcherData.message && (
+                <p
+                  className={`text-sm ${
+                    fetcherData.success ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {fetcherData.message}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="no_wa" className="text-md font-semibold">
+                No. Whatsapp <span className="text-red-600">*</span>
+              </label>
+              <input
+                pattern="[1-9]\d*|0" // for HTML5 validation
+                onInput={(e) => {
+                  const input = e.currentTarget;
+                  // Prevent leading zeros
+                  if (input.value === "0") {
+                    // Disallow "0" as the only input
+                    input.value = "";
+                  }
+
+                  // Replace leading zeros with 62
+                  input.value = input.value.replace(/^0+(?!$)/, "62");
+
+                  // Remove non-digit characters
+                  input.value = input.value.replace(/[^\d]/g, "");
+                }}
+                type="text"
+                inputMode="numeric"
+                placeholder="cth. 628xxxxxxxxxx"
+                className={`${
+                  fetcherData.message && !fetcherData.success
+                    ? "border-red-500 focus:outline-red-500"
+                    : "outline-gray-300 focus:outline-green-600"
+                } rounded-lg border border-gray-400 px-4 py-2`}
+                name="no_wa"
+                id="no_wa"
+              />
+              {fetcherData.message && (
+                <p
+                  className={`text-sm ${
+                    fetcherData.success ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {fetcherData.message}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="message" className="text-md font-semibold">
+                Komentar <span className="text-red-600">*</span>
+              </label>
+              <textarea
+                onInput={(e) => {
+                  const input = e.currentTarget;
+                  if (input.value === " " || input.value === "0") {
+                    input.value = "";
+                  }
+                }}
+                required
+                placeholder="Tulis komentar Anda"
+                className={`${
+                  fetcherData.message && !fetcherData.success
+                    ? "border-red-500 focus:outline-red-500"
+                    : "outline-gray-300 focus:outline-green-600"
+                } min-h-56 rounded-lg border border-gray-400 px-4 py-2`}
+                name="isi_komentar"
+              />
+              {fetcherData.message && (
+                <p
+                  className={`text-sm ${
+                    fetcherData.success ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {fetcherData.message}
+                </p>
+              )}
+            </div>
+            <div className="overflow-x-auto">
+              <GoogleReCaptchaProvider
+                type="v2-checkbox"
+                siteKey={import.meta.env.VITE_SITE_KEY}
+              >
+                <GoogleReCaptchaCheckbox
+                  onChange={(token) => {
+                    console.log(token);
+                  }}
+                />
+              </GoogleReCaptchaProvider>
+            </div>
+
+            <button className="rounded bg-green-600 px-8 py-2 text-white min-md:w-min">
+              Kirim
+            </button>
+          </fetcher.Form>
+
+          {komentarList?.map((c, index) => (
+            <MessageCard
+              message={c.isi_komentar}
+              name={c.nama}
+              date={c.tanggal_komentar}
+            />
+            // <p>{c.isi_komentar}</p>
+          ))}
         </article>
+        {/* </section> */}
 
         <aside className="flex flex-2 flex-col items-center gap-4 p-8 min-md:pr-8 min-md:pl-4">
           <h2 className="text-2xl font-bold">Berita Lainnya</h2>

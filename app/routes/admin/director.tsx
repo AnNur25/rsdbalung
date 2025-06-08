@@ -2,7 +2,7 @@ import { useFetcher } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { TrashIcon } from "@heroicons/react/24/solid";
-import type { Route } from "./+types/gallery";
+import type { Route } from "./+types/director";
 import { handleAction } from "~/utils/handleAction";
 
 import { toast } from "react-hot-toast";
@@ -18,30 +18,24 @@ import { createAuthenticatedClient } from "~/utils/auth-client";
 
 // Load existing gallery photos
 export async function loader({ params }: Route.LoaderArgs) {
-  const urlRequest = new URL(
-    `${import.meta.env.VITE_API_URL}/berita/${params.id}/galeri-berita`,
-  );
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/direktur`);
   return handleLoader(() => axios.get(urlRequest.href));
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
-    const client = await createAuthenticatedClient(request);
-  
-  const urlRequest = new URL(
-    `${import.meta.env.VITE_API_URL}/berita/${params.id}/galeri-berita`,
-  );
+  const client = await createAuthenticatedClient(request);
+
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/direktur`);
   const formData = await request.formData();
+  console.log("formData direktur", formData);
   const method = request.method;
   if (method === "POST") {
-    const files = formData.getAll("gambar_tambahan");
-    if (files.length > 4) {
-      return { success: false, message: "Maksimal upload 4 foto." };
-    }
-    console.log(files);
-    if (
-      files.length === 0 ||
-      files.every((file) => !(file instanceof File) || file.size === 0)
-    ) {
+    const file = formData.get("file");
+    // if (file.length > 1) {
+    //   return { success: false, message: "Maksimal upload 1 foto." };
+    // }
+    console.log("file direktur", file);
+    if (!(file instanceof File) || file.size === 0) {
       return { success: false, message: "Mohon upload minimal 1 foto" };
     }
 
@@ -54,19 +48,19 @@ export async function action({ request, params }: Route.ActionArgs) {
     );
   }
 
-  if (method === "DELETE") {
-    const deleteData = formData.getAll("ids");
+  //   if (method === "DELETE") {
+  //     const deleteData = formData.get("id");
 
-    return handleAction(
-      () => client.delete(urlRequest.href, { data: { ids: [...deleteData] } }),
-      "Foto berhasil dihapus.",
-    );
-  }
+  //     return handleAction(
+  //       () => client.delete(urlRequest.href, { data: { ids: [...deleteData] } }),
+  //       "Foto berhasil dihapus.",
+  //     );
+  //   }
 
   return { error: "Method tidak dikenal." };
 }
 
-export default function GalleryNews({
+export default function Director({
   loaderData,
   actionData,
 }: Route.ComponentProps) {
@@ -76,18 +70,6 @@ export default function GalleryNews({
   const fetcher = useFetcher();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-
-  // const hasShownLoaderToastRef = useRef(false);
-  // useEffect(() => {
-  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
-  //     if (loaderData.success) {
-  //       toast.success(loaderData.message);
-  //     } else {
-  //       toast.error(loaderData.message);
-  //     }
-  //     hasShownLoaderToastRef.current = true;
-  //   }
-  // }, [loaderData]);
 
   const fetcherData = fetcher.data || { message: "", success: false };
   useEffect(() => {
@@ -132,7 +114,7 @@ export default function GalleryNews({
   return (
     <>
       <div className="w-[100%] p-4 shadow-2xl">
-        <h1 className="mb-4 w-max text-2xl font-bold">Form Galeri Berita</h1>
+        <h1 className="mb-4 w-max text-2xl font-bold">Foto Direktur</h1>
 
         <div className="flex items-center justify-center gap-2 lg:max-w-3/5">
           <fetcher.Form
@@ -142,8 +124,7 @@ export default function GalleryNews({
           >
             <input
               type="file"
-              name="gambar_tambahan"
-              multiple
+              name="file"
               accept="image/*"
               className="w-full rounded border border-gray-500 p-2"
             />

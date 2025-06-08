@@ -35,7 +35,7 @@ export default function AdminPoli({ loaderData }: Route.ComponentProps) {
       <div className="mb-4 flex items-center justify-between">
         <h1 className="w-max text-2xl font-bold uppercase">Poli/Klinik</h1>
         <a
-          href="/admin/poli/create"
+          href="/humasbalung/poli/create"
           className="flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
         >
           <PlusIcon className="h-4 w-4" />
@@ -55,7 +55,7 @@ export default function AdminPoli({ loaderData }: Route.ComponentProps) {
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   <a
-                    href={`/admin/poli/edit/${item.id_poli}`}
+                    href={`/humasbalung/poli/edit/${item.id_poli}`}
                     className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:underline"
                   >
                     <PencilSquareIcon className="h-4 w-4" />

@@ -8,6 +8,8 @@ import { handleAction } from "~/utils/handleAction";
 import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
 import type { News } from "~/models/News";
 import toast from "react-hot-toast";
+import { createAuthenticatedClient } from "~/utils/auth-client";
+import { convertToDate } from "~/utils/formatDate";
 
 export async function loader({
   request,
@@ -21,6 +23,8 @@ export async function loader({
   return handleLoader(() => axios.get(urlRequest.href));
 }
 export async function action({ request, params }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const formData = await request.formData();
   const newsId = params.id;
 
@@ -35,12 +39,17 @@ export async function action({ request, params }: Route.ActionArgs) {
     headers: headers,
   };
 
-  return handleAction(() => axios.put(urlRequest.href, formData, config));
+  return handleAction(() => client.put(urlRequest.href, formData, config));
 }
 
 export default function EditNews({ loaderData }: Route.ComponentProps) {
   const news: News = loaderData.data;
-
+  const [newsDate, setNewsDate] = useState<string>(
+    convertToDate(news.tanggal_default) ||
+      new Date().toISOString().split("T")[0],
+  );
+  console.log(loaderData);
+  console.log(convertToDate(news.tanggal_default));
   const [title, setTitle] = useState<string>(news.judul || "");
   const [summary, setSummary] = useState<string>(news.ringkasan || "");
   const [content, setContent] = useState<string>(news.isi || "");
@@ -68,7 +77,7 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
         setTimeout(() => {
-          navigate("/admin/berita");
+          navigate("/humasbalung/berita");
         }, 2000);
       } else {
         toast.error(fetcherData.message);
@@ -112,6 +121,30 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
                   ? "border-red-500 focus:outline-red-500"
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
+            />
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="tanggal_berita" className="text-lg font-bold">
+              Tanggal Berita <span className="text-red-600">*</span>
+            </label>
+            <input
+              className="w-full rounded-md border-1 border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none"
+              type="date"
+              lang="id-ID"
+              placeholder="Pilih Tanggal"
+              name="date"
+              id="tanggal_berita"
+              value={newsDate}
+              onChange={(e) => setNewsDate(e.target.value)}
             />
             {fetcherData.message && (
               <p
@@ -257,7 +290,7 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/admin/berita")}
+              onClick={() => navigate("/humasbalung/berita")}
               className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
             >
               Batal

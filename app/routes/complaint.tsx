@@ -10,8 +10,13 @@ import type { ComplaintModel } from "~/models/Complaint";
 
 import MessageCard from "~/components/MessageCard";
 import TextWithRect from "~/components/TextWithRect";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import {
+  GoogleReCaptchaCheckbox,
+  GoogleReCaptchaProvider,
+} from "@google-recaptcha/react";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader() {
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/`);
@@ -19,11 +24,25 @@ export async function loader() {
 }
 
 export async function action({ request }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const formData = await request.formData();
   const method = request.method;
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/`);
+  console.log("formData", formData);
+  const captcha = formData.get("g-recaptcha-response");
   if (method === "POST")
-    return handleAction(() => axios.post(urlRequest.href, formData));
+    if (captcha) {
+      formData.delete("g-recaptcha-response");
+      formData.append("recaptcha_token", captcha);
+
+      return handleAction(() => client.post(urlRequest.href, formData));
+    } else {
+      return {
+        success: false,
+        message: "Captcha diperlukan untuk mengirim aduan",
+      };
+    }
 }
 
 export default function Complaint({ loaderData }: Route.ComponentProps) {
@@ -184,7 +203,18 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 </p>
               )}
             </div>
-
+            <div className="overflow-x-auto">
+              <GoogleReCaptchaProvider
+                type="v2-checkbox"
+                siteKey={import.meta.env.VITE_SITE_KEY}
+              >
+                <GoogleReCaptchaCheckbox
+                  onChange={(token) => {
+                    console.log(token);
+                  }}
+                />
+              </GoogleReCaptchaProvider>
+            </div>
             <button className="rounded bg-green-600 px-8 py-2 text-white min-md:w-min">
               Kirim
             </button>

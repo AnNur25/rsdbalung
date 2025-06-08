@@ -5,13 +5,16 @@ import { handleAction } from "~/utils/handleAction";
 import { useEffect, useState } from "react";
 import formatDigits from "~/utils/formatDigits";
 import toast from "react-hot-toast";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function action({ request }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const formData = await request.formData();
 
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/pelayanan`);
   return handleAction(() =>
-    axios.post(urlRequest.href, {
+    client.post(urlRequest.href, {
       ...Object.fromEntries(formData.entries()),
       Biaya: parseInt(formData.get("Biaya") as string, 10),
     }),
@@ -29,7 +32,7 @@ export default function CreateService() {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
         setTimeout(() => {
-          navigate("/admin/pelayanan");
+          navigate("/humasbalung/pelayanan");
         }, 2000);
       } else {
         toast.error(fetcherData.message);
@@ -42,7 +45,7 @@ export default function CreateService() {
         Form Pengisian Layanan RS
       </h1>
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
-        <Form method="post" action="/admin/pelayanan/create">
+        <Form method="post" action="/humasbalung/pelayanan/create">
           <div className="mb-4">
             <label htmlFor="nama_pelayanan" className="text-lg font-bold">
               Nama Pelayanan <span className="text-red-600">*</span>
@@ -225,7 +228,7 @@ export default function CreateService() {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/admin/pelayanan")}
+              onClick={() => navigate("/humasbalung/pelayanan")}
               className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
             >
               Batal

@@ -91,7 +91,7 @@ export default function Slider({
         {children.map((child, index) => (
           <div
             key={index}
-            className={`flex-shrink-0 ${overlapSize ? `-mr-${overlapSize?.toString()}` : ""}`}
+            className={`grow ${overlapSize ? `-mr-${overlapSize?.toString()}` : ""}`}
           >
             {child}
           </div>

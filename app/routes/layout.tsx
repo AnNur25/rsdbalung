@@ -2,24 +2,29 @@ import axios from "axios";
 import { Outlet, useLoaderData } from "react-router";
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
-// import type { PelayananResponse } from "./admin/services";
 import type { Pelayanan } from "~/models/Pelayanan";
 import { useEffect } from "react";
-import { GoogleReCaptchaProvider } from "@google-recaptcha/react";
+// import { GoogleReCaptchaProvider } from "@google-recaptcha/react";
 import type { Route } from "./+types/layout";
+import redirectWithCookie from "~/utils/redirectWithCookie";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const setCookieHeader = request.headers.get("cookie");
+export async function loader({ request, params }: Route.LoaderArgs) {
+  const client = await createAuthenticatedClient(request);
 
-  console.log("user cookie", setCookieHeader);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
+
+  const url = new URL(request.url);
+  const searchParams = url.searchParams;
+  console.log("searchParams", searchParams);
+
   const pelayananRequest = new URL(
     `${import.meta.env.VITE_API_URL}/pelayanan/`,
   );
 
   try {
-    const response = await axios.get(pelayananRequest.href, {
-      withCredentials: true,
-    });
+    const response = await client.get(pelayananRequest.href);
+    const profilResponse = await client.get(urlRequest.href);
 
     if (!response.data.success || !response.data.data.length) {
       // response.data.data = [];
@@ -30,20 +35,35 @@ export async function loader({ request }: Route.LoaderArgs) {
         data: [],
       };
     }
-
-    return response.data;
+    return { data: response.data, isLogin: profilResponse.data.statusCode };
+    // return response.data;
   } catch (error: any) {
-    // console.error("Error fetching data:", error.response);
-    return {
-      success: false,
-      statusCode: error.response?.status ?? 500,
-      message: "Failed to fetch data",
-      data: [],
-    };
+    try {
+      const refreshRes = await client.post(
+        `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
+        {},
+        {
+          headers: { Cookie: request.headers.get("cookie") ?? "" },
+        },
+      );
+      console.log("Unauthorized, refreshing token", refreshRes);
+      const refreshCookieHeader = refreshRes.headers["set-cookie"];
+      console.log("refresh header", refreshCookieHeader);
+      return redirectWithCookie(request.url, refreshCookieHeader ?? "");
+    } catch (error: any) {
+      console.error("Error fetching data:", error.response);
+      return {
+        success: false,
+        statusCode: error.response?.status ?? 500,
+        message: "Failed to fetch data",
+        data: [],
+        isLogin: false,
+      };
+    }
   }
 }
 
-export default function Layout() {
+export default function Layout({ loaderData }: Route.ComponentProps) {
   useEffect(() => {
     const hasVisited = sessionStorage.getItem("hasVisited");
     const nVisits = localStorage.getItem("nVisits") ?? "0";
@@ -53,24 +73,15 @@ export default function Layout() {
       localStorage.setItem("nVisits", (nVisitsInt + 1).toString());
     }
   }, []);
-  const data = useLoaderData();
+  const data = loaderData?.data || [];
   const pelayanan = data.data ?? [];
+  const isLogin = loaderData?.isLogin ?? false;
+  console.log("isLogin", isLogin);
 
   return (
     <>
-      <Header pelayanan={pelayanan} />
-      {/* <GoogleReCaptchaProvider
-        explicit={{ badge: "bottomright" }}
-        type="v2-invisible"
-        siteKey={import.meta.env.VITE_SITE_KEY}
-        scriptProps={{
-          async: true,
-          defer: true,
-          appendTo: "body",
-        }}
-      > */}
+      <Header pelayanan={pelayanan} isLogin={isLogin} />
       <Outlet />
-      {/* </GoogleReCaptchaProvider> */}
       <Footer />
     </>
   );

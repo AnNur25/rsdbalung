@@ -4,12 +4,17 @@ import {
   Dialog,
   DialogPanel,
   DialogTitle,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
 } from "@headlessui/react";
 import {
   Bars3Icon,
   XMarkIcon,
   ArrowLeftEndOnRectangleIcon,
   HomeIcon,
+  PhotoIcon,
+  GlobeAltIcon,
 } from "@heroicons/react/24/solid";
 import {
   UserIcon,
@@ -26,18 +31,42 @@ import { NavLink, redirect, useNavigate } from "react-router";
 import ConfirmDialog from "./ConfirmDialog";
 
 const navigation = [
-  { name: "Beranda", href: "/admin/home", icon: HomeIcon },
-  { name: "Akun", href: "/admin/akun", icon: UserIcon },
-  { name: "Berita", href: "/admin/berita", icon: NewspaperIcon },
-  { name: "Layanan RS", href: "/admin/pelayanan", icon: BuildingOffice2Icon },
-  { name: "Daftar Dokter", href: "/admin/dokter", icon: UserGroupIcon },
-  { name: "Poli/Klinik", href: "/admin/poli", icon: BuildingLibraryIcon },
+  {
+    name: "Beranda",
+    icon: HomeIcon,
+    submenu: [
+      {
+        name: "Banner & L.Unggulan",
+        href: "/humasbalung/home",
+        icon: PhotoIcon,
+      },
+      { name: "Foto Direktur", href: "/humasbalung/direktur", icon: PhotoIcon },
+      {
+        name: "Media Sosial",
+        href: "/humasbalung/media-sosial",
+        icon: GlobeAltIcon,
+      },
+    ],
+  },
+  { name: "Akun", href: "/humasbalung/akun", icon: UserIcon },
+  { name: "Berita", href: "/humasbalung/berita", icon: NewspaperIcon },
+  {
+    name: "Layanan RS",
+    href: "/humasbalung/pelayanan",
+    icon: BuildingOffice2Icon,
+  },
+  { name: "Daftar Dokter", href: "/humasbalung/dokter", icon: UserGroupIcon },
+  { name: "Poli/Klinik", href: "/humasbalung/poli", icon: BuildingLibraryIcon },
   {
     name: "Jadwal Praktek",
-    href: "/admin/jadwal-dokter",
+    href: "/humasbalung/jadwal-dokter",
     icon: CalendarDaysIcon,
   },
-  { name: "Aduan", href: "/admin/aduan", icon: ChatBubbleBottomCenterTextIcon },
+  {
+    name: "Aduan",
+    href: "/humasbalung/aduan",
+    icon: ChatBubbleBottomCenterTextIcon,
+  },
 ];
 
 export default function AdminSidebar() {
@@ -45,7 +74,7 @@ export default function AdminSidebar() {
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const navigate = useNavigate();
   const handleLogout = () => {
-    navigate("/admin/logout");
+    navigate("/humasbalung/logout");
     console.log("Logout");
     setLogoutDialogOpen(false);
   };
@@ -71,23 +100,74 @@ export default function AdminSidebar() {
             </button>
           </div>
           <nav className="space-y-2">
-            {navigation.map((item) => (
-              <NavLink
-                onClick={() => setSidebarOpen(false)}
-                key={item.name}
-                to={item.href}
-                className={({ isActive }: { isActive: boolean }) =>
-                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                    isActive
-                      ? "bg-blue-100 text-blue-800"
-                      : "text-gray-700 hover:bg-gray-100"
-                  }`
-                }
-              >
-                <item.icon className="h-4 w-4" />
-                {item.name}
-              </NavLink>
-            ))}
+            {navigation.map((item) =>
+              item.submenu ? (
+                <Disclosure key={item.name}>
+                  {({ open }) => (
+                    <>
+                      <DisclosureButton
+                        className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                          open
+                            ? "bg-blue-100 text-blue-800"
+                            : "text-gray-700 hover:bg-gray-100"
+                        }`}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {item.name}
+                        <svg
+                          className={`ml-auto h-4 w-4 transition-transform ${open ? "rotate-90" : ""}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </DisclosureButton>
+                      <DisclosurePanel className="ml-7 space-y-1">
+                        {item.submenu.map((sub) => (
+                          <NavLink
+                            key={sub.name}
+                            to={sub.href}
+                            onClick={() => setSidebarOpen(false)}
+                            className={({ isActive }) =>
+                              `flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium ${
+                                isActive
+                                  ? "bg-blue-100 text-blue-800"
+                                  : "text-gray-700 hover:bg-gray-100"
+                              }`
+                            }
+                          >
+                            <sub.icon className="h-4 w-4" />
+                            {sub.name}
+                          </NavLink>
+                        ))}
+                      </DisclosurePanel>
+                    </>
+                  )}
+                </Disclosure>
+              ) : (
+                <NavLink
+                  onClick={() => setSidebarOpen(false)}
+                  key={item.name}
+                  to={item.href}
+                  className={({ isActive }: { isActive: boolean }) =>
+                    `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                      isActive
+                        ? "bg-blue-100 text-blue-800"
+                        : "text-gray-700 hover:bg-gray-100"
+                    }`
+                  }
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.name}
+                </NavLink>
+              ),
+            )}
             <button
               onClick={() => setLogoutDialogOpen(true)}
               className="mt-4 flex w-full items-center gap-3 rounded-md bg-red-500 px-3 py-2 text-sm font-medium text-white hover:bg-red-600"
@@ -105,22 +185,72 @@ export default function AdminSidebar() {
           <img src={logo} alt="Logo" className="h-10" />
         </div>
         <nav className="flex-1 space-y-2">
-          {navigation.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.href}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                  isActive
-                    ? "bg-white text-blue-800"
-                    : "text-white hover:bg-blue-800"
-                }`
-              }
-            >
-              <item.icon className="h-4 w-4" />
-              {item.name}
-            </NavLink>
-          ))}
+          {navigation.map((item) =>
+            item.submenu ? (
+              <Disclosure key={item.name}>
+                {({ open }) => (
+                  <>
+                    <DisclosureButton
+                      className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                        open
+                          ? "bg-white text-blue-800"
+                          : "text-white hover:bg-blue-800"
+                      }`}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {item.name}
+                      <svg
+                        className={`ml-auto h-4 w-4 transition-transform ${open ? "rotate-90" : ""}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </DisclosureButton>
+                    <DisclosurePanel className="ml-7 space-y-1">
+                      {item.submenu.map((sub) => (
+                        <NavLink
+                          key={sub.name}
+                          to={sub.href}
+                          className={({ isActive }) =>
+                            `flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium transition-colors ${
+                              isActive
+                                ? "bg-white text-blue-800"
+                                : "text-white hover:bg-blue-900"
+                            }`
+                          }
+                        >
+                          <sub.icon className="h-4 w-4" />
+                          {sub.name}
+                        </NavLink>
+                      ))}
+                    </DisclosurePanel>
+                  </>
+                )}
+              </Disclosure>
+            ) : (
+              <NavLink
+                key={item.name}
+                to={item.href || "#"}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-white text-blue-800"
+                      : "text-white hover:bg-blue-800"
+                  }`
+                }
+              >
+                <item.icon className="h-4 w-4" />
+                {item.name}
+              </NavLink>
+            ),
+          )}
         </nav>
         <button
           onClick={() => setLogoutDialogOpen(true)}

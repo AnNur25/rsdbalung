@@ -7,8 +7,11 @@ import axios from "axios";
 import { handleAction } from "~/utils/handleAction";
 import toast from "react-hot-toast";
 import redirectDelay from "~/utils/redirectDelay";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function action({ request }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/berita`);
   const formData = await request.formData();
 
@@ -20,7 +23,7 @@ export async function action({ request }: Route.ActionArgs) {
     headers: headers,
   };
 
-  return handleAction(() => axios.post(urlRequest.href, formData, config));
+  return handleAction(() => client.post(urlRequest.href, formData, config));
 }
 
 export default function CreateNews() {
@@ -40,7 +43,7 @@ export default function CreateNews() {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
         setTimeout(() => {
-          navigate("/admin/berita");
+          navigate("/humasbalung/berita");
         }, 2000);
       } else {
         toast.error(fetcherData.message);
@@ -75,6 +78,28 @@ export default function CreateNews() {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
               // className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+            {fetcherData.message && (
+              <p
+                className={`text-sm ${
+                  fetcherData.success ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {fetcherData.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="tanggal_berita" className="text-lg font-bold">
+              Tanggal Berita <span className="text-red-600">*</span>
+            </label>
+            <input
+              className="w-full rounded-md border-1 border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none"
+              type="date"
+              lang="id-ID"
+              placeholder="Pilih Tanggal"
+              name="date"
+              id="tanggal_berita"
             />
             {fetcherData.message && (
               <p
@@ -217,7 +242,7 @@ export default function CreateNews() {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/admin/berita")}
+              onClick={() => navigate("/humasbalung/berita")}
               className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
             >
               Batal

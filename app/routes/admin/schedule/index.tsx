@@ -28,6 +28,8 @@ import {
 import type { Poli } from "~/models/Poli";
 import toast from "react-hot-toast";
 import ConfirmDialog from "~/components/ConfirmDialog";
+import { createAuthenticatedClient } from "~/utils/auth-client";
+import SearchBar from "~/components/SearchBar";
 
 export async function loader({
   request,
@@ -36,18 +38,13 @@ export async function loader({
 
   const url = new URL(request.url);
   const page = url.searchParams.get("page") || "1";
-  const poli = url.searchParams.get("poli") ?? "";
-  const date = url.searchParams.get("date") ?? "";
+  const keyword = url.searchParams.get("keyword");
 
   const poliRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
 
-  if (poli) {
-    urlRequest.pathname = "/jadwal-dokter/search";
-    urlRequest.searchParams.set("id_poli", poli);
-  }
-  if (date) {
-    urlRequest.pathname = "/jadwal-dokter/search";
-    urlRequest.searchParams.set("tanggal", date);
+  if (keyword) {
+    urlRequest.pathname = "/api/v1/jadwal-dokter/search-nama";
+    urlRequest.searchParams.set("nama", keyword);
   }
   urlRequest.searchParams.set("page", page);
 
@@ -67,14 +64,16 @@ export async function loader({
 }
 
 export async function action({ request }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const method = request.method;
   const formData = await request.formData();
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/jadwal-dokter/`);
 
   if (method === "DELETE") {
     const id = formData.get("id");
-    urlRequest.pathname = `/jadwal-dokter/${id}`;
-    return handleAction(() => axios.delete(urlRequest.href));
+    urlRequest.pathname = `/api/v1/jadwal-dokter/${id}`;
+    return handleAction(() => client.delete(urlRequest.href));
   }
 }
 
@@ -97,12 +96,16 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
   );
 
   const [searchPoli, setSearchPoli] = useState<string>("");
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
 
   const handleSearch = () => {
-    if (searchPoli.trim() !== "" && searchDate.trim() !== "") {
-      setSearchParams({ poli: searchPoli, date: searchDate });
-    } else {
+    if (searchKeyword.trim() === "") {
       setSearchParams({});
+      setIsSearching(false);
+    } else {
+      setSearchParams({ keyword: searchKeyword });
+      setIsSearching(true);
     }
   };
 
@@ -165,7 +168,7 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
         </h1>
 
         <a
-          href="/admin/jadwal-dokter/create"
+          href="/humasbalung/jadwal-dokter/create"
           className="flex w-fit items-center gap-2 rounded-lg bg-green-600 py-2 ps-2 pe-4 text-white"
         >
           <PlusIcon className="h-4 w-4" />
@@ -173,43 +176,10 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
         </a>
       </div>
       <div className="w-full overflow-x-auto rounded-lg border-1 border-gray-300 px-6 py-4 shadow-xl">
-        <div className="items-centers my-4 flex w-full justify-center">
-          <div className="relative flex w-full items-center gap-2">
-            {/* <div className="items-centers my-4 flex w-screen flex-col justify-center gap-2 lg:max-w-full lg:flex-row"> */}
-            {/* <div className="flex w-screen flex-wrap items-center justify-center gap-2 px-8 lg:max-w-3/5"> */}
-            <Select
-              className="max-w-full flex-1 rounded-md border-1 border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none lg:max-w-2xl"
-              value={searchPoli}
-              onChange={(e) => setSearchPoli(e.target.value)}
-            >
-              {poli.length > 0 ? (
-                poli.map((item, index) => (
-                  <option key={index} value={item.id_poli}>
-                    {item.nama_poli}
-                  </option>
-                ))
-              ) : (
-                <option value="">Tidak ada data</option>
-              )}
-            </Select>
-            <input
-              className="flex-1 rounded-md border-1 border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none lg:max-w-2xl"
-              type="date"
-              placeholder="Pilih Tanggal"
-              name="date"
-              id="schedule-date-search"
-              value={searchDate}
-              onChange={(e) => setSearchDate(e.target.value)}
-            />
-            <button
-              className="rounded-lg bg-green-600 px-6 py-2 text-white max-lg:w-full"
-              type="button"
-              onClick={handleSearch}
-            >
-              Cari
-            </button>
-          </div>
-        </div>
+        <SearchBar
+          handleSearch={handleSearch}
+          onSearchChange={setSearchKeyword}
+        />
 
         <section className="w-full overflow-x-auto">
           <Table headers={headers}>
@@ -274,7 +244,7 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
                       >
                         <div className="flex justify-center gap-0.5">
                           <a
-                            href={`/admin/jadwal-dokter/edit/${doctor.id_dokter}`}
+                            href={`/humasbalung/jadwal-dokter/edit/${doctor.id_dokter}`}
                             className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:cursor-pointer"
                           >
                             <PencilSquareIcon className="h-4 w-4" />

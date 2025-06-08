@@ -21,6 +21,7 @@ import type { Route } from "./+types";
 import { handleLoader } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
 import toast from "react-hot-toast";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader() {
   const poliRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
@@ -28,6 +29,7 @@ export async function loader() {
 }
 
 export async function action({ request }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
   const formData = await request.formData();
   const defaultImageUrl = `http://localhost:5173/logosquare.jpg`;
   console.log("formData", formData);
@@ -46,7 +48,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/dokter/`);
   return handleAction(() =>
-    axios.post(urlRequest.href, formData, {
+    client.post(urlRequest.href, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     }),
   );
@@ -76,7 +78,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
         setTimeout(() => {
-          navigate("/admin/dokter");
+          navigate("/humasbalung/dokter");
         }, 2000);
       } else {
         toast.error(fetcherData.message);
@@ -285,7 +287,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/admin/dokter")}
+              onClick={() => navigate("/humasbalung/dokter")}
               className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
             >
               Batal

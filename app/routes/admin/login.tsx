@@ -28,17 +28,30 @@ export async function action({ request }: Route.ActionArgs) {
 
     if (data.success) {
       const setCookieHeader = response.headers["set-cookie"];
-      const cookie = Array.isArray(setCookieHeader)
-        ? setCookieHeader.join("; ")
-        : setCookieHeader || "";
-      console.log("cookie join", setCookieHeader?.join("; "));
 
-      // axios.defaults.headers.common["Authorization"] =
-      //   `Bearer ${data.data.aksesToken}`;
-      // return;
-      return redirectWithCookie("/humasbalung", setCookieHeader ?? "");
+      const refreshRes = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
+        {},
+        {
+          headers: { Cookie: setCookieHeader ?? "" },
+        },
+      );
+
+      const refreshCookieHeader = refreshRes.headers["set-cookie"];
+
+      console.log("refresh token", refreshRes.headers);
+
+      return redirectWithCookie("/humasbalung", refreshCookieHeader ?? "");
+    } else {
+      console.error("Login failed:", data.message);
+      return {
+        success: false,
+        message: data.message || "Login gagal, silakan coba lagi.",
+      };
     }
-  } catch (error: any) {}
+  } catch (error: any) {
+    console.error("Error during login:", error);
+  }
 }
 
 export default function LoginAdmin({ loaderData }: Route.ComponentProps) {

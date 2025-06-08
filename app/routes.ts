@@ -8,8 +8,13 @@ import {
 
 export default [
   // Public routes
+  route("login", "routes/login.tsx"),
+  route("register", "routes/register.tsx"),
+  route("logout", "routes/logout.tsx"),
+  route("google", "routes/google.tsx"),
   layout("routes/layout.tsx", [
     route("test", "routes/test.tsx"),
+    route("akun", "routes/account.tsx"),
     route("api/v1", "routes/testoauth.tsx"),
     index("routes/home.tsx"),
     route("profile", "routes/profile.tsx"),
@@ -30,6 +35,7 @@ export default [
     layout("routes/admin/layout.tsx", [
       index("routes/admin/index.tsx"),
       route("home", "routes/admin/home.tsx"),
+      route("direktur", "routes/admin/director.tsx"),
       ...prefix("akun", [index("routes/admin/account/index.tsx")]),
       ...prefix("berita", [
         index("routes/admin/news/index.tsx"),
@@ -66,6 +72,7 @@ export default [
         // route("create", "routes/admin/complaints/create.tsx"),
         // route("edit/:id", "routes/admin/complaints/edit.tsx"),
       ]),
+      route("media-sosial", "routes/admin/socmed.tsx"),
     ]),
   ]),
 ] satisfies RouteConfig;

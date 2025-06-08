@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { handleLoader } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
 import toast from "react-hot-toast";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const urlRequest = new URL(
@@ -15,6 +16,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export async function action({ params, request }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
 
   let formData = await request.formData();
@@ -22,9 +25,9 @@ export async function action({ params, request }: Route.ActionArgs) {
   if (idPoli === null) {
     return { error: "ID Poli is required" };
   }
-  urlRequest.pathname = `/poli/${idPoli}`;
+  urlRequest.pathname = `/api/v1/poli/${idPoli}`;
   return handleAction(() =>
-    axios.put(urlRequest.href, {
+    client.put(urlRequest.href, {
       nama_poli: formData.get("nama_poli"),
     }),
   );
@@ -55,7 +58,7 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
         setTimeout(() => {
-          navigate("/admin/poli");
+          navigate("/humasbalung/poli");
         }, 2000);
       } else {
         toast.error(fetcherData.message);
@@ -114,7 +117,7 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
             </button>
             <button
               type="button"
-              onClick={() => navigate("/admin/poli")}
+              onClick={() => navigate("/humasbalung/poli")}
               className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
             >
               Batal

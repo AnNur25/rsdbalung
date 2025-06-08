@@ -41,6 +41,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import ConfirmDialog from "~/components/ConfirmDialog";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const bannerRequest = new URL(`${import.meta.env.VITE_API_URL}/banner/`);
@@ -57,7 +58,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     banners: bannerResponse.data,
     unggulan: unggulanResponse.data,
   };
-  // console.log(data);
+  console.log(data);
   return {
     success: true,
     message: "Selesai mendapatkan data",
@@ -66,6 +67,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const formData = await request.formData();
   console.log("formData", formData);
   const method = request.method;
@@ -90,7 +93,7 @@ export async function action({ request, params }: Route.ActionArgs) {
 
       return handleAction(
         () =>
-          axios.post(bannerRequest.href, formData, {
+          client.post(bannerRequest.href, formData, {
             headers: { "Content-Type": "multipart/form-data" },
           }),
         "Foto berhasil diupload.",
@@ -103,7 +106,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       // console.log("action delete", deleteData);
       return handleAction(
         () =>
-          axios.delete(bannerRequest.href, { data: { ids: [...deleteData] } }),
+          client.delete(bannerRequest.href, { data: { ids: [...deleteData] } }),
         "Foto berhasil dihapus.",
       );
     }
@@ -118,17 +121,17 @@ export async function action({ request, params }: Route.ActionArgs) {
     if (method === "POST") {
       return handleAction(
         () =>
-          axios.post(unggulanRequest.href, formData, {
+          client.post(unggulanRequest.href, formData, {
             headers: { "Content-Type": "multipart/form-data" },
           }),
         "Berhasil",
       );
     }
     if (method === "PUT") {
-      unggulanRequest.pathname = `/layanan-unggulan/${formData.get("id")}`;
+      unggulanRequest.pathname = `/api/v1/layanan-unggulan/${formData.get("id")}`;
       return handleAction(
         () =>
-          axios.put(unggulanRequest.href, formData, {
+          client.put(unggulanRequest.href, formData, {
             headers: { "Content-Type": "multipart/form-data" },
           }),
         "Berhasil",
@@ -181,7 +184,7 @@ export default function AdminHome({
     id_layanan_unggulan: unggulanData.id_layanan_unggulan,
     judul: unggulanData.judul,
     deskripsi: unggulanData.deskripsi,
-    existingImages: unggulanData.gambarCaptions?.map((img) => ({
+    existingImages: unggulanData.gambar_captions?.map((img) => ({
       id: img.id,
       caption: img.caption,
       gambar: img.gambar,

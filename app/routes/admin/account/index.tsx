@@ -13,11 +13,14 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 import ConfirmDialog from "~/components/ConfirmDialog";
 import logo from "~/assets/logoonly.png";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
+  const client = await createAuthenticatedClient(request);
+
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil/ubah-password`);
   try {
-    const response = await axios.get(urlRequest.href, {
+    const response = await client.get(urlRequest.href, {
       withCredentials: true,
       headers: { Cookie: request.headers.get("cookie") ?? "" },
       // headers: { "Set-Cookie": request.headers.get("cookie") },
@@ -30,10 +33,12 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 }
 export async function action({ request }: Route.ActionArgs) {
+  const client = await createAuthenticatedClient(request);
+
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
   const formData = await request.formData();
 
-  return handleAction(() => axios.put(urlRequest.href, formData), "Berhasil");
+  return handleAction(() => client.put(urlRequest.href, formData), "Berhasil");
 }
 
 export default function AdminAccount({
@@ -72,19 +77,24 @@ export default function AdminAccount({
   return (
     <>
       <h1 className="w-max text-2xl font-bold uppercase">Informasi Akun</h1>
-      <div className="mt-8 flex h-fit w-full flex-col items-center justify-center gap-4 min-md:flex-row">
+      {/* <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 p-4 min-md:flex-row"> */}
+      <div className="flex w-full flex-col justify-center gap-4 p-4 min-md:flex-row min-md:px-20">
         {/* <div className="flex w-full h-full flex-col items-center justify-center gap-4 rounded-2xl px-8 pt-8 pb-6 shadow-lg min-md:max-w-56 lg:px-12"> */}
-        <div className="flex w-full flex-none flex-col items-center justify-center rounded-lg border border-gray-400 px-6 py-6 shadow-lg min-md:min-h-86 min-md:max-w-63">
-          <div className="my-4 w-fit rounded-full border bg-white p-8">
+        {/* <div className="flex h-full w-full flex-col items-center justify-center rounded-lg border border-gray-400 px-6 py-6 shadow-lg min-md:min-h-86"> */}
+        <div className="flex flex-none flex-col justify-center gap-4 rounded-lg border border-gray-400 px-12 py-6 shadow-lg">
+          <div className="my-4 mx-auto w-fit rounded-full border bg-white p-8">
             <img
               className="w-20"
               src={logo}
               alt="Logo Rumah Sakit Daerah Balung"
             />
           </div>
-          <h2 className="text-xl font-bold uppercase">RSD Balung</h2>
+          <h2 className="text-center text-xl font-bold uppercase">
+            RSD Balung
+          </h2>
         </div>
-        <div className="flex w-full flex-1 grow flex-col items-center justify-center gap-4 rounded-lg border border-gray-400 px-8 pt-8 pb-6 shadow-lg min-md:max-w-96 lg:px-12">
+        <div className="flex flex-1 flex-col justify-between gap-4 rounded-lg border border-gray-400 px-8 pt-8 pb-6 shadow-lg min-md:max-w-96 lg:px-12">
+          {/* <div className="flex w-full flex-1 grow flex-col items-center justify-center gap-4 rounded-lg border border-gray-400 px-8 pt-8 pb-6 shadow-lg min-md:max-w-96 lg:px-12"> */}
           {!visibleChangeForm ? (
             <>
               <div>
