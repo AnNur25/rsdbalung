@@ -196,7 +196,7 @@ export default function Header({
                 <HeaderSearch />
 
                 {isLogin ? (
-                  <>
+                <>
                     <a
                       href="/akun"
                       className="-mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gradient-to-b hover:text-white"

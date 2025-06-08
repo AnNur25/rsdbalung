@@ -52,7 +52,6 @@ export async function action({ request }: Route.ActionArgs) {
 
     if (data.success) {
       // const setCookieHeader = response.headers["set-cookie"];
-
       // const refreshRes = await axios.post(
       //   `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
       //   {},
@@ -60,11 +59,8 @@ export async function action({ request }: Route.ActionArgs) {
       //     headers: { Cookie: setCookieHeader ?? "" },
       //   },
       // );
-
       // const refreshCookieHeader = refreshRes.headers["set-cookie"];
-
       // console.log("refresh token", refreshRes.headers);
-
       // return redirectWithCookie("/", refreshCookieHeader ?? "");
     } else {
       console.error("Login failed:", data.message);
@@ -304,11 +300,9 @@ export default function RegisterUser({ loaderData }: Route.ComponentProps) {
                 <button
                   type="button"
                   className="flex w-full items-center justify-center gap-3 rounded-md border border-gray-400 p-2 text-sm shadow-md"
-                  onClick={() =>
-                    navigate(
-                      `${import.meta.env.VITE_API_URL}/auth/google?redirect=${window.location.origin}/google`,
-                    )
-                  }
+                  onClick={() => {
+                    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google?redirect=${window.location.origin}/google`;
+                  }}
                 >
                   <img src={googleIcon} alt="Google" className="h-5 w-5" />
                   Daftar dengan Google
