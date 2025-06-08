@@ -34,7 +34,8 @@ export async function action({ request }: Route.ActionArgs) {
   if (method === "POST")
     if (captcha) {
       formData.delete("g-recaptcha-response");
-      formData.append("recaptcha_token", captcha);
+      formData.append("recaptcha_token", captcha as string);
+      console.log("formDatarecaptcha", formData)
 
       return handleAction(() => client.post(urlRequest.href, formData));
     } else {

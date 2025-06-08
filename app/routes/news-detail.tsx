@@ -117,7 +117,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   formData.delete("g-recaptcha-response");
   if (captcha) {
     formData.delete("g-recaptcha-response");
-    formData.append("recaptcha_token", captcha);
+    formData.append("recaptcha_token", captcha as string);
     return handleAction(() => client.post(urlRequest.href, formData));
   } else {
     return {
