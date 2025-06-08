@@ -108,7 +108,6 @@ export async function action({ request, params }: Route.ActionArgs) {
   );
 
   const formData = await request.formData();
-  console.log(formData);
   const localVerify = await handleAction(() =>
     axios.post("http://localhost:3000/api/verify", formData),
   );
@@ -117,7 +116,8 @@ export async function action({ request, params }: Route.ActionArgs) {
   formData.delete("g-recaptcha-response");
   if (captcha) {
     formData.delete("g-recaptcha-response");
-    formData.append("recaptcha_token", captcha as string);
+    formData.append("recaptcha_token", captcha);
+    console.log(formData);
     return handleAction(() => client.post(urlRequest.href, formData));
   } else {
     return {
@@ -140,8 +140,11 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
     comments = [],
   } = data || {};
   // const cleanHtml = DOMPurify.sanitize(isi);
-  
-  const komentarList: Comment[] = Array.isArray(data.comments) && data.comments.length > 0 ? data.comments : [];
+
+  const komentarList: Comment[] =
+    Array.isArray(data.comments) && data.comments.length > 0
+      ? data.comments
+      : [];
   const tanggal = tanggal_dibuat.split(" pukul")[0];
 
   const fetcher = useFetcher();

@@ -159,7 +159,7 @@ export default function Header({
           ) : (
             <>
               <a
-                href={`${import.meta.env.VITE_API_URL}/auth/google?redirect=${redirectUrl}`}
+                href="/login"
                 target="_blank"
                 className="font-semibold hover:text-dark-blue-900"
               >
@@ -207,7 +207,7 @@ export default function Header({
                 ) : (
                   <>
                     <a
-                      href={`${import.meta.env.VITE_API_URL}/auth/google`}
+                      href="/login"
                       target="_blank"
                       className="-mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gradient-to-b hover:text-white"
                     >

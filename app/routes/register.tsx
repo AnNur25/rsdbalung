@@ -305,7 +305,9 @@ export default function RegisterUser({ loaderData }: Route.ComponentProps) {
                   type="button"
                   className="flex w-full items-center justify-center gap-3 rounded-md border border-gray-400 p-2 text-sm shadow-md"
                   onClick={() =>
-                    navigate(`${import.meta.env.VITE_API_URL}/auth/google`)
+                    navigate(
+                      `${import.meta.env.VITE_API_URL}/auth/google?redirect=${window.location.origin}/google`,
+                    )
                   }
                 >
                   <img src={googleIcon} alt="Google" className="h-5 w-5" />
