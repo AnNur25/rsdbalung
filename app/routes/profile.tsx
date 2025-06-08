@@ -17,7 +17,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Profile() {
   return (
     <>
-      <PageBanner banner={strukturImg} title="Struktur Organisasi" />
+      <PageBanner title="Struktur Organisasi" />
       <main className="mx-auto lg:max-w-3/4">
         <div className="mx-auto my-4 w-fit rounded-full bg-white p-8">
           <img
