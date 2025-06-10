@@ -21,22 +21,22 @@ import redirectWithCookie from "~/utils/redirectWithCookie";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const client = await createAuthenticatedClient(request);
-  try {
-    const response = await client.get(`${import.meta.env.VITE_API_URL}/profil`);
-    console.log("response", response.data);
-  } catch (error) {
-    const refreshRes = await client.post(
-      `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
-      {},
-      {
-        headers: { Cookie: request.headers.get("cookie") ?? "" },
-      },
-    );
-    console.log("Unauthorized, refreshing token", refreshRes);
-    const refreshCookieHeader = refreshRes.headers["set-cookie"];
-    console.log("refresh header", refreshCookieHeader);
-    return redirectWithCookie(request.url, refreshCookieHeader ?? "");
-  }
+  // try {
+  //   const response = await client.get(`${import.meta.env.VITE_API_URL}/profil`);
+  //   console.log("response", response.data);
+  // } catch (error) {
+  //   const refreshRes = await client.post(
+  //     `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
+  //     {},
+  //     {
+  //       headers: { Cookie: request.headers.get("cookie") ?? "" },
+  //     },
+  //   );
+  //   console.log("Unauthorized, refreshing token", refreshRes);
+  //   const refreshCookieHeader = refreshRes.headers["set-cookie"];
+  //   console.log("refresh header", refreshCookieHeader);
+  //   return redirectWithCookie(request.url, refreshCookieHeader ?? "");
+  // }
 
   const channelId = "UChVGsibHFT03DpOhvBp36kQ";
   const res = await axios.get(

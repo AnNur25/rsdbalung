@@ -15,6 +15,7 @@ import type { Route } from "./+types/schedule";
 import type { DokterSchedule } from "~/models/Schedule";
 import Table from "~/components/Table";
 import PaginationControls from "~/components/PaginationControl";
+import PageBanner from "~/components/PageBanner";
 
 // export interface ApiResponseAndPoli extends ApiResponse {
 //   poli: Poli[];
@@ -109,117 +110,122 @@ export default function Schedule({ loaderData }: Route.ComponentProps) {
   };
 
   return (
-    <main className="mt-4 flex flex-col items-center">
-      <h1 className="mt-2 text-2xl font-extrabold uppercase">Jadwal Dokter</h1>
-      <p className="px-4 py-2 text-center text-gray-600">
-        Jadwal dapat berubah sewaktu-waktu, Silakan periksa secara berkala
-      </p>
-      <div className="items-centers my-4 flex w-screen flex-col justify-center gap-2 lg:max-w-full lg:flex-row">
-        <div className="flex w-screen flex-wrap items-center justify-center gap-2 px-8 lg:max-w-3/5">
-          <Select
-            className="max-w-full flex-1 rounded-md border-1 border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none lg:max-w-2xl"
-            value={searchPoli}
-            onChange={(e) => setSearchPoli(e.target.value)}
-          >
-            {poli.length > 0 ? (
-              poli.map((item, index) => (
-                <option key={index} value={item.id_poli}>
-                  {item.nama_poli}
-                </option>
-              ))
-            ) : (
-              <option value="">Tidak ada data</option>
-            )}
-          </Select>
-          <input
-            className="flex-1 rounded-md border-1 border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none lg:max-w-2xl"
-            type="date"
-            lang="id-ID"
-            placeholder="Pilih Tanggal"
-            name="date"
-            id="schedule-date-search"
-            value={searchDate}
-            onChange={(e) => setSearchDate(e.target.value)}
-          />
-          <button
-            className="rounded-lg bg-green-600 px-6 py-2 text-white max-lg:w-full"
-            type="button"
-            onClick={handleSearch}
-          >
-            Cari
-          </button>
+    <>
+      <PageBanner title="Jadwal Dokter" />
+      <main className="mt-4 flex flex-col items-center">
+        {/* <h1 className="mt-2 text-2xl font-extrabold uppercase">
+          Jadwal Dokter
+        </h1> */}
+        <p className="px-4 py-2 text-center text-gray-600">
+          Jadwal dapat berubah sewaktu-waktu, Silakan periksa secara berkala
+        </p>
+        <div className="items-centers my-4 flex w-screen flex-col justify-center gap-2 lg:max-w-full lg:flex-row">
+          <div className="flex w-screen flex-wrap items-center justify-center gap-2 px-8 lg:max-w-3/5">
+            <Select
+              className="max-w-full flex-1 rounded-md border-1 border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none lg:max-w-2xl"
+              value={searchPoli}
+              onChange={(e) => setSearchPoli(e.target.value)}
+            >
+              {poli.length > 0 ? (
+                poli.map((item, index) => (
+                  <option key={index} value={item.id_poli}>
+                    {item.nama_poli}
+                  </option>
+                ))
+              ) : (
+                <option value="">Tidak ada data</option>
+              )}
+            </Select>
+            <input
+              className="flex-1 rounded-md border-1 border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none lg:max-w-2xl"
+              type="date"
+              lang="id-ID"
+              placeholder="Pilih Tanggal"
+              name="date"
+              id="schedule-date-search"
+              value={searchDate}
+              onChange={(e) => setSearchDate(e.target.value)}
+            />
+            <button
+              className="rounded-lg bg-green-600 px-6 py-2 text-white max-lg:w-full"
+              type="button"
+              onClick={handleSearch}
+            >
+              Cari
+            </button>
+          </div>
         </div>
-      </div>
 
-      <section className="max-w-[90vw] overflow-auto">
-        <Table headers={headers}>
-          {doctors.map((doctor, index) => {
-            // Total number of schedule rows for this doctor
-            const totalRows = doctor.layananList.reduce(
-              (sum, layanan) => sum + layanan.jadwal.length,
-              0,
-            );
+        <section className="max-w-[90vw] overflow-auto">
+          <Table headers={headers}>
+            {doctors.map((doctor, index) => {
+              // Total number of schedule rows for this doctor
+              const totalRows = doctor.layananList.reduce(
+                (sum, layanan) => sum + layanan.jadwal.length,
+                0,
+              );
 
-            return doctor.layananList.map((layanan, lIndex) =>
-              layanan.jadwal.map((jadwal, jIndex) => (
-                <tr
-                  key={`${index}-${lIndex}-${jIndex}`}
-                  className={alternatingRowColor}
-                >
-                  {lIndex === 0 && jIndex === 0 && (
-                    <>
-                      <td
-                        rowSpan={totalRows}
-                        className="border border-gray-300 px-4 py-2 text-center"
-                      >
-                        {index + 1}
-                      </td>
-                      <td
-                        rowSpan={totalRows}
-                        className="border border-gray-300 px-4 py-2"
-                      >
-                        {doctor.nama_dokter}
-                      </td>
-                      {/* <td
+              return doctor.layananList.map((layanan, lIndex) =>
+                layanan.jadwal.map((jadwal, jIndex) => (
+                  <tr
+                    key={`${index}-${lIndex}-${jIndex}`}
+                    className={alternatingRowColor}
+                  >
+                    {lIndex === 0 && jIndex === 0 && (
+                      <>
+                        <td
+                          rowSpan={totalRows}
+                          className="border border-gray-300 px-4 py-2 text-center"
+                        >
+                          {index + 1}
+                        </td>
+                        <td
+                          rowSpan={totalRows}
+                          className="border border-gray-300 px-4 py-2"
+                        >
+                          {doctor.nama_dokter}
+                        </td>
+                        {/* <td
                         rowSpan={totalRows}
                         className="border border-gray-300 px-4 py-2"
                       >
                         {doctor.poli.nama_poli}
                       </td> */}
-                    </>
-                  )}
+                      </>
+                    )}
 
-                  {jIndex === 0 && (
-                    <td
-                      rowSpan={layanan.jadwal.length}
-                      className="border border-gray-300 px-4 py-2"
-                    >
-                      {layanan.nama_pelayanan}
+                    {jIndex === 0 && (
+                      <td
+                        rowSpan={layanan.jadwal.length}
+                        className="border border-gray-300 px-4 py-2"
+                      >
+                        {layanan.nama_pelayanan}
+                      </td>
+                    )}
+
+                    {/* Hari & Jam */}
+                    <td className="border border-gray-300 px-4 py-2">
+                      {jadwal.hari}
                     </td>
-                  )}
+                    <td className="border border-gray-300 px-4 py-2">
+                      {jadwal.jam_mulai} - {jadwal.jam_selesai}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 capitalize">
+                      {jadwal.sesi}
+                    </td>
+                  </tr>
+                )),
+              );
+            })}
+          </Table>
+        </section>
 
-                  {/* Hari & Jam */}
-                  <td className="border border-gray-300 px-4 py-2">
-                    {jadwal.hari}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {jadwal.jam_mulai} - {jadwal.jam_selesai}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 capitalize">
-                    {jadwal.sesi}
-                  </td>
-                </tr>
-              )),
-            );
-          })}
-        </Table>
-      </section>
-
-      <PaginationControls
-        currentPage={currentPage}
-        totalPages={pagination.totalPages}
-        onPageChange={handlePageChange}
-      />
-    </main>
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={handlePageChange}
+        />
+      </main>
+    </>
   );
 }

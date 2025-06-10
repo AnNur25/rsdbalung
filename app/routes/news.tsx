@@ -10,6 +10,7 @@ import { paginationDefault, type Pagination } from "~/models/Pagination";
 import NewsCard from "~/components/NewsCard";
 import SearchBar from "~/components/SearchBar";
 import PaginationControls from "~/components/PaginationControl";
+import PageBanner from "~/components/PageBanner";
 
 export async function loader({
   request,
@@ -61,37 +62,40 @@ export default function News({ loaderData }: Route.ComponentProps) {
   };
 
   return (
-    <main className="mt-4 flex flex-col items-center">
-      <h1 className="mt-2 text-2xl font-extrabold uppercase">Berita</h1>
-      <div className="items-centers mt-4 flex gap-2">
-        <SearchBar
-          handleSearch={handleSearch}
-          onSearchChange={setSearchKeyword}
+    <>
+      <PageBanner title="Berita" />
+      <main className="mt-4 flex flex-col items-center">
+        {/* <h1 className="mt-2 text-2xl font-extrabold uppercase">Berita</h1> */}
+        <div className="items-centers mt-4 flex gap-2">
+          <SearchBar
+            handleSearch={handleSearch}
+            onSearchChange={setSearchKeyword}
+          />
+        </div>
+
+        <section className="flex flex-col flex-wrap justify-center gap-5 p-4 min-md:flex-row">
+          {news.length > 0 ? (
+            news.map((berita, index) => (
+              <NewsCard
+                key={index}
+                id={berita.id}
+                title={berita.judul}
+                description={berita.ringkasan}
+                image={berita.gambar_sampul}
+                date={berita.tanggal_dibuat}
+              />
+            ))
+          ) : (
+            <p className="text-gray-500">{loaderData.message}</p>
+          )}
+        </section>
+
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={handlePageChange}
         />
-      </div>
-
-      <section className="flex flex-col flex-wrap justify-center gap-5 p-4 min-md:flex-row">
-        {news.length > 0 ? (
-          news.map((berita, index) => (
-            <NewsCard
-              key={index}
-              id={berita.id}
-              title={berita.judul}
-              description={berita.ringkasan}
-              image={berita.gambar_sampul}
-              date={berita.tanggal_dibuat}
-            />
-          ))
-        ) : (
-          <p className="text-gray-500">{loaderData.message}</p>
-        )}
-      </section>
-
-      <PaginationControls
-        currentPage={currentPage}
-        totalPages={pagination.totalPages}
-        onPageChange={handlePageChange}
-      />
-    </main>
+      </main>
+    </>
   );
 }

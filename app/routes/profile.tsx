@@ -34,7 +34,7 @@ export default function Profile() {
           <img
             loading="lazy"
             className="mx-auto p-4"
-            src={strukturImg}
+            src="/images/struktur.png"
             alt="Struktur Organisasi"
           />
         </section>

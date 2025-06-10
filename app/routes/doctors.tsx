@@ -12,6 +12,7 @@ import DoctorCard from "~/components/DoctorCard";
 
 import PaginationControls from "~/components/PaginationControl";
 import SearchBar from "~/components/SearchBar";
+import PageBanner from "~/components/PageBanner";
 
 export async function loader({
   request,
@@ -69,42 +70,47 @@ export default function Doctors({ loaderData }: Route.ComponentProps) {
   };
 
   return (
-    <main className="mt-4 flex flex-col items-center">
-      <h1 className="mt-2 text-2xl font-extrabold uppercase">Daftar Dokter</h1>
-      <div className="items-centers mt-4 flex gap-2">
-        <SearchBar
-          handleSearch={handleSearch}
-          onSearchChange={setSearchKeyword}
-        />
-      </div>
+    <>
+      <PageBanner title="Daftar Dokter" />
+      <main className="mt-4 flex flex-col items-center">
+        {/* <h1 className="mt-2 text-2xl font-extrabold uppercase">
+          Daftar Dokter
+        </h1> */}
+        <div className="items-centers mt-4 flex gap-2">
+          <SearchBar
+            handleSearch={handleSearch}
+            onSearchChange={setSearchKeyword}
+          />
+        </div>
 
-      <section className="flex flex-col flex-wrap justify-center gap-10 p-6 min-md:flex-row">
-        {doctors.length > 0 ? (
-          doctors.map((doctor, index) => (
-            <div className="relative w-min">
-              <DoctorCard
-                id={doctor.id_dokter}
-                key={index}
-                name={doctor.nama}
-                specialty={doctor.poli.nama_poli}
-                image={doctor.gambar}
-              />
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500 first-letter:capitalize">
-            {loaderData.message}
-          </p>
-        )}
-      </section>
+        <section className="flex flex-col flex-wrap justify-center gap-10 p-6 min-md:flex-row">
+          {doctors.length > 0 ? (
+            doctors.map((doctor, index) => (
+              <div className="relative w-min">
+                <DoctorCard
+                  id={doctor.id_dokter}
+                  key={index}
+                  name={doctor.nama}
+                  specialty={doctor.poli.nama_poli}
+                  image={doctor.gambar}
+                />
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500 first-letter:capitalize">
+              {loaderData.message}
+            </p>
+          )}
+        </section>
 
-      <div className="flex w-full justify-center">
-        <PaginationControls
-          currentPage={currentPage}
-          totalPages={pagination.totalPages}
-          onPageChange={handlePageChange}
-        />
-      </div>
-    </main>
+        <div className="flex w-full justify-center">
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      </main>
+    </>
   );
 }
