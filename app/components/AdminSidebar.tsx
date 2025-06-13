@@ -1,4 +1,5 @@
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
 import {
   Description,
   Dialog,
@@ -29,6 +30,8 @@ import logo from "~/assets/logo-text-white.png";
 import logoBlack from "~/assets/logo-black.png";
 import { NavLink, redirect, useNavigate } from "react-router";
 import ConfirmDialog from "./ConfirmDialog";
+import axios from "axios";
+import type { ComplaintModel } from "~/models/Complaint";
 
 const navigation = [
   {
@@ -78,7 +81,19 @@ export default function AdminSidebar() {
     console.log("Logout");
     setLogoutDialogOpen(false);
   };
-
+  const [complaints, setComplaints] = useState<ComplaintModel[]>([]);
+  const nComplaints = complaints.length;
+  console.log("nComplaints", nComplaints);
+  const nComplaint = localStorage.getItem("nComplaint") ?? "0";
+  const nComplaintInt = parseInt(nComplaint, 10);
+  const isUnread = nComplaintInt < nComplaints;
+  useEffect(() => {
+    const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/all`);
+    axios.get(urlRequest.href).then((res) => {
+      console.log(res);
+      setComplaints(res.data.data.data_aduan);
+    });
+  }, []);
   return (
     <>
       {/* Mobile top bar */}
@@ -156,7 +171,7 @@ export default function AdminSidebar() {
                   key={item.name}
                   to={item.href}
                   className={({ isActive }: { isActive: boolean }) =>
-                    `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                    `flex relative items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
                       isActive
                         ? "bg-blue-100 text-blue-800"
                         : "text-gray-700 hover:bg-gray-100"
@@ -164,7 +179,10 @@ export default function AdminSidebar() {
                   }
                 >
                   <item.icon className="h-4 w-4" />
-                  {item.name}
+                  {item.name}{" "}
+                  {isUnread && item.name == "Aduan" && (
+                    <div className="absolute top-2 left-6 h-2 w-2 rounded-full bg-red-600"></div>
+                  )}
                 </NavLink>
               ),
             )}
@@ -239,7 +257,7 @@ export default function AdminSidebar() {
                 key={item.name}
                 to={item.href || "#"}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                  `relative flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                     isActive
                       ? "bg-white text-blue-800"
                       : "text-white hover:bg-blue-800"
@@ -247,7 +265,10 @@ export default function AdminSidebar() {
                 }
               >
                 <item.icon className="h-4 w-4" />
-                {item.name}
+                {item.name}{" "}
+                {isUnread && item.name == "Aduan" && (
+                  <div className="absolute top-2 left-6 h-2 w-2 rounded-full bg-red-600"></div>
+                )}
               </NavLink>
             ),
           )}

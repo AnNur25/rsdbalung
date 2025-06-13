@@ -6,7 +6,8 @@ import axios from "axios";
 import { clearAuthCookies, hasAuthCookies } from "~/utils/auth-cookie";
 import { createAuthenticatedClient } from "~/utils/auth-client";
 import redirectWithCookie from "~/utils/redirectWithCookie";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import type { ComplaintModel } from "~/models/Complaint";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const client = await createAuthenticatedClient(request);
@@ -55,12 +56,14 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function AdminLayout() {
+  // const [complaints, setComplaints] = useState<ComplaintModel[]>([]);
+  // const nComplaints = complaints.length;
+  // console.log("layout complaint", nComplaints);
   // useEffect(() => {
-  //   fetch(`${import.meta.env.VITE_API_URL}/auth/refresh-token`, {
-  //     method: "POST",
-  //     credentials: "include",
-  //   }).then((res) => {
-  //     console.log("refresh token response", res.headers);
+  //   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/all`);
+  //   axios.get(urlRequest.href).then((res) => {
+  //     console.log(res);
+  //     setComplaints(res.data.data.data_aduan);
   //   });
   // }, []);
   return (
