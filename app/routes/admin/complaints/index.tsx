@@ -123,6 +123,7 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
               isAdmin={true}
               sendOnClick={handleReplyComplaint}
               isVisible={complaint.is_visible}
+              isLogin={true}
               switchOnClick={() => handleVisibleComplaint(complaint.id)}
               deleteOnClick={() => deleteOnClick(complaint.id)}
               date={complaint.dibuat_pada}

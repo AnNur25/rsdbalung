@@ -19,13 +19,13 @@ export default function Profile() {
     <>
       <PageBanner title="Struktur Organisasi" />
       <main className="mx-auto lg:max-w-3/4">
-        <div className="mx-auto my-4 w-fit rounded-full bg-white p-8">
+        {/* <div className="mx-auto my-4 w-fit rounded-full bg-white p-8">
           <img
             className="w-20"
             src={logo}
             alt="Logo Rumah Sakit Daerah Balung"
           />
-        </div>
+        </div> */}
 
         <section className="my-8">
           <h2 className="text-center text-2xl font-bold">
