@@ -94,7 +94,7 @@ export default function RegisterUser({ loaderData }: Route.ComponentProps) {
         <div
           className="hidden h-screen w-max bg-cover bg-center py-10 text-center text-white shadow-md lg:block lg:flex-1"
           style={{
-            backgroundImage: `url(${loginImage})`,
+            backgroundImage: `url(/images/login.png)`,
           }}
         ></div>
         {/* <img src={loginImage} className="h-screen" alt="" /> */}
