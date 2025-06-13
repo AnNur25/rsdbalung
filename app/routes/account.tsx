@@ -7,11 +7,12 @@ import {
   EyeSlashIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/solid";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFetcher } from "react-router";
 import { div } from "motion/react-client";
 import { handleAction } from "~/utils/handleAction";
 import ConfirmDialog from "~/components/ConfirmDialog";
+import toast from "react-hot-toast";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const client = await createAuthenticatedClient(request);
@@ -60,7 +61,16 @@ export default function UserAccount({ loaderData }: Route.ComponentProps) {
 
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
-
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+        setTimeout(() => {}, 2000);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
   const activeColor = "dark-blue-900";
   const inactiveColor = "black";
 

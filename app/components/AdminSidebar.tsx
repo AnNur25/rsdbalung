@@ -76,7 +76,7 @@ export default function AdminSidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const navigate = useNavigate();
-  const handleLogout = () => {
+const handleLogout = () => {
     navigate("/humasbalung/logout");
     console.log("Logout");
     setLogoutDialogOpen(false);

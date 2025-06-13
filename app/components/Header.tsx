@@ -157,14 +157,14 @@ export default function Header({
                   <UserCircleIcon className="h-8 w-8 text-gray-700 hover:text-dark-blue-900" />
                 </PopoverButton>
                 {/* <PopoverPanel className="ring-opacity-5 absolute right-0 z-100 mt-2 w-56 rounded-md bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none"> */}
-                <PopoverPanel className="absolute right-0 z-100 mt-2 flex w-fit flex-col rounded border border-gray-200 shadow-2xl bg-white">
+                <PopoverPanel className="absolute right-0 z-100 mt-2 flex w-fit flex-col rounded border border-gray-200 bg-white shadow-2xl">
                   <a
                     className="px-4 py-2 text-sm font-medium hover:text-dark-blue-950"
                     href="/akun"
                   >
                     Akun
                   </a>
-                  <hr className="border-gray-200"/>
+                  <hr className="border-gray-200" />
                   <a
                     className="px-4 py-2 text-sm font-medium hover:text-dark-blue-950"
                     href="/logout"
@@ -220,6 +220,12 @@ export default function Header({
                       className="-mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gradient-to-b hover:text-white"
                     >
                       Akun
+                    </a>
+                    <a
+                      href="/logout"
+                      className="-mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gradient-to-b hover:text-white"
+                    >
+                      Logout
                     </a>
                   </>
                 ) : (
