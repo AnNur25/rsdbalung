@@ -4,7 +4,8 @@ import { handleAction } from "~/utils/handleAction";
 import { handleLoader } from "~/utils/handleLoader";
 import axios from "axios";
 import { useFetcher } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export async function loader() {
   const igRequest = new URL(`${import.meta.env.VITE_API_URL}/media-sosial`);
@@ -50,6 +51,17 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
   const [instagram, setInstagram] = useState(
     instagramsLinks || ["", "", "", ""],
   );
+  const fetcherData = fetcher.data || { message: "", success: false };
+  console.log("fetcherData", fetcherData);
+  useEffect(() => {
+    if (fetcherData.message) {
+      if (fetcherData.success) {
+        toast.success(fetcherData.message);
+      } else {
+        toast.error(fetcherData.message);
+      }
+    }
+  }, [fetcherData]);
 
   const handleChange = (index: number, value: string) => {
     const editedInstagrams = [...instagram];
