@@ -13,6 +13,7 @@ export default [
   route("logout", "routes/logout.tsx"),
   route("google", "routes/google.tsx"),
   layout("routes/layout.tsx", [
+    route("developer", "routes/developer.tsx"),
     route("test", "routes/test.tsx"),
     route("akun", "routes/account.tsx"),
     route("api/v1", "routes/testoauth.tsx"),

@@ -1,6 +1,12 @@
+import { handleAction } from "~/utils/handleAction";
 import type { Route } from "./+types/logout";
+import { createAuthenticatedClient } from "~/utils/auth-client";
 
 export async function loader({ request }: Route.LoaderArgs) {
+  const client = await createAuthenticatedClient(request);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/auth/logout`);
+  await handleAction(() => client.post(urlRequest.href));
+
   const headers = new Headers({
     Location: "/",
   });

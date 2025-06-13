@@ -128,7 +128,7 @@ export default function AdminSidebar() {
                           />
                         </svg>
                       </DisclosureButton>
-                      <DisclosurePanel className="ml-7 space-y-1">
+                      <DisclosurePanel className="space-y-1">
                         {item.submenu.map((sub) => (
                           <NavLink
                             key={sub.name}
@@ -213,7 +213,7 @@ export default function AdminSidebar() {
                         />
                       </svg>
                     </DisclosureButton>
-                    <DisclosurePanel className="ml-7 space-y-1">
+                    <DisclosurePanel className="space-y-1">
                       {item.submenu.map((sub) => (
                         <NavLink
                           key={sub.name}

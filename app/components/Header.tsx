@@ -152,9 +152,27 @@ export default function Header({
 
           {isLogin ? (
             <>
-              <a href="/akun">
-                <UserCircleIcon className="h-8 w-8 text-gray-700 hover:text-dark-blue-900" />
-              </a>
+              <Popover as="div" className="relative">
+                <PopoverButton>
+                  <UserCircleIcon className="h-8 w-8 text-gray-700 hover:text-dark-blue-900" />
+                </PopoverButton>
+                {/* <PopoverPanel className="ring-opacity-5 absolute right-0 z-100 mt-2 w-56 rounded-md bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none"> */}
+                <PopoverPanel className="absolute right-0 z-100 mt-2 flex w-fit flex-col rounded border border-gray-200 shadow-2xl bg-white">
+                  <a
+                    className="px-4 py-2 text-sm font-medium hover:text-dark-blue-950"
+                    href="/akun"
+                  >
+                    Akun
+                  </a>
+                  <hr className="border-gray-200"/>
+                  <a
+                    className="px-4 py-2 text-sm font-medium hover:text-dark-blue-950"
+                    href="/logout"
+                  >
+                    Logout
+                  </a>
+                </PopoverPanel>
+              </Popover>
             </>
           ) : (
             <>
@@ -196,7 +214,7 @@ export default function Header({
                 <HeaderSearch />
 
                 {isLogin ? (
-                <>
+                  <>
                     <a
                       href="/akun"
                       className="-mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gradient-to-b hover:text-white"

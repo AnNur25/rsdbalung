@@ -341,8 +341,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           )}
         </div>
       </section> */}
-
-      <SliderSection
+      <section id="layanan-unggulan"></section>
+      <SliderSection  
         title={unggulanData.judul}
         subtitle="Layanan Unggulan Kami"
         description={unggulanData.deskripsi}

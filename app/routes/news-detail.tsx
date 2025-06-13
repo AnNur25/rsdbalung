@@ -1,7 +1,7 @@
 import NewsCard from "~/components/NewsCard";
 import banner from "~/assets/rsdbalung.jpeg";
 import axios from "axios";
-import { useFetcher, useLoaderData } from "react-router";
+import { useFetcher, useLoaderData, useOutletContext } from "react-router";
 import NewsBanner from "~/components/NewsBanner";
 // import type { NewsApiResponse } from "./news";
 import type { News } from "~/models/News";
@@ -11,7 +11,7 @@ import {
   GoogleReCaptchaCheckbox,
   GoogleReCaptchaProvider,
 } from "@google-recaptcha/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import type { Route } from "./+types/news-detail";
 import { handleAction } from "~/utils/handleAction";
@@ -108,26 +108,43 @@ export async function action({ request, params }: Route.ActionArgs) {
   );
 
   const formData = await request.formData();
-  const localVerify = await handleAction(() =>
-    axios.post("http://localhost:3000/api/verify", formData),
-  );
-  console.log("localVerify", localVerify);
-  const captcha = formData.get("g-recaptcha-response");
-  formData.delete("g-recaptcha-response");
-  if (captcha) {
+  const feature = formData.get("feat");
+
+  if (feature === "comment") {
+    const captcha = formData.get("g-recaptcha-response");
     formData.delete("g-recaptcha-response");
-    formData.append("recaptcha_token", captcha);
+    if (captcha) {
+      formData.delete("g-recaptcha-response");
+      formData.append("recaptcha_token", captcha);
+      console.log(formData);
+      return handleAction(() => client.post(urlRequest.href, formData));
+    } else {
+      return {
+        success: false,
+        message: "Captcha diperlukan untuk mengirim aduan",
+      };
+    }
+  }
+
+  if (feature === "reply") {
+    console.log(feature);
+    const comment_id = formData.get("id");
+    const replyRequest = new URL(
+      `${import.meta.env.VITE_API_URL}/berita/${id}/komentar/${comment_id}/reply`,
+    );
     console.log(formData);
-    return handleAction(() => client.post(urlRequest.href, formData));
-  } else {
-    return {
-      success: false,
-      message: "Captcha diperlukan untuk mengirim aduan",
-    };
+
+    return handleAction(() => client.post(replyRequest.href, formData));
   }
 }
 
 export default function NewsDetail({ loaderData }: Route.ComponentProps) {
+  const dataProfil = useOutletContext();
+  // console.log("profilnews", profil);
+  const { profil } = dataProfil as any;
+  const isLogin = profil.success;
+  const profileData = profil.data;
+  console.log(isLogin, profileData);
   const data = loaderData ?? {};
   const {
     judul = "",
@@ -146,6 +163,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
       ? data.comments
       : [];
   const tanggal = tanggal_dibuat.split(" pukul")[0];
+  console.log(komentarList);
 
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
@@ -158,6 +176,27 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
       }
     }
   }, [fetcherData]);
+
+  const handleReply = (id: string, message: string) => {
+    fetcher.submit(
+      {
+        id,
+        isi_komentar: message,
+        no_wa: profileData.no_wa,
+        nama: profileData.nama,
+        feat: "reply",
+      },
+      {
+        method: "post",
+      },
+    );
+  };
+  async function submitComment(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.target as HTMLFormElement);
+    formData.append("feat", "comment");
+    fetcher.submit(formData, { method: "post" });
+  }
   return (
     <main>
       <NewsBanner
@@ -192,6 +231,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
 
           <h3 className="py-2 text-2xl font-bold">Form Komentar</h3>
           <fetcher.Form
+            onSubmit={submitComment}
             method="post"
             className="flex flex-1 flex-col gap-4 rounded-xl border border-gray-300 p-8 shadow-lg"
           >
@@ -321,9 +361,21 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
 
           {komentarList?.map((c, index) => (
             <MessageCard
+              id={c.id_komentar}
+              sendOnClick={handleReply}
               message={c.isi_komentar}
               name={c.nama}
               date={c.tanggal_komentar}
+              isLogin={isLogin}
+              replies={
+                c.replies?.map((reply) => ({
+                  id: reply.id_komentar,
+                  name: reply.nama,
+                  message: reply.isi_komentar,
+                  date: reply.tanggal_komentar,
+                })) ?? []
+              }
+              // isAdmin={true}
             />
             // <p>{c.isi_komentar}</p>
           ))}

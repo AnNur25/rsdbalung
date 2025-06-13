@@ -3,7 +3,7 @@ import { Outlet, useLoaderData } from "react-router";
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
 import type { Pelayanan } from "~/models/Pelayanan";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 // import { GoogleReCaptchaProvider } from "@google-recaptcha/react";
 import type { Route } from "./+types/layout";
 import redirectWithCookie from "~/utils/redirectWithCookie";
@@ -25,6 +25,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   try {
     const response = await client.get(pelayananRequest.href);
     const profilResponse = await client.get(urlRequest.href);
+    // console.log(profilResponse);
 
     if (!response.data.success || !response.data.data.length) {
       // response.data.data = [];
@@ -35,7 +36,11 @@ export async function loader({ request, params }: Route.LoaderArgs) {
         data: [],
       };
     }
-    return { data: response.data, isLogin: profilResponse.data.statusCode };
+    return {
+      data: response.data,
+      isLogin: profilResponse.data.success,
+      profil: profilResponse.data,
+    };
     // return response.data;
   } catch (error: any) {
     try {
@@ -64,6 +69,12 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 }
 
 export default function Layout({ loaderData }: Route.ComponentProps) {
+  const [pelayanan, setPelayanan] = useState<Pelayanan[]>([]);
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/pelayanan/`).then((res) => {
+      setPelayanan(res.data.data);
+    });
+  }, []);
   useEffect(() => {
     const hasVisited = sessionStorage.getItem("hasVisited");
     const nVisits = localStorage.getItem("nVisits") ?? "0";
@@ -74,14 +85,15 @@ export default function Layout({ loaderData }: Route.ComponentProps) {
     }
   }, []);
   const data = loaderData?.data || [];
-  const pelayanan = data.data ?? [];
+  const profil = loaderData?.profil ?? {};
   const isLogin = loaderData?.isLogin ?? false;
   console.log("isLogin", isLogin);
+  console.log("profil", profil);
 
   return (
     <>
       <Header pelayanan={pelayanan} isLogin={isLogin} />
-      <Outlet />
+      <Outlet context={{ profil }} />
       <Footer />
     </>
   );

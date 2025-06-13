@@ -92,7 +92,6 @@ export default function UserAccount({ loaderData }: Route.ComponentProps) {
     const formData = new FormData(formProfilRef.current);
     formData.append("feat", "profil");
     fetcher.submit(formData, { method: "PUT" });
-    // setDialogOpen(false);
   };
 
   return (

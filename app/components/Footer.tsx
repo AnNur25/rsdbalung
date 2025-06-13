@@ -1,9 +1,13 @@
 import logo from "~/assets/logo-text-white.png";
 export default function Footer() {
   const navLinks = [
-    { to: "/profile", label: "Profile" },
-    { to: "/news", label: "Berita" },
-    { to: "#layanan-unggulan", label: "Layanan Unggulan" },
+    { to: "/profile", label: "Profil" },
+    { to: "/#layanan-unggulan", label: "Layanan Unggulan" },
+    {
+      to: "https://rsdbalung.simkeskhanza.com/index.php?act=FasilitasKamar",
+      label: "Ketersediaan Tempat Tidur",
+    },
+    { to: "/developer", label: "Developer/Pengembang" },
   ];
 
   const iconSize: number = 36;

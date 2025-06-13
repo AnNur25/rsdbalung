@@ -14,6 +14,7 @@ interface MessageCardProps extends MessageCardModel {
   phoneNumber?: string;
   replies?: MessageCardModel[];
   isAdmin?: boolean;
+  isLogin?: boolean;
   isVisible?: boolean;
   deleteOnClick?: (id: string) => void;
   switchOnClick?: (id: string) => void;
@@ -27,16 +28,16 @@ export default function MessageCard({
   phoneNumber = "",
   replies = [],
   isAdmin = false,
+  isLogin = false,
   isVisible = false,
   deleteOnClick,
   switchOnClick,
   sendOnClick,
 }: MessageCardProps) {
-  
   const [reply, setReply] = useState("");
 
   const handleSend = () => {
-    if (!reply.trim()) return; 
+    if (!reply.trim()) return;
     if (sendOnClick) sendOnClick(id, reply);
     setReply("");
   };
@@ -76,7 +77,6 @@ export default function MessageCard({
           <>
             <hr className="my-4" />
 
-            {/* Admin */}
             {replies.map((r, index) => (
               <div className="mt-2" key={index}>
                 <p className="font-bold text-gray-500">
@@ -87,7 +87,7 @@ export default function MessageCard({
             ))}
           </>
         )}
-        {isAdmin && (
+        {isLogin && (
           <div className="mt-2 flex items-center gap-2">
             <input
               placeholder="Balas"
@@ -110,12 +110,14 @@ export default function MessageCard({
             >
               <PaperAirplaneIcon className="h-4 w-4" />
             </button>
-            <a
-              target="__blank"
-              href={`https://api.whatsapp.com/send/?phone=${phoneNumber}`}
-            >
-              <img src={whatsAppIcon} className="h-8 w-8" />
-            </a>
+            {isAdmin && (
+              <a
+                target="__blank"
+                href={`https://api.whatsapp.com/send/?phone=${phoneNumber}`}
+              >
+                <img src={whatsAppIcon} className="h-8 w-8" />
+              </a>
+            )}
           </div>
         )}
       </div>
