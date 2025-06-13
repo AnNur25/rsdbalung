@@ -18,7 +18,7 @@ import { createAuthenticatedClient } from "~/utils/auth-client";
 export async function loader({ request }: Route.LoaderArgs) {
   const client = await createAuthenticatedClient(request);
 
-  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil/ubah-password`);
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil/`);
   try {
     const response = await client.get(urlRequest.href, {
       withCredentials: true,
@@ -28,7 +28,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     const data = response.data;
     return data;
   } catch (error: any) {
-    // console.error("Error fetching data:", error.response);
+    console.error("Error fetching data:", error.response);
     // return redirect("/admin/login");
   }
 }
@@ -82,7 +82,7 @@ export default function AdminAccount({
         {/* <div className="flex w-full h-full flex-col items-center justify-center gap-4 rounded-2xl px-8 pt-8 pb-6 shadow-lg min-md:max-w-56 lg:px-12"> */}
         {/* <div className="flex h-full w-full flex-col items-center justify-center rounded-lg border border-gray-400 px-6 py-6 shadow-lg min-md:min-h-86"> */}
         <div className="flex flex-none flex-col justify-center gap-4 rounded-lg border border-gray-400 px-12 py-6 shadow-lg">
-          <div className="my-4 mx-auto w-fit rounded-full border bg-white p-8">
+          <div className="mx-auto my-4 w-fit rounded-full border bg-white p-8">
             <img
               className="w-20"
               src={logo}
