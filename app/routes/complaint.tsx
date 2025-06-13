@@ -17,6 +17,7 @@ import {
   GoogleReCaptchaProvider,
 } from "@google-recaptcha/react";
 import { createAuthenticatedClient } from "~/utils/auth-client";
+import PageBanner from "~/components/PageBanner";
 
 export async function loader() {
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/`);
@@ -35,7 +36,7 @@ export async function action({ request }: Route.ActionArgs) {
     if (captcha) {
       formData.delete("g-recaptcha-response");
       formData.append("recaptcha_token", captcha as string);
-      console.log("formDatarecaptcha", formData)
+      console.log("formDatarecaptcha", formData);
 
       return handleAction(() => client.post(urlRequest.href, formData));
     } else {
@@ -65,10 +66,8 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
+      <PageBanner title="Aduan" />
       <div className="mt-8 flex flex-col items-center">
-        <h1 className="text-2xl font-extrabold text-persian-blue-950 uppercase">
-          Aduan
-        </h1>
         <p className="text-center text-gray-500">
           Kritik dan saran Anda sangat berarti untuk kemajuan rumah sakit kami.
           Terima kasih!
