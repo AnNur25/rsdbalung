@@ -139,7 +139,10 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
   const { profil } = dataProfil as any;
   const isLogin = profil.success;
   const profileData = profil.data;
-  const isAdmin = profileData.role.toLowerCase() == "admin" ? true : false;
+  const isAdmin =
+    profileData && profileData.role
+      ? profileData.role.toLowerCase() === "admin"
+      : false;
   console.log(isLogin, isAdmin, profileData);
   const data = loaderData ?? {};
   const {
