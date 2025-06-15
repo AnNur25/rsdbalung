@@ -51,12 +51,14 @@ export default function MessageCard({
           </p>
           {isAdmin && (
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => deleteOnClick && deleteOnClick(id)}
-                className="ms-2 flex items-center rounded bg-red-600 p-2 text-white"
-              >
-                <TrashIcon className="h-4 w-4" />
-              </button>
+              {deleteOnClick && (
+                <button
+                  onClick={() => deleteOnClick(id)}
+                  className="ms-2 flex items-center rounded bg-red-600 p-2 text-white"
+                >
+                  <TrashIcon className="h-4 w-4" />
+                </button>
+              )}
               <Switch checked={isVisible} onChange={() => {}} as={Fragment}>
                 {({ checked }) => (
                   <button
@@ -110,13 +112,13 @@ export default function MessageCard({
             >
               <PaperAirplaneIcon className="h-4 w-4" />
             </button>
-            {isAdmin && (
-              <a
-                target="__blank"
-                href={`https://api.whatsapp.com/send/?phone=${phoneNumber}`}
-              >
-                <img src={whatsAppIcon} className="h-8 w-8" />
-              </a>
+            {isAdmin && phoneNumber && (
+                <a
+                  target="__blank"
+                  href={`https://api.whatsapp.com/send/?phone=${phoneNumber}`}
+                >
+                  <img src={whatsAppIcon} className="h-8 w-8" />
+                </a>
             )}
           </div>
         )}

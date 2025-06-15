@@ -15,6 +15,7 @@ export default [
   layout("routes/layout.tsx", [
     route("developer", "routes/developer.tsx"),
     route("test", "routes/test.tsx"),
+    route("cari", "routes/search.tsx"),
     route("akun", "routes/account.tsx"),
     route("api/v1", "routes/testoauth.tsx"),
     index("routes/home.tsx"),

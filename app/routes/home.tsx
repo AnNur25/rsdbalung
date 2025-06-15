@@ -48,22 +48,28 @@ export function meta({}: Route.MetaArgs) {
 
 export async function loader(): Promise<LoaderResult> {
   const bannerRequest = new URL(`${import.meta.env.VITE_API_URL}/banner/`);
+  const direkturRequest = new URL(`${import.meta.env.VITE_API_URL}/direktur/`);
   const unggulanRequest = new URL(
     `${import.meta.env.VITE_API_URL}/layanan-unggulan/`,
   );
   const newsRequest = new URL(`${import.meta.env.VITE_API_URL}/berita?page=1`);
   const igRequest = new URL(`${import.meta.env.VITE_API_URL}/media-sosial`);
+
   const bannerResponse = await handleLoader(() =>
     axios.get(bannerRequest.href),
+  );
+  const direkturResponse = await handleLoader(() =>
+    axios.get(direkturRequest.href),
   );
   const unggulanResponse = await handleLoader(() =>
     axios.get(unggulanRequest.href),
   );
   const newsResponse = await handleLoader(() => axios.get(newsRequest.href));
   const igResponse = await handleLoader(() => axios.get(igRequest.href));
-  console.log("ig", igResponse.data);
+  console.log("direktur", direkturResponse.data);
   const data = {
     banners: bannerResponse.data,
+    direktur: direkturResponse.data,
     unggulan: unggulanResponse.data,
     news: newsResponse.data,
     instagrams: igResponse.data,
@@ -73,8 +79,8 @@ export async function loader(): Promise<LoaderResult> {
     message: "Selesai mendapatkan data",
     data,
   };
-  return { success: false, message: "test", data: {} };
 }
+
 const animationTransition = {
   type: "spring",
   bounce: 0.4,
@@ -115,24 +121,10 @@ const animationVariants = {
 export default function Home({ loaderData }: Route.ComponentProps) {
   const data = loaderData?.data ?? {};
   const banners: BannerModel[] = data.banners || [];
-  const dummyUnggulan = [
-    {
-      gambar: "gambar",
-      caption: "caption",
-    },
-    {
-      gambar: "gambar",
-      caption: "caption",
-    },
-    {
-      gambar: "gambar",
-      caption: "caption",
-    },
-    {
-      gambar: "gambar",
-      caption: "caption",
-    },
-  ];
+  const direktur = Array.isArray(data.direktur)
+    ? (data.direktur as { id_direktur: string; gambar: string }[])
+    : [];
+  const direkturImage = direktur.length > 0 ? direktur[0].gambar : "/direkturtrnsprnt.png";
   const mottoList = [
     {
       title: "ATENSI",
@@ -201,7 +193,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             whileInView="onscreen"
             viewport={{ once: true }}
             variants={animationVariants.vertical}
-            src="/direkturtrnsprnt.png"
+            src={direkturImage}
             alt="Person"
             className="relative z-10 max-w-[250px]"
           />
@@ -309,40 +301,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           })}
         </div>
       </motion.section>
-      {/* 
-      <section className="flex flex-col items-center p-4 max-sm:gap-y-2 lg:flex-row lg:gap-x-26 lg:p-16">
-        <div className="lg:flex-1">
-          <TextWithRect>{unggulanData.judul}</TextWithRect>
-          <h2 className="text-2xl font-black text-persian-blue-950 lg:text-4xl">
-            Layanan Unggulan Kami
-          </h2>
-
-          <p className="text-justify text-sm text-gray-600 lg:text-lg">
-            {unggulanData.deskripsi}
-          </p>
-        </div>
-
-        <div className="bg-sky-0 w-full overflow-hidden lg:flex-1">
-          {Array.isArray(unggulanData?.gambarCaptions) &&
-          unggulanData.gambarCaptions.length > 0 ? (
-            <Slider>
-              {unggulanData.gambarCaptions.map((item, index) => (
-                <LayananUnggulanCard
-                  key={index}
-                  description={item.caption}
-                  image={item.gambar}
-                />
-              ))}
-            </Slider>
-          ) : (
-            <p className="text-gray-500">
-              Belum ada layanan unggulan tersedia.
-            </p>
-          )}
-        </div>
-      </section> */}
       <section id="layanan-unggulan"></section>
-      <SliderSection  
+      <SliderSection
         title={unggulanData.judul}
         subtitle="Layanan Unggulan Kami"
         description={unggulanData.deskripsi}
@@ -412,7 +372,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </a>
         </div>
 
-        {/* Slider cannot move the embed */}
         <div
           // className="flex w-full items-center gap-2 overflow-x-auto bg-sky-50 p-2 lg:flex-1"
           className="relative flex h-full max-w-full flex-1 overflow-x-auto bg-white"
@@ -424,8 +383,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           ) : (
             <p className="text-gray-500">{data.message}</p>
           )}
-          {/* <InstagramEmbed url="https://www.instagram.com/p/DILIx7czwOo/" />
-          <InstagramEmbed url="https://www.instagram.com/p/DILIx7czwOo/" /> */}
         </div>
       </section>
 

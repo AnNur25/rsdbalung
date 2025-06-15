@@ -19,17 +19,6 @@ import { handleLoader } from "~/utils/handleLoader";
 import type { Comment } from "~/models/Comment";
 import { createAuthenticatedClient } from "~/utils/auth-client";
 import MessageCard from "~/components/MessageCard";
-// export async function loader({ params }: Route.LoaderArgs) {
-//   return { id: params.id };
-// }
-
-// export async function action({ params }: Route.ActionArgs) {
-//   return { id: params.id };
-// }
-
-// export default function News({ loaderData }: Route.ComponentProps) {
-//   return <h1>News {loaderData?.id ?? "not found"}</h1>;
-// }
 interface NewsDetail {
   id: string;
   judul: string;
@@ -76,7 +65,8 @@ export async function loader({ params }: Route.LoaderArgs) {
         `${import.meta.env.VITE_API_URL}/berita/${id}/komentar/visible`,
       ),
     );
-    // console.log(commentsResponse.data);
+
+    console.log(commentsResponse.data);
     const dataAll = responseAll.data;
     if (!dataAll.success || !dataAll.data.berita.length) {
       return {
@@ -102,6 +92,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
   const { id } = params;
   console.log(params);
+  const method = request.method;
 
   const urlRequest = new URL(
     `${import.meta.env.VITE_API_URL}/berita/${id}/komentar/`,
@@ -136,15 +127,20 @@ export async function action({ request, params }: Route.ActionArgs) {
 
     return handleAction(() => client.post(replyRequest.href, formData));
   }
+  if (method === "PATCH") {
+    const id = formData.get("id");
+    urlRequest.pathname = `/api/v1/berita/${id}/komentar/${id}`;
+    return handleAction(() => client.patch(urlRequest.href));
+  }
 }
 
 export default function NewsDetail({ loaderData }: Route.ComponentProps) {
   const dataProfil = useOutletContext();
-  // console.log("profilnews", profil);
   const { profil } = dataProfil as any;
   const isLogin = profil.success;
   const profileData = profil.data;
-  console.log(isLogin, profileData);
+  const isAdmin = profileData.role.toLowerCase() == "admin" ? true : false;
+  console.log(isLogin, isAdmin, profileData);
   const data = loaderData ?? {};
   const {
     judul = "",
@@ -188,6 +184,14 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
       },
       {
         method: "post",
+      },
+    );
+  };
+  const handleVisible = (id: string) => {
+    fetcher.submit(
+      { id },
+      {
+        method: "patch",
       },
     );
   };
@@ -366,6 +370,8 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
               message={c.isi_komentar}
               name={c.nama}
               date={c.tanggal_komentar}
+              isVisible={c.isVisible}
+              switchOnClick={() => handleVisible(c.id_komentar)}
               isLogin={isLogin}
               replies={
                 c.replies?.map((reply) => ({
@@ -375,9 +381,8 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                   date: reply.tanggal_komentar,
                 })) ?? []
               }
-              // isAdmin={true}
+              isAdmin={isAdmin}
             />
-            // <p>{c.isi_komentar}</p>
           ))}
         </article>
         {/* </section> */}
