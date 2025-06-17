@@ -15,6 +15,7 @@ import SearchBar from "~/components/SearchBar";
 import PaginationControls from "~/components/PaginationControl";
 
 import {
+  ChatBubbleLeftIcon,
   PaperAirplaneIcon,
   PencilSquareIcon,
   PhotoIcon,
@@ -180,6 +181,12 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
                 </td> */}
                 <td className="border border-gray-300 px-4 py-2">
                   <div className="flex justify-center gap-0.5">
+                    <a
+                      href={`/humasbalung/berita/komentar/${item.id}`}
+                      className="block w-min rounded bg-blue-600 p-2 text-white"
+                    >
+                      <ChatBubbleLeftIcon className="h-4 w-4" />
+                    </a>
                     <a
                       href={`/humasbalung/berita/galeri/${item.id}`}
                       className="block w-min rounded bg-blue-600 p-2 text-white"

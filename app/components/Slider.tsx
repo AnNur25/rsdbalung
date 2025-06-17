@@ -2,12 +2,14 @@ import { useState, useEffect, useRef, type ReactNode } from "react";
 
 interface SliderProps {
   navInside?: boolean;
+  filledButton?: boolean;
   overlapSize?: number;
   children: ReactNode[]; // Accept an array of ReactNode as slides
 }
 
 export default function Slider({
   navInside = false,
+  filledButton = false,
   overlapSize = 0,
   children,
 }: SliderProps) {
@@ -17,6 +19,9 @@ export default function Slider({
   const sliderRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+  const buttonStyle = filledButton
+    ? "absolute bottom-1  rounded-full bg-white/80 p-2 text-black shadow transition hover:bg-white"
+    : "absolute bottom-0 rounded-full p-2 text-black transition";
 
   useEffect(() => {
     if (sliderRef.current) {
@@ -97,17 +102,13 @@ export default function Slider({
           </div>
         ))}
 
-        {/* {children.map((child, index) => (
-          <div key={index} className="flex-shrink-0">
-            {child}
-          </div>
-        ))} */}
       </div>
       <div className={navInside ? "absolute inset-0 bottom-14" : ""}>
         {/* Navigation Buttons */}
         <button
           onClick={prevSlide}
-          className="absolute bottom-0 left-0 rounded-full p-2 text-black transition"
+          // className="absolute bottom-1 left-2 rounded-full bg-white/80 p-2 text-black shadow transition hover:bg-white"
+          className={`${buttonStyle} left-2`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -126,7 +127,8 @@ export default function Slider({
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-0 bottom-0 rounded-full p-2 text-black transition"
+          // className="absolute right-2 bottom-1 rounded-full bg-white/80 p-2 text-black shadow transition hover:bg-white"
+          className={`${buttonStyle} right-2`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -126,14 +126,14 @@ export default function Director({
           </fetcher.Form>
         </div>
 
-        <div className="mt-3 grid min-h-[40vh] w-full grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-2">
+        <div className="rounded-lg border p-4 mt-4">
           {photos?.map((photo) => (
             // <div key={photo.id_direktur} className="relative aspect-[9/16]">
             <img
               key={photo.id_direktur}
               src={photo.gambar}
               alt="Gallery"
-              className="aspect-auto rounded-lg object-cover"
+              className="max-h-[60vh] rounded-lg object-cover"
             />
             // </div>
           ))}

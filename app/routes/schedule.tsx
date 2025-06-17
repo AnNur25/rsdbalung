@@ -17,10 +17,6 @@ import Table from "~/components/Table";
 import PaginationControls from "~/components/PaginationControl";
 import PageBanner from "~/components/PageBanner";
 
-// export interface ApiResponseAndPoli extends ApiResponse {
-//   poli: Poli[];
-// }
-
 export async function loader({
   request,
 }: Route.LoaderArgs): Promise<LoaderResult> {
@@ -70,16 +66,6 @@ export default function Schedule({ loaderData }: Route.ComponentProps) {
 
   const { dokter: doctors = [], pagination = paginationDefault } = scheduleData;
 
-  // const flattenedSchedules = doctors.flatMap((doctor) =>
-  //   doctor.layananList.map((layanan) => ({
-  //     id_dokter: doctor.id_dokter,
-  //     dokter: doctor.nama_dokter,
-  //     poli: doctor.poli.nama_poli,
-  //     layanan: layanan.nama_pelayanan,
-  //     jadwal: layanan.jadwal,
-  //   })),
-  // );
-
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(pagination?.currentPage || 1);
   const [searchDate, setSearchDate] = useState<string>(
@@ -113,9 +99,6 @@ export default function Schedule({ loaderData }: Route.ComponentProps) {
     <>
       <PageBanner title="Jadwal Dokter" />
       <main className="mt-4 flex flex-col items-center">
-        {/* <h1 className="mt-2 text-2xl font-extrabold uppercase">
-          Jadwal Dokter
-        </h1> */}
         <p className="px-4 py-2 text-center text-gray-600">
           Jadwal dapat berubah sewaktu-waktu, Silakan periksa secara berkala
         </p>
@@ -158,65 +141,82 @@ export default function Schedule({ loaderData }: Route.ComponentProps) {
 
         <section className="max-w-[90vw] overflow-auto">
           <Table headers={headers}>
-            {doctors.map((doctor, index) => {
-              // Total number of schedule rows for this doctor
-              const totalRows = doctor.layananList.reduce(
-                (sum, layanan) => sum + layanan.jadwal.length,
-                0,
-              );
+            {doctors
+              .map((doctor, index) => {
+                const days = [
+                  "Minggu",
+                  "Senin",
+                  "Selasa",
+                  "Rabu",
+                  "Kamis",
+                  "Jumat",
+                  "Sabtu",
+                ];
+                const dateObj = new Date(searchDate);
+                const today = days[dateObj.getDay()];
+                const layananListToday = doctor.layananList
+                  .map((layanan) => ({
+                    ...layanan,
+                    jadwal: layanan.jadwal.filter(
+                      (jadwal) => jadwal.hari === today,
+                    ),
+                  }))
+                  .filter((layanan) => layanan.jadwal.length > 0);
 
-              return doctor.layananList.map((layanan, lIndex) =>
-                layanan.jadwal.map((jadwal, jIndex) => (
-                  <tr
-                    key={`${index}-${lIndex}-${jIndex}`}
-                    className={alternatingRowColor}
-                  >
-                    {lIndex === 0 && jIndex === 0 && (
-                      <>
+                if (layananListToday.length === 0) return null;
+
+                const totalRows = layananListToday.reduce(
+                  (sum, layanan) => sum + layanan.jadwal.length,
+                  0,
+                );
+
+                return layananListToday.map((layanan, lIndex) =>
+                  layanan.jadwal.map((jadwal, jIndex) => (
+                    <tr
+                      key={`${index}-${lIndex}-${jIndex}`}
+                      className={alternatingRowColor}
+                    >
+                      {lIndex === 0 && jIndex === 0 && (
+                        <>
+                          <td
+                            rowSpan={totalRows}
+                            className="border border-gray-300 px-4 py-2 text-center"
+                          >
+                            {index + 1}
+                          </td>
+                          <td
+                            rowSpan={totalRows}
+                            className="border border-gray-300 px-4 py-2"
+                          >
+                            {doctor.nama_dokter}
+                          </td>
+                        </>
+                      )}
+
+                      {jIndex === 0 && (
                         <td
-                          rowSpan={totalRows}
-                          className="border border-gray-300 px-4 py-2 text-center"
-                        >
-                          {index + 1}
-                        </td>
-                        <td
-                          rowSpan={totalRows}
+                          rowSpan={layanan.jadwal.length}
                           className="border border-gray-300 px-4 py-2"
                         >
-                          {doctor.nama_dokter}
+                          {layanan.nama_pelayanan}
                         </td>
-                        {/* <td
-                        rowSpan={totalRows}
-                        className="border border-gray-300 px-4 py-2"
-                      >
-                        {doctor.poli.nama_poli}
-                      </td> */}
-                      </>
-                    )}
+                      )}
 
-                    {jIndex === 0 && (
-                      <td
-                        rowSpan={layanan.jadwal.length}
-                        className="border border-gray-300 px-4 py-2"
-                      >
-                        {layanan.nama_pelayanan}
+                      {/* Hari & Jam */}
+                      <td className="border border-gray-300 px-4 py-2">
+                        {jadwal.hari}
                       </td>
-                    )}
-
-                    {/* Hari & Jam */}
-                    <td className="border border-gray-300 px-4 py-2">
-                      {jadwal.hari}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {jadwal.jam_mulai} - {jadwal.jam_selesai}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2 capitalize">
-                      {jadwal.sesi}
-                    </td>
-                  </tr>
-                )),
-              );
-            })}
+                      <td className="border border-gray-300 px-4 py-2">
+                        {jadwal.jam_mulai} - {jadwal.jam_selesai}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 capitalize">
+                        {jadwal.sesi}
+                      </td>
+                    </tr>
+                  )),
+                );
+              })
+              .filter(Boolean)}
           </Table>
         </section>
 

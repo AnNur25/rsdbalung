@@ -80,7 +80,7 @@ export default function SliderSection({
   const overlapEm = overlapSize * 4 || 0;
   return (
     <section className="flex flex-col items-center bg-gradient-to-b from-dark-blue-900 to-dark-blue-950 max-sm:gap-y-2 lg:flex-row lg:gap-x-8 lg:ps-8">
-      <div className="flex flex-col gap-6 px-6 py-8 text-white">
+      <div className="flex flex-col gap-6 px-6 py-8 text-white min-md:flex-1">
         <TextWithRect leftShifted={false} textColor="text-white">
           {title}
         </TextWithRect>
@@ -118,9 +118,7 @@ export default function SliderSection({
               <button
                 key={index}
                 className={`h-3 rounded-full transition-all duration-200 ${
-                  index === currentIndex
-                    ? "w-8 shadow-md"
-                    : "w-3"
+                  index === currentIndex ? "w-8 shadow-md" : "w-3"
                 } bg-white`}
                 onClick={() => goToSlide(index)}
                 aria-label={`Go to slide ${index + 1}`}
@@ -154,7 +152,7 @@ export default function SliderSection({
       {/* </div> */}
 
       <div
-        className="relative h-full max-w-full overflow-hidden bg-white"
+        className="relative h-full max-w-full overflow-hidden bg-white min-md:flex-2"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         onTouchStart={handleTouchStart}

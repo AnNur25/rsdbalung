@@ -41,7 +41,7 @@ export default [
       ...prefix("akun", [index("routes/admin/account/index.tsx")]),
       ...prefix("berita", [
         index("routes/admin/news/index.tsx"),
-        // route("detail/:id", "routes/admin/news/detail.tsx"),
+        route("komentar/:id", "routes/admin/news/comments.tsx"),
         route("create", "routes/admin/news/create.tsx"),
         route("edit/:id", "routes/admin/news/edit.tsx"),
         route("galeri/:id", "routes/admin/news/gallery.tsx"),

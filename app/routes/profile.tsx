@@ -17,7 +17,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Profile() {
   return (
     <>
-      <PageBanner title="Struktur Organisasi" />
+      <PageBanner title="PROFIL RSD BALUNG" />
       <main className="mx-auto lg:max-w-3/4">
         <section className="my-8">
           <h2 className="text-center text-2xl font-bold">

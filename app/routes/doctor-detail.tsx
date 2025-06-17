@@ -11,6 +11,7 @@ import Table from "~/components/Table";
 import DoctorCard from "~/components/DoctorCard";
 import { alternatingRowColor } from "~/utils/styles";
 import Slider from "~/components/Slider";
+import PageBanner from "~/components/PageBanner";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const doctorRequest = new URL(
@@ -64,6 +65,7 @@ export default function DoctorDetail({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
+      <PageBanner title="Detail Dokter"/>
       <div className="flex flex-col">
         <div className="flex flex-col justify-center gap-8 p-8 min-md:flex-row">
           <div className="flex w-fit flex-col items-center">

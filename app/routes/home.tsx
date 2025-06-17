@@ -124,7 +124,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const direktur = Array.isArray(data.direktur)
     ? (data.direktur as { id_direktur: string; gambar: string }[])
     : [];
-  const direkturImage = direktur.length > 0 ? direktur[0].gambar : "/direkturtrnsprnt.png";
+  const direkturImage =
+    direktur.length > 0 ? direktur[0].gambar : "/direkturtrnsprnt.png";
   const mottoList = [
     {
       title: "ATENSI",
@@ -173,9 +174,31 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         className="absolute bottom-0 z-10 h-full w-full object-cover"
         alt="Waves"
       /> */}
-      <section className="mx-4 mt-8 flex flex-col items-center justify-center gap-4 min-md:mx-16 min-md:flex-row">
+      <section className="mx-4 mt-16 flex flex-col items-center justify-center gap-4 min-md:mx-16 min-md:flex-row">
         <div className="absolute -top-60 -left-20 z-10">
           <img src={waveImage} className="w-100 object-cover" alt="Waves" />
+        </div>
+        <div className="flex w-fit flex-col items-center min-md:hidden">
+          <motion.p
+            initial="offscreen"
+            whileInView="onscreen"
+            variants={animationVariants.vertical}
+            className="text-xl text-dark-blue-950 min-md:text-2xl"
+            transition={{ delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            Selamat Datang di
+          </motion.p>
+          <motion.h1
+            initial="offscreen"
+            whileInView="onscreen"
+            variants={animationVariants.vertical}
+            className="text-4xl font-black text-dark-blue-900 uppercase min-md:text-5xl"
+            transition={{ delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            RSD Balung
+          </motion.h1>
         </div>
         {/* <img src="/direktur.png" className="w-60 min-md:w-80" /> */}
         <div className="relative mx-auto w-fit">
@@ -200,7 +223,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
 
         <div className="flex shrink flex-col items-center justify-center min-md:max-w-3/5">
-          <div className="flex w-fit flex-col items-center">
+          <div className="flex w-fit flex-col items-center max-md:hidden">
             <motion.p
               initial="offscreen"
               whileInView="onscreen"
@@ -268,7 +291,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       </section>
 
       <motion.section
-        className="mt-8 flex flex-col items-center"
+        className="my-8 mt-18 flex flex-col items-center"
         initial="offscreen"
         whileInView="onscreen"
         variants={animationVariants.vertical}
@@ -295,13 +318,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 <h2 className="text-2xl font-extrabold text-dark-blue-950">
                   {item.title}
                 </h2>
-                <p className="text-justify text-gray-600">{item.description}</p>
+                <p className="text-center text-gray-600">{item.description}</p>
               </article>
             );
           })}
         </div>
       </motion.section>
-      <section id="layanan-unggulan"></section>
+      <section className="my-8" id="layanan-unggulan"></section>
       <SliderSection
         title={unggulanData.judul}
         subtitle="Layanan Unggulan Kami"
@@ -319,7 +342,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           : []}
       </SliderSection>
 
-      <section className="p-5 lg:p-16">
+      <section className="my-8 p-5 lg:p-16">
         <div className="flex flex-col items-center gap-4">
           <TextWithRect>BERITA</TextWithRect>
           <p className="text-center text-lg font-black lg:text-2xl">
@@ -350,7 +373,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </section>
 
-      <section className="flex flex-col items-center bg-gradient-to-b from-dark-blue-900 to-dark-blue-950 max-sm:gap-y-2 lg:flex-row lg:gap-x-8 lg:ps-8">
+      <section className="my-8 flex flex-col items-center bg-gradient-to-b from-dark-blue-900 to-dark-blue-950 max-sm:gap-y-2 lg:flex-row lg:gap-x-8 lg:ps-8">
         <div className="flex flex-1 flex-col gap-6 px-6 py-8 text-white">
           <TextWithRect leftShifted={false} textColor="text-white">
             INSTAGRAM
@@ -386,7 +409,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </section>
 
-      <div className="flex w-full flex-col justify-between gap-4 p-4 min-md:flex-row min-md:px-20">
+      <div className="my-8 flex w-full flex-col justify-between gap-4 p-4 min-md:flex-row min-md:px-20">
         <div className="flex flex-1 flex-col justify-between gap-4">
           <img src="images/rsd.png" />
 

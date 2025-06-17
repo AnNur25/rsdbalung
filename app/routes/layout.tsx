@@ -57,13 +57,13 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       return redirectWithCookie(request.url, refreshCookieHeader ?? "");
     } catch (error: any) {
       console.error("Error fetching data:", error.response);
-      return {
-        success: false,
-        statusCode: error.response?.status ?? 500,
-        message: "Failed to fetch data",
-        data: [],
-        isLogin: false,
-      };
+      // return {
+      //   success: false,
+      //   statusCode: error.response?.status ?? 500,
+      //   message: "Failed to fetch data",
+      //   data: [],
+      //   isLogin: false,
+      // };
     }
   }
 }
