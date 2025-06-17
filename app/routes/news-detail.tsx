@@ -376,6 +376,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
               isVisible={c.isVisible}
               switchOnClick={() => handleVisible(c.id_komentar)}
               isLogin={isLogin}
+              phoneNumber={c.no_wa ?? ""}
               replies={
                 c.replies?.map((reply) => ({
                   id: reply.id_komentar,

@@ -119,6 +119,7 @@ export default function AdminComments({ loaderData }: Route.ComponentProps) {
         <section className="mb-4 w-full overflow-x-auto">
           {comments?.map((c) => (
             <MessageCard
+              phoneNumber={c.no_wa ?? ""}
               id={c.id_komentar}
               sendOnClick={handleReply}
               message={c.isi_komentar}
