@@ -32,7 +32,10 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   console.log(commentsResponse.data);
   return {
     success: commentsResponse.data.success && profilResponse.data.success,
-    message: commentsResponse.data.message || profilResponse.data.message || "Berhasil",
+    message:
+      commentsResponse.data.message ||
+      profilResponse.data.message ||
+      "Berhasil",
     data: { data: commentsResponse.data, profil: profilResponse.data },
   };
 }
@@ -68,9 +71,7 @@ export async function action({ request, params }: Route.ActionArgs) {
 export default function AdminComments({ loaderData }: Route.ComponentProps) {
   const data = loaderData?.data || { data: {} };
   console.log("loader data", data);
-  const comments = Array.isArray(data?.data)
-    ? (data.data as Comment[])
-    : [];
+  const comments = Array.isArray(data?.data) ? (data.data as Comment[]) : [];
   const profileData = data?.profil?.data || {
     no_wa: "",
     nama: "",
