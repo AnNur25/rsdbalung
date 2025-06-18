@@ -24,8 +24,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
-    const client = await createAuthenticatedClient(request);
-  
+  const client = await createAuthenticatedClient(request);
+
   const urlRequest = new URL(
     `${import.meta.env.VITE_API_URL}/berita/${params.id}/galeri-berita`,
   );
@@ -42,6 +42,15 @@ export async function action({ request, params }: Route.ActionArgs) {
       files.every((file) => !(file instanceof File) || file.size === 0)
     ) {
       return { success: false, message: "Mohon upload minimal 1 foto" };
+    }
+    
+    const maxMb = 1;
+    if (
+      files.every(
+        (file) => file instanceof File && file.size > maxMb * 1024 * 1024,
+      )
+    ) {
+      return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
     }
 
     return handleAction(

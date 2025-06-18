@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { Route } from "./+types";
-import { Form, useFetcher, useNavigate } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import { useFetcher, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 import type { Doctor } from "~/models/Doctor";
 import { handleLoader } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
@@ -44,6 +44,10 @@ export async function action({ request, params }: Route.ActionArgs) {
   //   formData.delete("file");
   //   formData.append("file", defaultFile);
   // }
+  const maxMb = 1;
+  if (file.size > maxMb * 1024 * 1024) {
+    return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
+  }
   console.log("formData", formData);
 
   const urlRequest = new URL(

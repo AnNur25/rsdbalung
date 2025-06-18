@@ -56,6 +56,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   console.log("method", method);
   const feature = formData.get("feat");
   console.log("feature", feature);
+  const maxMb = 1;
 
   if (feature === "banner") {
     const bannerRequest = new URL(`${import.meta.env.VITE_API_URL}/banner/`);
@@ -70,6 +71,14 @@ export async function action({ request, params }: Route.ActionArgs) {
         files.every((file) => !(file instanceof File) || file.size === 0)
       ) {
         return { success: false, message: "Mohon upload minimal 1 foto" };
+      }
+
+      if (
+        files.every(
+          (file) => file instanceof File && file.size > maxMb * 1024 * 1024,
+        )
+      ) {
+        return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
       }
 
       return handleAction(
