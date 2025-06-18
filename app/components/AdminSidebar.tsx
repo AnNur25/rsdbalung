@@ -1,10 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import {
-  Description,
   Dialog,
   DialogPanel,
-  DialogTitle,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
@@ -28,7 +26,7 @@ import {
 } from "@heroicons/react/24/solid";
 import logo from "~/assets/logo-text-white.png";
 import logoBlack from "~/assets/logo-black.png";
-import { NavLink, redirect, useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import ConfirmDialog from "./ConfirmDialog";
 import axios from "axios";
 import type { ComplaintModel } from "~/models/Complaint";
@@ -76,7 +74,7 @@ export default function AdminSidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const navigate = useNavigate();
-const handleLogout = () => {
+  const handleLogout = () => {
     navigate("/humasbalung/logout");
     console.log("Logout");
     setLogoutDialogOpen(false);
@@ -171,7 +169,7 @@ const handleLogout = () => {
                   key={item.name}
                   to={item.href}
                   className={({ isActive }: { isActive: boolean }) =>
-                    `flex relative items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
+                    `relative flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
                       isActive
                         ? "bg-blue-100 text-blue-800"
                         : "text-gray-700 hover:bg-gray-100"
@@ -289,40 +287,9 @@ const handleLogout = () => {
         confirmOnClick={handleLogout}
         // title="Konfirmasi Keluar"
         description="Apakah Anda yakin ingin keluar?"
-        cancelLabel="Batal"
-        confirmLabel="Keluar"
+        cancelLabel="Tidak"
+        confirmLabel="Iya"
       />
-      {/* <Dialog
-        open={logoutDialogOpen}
-        onClose={() => setLogoutDialogOpen(false)}
-        className="relative z-50"
-      >
-        <div className="fixed inset-0 bg-gray-600/50" />
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg">
-            <DialogTitle className="text-lg font-bold text-gray-900">
-              Konfirmasi Keluar
-            </DialogTitle>
-            <Description className="mt-2 text-sm text-gray-600">
-              Apakah Anda yakin ingin keluar?
-            </Description>
-            <div className="mt-4 flex gap-2">
-              <button
-                onClick={() => setLogoutDialogOpen(false)}
-                className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Batal
-              </button>
-              <button
-                onClick={handleLogout}
-                className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-              >
-                Keluar
-              </button>
-            </div>
-          </DialogPanel>
-        </div>
-      </Dialog> */}
 
       {/* Offset for content */}
       <div className="lg:ml-54" />

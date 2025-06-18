@@ -1,14 +1,14 @@
 import type { Route } from "./+types/login";
-import loginImage from "~/assets/loginimage.jpg";
 import { useFetcher } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import redirectWithCookie from "~/utils/redirectWithCookie";
+import { getErrorMessage } from "~/utils/handleError";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  console.log("load cookie", request.headers.get("Cookie"));
+  // console.log("load cookie", request.headers.get("Cookie"));
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -50,6 +50,11 @@ export async function action({ request }: Route.ActionArgs) {
     }
   } catch (error: any) {
     console.error("Error during login:", error);
+
+    return {
+      success: false,
+      message: getErrorMessage(error) || "Login gagal, silakan coba lagi.",
+    };
   }
 }
 
@@ -65,6 +70,7 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
       }
     }
   }, [fetcherData]);
+  
   const [showPassword, setShowPassword] = useState(false);
   return (
     <>

@@ -1,11 +1,6 @@
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/solid";
 import { Select } from "@headlessui/react";
 import axios from "axios";
-import { data, useLoaderData, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { useState } from "react";
 import { alternatingRowColor } from "~/utils/styles";
 import { paginationDefault, type Pagination } from "~/models/Pagination";

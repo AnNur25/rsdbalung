@@ -143,8 +143,8 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
         confirmOnClick={handleDelete}
         // title="Konfirmasi Hapus"
         description="Apakah Anda yakin ingin menghapus data ini?"
-        cancelLabel="Batal"
-        confirmLabel="Hapus"
+        cancelLabel="Tidak"
+        confirmLabel="Iya"
       />
       {/* <Dialog
         open={deleteDialogOpen}

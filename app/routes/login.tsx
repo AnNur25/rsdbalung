@@ -1,43 +1,11 @@
 import axios from "axios";
 import type { Route } from "./+types/login";
 import redirectWithCookie from "~/utils/redirectWithCookie";
-import { redirect, useFetcher, useNavigate } from "react-router";
+import { useFetcher, useNavigate } from "react-router";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import loginImage from "~/assets/loginuser.png";
 import googleIcon from "~/assets/google.svg";
-
-export async function loader({ request }: Route.LoaderArgs) {
-  //   const url = new URL(request.url);
-  //   const searchParams = url.searchParams;
-  //   console.log("url", url);
-  //   console.log("searchParams", searchParams);
-  //   let authSuccess = searchParams.get("authSuccess");
-  //   let refreshToken = searchParams.get("refreshToken") ?? "";
-  //   let aksesToken = authSuccess?.split("?")[1] ?? "";
-  //   aksesToken = aksesToken?.split("=")[1] ?? "";
-  //   if (!authSuccess) {
-  //     return redirect("/test");
-  //   }
-  //   if (refreshToken && aksesToken) {
-  //     console.log("aksesToken", aksesToken);
-  //     const aksesCookie = `${aksesToken}; Path=/; HttpOnly; SameSite=Lax; Secure`;
-  //     const refreshCookie = `refreshToken=${refreshToken}; Path=/; HttpOnly; SameSite=Lax; Secure`;
-  //     const setTokenRes = await axios.post(
-  //       `${import.meta.env.VITE_API_URL}/auth/set-cookie`,
-  //       {
-  //         aksesToken,
-  //         refreshToken,
-  //       },
-  //       { withCredentials: true },
-  //     );
-  //     const setCookieHeader = setTokenRes.headers["set-cookie"];
-  //     console.log(setTokenRes);
-  //     return redirectWithCookie("/", setCookieHeader ?? "");
-  //     // return redirectWithCookie("/", [aksesCookie, refreshCookie]);
-  //   }
-}
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
@@ -81,7 +49,6 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function LoginUser({ loaderData }: Route.ComponentProps) {
   const fetcher = useFetcher();
-  const navigate = useNavigate();
   const fetcherData = fetcher.data || { message: "", success: false };
   useEffect(() => {
     if (fetcherData.message) {
@@ -133,6 +100,7 @@ export default function LoginUser({ loaderData }: Route.ComponentProps) {
                       name="email"
                       type="email"
                       required
+                      placeholder="Masukkan email di sini"
                       autoComplete="email"
                       className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 ${
                         fetcherData.message && !fetcherData.success
@@ -189,6 +157,7 @@ export default function LoginUser({ loaderData }: Route.ComponentProps) {
                         name="password"
                         type={showPassword ? "text" : "password"}
                         required
+                        placeholder="Masukkan password di sini"
                         autoComplete="current-password"
                         className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 ${
                           fetcherData.message && !fetcherData.success

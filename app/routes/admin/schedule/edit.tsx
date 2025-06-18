@@ -1,24 +1,7 @@
-// {
-//   id_dokter: "d5c02314-f01d-424c-9cd2-4c6152f0e758",
-//   nama_dokter: "test",
-//   gambar_dokter: "https://ik.imagekit.io/ena3eh2k0/Cat_Illust_CSpvlVvJA.jpg",
-//   poli: {
-//     id_poli: "95d1f57c-01cf-49f3-bb6c-32a5dba8f300",
-//     nama_poli: "Poli Spesialis Penyakit Dalam",
-//   },
-//   layananList: [[Object]],
-// }
-// get poli
-// get dokter
-// filter dokter by poli id
-// get layanan
-
-import { Form, useFetcher, useNavigate } from "react-router";
+import { useFetcher, useNavigate } from "react-router";
 import type { Route } from "./+types/edit";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import type { Poli } from "~/models/Poli";
-import type { Doctor } from "~/models/Doctor";
 import type { Pelayanan } from "~/models/Pelayanan";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
@@ -102,32 +85,6 @@ export async function action({ request }: Route.ActionArgs) {
     `${import.meta.env.VITE_API_URL}/jadwal-dokter/${idDokter}`,
   );
   return handleAction(() => client.put(urlRequest.href, data));
-  // let data = {
-  //   id_dokter: formData.get("id_dokter"),
-  //   layananList: [
-  //     {
-  //       id_pelayanan: formData.get("id_pelayanan"),
-  //       hariList: [
-  //         {
-  //           hari: formData.get("hari"),
-  //           jam_mulai: formData.get("jam_mulai"),
-  //           jam_selesai: formData.get("jam_selesai"),
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // };
-  // {
-  //   id_dokter: "d5c02314-f01d-424c-9cd2-4c6152f0e758",
-  //   hari: ["Senin", "Selasa", "Rabu"],
-  //   jam_mulai: ["07:00", "07:00", "09:00"],
-  //   jam_selesai: ["08:00", "08:00", "10:00"],
-  //   id_pelayanan: [
-  //     "427d9b56-e652-4f57-b700-235de5d24f2b",
-  //     "fa732262-87a1-43ac-8c4b-5f37be6ee19c",
-  //     "83332a3c-452a-4a3c-b89f-8602a72ea278",
-  //   ],
-  // }
 }
 
 type ScheduleItem = {
@@ -202,17 +159,6 @@ export default function EditSchedule({ loaderData }: Route.ComponentProps) {
     newSchedules[index][field] = value;
     setSchedules(newSchedules);
   };
-  // const hasShownLoaderToastRef = useRef(false);
-  // useEffect(() => {
-  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
-  //     if (loaderData.success) {
-  //       toast.success(loaderData.message);
-  //     } else {
-  //       toast.error(loaderData.message);
-  //     }
-  //     hasShownLoaderToastRef.current = true;
-  //   }
-  // }, [loaderData]);
 
   const navigate = useNavigate();
   const fetcher = useFetcher();

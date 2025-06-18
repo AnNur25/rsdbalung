@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useFetcher, useSearchParams } from "react-router";
 import axios from "axios";
 
@@ -16,19 +16,12 @@ import PaginationControls from "~/components/PaginationControl";
 
 import {
   ChatBubbleLeftIcon,
-  PaperAirplaneIcon,
   PencilSquareIcon,
   PhotoIcon,
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
-import {
-  Description,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
 import ConfirmDialog from "~/components/ConfirmDialog";
 import { createAuthenticatedClient } from "~/utils/auth-client";
 
@@ -50,8 +43,8 @@ export async function loader({
   return handleLoader(() => axios.get(urlRequest.href));
 }
 export async function action({ request }: Route.ActionArgs) {
-    const client = await createAuthenticatedClient(request);
-  
+  const client = await createAuthenticatedClient(request);
+
   const method = request.method;
   const formData = await request.formData();
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/berita`);
@@ -227,8 +220,8 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
         confirmOnClick={handleDelete}
         // title="Konfirmasi Hapus"
         description="Apakah Anda yakin ingin menghapus data ini?"
-        cancelLabel="Batal"
-        confirmLabel="Hapus"
+        cancelLabel="Tidak"
+        confirmLabel="Iya"
       />
       {/* <Dialog
         open={deleteDialogOpen}

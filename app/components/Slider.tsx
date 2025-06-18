@@ -20,8 +20,8 @@ export default function Slider({
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
   const buttonStyle = filledButton
-    ? "absolute bottom-1  rounded-full bg-white/80 p-2 text-black shadow transition hover:bg-white"
-    : "absolute bottom-0 rounded-full p-2 text-black transition";
+    ? "absolute bottom-1  rounded-full bg-white/80 p-1.5 text-black shadow transition hover:bg-white"
+    : "absolute bottom-0 rounded-full p-1.5 text-black transition";
 
   useEffect(() => {
     if (sliderRef.current) {
@@ -102,7 +102,7 @@ export default function Slider({
           </div>
         ))}
       </div>
-      <div className={navInside ? "absolute inset-0 bottom-4" : ""}>
+      <div className={navInside ? "absolute inset-0 bottom-2" : "mt-14"}>
         {/* Navigation Buttons */}
         <button
           onClick={prevSlide}
@@ -115,7 +115,7 @@ export default function Slider({
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className="size-5"
           >
             <path
               strokeLinecap="round"
@@ -135,7 +135,7 @@ export default function Slider({
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className="size-5"
           >
             <path
               strokeLinecap="round"

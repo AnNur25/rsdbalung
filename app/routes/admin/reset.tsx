@@ -1,35 +1,22 @@
 import type { Route } from "./+types/reset";
 import loginImage from "~/assets/loginimage.jpg";
-
-// import {
-//   getSession,
-//   commitSession,
-//   type SessionFlashData,
-// } from "../../sessions.server";
 import {
-  data,
-  Form,
-  redirect,
-  useActionData,
   useFetcher,
   useSearchParams,
 } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { ActionToast, LoaderToast } from "~/hooks/toastHandler";
 import { useEffect, useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { handleAction } from "~/utils/handleAction";
-import { createAuthenticatedClient } from "~/utils/auth-client";
 
-export async function loader({ request, params }: Route.LoaderArgs) {}
+// export async function loader({ request, params }: Route.LoaderArgs) {}
 
 export async function action({ request }: Route.ActionArgs) {
   console.log("action");
   
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/`);
   const formData = await request.formData();
-  // const session = await getSession(request.headers.get("Cookie"));
   const url = new URL(request.url);
   const token = url.searchParams.get("token");
   console.log("token", token);
@@ -65,9 +52,7 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
   const fetcherData = fetcher.data || { message: "", success: false };
   const [showPassword, setShowPassword] = useState(false);
 
-  // Check if there's a query parameter
   const [searchParams, setSearchParams] = useSearchParams();
-  // console.log("searchParams", searchParams.get("token"));
   const token = searchParams.get("token"); //urlParams.has("token");
 
   useEffect(() => {

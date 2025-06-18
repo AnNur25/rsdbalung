@@ -65,7 +65,6 @@ export default function News({ loaderData }: Route.ComponentProps) {
     <>
       <PageBanner title="Berita" />
       <main className="mt-4 flex flex-col items-center">
-        {/* <h1 className="mt-2 text-2xl font-extrabold uppercase">Berita</h1> */}
         <div className="items-centers mt-4 flex gap-2">
           <SearchBar
             handleSearch={handleSearch}

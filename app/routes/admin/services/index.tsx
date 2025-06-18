@@ -9,8 +9,6 @@ import type { Pelayanan } from "~/models/Pelayanan";
 import Table from "~/components/Table";
 
 import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/solid";
-import { useRef, useEffect } from "react";
-import toast from "react-hot-toast";
 
 export async function loader(): Promise<LoaderResult> {
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/pelayanan`);
@@ -20,17 +18,7 @@ export async function loader(): Promise<LoaderResult> {
 export default function AdminServices({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Layanan", "Aksi"];
   const pelayananList = (loaderData.data as Pelayanan[]) || [];
-  // const hasShownLoaderToastRef = useRef(false);
-  // useEffect(() => {
-  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
-  //     if (loaderData.success) {
-  //       toast.success(loaderData.message);
-  //     } else {
-  //       toast.error(loaderData.message);
-  //     }
-  //     hasShownLoaderToastRef.current = true;
-  //   }
-  // }, [loaderData]);
+
   return (
     <>
       <div className="mb-4 flex items-center justify-between">

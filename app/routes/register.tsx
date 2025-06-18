@@ -1,43 +1,11 @@
 import axios from "axios";
 import type { Route } from "./+types/register";
-import redirectWithCookie from "~/utils/redirectWithCookie";
-import { redirect, useFetcher, useNavigate } from "react-router";
+import { useFetcher, useNavigate } from "react-router";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import loginImage from "~/assets/loginuser.png";
 import googleIcon from "~/assets/google.svg";
-
-export async function loader({ request }: Route.LoaderArgs) {
-  //   const url = new URL(request.url);
-  //   const searchParams = url.searchParams;
-  //   console.log("url", url);
-  //   console.log("searchParams", searchParams);
-  //   let authSuccess = searchParams.get("authSuccess");
-  //   let refreshToken = searchParams.get("refreshToken") ?? "";
-  //   let aksesToken = authSuccess?.split("?")[1] ?? "";
-  //   aksesToken = aksesToken?.split("=")[1] ?? "";
-  //   if (!authSuccess) {
-  //     return redirect("/test");
-  //   }
-  //   if (refreshToken && aksesToken) {
-  //     console.log("aksesToken", aksesToken);
-  //     const aksesCookie = `${aksesToken}; Path=/; HttpOnly; SameSite=Lax; Secure`;
-  //     const refreshCookie = `refreshToken=${refreshToken}; Path=/; HttpOnly; SameSite=Lax; Secure`;
-  //     const setTokenRes = await axios.post(
-  //       `${import.meta.env.VITE_API_URL}/auth/set-cookie`,
-  //       {
-  //         aksesToken,
-  //         refreshToken,
-  //       },
-  //       { withCredentials: true },
-  //     );
-  //     const setCookieHeader = setTokenRes.headers["set-cookie"];
-  //     console.log(setTokenRes);
-  //     return redirectWithCookie("/", setCookieHeader ?? "");
-  //     // return redirectWithCookie("/", [aksesCookie, refreshCookie]);
-  //   }
-}
+import { getErrorMessage } from "~/utils/handleError";
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
@@ -47,30 +15,28 @@ export async function action({ request }: Route.ActionArgs) {
 
   try {
     const response = await axios.post(urlRequest.href, formData);
-    console.log("response", response.headers);
+    console.log("response", response);
     const data = response.data;
 
     if (data.success) {
-      // const setCookieHeader = response.headers["set-cookie"];
-      // const refreshRes = await axios.post(
-      //   `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
-      //   {},
-      //   {
-      //     headers: { Cookie: setCookieHeader ?? "" },
-      //   },
-      // );
-      // const refreshCookieHeader = refreshRes.headers["set-cookie"];
-      // console.log("refresh token", refreshRes.headers);
-      // return redirectWithCookie("/", refreshCookieHeader ?? "");
+      return {
+        success: true,
+        message: data.message || "Registrasi berhasil, silakan masuk.",
+      };
     } else {
       console.error("Login failed:", data.message);
       return {
         success: false,
-        message: data.message || "Login gagal, silakan coba lagi.",
+        message: data.message || "Registrasi gagal, silakan coba lagi.",
       };
     }
   } catch (error: any) {
     console.error("Error during login:", error);
+    return {
+      success: false,
+      message:
+        getErrorMessage(error) || "Terjadi kesalahan, silakan coba lagi.",
+    };
   }
 }
 export default function RegisterUser({ loaderData }: Route.ComponentProps) {
@@ -128,6 +94,7 @@ export default function RegisterUser({ loaderData }: Route.ComponentProps) {
                       name="email"
                       type="email"
                       required
+                      placeholder="Masukkan email di sini"
                       autoComplete="email"
                       className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 ${
                         fetcherData.message && !fetcherData.success
@@ -167,6 +134,7 @@ export default function RegisterUser({ loaderData }: Route.ComponentProps) {
                       name="nama"
                       type="text"
                       required
+                      placeholder="Masukkan username di sini"
                       autoComplete="name"
                       className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 ${
                         fetcherData.message && !fetcherData.success
@@ -197,15 +165,26 @@ export default function RegisterUser({ loaderData }: Route.ComponentProps) {
                   </label>
                   <div className="mt-2">
                     <input
+                      pattern="[1-9]\d*|0" // for HTML5 validation
                       onInput={(e) => {
                         const input = e.currentTarget;
-                        if (input.value === " " || input.value === "0") {
+                        // Prevent leading zeros
+                        if (input.value === "0") {
+                          // Disallow "0" as the only input
                           input.value = "";
                         }
+
+                        // Replace leading zeros with 62
+                        input.value = input.value.replace(/^0+(?!$)/, "62");
+
+                        // Remove non-digit characters
+                        input.value = input.value.replace(/[^\d]/g, "");
                       }}
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="cth. 628xxxxxxxxxx"
                       id="no_wa"
                       name="no_wa"
-                      type="text"
                       required
                       className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 ${
                         fetcherData.message && !fetcherData.success
@@ -255,6 +234,7 @@ export default function RegisterUser({ loaderData }: Route.ComponentProps) {
                         name="password"
                         type={showPassword ? "text" : "password"}
                         required
+                        placeholder="Masukkan password di sini"
                         autoComplete="current-password"
                         className={`block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 ${
                           fetcherData.message && !fetcherData.success

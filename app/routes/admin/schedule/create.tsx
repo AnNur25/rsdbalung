@@ -1,27 +1,6 @@
-// {
-//   "id_dokter": 101,
-//   "layananList": [
-//     {
-//       "id_pelayanan": 201,
-//       "hariList": [
-//         {
-//           "hari": "Senin",
-//           "jam_mulai": "08:00",
-//           "jam_selesai": "12:00"
-//         }
-//       ]
-//     }
-//   ]
-// }
-
-// get poli
-// get dokter
-// filter dokter by poli id
-// get layanan
-
-import { Form, useFetcher, useNavigate } from "react-router";
+import { useFetcher, useNavigate } from "react-router";
 import type { Route } from "./+types/create";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import type { Poli } from "~/models/Poli";
 import type { Doctor } from "~/models/Doctor";
@@ -33,7 +12,7 @@ import { handleLoader } from "~/utils/handleLoader";
 import { isSuccess } from "~/utils/extractResponses";
 import { createAuthenticatedClient } from "~/utils/auth-client";
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader() {
   const poliRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
   const doctorRequest = new URL(
     `${import.meta.env.VITE_API_URL}/dokter?pageSize=999`,

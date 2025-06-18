@@ -1,24 +1,12 @@
 import type { Route } from "./+types/home";
-// import { getSession } from "~/sessions.server";
 import {
-  data,
-  Form,
-  isRouteErrorResponse,
-  redirect,
   useFetcher,
-  useRouteError,
-  useSubmit,
   type HTMLFormMethod,
 } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useEffect, useRef, useState } from "react";
-import {
-  getDataForToast,
-  useToastFromAction,
-  useToastFromLoader,
-} from "~/hooks/useToast";
-import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
+import { useEffect, useState } from "react";
+import { handleLoader } from "~/utils/handleLoader";
 import {
   MinusIcon,
   PencilSquareIcon,
@@ -33,13 +21,6 @@ import type {
   Unggulan,
   UnggulanRequest,
 } from "~/models/Unggulan";
-import { ActionToast, LoaderToast } from "~/hooks/toastHandler";
-import {
-  Description,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
 import ConfirmDialog from "~/components/ConfirmDialog";
 import { createAuthenticatedClient } from "~/utils/auth-client";
 
@@ -143,19 +124,7 @@ export async function action({ request, params }: Route.ActionArgs) {
 
 export default function AdminHome({
   loaderData,
-  actionData,
 }: Route.ComponentProps) {
-  // const hasShownLoaderToastRef = useRef(false);
-  // useEffect(() => {
-  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
-  //     if (loaderData.success) {
-  //       toast.success(loaderData.message);
-  //     } else {
-  //       toast.error(loaderData.message);
-  //     }
-  //     hasShownLoaderToastRef.current = true;
-  //   }
-  // }, [loaderData]);
 
   const banners = Array.isArray(loaderData?.data?.banners)
     ? (loaderData?.data?.banners as BannerModel[])
@@ -731,41 +700,9 @@ export default function AdminHome({
         confirmOnClick={handleDeleteSelected}
         // title="Konfirmasi Keluar"
         description="Apakah Anda yakin ingin menghapus data ini?"
-        cancelLabel="Batal"
-        confirmLabel="Hapus"
+        cancelLabel="Tidak"
+        confirmLabel="Iya"
       />
-
-      {/* <Dialog
-        open={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
-        className="relative z-50"
-      >
-        <div className="fixed inset-0 bg-gray-600/50" />
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg">
-            <DialogTitle className="text-lg font-bold text-gray-900">
-              Konfirmasi Hapus
-            </DialogTitle>
-            <Description className="mt-2 text-sm text-gray-600">
-              Apakah Anda yakin ingin menghapus?
-            </Description>
-            <div className="mt-4 flex gap-2">
-              <button
-                onClick={() => setDeleteDialogOpen(false)}
-                className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Batal
-              </button>
-              <button
-                onClick={handleDeleteSelected}
-                className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-              >
-                Hapus
-              </button>
-            </div>
-          </DialogPanel>
-        </div>
-      </Dialog> */}
     </>
   );
 }

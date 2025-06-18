@@ -1,10 +1,9 @@
 import axios from "axios";
-import { Outlet, useLoaderData } from "react-router";
+import { Outlet } from "react-router";
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
 import type { Pelayanan } from "~/models/Pelayanan";
 import { useEffect, useState } from "react";
-// import { GoogleReCaptchaProvider } from "@google-recaptcha/react";
 import type { Route } from "./+types/layout";
 import redirectWithCookie from "~/utils/redirectWithCookie";
 import { createAuthenticatedClient } from "~/utils/auth-client";
@@ -14,34 +13,12 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
 
-  const url = new URL(request.url);
-  const searchParams = url.searchParams;
-  console.log("searchParams", searchParams);
-
-  const pelayananRequest = new URL(
-    `${import.meta.env.VITE_API_URL}/pelayanan/`,
-  );
-
   try {
-    const response = await client.get(pelayananRequest.href);
     const profilResponse = await client.get(urlRequest.href);
-    // console.log(profilResponse);
-
-    if (!response.data.success || !response.data.data.length) {
-      // response.data.data = [];
-      return {
-        success: false,
-        statusCode: response.status,
-        message: "No data found",
-        data: [],
-      };
-    }
     return {
-      data: response.data,
       isLogin: profilResponse.data.success,
       profil: profilResponse.data,
     };
-    // return response.data;
   } catch (error: any) {
     try {
       const refreshRes = await client.post(
@@ -84,7 +61,6 @@ export default function Layout({ loaderData }: Route.ComponentProps) {
       localStorage.setItem("nVisits", (nVisitsInt + 1).toString());
     }
   }, []);
-  const data = loaderData?.data || [];
   const profil = loaderData?.profil ?? {};
   const isLogin = loaderData?.isLogin ?? false;
   console.log("isLogin", isLogin);

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { handleLoader } from "~/utils/handleLoader";
 import type { Route } from "./+types/account";
 import { createAuthenticatedClient } from "~/utils/auth-client";
@@ -9,7 +8,6 @@ import {
 } from "@heroicons/react/24/solid";
 import { useEffect, useRef, useState } from "react";
 import { useFetcher } from "react-router";
-import { div } from "motion/react-client";
 import { handleAction } from "~/utils/handleAction";
 import ConfirmDialog from "~/components/ConfirmDialog";
 import toast from "react-hot-toast";
@@ -33,7 +31,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   if (feature === "password") {
     formData.delete("feat");
-    console.log(formData)
+    console.log(formData);
     return handleAction(
       () => client.put(passwordRequest.href, formData),
       "Berhasil",
@@ -44,7 +42,7 @@ export async function action({ request }: Route.ActionArgs) {
     return handleAction(
       () => client.put(profilRequest.href, formData),
       "Berhasil",
-    );  
+    );
   }
 }
 export default function UserAccount({ loaderData }: Route.ComponentProps) {
@@ -92,7 +90,7 @@ export default function UserAccount({ loaderData }: Route.ComponentProps) {
 
     const formData = new FormData(formPasswordRef.current);
     formData.append("feat", "password");
-    console.log("formData", formData)
+    console.log("formData", formData);
     fetcher.submit(formData, { method: "PUT" });
     setDialogOpen(false);
   };
@@ -408,8 +406,8 @@ export default function UserAccount({ loaderData }: Route.ComponentProps) {
         confirmOnClick={handleChangePassword}
         // title="Konfirmasi Keluar"
         description="Apakah Anda yakin ingin mengubah password?"
-        cancelLabel="Batal"
-        confirmLabel="Simpan"
+        cancelLabel="Tidak"
+        confirmLabel="Iya"
         cancelBtnStyle="bg-red-500 hover:bg-red-600 text-white"
         confirmBtnStyle="bg-green-600 hover:bg-green-700 text-white"
       />

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Form, useFetcher, useNavigate } from "react-router";
 import type { Route } from "./+types";
 import { handleAction } from "~/utils/handleAction";

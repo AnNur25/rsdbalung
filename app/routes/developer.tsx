@@ -1,9 +1,5 @@
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import { UserCircleIcon } from "@heroicons/react/24/solid";
-import { div } from "motion/react-client";
 import PageBanner from "~/components/PageBanner";
 import TeamCard from "~/components/TeamCard";
-import imageErrorHandler from "~/utils/imageErrorHandler";
 
 export default function DeveloperPage() {
   const developers = [
@@ -36,26 +32,6 @@ export default function DeveloperPage() {
   ];
   return (
     <>
-      {/* <Popover>
-        <PopoverButton>
-          <UserCircleIcon className="h-8 w-8 text-gray-700 hover:text-dark-blue-900" />
-        </PopoverButton>
-        <PopoverPanel className="flex w-fit flex-col rounded border border-gray-400 bg-gray-200">
-          <a
-            className="px-4 py-2 text-sm font-medium hover:text-dark-blue-950"
-            href="/akun"
-          >
-            Akun
-          </a>
-          <hr />
-          <a
-            className="px-4 py-2 text-sm font-medium hover:text-dark-blue-950"
-            href="/logout"
-          >
-            Logout
-          </a>
-        </PopoverPanel>
-      </Popover> */}
       <PageBanner title="Developer" />
       <section className="mt-8 flex w-full flex-col items-center justify-center">
         <h2 className="text-4xl font-extrabold text-gray-800">

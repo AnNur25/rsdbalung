@@ -1,13 +1,10 @@
 import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
-import { useLoaderData } from "react-router";
 import Table from "~/components/Table";
 import type { Poli } from "~/models/Poli";
 import { alternatingRowColor } from "~/utils/styles";
 import type { Route } from "./+types";
 import { handleLoader, type LoaderResult } from "~/utils/handleLoader";
-import { useRef, useEffect } from "react";
-import toast from "react-hot-toast";
 
 export async function loader({
   request,
@@ -19,17 +16,7 @@ export async function loader({
 export default function AdminPoli({ loaderData }: Route.ComponentProps) {
   const headers = ["No", "Poli", "Aksi"];
   const poliList = (loaderData.data as Poli[]) || [];
-  // const hasShownLoaderToastRef = useRef(false);
-  // useEffect(() => {
-  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
-  //     if (loaderData.success) {
-  //       toast.success(loaderData.message);
-  //     } else {
-  //       toast.error(loaderData.message);
-  //     }
-  //     hasShownLoaderToastRef.current = true;
-  //   }
-  // }, [loaderData]);
+
   return (
     <>
       <div className="mb-4 flex items-center justify-between">

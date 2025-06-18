@@ -1,10 +1,10 @@
 import axios from "axios";
 import type { Route } from "./+types/edit";
-import { Form, useFetcher, useNavigate } from "react-router";
+import { useFetcher, useNavigate } from "react-router";
 import { handleLoader } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
 import type { PelayananDetail } from "~/models/Pelayanan";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import formatDigits from "~/utils/formatDigits";
 import toast from "react-hot-toast";
 import { createAuthenticatedClient } from "~/utils/auth-client";
@@ -46,18 +46,6 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
     pelayanan.Persyaratan || "",
   );
   const [procedure, setProcedure] = useState<string>(pelayanan.Prosedur || "");
-
-  // const hasShownLoaderToastRef = useRef(false);
-  // useEffect(() => {
-  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
-  //     if (loaderData.success) {
-  //       toast.success(loaderData.message);
-  //     } else {
-  //       toast.error(loaderData.message);
-  //     }
-  //     hasShownLoaderToastRef.current = true;
-  //   }
-  // }, [loaderData]);
 
   const navigate = useNavigate();
   const fetcher = useFetcher();
@@ -187,21 +175,6 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
             )}
             <input type="number" name="Biaya" hidden readOnly value={cost} />
           </div>
-          {/* <div className="mb-4">
-            <label htmlFor="Biaya" className="text-lg font-bold">
-              Biaya <span className="text-red-600">*</span>
-            </label>
-            <input
-              value={cost}
-              onChange={(e) => setCost(parseInt(e.target.value, 10))}
-              type="number"
-              placeholder="Isi jumlah biaya di sini"
-              name="Biaya"
-              id="Biaya"
-              required
-              className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-          </div> */}
           <div className="mb-4">
             <label htmlFor="Persyaratan" className="text-lg font-bold">
               Persyaratan <span className="text-red-600">*</span>

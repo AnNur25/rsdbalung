@@ -13,7 +13,7 @@ export default function PageBanner({ title }: PageBannerProps) {
     //     backgroundSize: "full"
     //   }}
     // >
-    <div className="relative flex flex-col items-start justify-center ps-5 max-md:aspect-[412/80] min-md:aspect-[2172/250] min-md:ps-10">
+    <div className="relative flex flex-col items-start justify-center ps-5 max-md:aspect-[412/80] min-md:aspect-[2172/250] min-md:ps-10 shadow-md">
       <img
         src="/images/bg-heading.png"
         className="absolute inset-0 -z-10 aspect-[2172/250] w-full max-md:hidden"

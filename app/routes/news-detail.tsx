@@ -1,9 +1,6 @@
-import NewsCard from "~/components/NewsCard";
-import banner from "~/assets/rsdbalung.jpeg";
 import axios from "axios";
-import { useFetcher, useLoaderData, useOutletContext } from "react-router";
+import { useFetcher, useOutletContext } from "react-router";
 import NewsBanner from "~/components/NewsBanner";
-// import type { NewsApiResponse } from "./news";
 import type { News } from "~/models/News";
 import "~/lists.css";
 import HtmlParse from "~/components/HtmlParse";
@@ -11,7 +8,7 @@ import {
   GoogleReCaptchaCheckbox,
   GoogleReCaptchaProvider,
 } from "@google-recaptcha/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import type { Route } from "./+types/news-detail";
 import { handleAction } from "~/utils/handleAction";
@@ -366,14 +363,6 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
             {/* Berita lainnya */}
             {news.length > 0 ? (
               news.slice(0, 5).map((berita, index) => (
-                // <NewsCard
-                //   key={index}
-                //   id={berita.id}
-                //   title={berita.judul}
-                //   description={berita.isi}
-                //   image={berita.gambar_sampul}
-                //   date={berita.tanggal_dibuat}
-                // />
                 <article className="relative flex items-center gap-2">
                   <img
                     src={berita.gambar_sampul}

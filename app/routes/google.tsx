@@ -1,11 +1,7 @@
 import axios from "axios";
 import type { Route } from "./+types/login";
 import redirectWithCookie from "~/utils/redirectWithCookie";
-import { redirect, useFetcher } from "react-router";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import loginImage from "~/assets/loginuser.png";
+import { redirect } from "react-router";
 
 export async function loader({ request }: Route.LoaderArgs) {
     const url = new URL(request.url);

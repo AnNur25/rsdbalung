@@ -73,9 +73,6 @@ export default function Doctors({ loaderData }: Route.ComponentProps) {
     <>
       <PageBanner title="Daftar Dokter" />
       <main className="mt-4 flex flex-col items-center">
-        {/* <h1 className="mt-2 text-2xl font-extrabold uppercase">
-          Daftar Dokter
-        </h1> */}
         <div className="items-centers mt-4 flex gap-2">
           <SearchBar
             handleSearch={handleSearch}

@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { Route } from "./+types/edit";
-import { Form, useFetcher, useNavigate } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import { useFetcher, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 import { handleLoader } from "~/utils/handleLoader";
 import { handleAction } from "~/utils/handleAction";
 import toast from "react-hot-toast";
@@ -37,18 +37,6 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
   const poli = loaderData.data;
   const extractedPoliName = poli.nama_poli.split(" ").slice(2).join(" ") || "";
   const [poliName, setPoliName] = useState(extractedPoliName || "");
-
-  // const hasShownLoaderToastRef = useRef(false);
-  // useEffect(() => {
-  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
-  //     if (loaderData.success) {
-  //       toast.success(loaderData.message);
-  //     } else {
-  //       toast.error(loaderData.message);
-  //     }
-  //     hasShownLoaderToastRef.current = true;
-  //   }
-  // }, [loaderData]);
 
   const navigate = useNavigate();
   const fetcher = useFetcher();
@@ -124,14 +112,6 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
             </button>
           </div>
         </fetcher.Form>
-        {/* {actionData?.error && (
-          <p className="mt-4 text-sm text-red-600">{actionData.error}</p>
-        )}
-        {actionData?.success && (
-          <p className="mt-4 text-sm text-green-600">
-            Poli "{actionData.nama_poli}" created successfully!
-          </p>
-        )} */}
       </div>
     </>
   );

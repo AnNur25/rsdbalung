@@ -1,11 +1,9 @@
-import { Form, useActionData, useFetcher, useNavigate } from "react-router";
-import axios from "axios";
+import { useFetcher, useNavigate } from "react-router";
 import type { Route } from "./+types/create";
 import { handleAction } from "~/utils/handleAction";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { createAuthenticatedClient } from "~/utils/auth-client";
-// import { ActionToast, LoaderToast } from "~/hooks/toastHandler";
 
 export async function action({ request }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
@@ -15,15 +13,12 @@ export async function action({ request }: Route.ActionArgs) {
   let formData = await request.formData();
   let namaPoli = formData.get("nama_poli");
 
-  // if (!namaPoli || typeof namaPoli !== "string") {
-  //   return { error: "Nama Poli is required" };
-  // }
   return handleAction(() =>
     client.post(urlRequest.href, { nama_poli: namaPoli }),
   );
 }
 
-export default function CreatePoli({ actionData }: Route.ComponentProps) {
+export default function CreatePoli() {
   const navigate = useNavigate();
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
@@ -95,14 +90,6 @@ export default function CreatePoli({ actionData }: Route.ComponentProps) {
             </button>
           </div>
         </fetcher.Form>
-        {/* {actionData?.error && (
-          <p className="mt-4 text-sm text-red-600">{actionData.error}</p>
-        )}
-        {actionData?.success && (
-          <p className="mt-4 text-sm text-green-600">
-            Poli "{actionData.nama_poli}" created successfully!
-          </p>
-        )} */}
       </div>
     </>
   );

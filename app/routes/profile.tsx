@@ -1,7 +1,4 @@
 import type { Route } from "./+types/profile";
-import logo from "~/assets/logoonly.png";
-import strukturImg from "~/assets/struktur-organisasi.png";
-import Footer from "~/components/Footer";
 import PageBanner from "~/components/PageBanner";
 
 export function meta({}: Route.MetaArgs) {

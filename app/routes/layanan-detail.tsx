@@ -1,54 +1,31 @@
 import axios from "axios";
-import { useLoaderData } from "react-router";
 import PageBanner from "~/components/PageBanner";
 import type { PelayananDetail } from "~/models/Pelayanan";
 import formatDigits from "~/utils/formatDigits";
+import type { Route } from "./+types/layanan-detail";
+import { handleLoader } from "~/utils/handleLoader";
 
-interface LayananDetailResponse {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  data: PelayananDetail;
-}
-
-export async function loader({
-  params,
-}: {
-  params: { id: string };
-}): Promise<LayananDetailResponse> {
+export async function loader({ params }: Route.LoaderArgs) {
   const { id } = params;
   const pelayananRequest = new URL(
     `${import.meta.env.VITE_API_URL}/pelayanan/${id}`,
   );
-  try {
-    const response = await axios.get<LayananDetailResponse>(
-      pelayananRequest.href,
-    );
-    if (!response.data.success) {
-      response.data.data = {} as PelayananDetail;
-    }
-    return response.data;
-  } catch (error: any) {
-    // console.error("Error fetching data:", error.response);
-    return {
-      success: false,
-      statusCode: error.response?.status ?? 500,
-      message: "Failed to fetch data",
-      data: {} as PelayananDetail,
-    };
-  }
+  return handleLoader(() => axios.get(pelayananRequest.href));
 }
 
-export default function LayananDetail() {
-  const data = useLoaderData() as LayananDetailResponse;
+export default function LayananDetail({ loaderData }: Route.ComponentProps) {
+  console.log(loaderData);
   const {
-    id_pelayanan,
-    nama_pelayanan,
-    Persyaratan,
-    Prosedur,
-    JangkaWaktu,
-    Biaya,
-  } = data.data;
+    id_pelayanan = "",
+    nama_pelayanan = "",
+    Persyaratan = "",
+    Prosedur = "",
+    JangkaWaktu = "",
+    Biaya = 0,
+  } = (loaderData?.data as PelayananDetail) || {};
+  if (loaderData?.success === false) {
+    throw new Response("Not Found", { status: 404 });
+  }
   return (
     <>
       <PageBanner title={nama_pelayanan} />

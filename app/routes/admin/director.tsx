@@ -1,27 +1,19 @@
 import { useFetcher } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
-import { TrashIcon } from "@heroicons/react/24/solid";
 import type { Route } from "./+types/director";
 import { handleAction } from "~/utils/handleAction";
 
 import { toast } from "react-hot-toast";
 import { handleLoader } from "~/utils/handleLoader";
-import type { GalleryModel } from "~/models/Gallery";
-import {
-  Description,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
 import { createAuthenticatedClient } from "~/utils/auth-client";
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader() {
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/direktur`);
   return handleLoader(() => axios.get(urlRequest.href));
 }
 
-export async function action({ request, params }: Route.ActionArgs) {
+export async function action({ request }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
 
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/direktur`);
@@ -34,6 +26,10 @@ export async function action({ request, params }: Route.ActionArgs) {
     console.log("file direktur", file);
     if (!(file instanceof File) || file.size === 0) {
       return { success: false, message: "Mohon upload minimal 1 foto" };
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      return { success: false, message: "Ukuran file maksimal 5MB" };
     }
 
     return handleAction(
@@ -60,10 +56,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   return { error: "Method tidak dikenal." };
 }
 
-export default function Director({
-  loaderData,
-  actionData,
-}: Route.ComponentProps) {
+export default function Director({ loaderData }: Route.ComponentProps) {
   const photos = Array.isArray(loaderData?.data)
     ? (loaderData.data as { id_direktur: string; gambar: string }[])
     : [];
@@ -126,7 +119,7 @@ export default function Director({
           </fetcher.Form>
         </div>
 
-        <div className="rounded-lg border p-4 mt-4">
+        <div className="mt-4 rounded-lg border p-4">
           {photos?.map((photo) => (
             // <div key={photo.id_direktur} className="relative aspect-[9/16]">
             <img

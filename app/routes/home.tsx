@@ -20,6 +20,7 @@ import type { Unggulan } from "~/models/Unggulan";
 import HomeShortcut from "~/components/HomeShortcut";
 import SliderSection from "~/components/SliderSection";
 import type { Variants } from "motion/react";
+
 import {
   ChatBubbleLeftRightIcon,
   EyeIcon,

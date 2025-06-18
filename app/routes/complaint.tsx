@@ -1,4 +1,4 @@
-import { Form, useFetcher, useOutletContext } from "react-router";
+import { useFetcher, useOutletContext } from "react-router";
 import axios from "axios";
 
 import type { Route } from "./+types/complaint";
@@ -10,7 +10,7 @@ import type { ComplaintModel } from "~/models/Complaint";
 
 import MessageCard from "~/components/MessageCard";
 import TextWithRect from "~/components/TextWithRect";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   GoogleReCaptchaCheckbox,
@@ -47,6 +47,7 @@ export async function action({ request }: Route.ActionArgs) {
       };
     }
 }
+
 export default function Complaint({ loaderData }: Route.ComponentProps) {
   const dataProfil = useOutletContext() as { profil: { data: ProfileData } };
   console.log(dataProfil);

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useFetcher, useSearchParams } from "react-router";
 import axios from "axios";
 
@@ -18,13 +18,6 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import {
-  Description,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  Select,
-} from "@headlessui/react";
 import type { Poli } from "~/models/Poli";
 import toast from "react-hot-toast";
 import ConfirmDialog from "~/components/ConfirmDialog";
@@ -121,17 +114,6 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
     }
     setCurrentPage(page);
   };
-  // const hasShownLoaderToastRef = useRef(false);
-  // useEffect(() => {
-  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
-  //     if (loaderData.success) {
-  //       toast.success(loaderData.message);
-  //     } else {
-  //       toast.error(loaderData.message);
-  //     }
-  //     hasShownLoaderToastRef.current = true;
-  //   }
-  // }, [loaderData]);
   const fetcher = useFetcher();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteDoctorId, setDeleteDoctorId] = useState("");
@@ -278,42 +260,10 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
         onClose={() => setDeleteDialogOpen(false)}
         cancelOnClick={() => setDeleteDialogOpen(false)}
         confirmOnClick={handleDelete}
-        // title="Konfirmasi Hapus"
         description="Apakah Anda yakin ingin menghapus data ini?"
-        cancelLabel="Batal"
-        confirmLabel="Hapus"
+        cancelLabel="Tidak"
+        confirmLabel="Iya"
       />
-      {/* <Dialog
-        open={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
-        className="relative z-50"
-      >
-        <div className="fixed inset-0 bg-gray-600/90" />
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg">
-            <DialogTitle className="text-lg font-bold text-gray-900">
-              Konfirmasi Hapus
-            </DialogTitle>
-            <Description className="mt-2 text-sm text-gray-600">
-              Apakah Anda yakin ingin menghapus?
-            </Description>
-            <div className="mt-4 flex gap-2">
-              <button
-                onClick={() => setDeleteDialogOpen(false)}
-                className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Batal
-              </button>
-              <button
-                onClick={handleDelete}
-                className="rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
-              >
-                Hapus
-              </button>
-            </div>
-          </DialogPanel>
-        </div>
-      </Dialog> */}
     </>
   );
 }

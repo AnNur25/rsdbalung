@@ -16,7 +16,6 @@ import {
 } from "@headlessui/react";
 import { createAuthenticatedClient } from "~/utils/auth-client";
 
-// Load existing gallery photos
 export async function loader({ params }: Route.LoaderArgs) {
   const urlRequest = new URL(
     `${import.meta.env.VITE_API_URL}/berita/${params.id}/galeri-berita`,
@@ -76,18 +75,6 @@ export default function GalleryNews({
   const fetcher = useFetcher();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-
-  // const hasShownLoaderToastRef = useRef(false);
-  // useEffect(() => {
-  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
-  //     if (loaderData.success) {
-  //       toast.success(loaderData.message);
-  //     } else {
-  //       toast.error(loaderData.message);
-  //     }
-  //     hasShownLoaderToastRef.current = true;
-  //   }
-  // }, [loaderData]);
 
   const fetcherData = fetcher.data || { message: "", success: false };
   useEffect(() => {

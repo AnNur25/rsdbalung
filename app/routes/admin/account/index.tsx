@@ -14,23 +14,13 @@ import toast from "react-hot-toast";
 import ConfirmDialog from "~/components/ConfirmDialog";
 import logo from "~/assets/logoonly.png";
 import { createAuthenticatedClient } from "~/utils/auth-client";
+import { handleLoader } from "~/utils/handleLoader";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const client = await createAuthenticatedClient(request);
 
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/profil/`);
-  try {
-    const response = await client.get(urlRequest.href, {
-      withCredentials: true,
-      headers: { Cookie: request.headers.get("cookie") ?? "" },
-      // headers: { "Set-Cookie": request.headers.get("cookie") },
-    });
-    const data = response.data;
-    return data;
-  } catch (error: any) {
-    console.error("Error fetching data:", error.response);
-    // return redirect("/admin/login");
-  }
+  return handleLoader(() => client.get(urlRequest.href));
 }
 export async function action({ request }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
@@ -41,10 +31,8 @@ export async function action({ request }: Route.ActionArgs) {
   return handleAction(() => client.put(urlRequest.href, formData), "Berhasil");
 }
 
-export default function AdminAccount({
-  loaderData,
-  actionData,
-}: Route.ComponentProps) {
+export default function AdminAccount({ loaderData }: Route.ComponentProps) {
+  console.log(loaderData);
   const { data } = loaderData || {
     data: { id_user: "admin", nama: "Admin", email: "admin@admin.com" },
   };
@@ -77,10 +65,7 @@ export default function AdminAccount({
   return (
     <>
       <h1 className="w-max text-2xl font-bold uppercase">Informasi Akun</h1>
-      {/* <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 p-4 min-md:flex-row"> */}
       <div className="flex w-full flex-col justify-center gap-4 p-4 min-md:flex-row min-md:px-20">
-        {/* <div className="flex w-full h-full flex-col items-center justify-center gap-4 rounded-2xl px-8 pt-8 pb-6 shadow-lg min-md:max-w-56 lg:px-12"> */}
-        {/* <div className="flex h-full w-full flex-col items-center justify-center rounded-lg border border-gray-400 px-6 py-6 shadow-lg min-md:min-h-86"> */}
         <div className="flex flex-none flex-col justify-center gap-4 rounded-lg border border-gray-400 px-12 py-6 shadow-lg">
           <div className="mx-auto my-4 w-fit rounded-full border bg-white p-8">
             <img
@@ -94,7 +79,6 @@ export default function AdminAccount({
           </h2>
         </div>
         <div className="flex flex-1 flex-col justify-between gap-4 rounded-lg border border-gray-400 px-8 pt-8 pb-6 shadow-lg min-md:max-w-96 lg:px-12">
-          {/* <div className="flex w-full flex-1 grow flex-col items-center justify-center gap-4 rounded-lg border border-gray-400 px-8 pt-8 pb-6 shadow-lg min-md:max-w-96 lg:px-12"> */}
           {!visibleChangeForm ? (
             <>
               <div>
@@ -254,10 +238,9 @@ export default function AdminAccount({
         onClose={() => setDialogOpen(false)}
         cancelOnClick={() => setDialogOpen(false)}
         confirmOnClick={handleChangePassword}
-        // title="Konfirmasi Keluar"
         description="Apakah Anda yakin ingin mengubah password?"
-        cancelLabel="Batal"
-        confirmLabel="Simpan"
+        cancelLabel="Tidak"
+        confirmLabel="Iya"
         cancelBtnStyle="bg-red-500 hover:bg-red-600 text-white"
         confirmBtnStyle="bg-green-600 hover:bg-green-700 text-white"
       />
