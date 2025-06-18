@@ -2,16 +2,7 @@ import type { Route } from "./+types/home";
 import axios from "axios";
 import * as motion from "motion/react-client";
 
-import pelayananNyamanIcon from "~/assets/pelayanan-nyaman.svg";
-import kualitasTerbaikIcon from "~/assets/kualitas-terbaik.svg";
-import penangananCepatIcon from "~/assets/penanganan-cepat.svg";
-import layananRamahIcon from "~/assets/layanan-ramah.svg";
-
-import shortcutDokterIcon from "~/assets/shortcut-dokter.svg";
-import shortcutJadwalIcon from "~/assets/shortcut-jadwal-dokter.svg";
-import shortcutAduanIcon from "~/assets/shortcut-aduan.svg";
-
-import waveImage from "~/assets/waves.svg";
+import waveImage from "~/assets/wave.svg";
 
 import Banner from "~/components/Banner";
 import MapsEmbed from "~/components/MapsEmbed";
@@ -176,12 +167,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       <Banner bannersSrc={bannerList} />
       {/* <img
         src={waveImage}
-        className="absolute bottom-0 z-10 h-full w-full object-cover"
+        className="absolute top-0 z-50 h-full w-full object-cover"
         alt="Waves"
       /> */}
-      <section className="mx-4 mt-16 flex flex-col items-center justify-center gap-4 min-md:mx-16 min-md:flex-row">
-        <div className="absolute -top-60 -left-20 z-10">
-          <img src={waveImage} className="w-100 object-cover" alt="Waves" />
+      <section className="relative mx-4 mt-16 flex flex-col items-center justify-center gap-4 min-md:mx-16 min-md:flex-row">
+        <div className="absolute -top-60 -left-28 -z-10">
+          <img src={waveImage} className="w-100" />
         </div>
         <div className="flex w-fit flex-col items-center min-md:hidden">
           <motion.p
@@ -321,7 +312,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 className={`flex flex-col items-center gap-4 rounded-lg border-2 p-6 border-${color}`}
               >
                 <div className={`aspect-square rounded-full bg-${color} p-2`}>
-                  {/* <img src={item.icon} className="h-full w-full" /> */}
                   {item.icon}
                 </div>
                 <h2 className="text-2xl font-extrabold text-dark-blue-950">
@@ -418,7 +408,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </section>
 
-      <div className="my-8 flex w-full flex-col justify-between gap-4 p-4 min-md:flex-row min-md:px-20">
+      <div className="relative my-8 flex w-full flex-col justify-between gap-4 overflow-clip p-4 min-md:flex-row min-md:px-20">
         <div className="flex flex-1 flex-col justify-between gap-4">
           <img src="images/rsd.png" />
 
@@ -446,6 +436,11 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
         <div className="flex-1">
           <MapsEmbed />
+        </div>
+      </div>
+      <div className="relative inset-x-0 overflow-x-clip">
+        <div className="absolute -right-16 -bottom-80 -z-10">
+          <img src={waveImage} className="w-140 -rotate-180" />
         </div>
       </div>
     </>

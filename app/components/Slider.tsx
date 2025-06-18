@@ -88,7 +88,7 @@ export default function Slider({
       {/* Content Track - Flexbox for showing next content dynamically */}
       <div
         ref={sliderRef}
-        className="mb-12 flex w-fit transition-transform duration-500 ease-in-out"
+        className="flex w-fit transition-transform duration-500 ease-in-out"
         style={{
           transform: `translateX(-${currentIndex * (childWidth - overlapEm)}px)`, // Move the track dynamically
         }}
@@ -101,14 +101,13 @@ export default function Slider({
             {child}
           </div>
         ))}
-
       </div>
-      <div className={navInside ? "absolute inset-0 bottom-14" : ""}>
+      <div className={navInside ? "absolute inset-0 bottom-4" : ""}>
         {/* Navigation Buttons */}
         <button
           onClick={prevSlide}
           // className="absolute bottom-1 left-2 rounded-full bg-white/80 p-2 text-black shadow transition hover:bg-white"
-          className={`${buttonStyle} left-2`}
+          className={`${buttonStyle} left-4`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -128,7 +127,7 @@ export default function Slider({
         <button
           onClick={nextSlide}
           // className="absolute right-2 bottom-1 rounded-full bg-white/80 p-2 text-black shadow transition hover:bg-white"
-          className={`${buttonStyle} right-2`}
+          className={`${buttonStyle} right-4`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
