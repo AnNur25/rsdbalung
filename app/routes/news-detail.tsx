@@ -11,7 +11,7 @@ import {
   GoogleReCaptchaCheckbox,
   GoogleReCaptchaProvider,
 } from "@google-recaptcha/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import type { Route } from "./+types/news-detail";
 import { handleAction } from "~/utils/handleAction";
@@ -19,73 +19,32 @@ import { handleLoader } from "~/utils/handleLoader";
 import type { Comment } from "~/models/Comment";
 import { createAuthenticatedClient } from "~/utils/auth-client";
 import MessageCard from "~/components/MessageCard";
-interface NewsDetail {
-  id: string;
-  judul: string;
-  ringkasan: string;
-  isi: string;
-  gambar_sampul: string;
-  tanggal_dibuat: string;
-  gambar_tambahan: [];
-}
-interface NewsDetailAndAll {
-  id: string;
-  judul: string;
-  ringkasan: string;
-  isi: string;
-  gambar_sampul: string;
-  tanggal_dibuat: string;
-  gambar_tambahan: [];
-  berita: News[];
-}
-
-interface NewsDetailApiResponse {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  data: NewsDetail;
-}
 
 export async function loader({ params }: Route.LoaderArgs) {
   const { id } = params;
 
-  try {
-    const response = await axios.get<NewsDetailApiResponse>(
-      `${import.meta.env.VITE_API_URL}/berita/${id}`,
-    );
-    ``;
-    const data = response.data;
+  const response = await handleLoader(() =>
+    axios.get(`${import.meta.env.VITE_API_URL}/berita/${id}`),
+  );
 
-    const responseAll = await axios.get(
-      `${import.meta.env.VITE_API_URL}/berita?page=1`,
-    );
+  const responseAll = await handleLoader(() =>
+    axios.get(`${import.meta.env.VITE_API_URL}/berita?page=1`),
+  );
 
-    const commentsResponse = await handleLoader(() =>
-      axios.get(
-        `${import.meta.env.VITE_API_URL}/berita/${id}/komentar/visible`,
-      ),
-    );
+  const commentsResponse = await handleLoader(() =>
+    axios.get(`${import.meta.env.VITE_API_URL}/berita/${id}/komentar/visible`),
+  );
 
-    console.log(commentsResponse.data);
-    const dataAll = responseAll.data;
-    if (!dataAll.success || !dataAll.data.berita.length) {
-      return {
-        ...data.data,
-        berita: [],
-        comments: [],
-      };
-    }
-
-    return {
-      ...data.data,
-      berita: dataAll.data.berita as News[],
+  return {
+    success: commentsResponse.data.success && response.data.success,
+    message:
+      commentsResponse.data.message || response.data.message || "Berhasil",
+    data: {
+      ...(response.data as News),
       comments: commentsResponse.data as Comment[],
-    };
-  } catch (error: any) {
-    throw new Error(
-      error.response?.data?.message || "Failed to fetch news detail",
-    );
-  }
+      news: responseAll.data.berita as News[],
+    },
+  };
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
@@ -144,7 +103,12 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
       ? profileData.role.toLowerCase() === "admin"
       : false;
   console.log(isLogin, isAdmin, profileData);
-  const data = loaderData ?? {};
+  const [name, setName] = useState<string>(profileData?.nama || "");
+  const [phoneNumber, setPhoneNumber] = useState<string>(
+    profileData?.no_wa || "",
+  );
+
+  // const data = loaderData?.data ?? {};
   const {
     judul = "",
     ringkasan = "",
@@ -152,17 +116,16 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
     gambar_sampul = "",
     tanggal_dibuat = "",
     gambar_tambahan = [],
-    berita: news = [],
+    news = [],
     comments = [],
-  } = data || {};
+  } = loaderData?.data || {};
   // const cleanHtml = DOMPurify.sanitize(isi);
 
   const komentarList: Comment[] =
-    Array.isArray(data.comments) && data.comments.length > 0
-      ? data.comments
-      : [];
-  const tanggal = tanggal_dibuat.split(" pukul")[0];
+    Array.isArray(comments) && comments.length > 0 ? comments : [];
   console.log(komentarList);
+
+  const tanggal = tanggal_dibuat.split(" pukul")[0];
 
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
@@ -198,12 +161,14 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
       },
     );
   };
+
   async function submitComment(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
     formData.append("feat", "comment");
     fetcher.submit(formData, { method: "post" });
   }
+
   return (
     <main>
       <NewsBanner
@@ -263,6 +228,8 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                     : "outline-gray-300 focus:outline-green-600"
                 } rounded-lg border border-gray-400 px-4 py-2`}
                 name="nama"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 id="nama"
               />
               {fetcherData.message && (
@@ -305,6 +272,8 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                     : "outline-gray-300 focus:outline-green-600"
                 } rounded-lg border border-gray-400 px-4 py-2`}
                 name="no_wa"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 id="no_wa"
               />
               {fetcherData.message && (

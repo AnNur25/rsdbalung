@@ -35,6 +35,9 @@ import {
   FaceSmileIcon,
   UsersIcon,
 } from "@heroicons/react/24/solid";
+import ShortcutAduan from "~/assets/shortcut-aduan";
+import ShortcutDokter from "~/assets/shortcut-dokter";
+import ShortcutJadwalDokter from "~/assets/shortcut-jadwal-dokter";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -67,6 +70,7 @@ export async function loader(): Promise<LoaderResult> {
   const newsResponse = await handleLoader(() => axios.get(newsRequest.href));
   const igResponse = await handleLoader(() => axios.get(igRequest.href));
   console.log("direktur", direkturResponse.data);
+
   const data = {
     banners: bannerResponse.data,
     direktur: direkturResponse.data,
@@ -74,6 +78,7 @@ export async function loader(): Promise<LoaderResult> {
     news: newsResponse.data,
     instagrams: igResponse.data,
   };
+
   return {
     success: true,
     message: "Selesai mendapatkan data",
@@ -271,13 +276,17 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             className="flex h-auto w-full flex-col gap-2 p-6 min-md:flex-row"
           >
             {[
-              { icon: shortcutDokterIcon, name: "Dokter", url: "/dokter" },
+              { icon: <ShortcutDokter />, name: "Dokter", url: "/dokter" },
               {
-                icon: shortcutJadwalIcon,
+                icon: <ShortcutJadwalDokter />,
                 name: "Jadwal Dokter",
                 url: "/jadwal-dokter",
               },
-              { icon: shortcutAduanIcon, name: "Aduan", url: "/aduan" },
+              {
+                icon: <ShortcutAduan />,
+                name: "Aduan",
+                url: "/aduan",
+              },
             ].map((item, index) => (
               <HomeShortcut
                 key={index}
