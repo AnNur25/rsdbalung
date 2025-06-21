@@ -21,7 +21,7 @@ export default function LayananDetail({ loaderData }: Route.ComponentProps) {
     Persyaratan = "",
     Prosedur = "",
     JangkaWaktu = "",
-    Biaya = 0,
+    Biaya = "",
   } = (loaderData?.data as PelayananDetail) || {};
   if (loaderData?.success === false) {
     throw new Response("Not Found", { status: 404 });
@@ -47,7 +47,8 @@ export default function LayananDetail({ loaderData }: Route.ComponentProps) {
               Biaya
             </h2>
             <p className="mx-auto h-min w-max p-2 px-8 text-center">
-              Rp{formatDigits(Biaya.toString())}
+              {/* Rp{formatDigits(Biaya.toString())} */}
+              {Biaya}
             </p>
           </section>
         </div>

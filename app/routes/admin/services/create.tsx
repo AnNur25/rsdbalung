@@ -15,7 +15,7 @@ export async function action({ request }: Route.ActionArgs) {
   return handleAction(() =>
     client.post(urlRequest.href, {
       ...Object.fromEntries(formData.entries()),
-      Biaya: parseInt(formData.get("Biaya") as string, 10),
+      // Biaya: parseInt(formData.get("Biaya") as string, 10),
     }),
   );
 }
@@ -115,17 +115,16 @@ export default function CreateService() {
               Biaya <span className="text-red-600">*</span>
             </label>
             <div className="relative flex items-center">
-              <p className="absolute left-3">Rp</p>
+              {/* <p className="absolute left-3">Rp</p> */}
               <input
                 onInput={(e) => {
                   const input = e.currentTarget;
-                  input.value = input.value.replace(/\D/g, "");
-                  const formatted = formatDigits(input.value);
-
-                  setDisplayValue(formatted);
-                  setNumberValue(input.value ? parseInt(input.value, 10) : 0);
+                  if (input.value === " " || input.value === "0") {
+                    input.value = "";
+                  }
                 }}
-                value={displayValue}
+                // value={displayValue}
+                name="Biaya"
                 type="text"
                 placeholder="Isi jumlah biaya di sini"
                 id="Biaya"
@@ -134,7 +133,7 @@ export default function CreateService() {
                   fetcherData.message && !fetcherData.success
                     ? "border-red-500 focus:outline-red-500"
                     : "border-gray-300 focus:outline-blue-500"
-                } w-full rounded border border-gray-300 py-2 ps-8`}
+                } w-full rounded border border-gray-300 p-2`}
               />
             </div>
             {fetcherData.message && (
@@ -146,13 +145,13 @@ export default function CreateService() {
                 {fetcherData.message}
               </p>
             )}
-            <input
+            {/* <input
               type="number"
               name="Biaya"
               hidden
               readOnly
               value={numberValue}
-            />
+            /> */}
           </div>
           <div className="mb-4">
             <label htmlFor="Persyaratan" className="text-lg font-bold">

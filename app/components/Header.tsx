@@ -127,10 +127,10 @@ export default function Header({
               item.submenu ? (
                 <Popover
                   as="div"
-                  className="relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer hover:text-dark-blue-900"
+                  className="relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer"
                   key={index}
                 >
-                  <PopoverButton className="flex w-max items-center gap-2 outline-none hover:cursor-pointer">
+                  <PopoverButton className="flex w-max items-center gap-2 outline-none hover:cursor-pointer hover:text-dark-blue-900">
                     {item.name}
                     <ChevronDownIcon className="h-4 w-4" />
                   </PopoverButton>
@@ -177,7 +177,7 @@ export default function Header({
                     <button
                       onClick={() => setLogoutDialogOpen(true)}
                       type="button"
-                      className="-mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gradient-to-b hover:text-white"
+                      className="px-4 py-2 text-sm font-medium hover:text-dark-blue-950"
                     >
                       Logout
                     </button>

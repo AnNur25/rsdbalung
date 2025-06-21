@@ -8,5 +8,5 @@ export interface PelayananDetail {
   Persyaratan: string;
   Prosedur: string;
   JangkaWaktu: string;
-  Biaya: number;
+  Biaya: string;
 }

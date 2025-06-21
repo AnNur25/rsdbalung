@@ -118,6 +118,7 @@ const animationVariants = {
 export default function Home({ loaderData }: Route.ComponentProps) {
   const data = loaderData?.data ?? {};
   const banners: BannerModel[] = data.banners || [];
+  console.log("banners", banners);
   const direktur = Array.isArray(data.direktur)
     ? (data.direktur as { id_direktur: string; gambar: string }[])
     : [];
@@ -175,7 +176,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <div className="absolute -top-60 -left-28 -z-10">
           <img src={waveImage} className="w-100" />
         </div>
-        <div className="flex w-fit flex-col items-center min-md:hidden">
+        <div className="mt-14 flex w-fit flex-col items-center min-md:hidden">
           <motion.p
             initial="offscreen"
             whileInView="onscreen"
@@ -215,7 +216,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             variants={animationVariants.vertical}
             src={direkturImage}
             alt="Person"
-            className="relative z-10 max-w-[250px]"
+            className="relative z-10 max-w-[220px] min-md:max-w-[250px]"
           />
         </div>
 
