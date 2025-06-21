@@ -8,7 +8,7 @@
 @theme {
   --font-sans: "Nunito", "Inter", sans-serif;
   --color-persian-blue-950: #152151;
-  --color-dark-blue-900: #0B19AA;
+  --color-dark-blue-900: #091488;
   --color-dark-blue-950: #070D5F;
   --color-gdr-dark-blue: linear-gradient(to bottom, var(--color-dark-blue-900), var(--color-dark-blue-950));
 }
