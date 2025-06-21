@@ -49,8 +49,8 @@ export async function loader() {
 }
 
 export async function action({ request }: Route.ActionArgs) {
-    const client = await createAuthenticatedClient(request);
-  
+  const client = await createAuthenticatedClient(request);
+
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/jadwal-dokter/`);
   const formData = await request.formData();
   console.log("action form", formData);
@@ -190,7 +190,7 @@ export default function CreateSchedule({ loaderData }: Route.ComponentProps) {
                   key={index}
                   type="button"
                   onClick={() => setSelectedPoli(poli.id_poli)}
-                  className="min-h-36 rounded-2xl bg-sky-800 p-6 text-white"
+                  className="min-h-36 rounded-2xl bg-dark-blue-900 p-6 text-white"
                 >
                   {poli.nama_poli}
                 </button>

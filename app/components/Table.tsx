@@ -13,7 +13,7 @@ export default function Table({
   return (
     <table className="w-full table-auto divide-y divide-gray-500">
       <thead className="divide-y divide-gray-300">
-        <tr className="bg-sky-700 text-white">
+        <tr className="bg-dark-blue-900 text-white">
           {headers.map((header, index) => (
             <th
               key={index}

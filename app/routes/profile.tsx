@@ -30,7 +30,7 @@ export default function Profile() {
 
         {/* Sejarah */}
         <section className="m-6 rounded-md shadow-md">
-          <h2 className="rounded-t-md bg-sky-700 p-2 text-2xl font-bold text-white">
+          <h2 className="rounded-t-md bg-dark-blue-900 p-2 text-2xl font-bold text-white">
             Sejarah
           </h2>
           <article className="flex flex-col gap-2 p-4 text-justify">
@@ -95,7 +95,7 @@ export default function Profile() {
         {/* Visi dan Misi */}
         <div className="mx-auto flex flex-col gap-8 px-8 min-md:flex-row">
           {/* Visi */}
-          <section className="flex flex-2 flex-col gap-4" >
+          <section className="flex flex-2 flex-col gap-4">
             <h2 className="text-2xl font-bold text-persian-blue-950">Visi</h2>
             <blockquote className="text-center">
               ”Terwujudnya Rumah Sakit Balung yang Prima, Profesional, dan

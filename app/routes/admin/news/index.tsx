@@ -16,6 +16,7 @@ import PaginationControls from "~/components/PaginationControl";
 
 import {
   ChatBubbleLeftIcon,
+  ChatBubbleLeftRightIcon,
   PencilSquareIcon,
   PhotoIcon,
   PlusIcon,
@@ -178,11 +179,11 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
                       href={`/humasbalung/berita/komentar/${item.id}`}
                       className="block w-min rounded bg-blue-600 p-2 text-white"
                     >
-                      <ChatBubbleLeftIcon className="h-4 w-4" />
+                      <ChatBubbleLeftRightIcon className="h-4 w-4" />
                     </a>
                     <a
                       href={`/humasbalung/berita/galeri/${item.id}`}
-                      className="block w-min rounded bg-blue-600 p-2 text-white"
+                      className="block w-min rounded bg-yellow-500 p-2 text-white"
                     >
                       <PhotoIcon className="h-4 w-4" />
                     </a>

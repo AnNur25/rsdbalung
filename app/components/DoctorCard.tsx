@@ -35,7 +35,7 @@ export default function DoctorCard({
           <span className="absolute inset-0"></span>
         </a>
       )}
-      <p className="flex-1 content-center rounded-b-md bg-sky-600 px-2 py-4 text-center text-base font-bold text-white">
+      <p className="flex-1 content-center rounded-b-md bg-dark-blue-900 px-2 py-4 text-center text-base font-bold text-white">
         {name}
       </p>
     </div>

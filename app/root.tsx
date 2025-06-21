@@ -108,10 +108,10 @@ export default function App() {
         //     }
         //   }}
         // >
-          <>
-            <Toaster position="top-right" />
-            <Outlet />
-          </>
+        <>
+          <Toaster position="top-right" />
+          <Outlet />
+        </>
         // {/* </GoogleReCaptchaProvider> */}
       )}
     </>
@@ -135,7 +135,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="flex h-screen flex-col items-center justify-center gap-2 bg-sky-800 p-4 text-white">
+    <main className="flex h-screen flex-col items-center justify-center gap-2 bg-dark-blue-900 p-4 text-white">
       <h1 className="text-4xl font-extrabold">{message}</h1>
       <p className="text-center">{details}</p>
       <a href="/" className="mt-4 rounded bg-white px-2 text-persian-blue-950">
