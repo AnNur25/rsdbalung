@@ -119,9 +119,9 @@ export default function EditSchedule({ loaderData }: Route.ComponentProps) {
     };
     layananList: Pelayanan[];
   };
-
-  const flattendSchedules = response.layananList.flatMap((layanan) =>
-    layanan.jadwal.map((hari) => ({
+console.log("loaderData", response, layananList);
+  const flattendSchedules = (response.layananList ?? []).flatMap((layanan) =>
+    (layanan.jadwal ?? []).map((hari) => ({
       id_pelayanan: layanan.id_pelayanan,
       layanan: layanan.nama_pelayanan,
       hari: hari.hari,
