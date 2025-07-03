@@ -44,14 +44,14 @@ export async function action({ request, params }: Route.ActionArgs) {
       return { success: false, message: "Mohon upload minimal 1 foto" };
     }
     
-    const maxMb = 1;
-    if (
-      files.every(
-        (file) => file instanceof File && file.size > maxMb * 1024 * 1024,
-      )
-    ) {
-      return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
-    }
+    // const maxMb = 1;
+    // if (
+    //   files.every(
+    //     (file) => file instanceof File && file.size > maxMb * 1024 * 1024,
+    //   )
+    // ) {
+    //   return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
+    // }
 
     return handleAction(
       () =>

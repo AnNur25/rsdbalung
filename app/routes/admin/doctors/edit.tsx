@@ -45,10 +45,10 @@ export async function action({ request, params }: Route.ActionArgs) {
   //   formData.delete("file");
   //   formData.append("file", defaultFile);
   // }
-  const maxMb = 1;
-  if (file.size > maxMb * 1024 * 1024) {
-    return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
-  }
+  // const maxMb = 1;
+  // if (file.size > maxMb * 1024 * 1024) {
+  //   return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
+  // }
   console.log("formData", formData);
 
   const urlRequest = new URL(

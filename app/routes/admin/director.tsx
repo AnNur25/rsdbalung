@@ -20,18 +20,18 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   console.log("formData direktur", formData);
   const method = request.method;
-  const maxMb = 1;
   if (method === "POST") {
     const file = formData.get("gambar") as File;
-
+    
     console.log("file direktur", file.size);
     if (!(file instanceof File) || file.size === 0) {
       return { success: false, message: "Mohon upload minimal 1 foto" };
     }
-
-    if (file.size > maxMb * 1024 * 1024) {
-      return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
-    }
+    
+    // const maxMb = 1;
+    // if (file.size > maxMb * 1024 * 1024) {
+    //   return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
+    // }
 
     return handleAction(
       () =>
@@ -46,9 +46,9 @@ export async function action({ request }: Route.ActionArgs) {
     const id = formData.get("id");
     const file = formData.get("gambar") as File;
 
-    if (file.size > maxMb * 1024 * 1024) {
-      return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
-    }
+    // if (file.size > maxMb * 1024 * 1024) {
+    //   return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
+    // }
 
     return handleAction(
       () =>

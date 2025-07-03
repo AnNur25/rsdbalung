@@ -20,10 +20,10 @@ export async function action({ request }: Route.ActionArgs) {
   const defaultImageUrl = `http://localhost:5173/logosquare.jpg`;
   console.log("formData", formData);
   const file = formData.get("file") as File;
-  const maxMb = 1;
-  if (file.size > maxMb * 1024 * 1024) {
-    return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
-  }
+  // const maxMb = 1;
+  // if (file.size > maxMb * 1024 * 1024) {
+  //   return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
+  // }
   // Check if no file uploaded
   // if (!file || file.size === 0) {
   //   // Create a default image file
