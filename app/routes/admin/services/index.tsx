@@ -16,7 +16,7 @@ export async function loader(): Promise<LoaderResult> {
 }
 
 export default function AdminServices({ loaderData }: Route.ComponentProps) {
-  const headers = ["No", "Layanan", "Aksi"];
+  const headers = ["No", "Layanan RS", "Aksi"];
   const pelayananList = (loaderData.data as Pelayanan[]) || [];
 
   return (
