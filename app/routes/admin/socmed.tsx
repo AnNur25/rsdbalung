@@ -50,7 +50,7 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
   while (instagramsLinks.length < 4) {
     instagramsLinks.push("");
   }
-
+  console.log(loaderData);
   const fetcher = useFetcher();
   const navigate = useNavigate();
   const [instagram, setInstagram] = useState(
@@ -122,6 +122,9 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
 
           <div className="flex gap-2">
             <button
+              onClick={() => {
+                setDisableForm(true);
+              }}
               type="submit"
               className={`rounded px-4 py-2 text-white ${disableForm ? "bg-gray-500" : "bg-green-600"}`}
             >

@@ -78,7 +78,7 @@ export default function AdminAccount({ loaderData }: Route.ComponentProps) {
             RSD Balung
           </h2>
         </div>
-        <div className="flex flex-1 flex-col justify-between gap-4 rounded-lg border border-gray-400 px-8 pt-8 pb-6 shadow-lg min-md:max-w-96 lg:px-12">
+        <div className="flex flex-1 flex-col justify-between gap-4 rounded-lg border border-gray-400 px-8 pt-8 pb-6 shadow-lg lg:px-12">
           {!visibleChangeForm ? (
             <>
               <div>

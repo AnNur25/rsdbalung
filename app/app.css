@@ -35,6 +35,10 @@ button:hover {
   cursor: pointer;
 }
 
+table {
+  width: 100%;
+}
+
 /* html,
 body {
   @apply bg-white dark:bg-gray-950;
