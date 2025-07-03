@@ -167,7 +167,7 @@ export default function UserAccount({ loaderData }: Route.ComponentProps) {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label htmlFor="nama" className="text-lg font-semibold">
-                    username
+                    Username
                   </label>
                   <input
                     required
@@ -285,7 +285,7 @@ export default function UserAccount({ loaderData }: Route.ComponentProps) {
                         )}
                       </button>
                     </div>
-                    {fetcherData.message && (
+                    {fetcherData.message && !fetcherData.success && (
                       <p
                         className={`text-sm ${
                           fetcherData.success
@@ -331,7 +331,7 @@ export default function UserAccount({ loaderData }: Route.ComponentProps) {
                         )}
                       </button>
                     </div>
-                    {fetcherData.message && (
+                    {fetcherData.message && !fetcherData.success && (
                       <p
                         className={`text-sm ${
                           fetcherData.success

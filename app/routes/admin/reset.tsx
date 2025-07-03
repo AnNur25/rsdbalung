@@ -1,9 +1,6 @@
 import type { Route } from "./+types/reset";
 import loginImage from "~/assets/loginimage.jpg";
-import {
-  useFetcher,
-  useSearchParams,
-} from "react-router";
+import { useFetcher, useSearchParams } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
@@ -14,7 +11,7 @@ import { handleAction } from "~/utils/handleAction";
 
 export async function action({ request }: Route.ActionArgs) {
   console.log("action");
-  
+
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/`);
   const formData = await request.formData();
   const url = new URL(request.url);
@@ -117,7 +114,7 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                         )}
                       </button>
                     </div>
-                    {fetcherData.message && (
+                    {fetcherData.message && !fetcherData.success && (
                       <p
                         className={`text-sm ${
                           fetcherData.success
@@ -160,7 +157,7 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                         )}
                       </button>
                     </div>
-                    {fetcherData.message && (
+                    {fetcherData.message && !fetcherData.success && (
                       <p
                         className={`text-sm ${
                           fetcherData.success
@@ -216,7 +213,7 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                             : "outline-gray-300 focus:outline-blue-600"
                         } placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6`}
                       />
-                      {fetcherData.message && (
+                      {fetcherData.message && !fetcherData.success && (
                         <p
                           className={`text-sm ${
                             fetcherData.success

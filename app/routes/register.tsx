@@ -102,7 +102,7 @@ export default function RegisterUser({ loaderData }: Route.ComponentProps) {
                           : "outline-gray-300 focus:outline-blue-600"
                       } placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6`}
                     />
-                    {fetcherData.message && (
+                    {fetcherData.message && !fetcherData.success && (
                       <p
                         className={`text-sm ${
                           fetcherData.success
@@ -142,7 +142,7 @@ export default function RegisterUser({ loaderData }: Route.ComponentProps) {
                           : "outline-gray-300 focus:outline-blue-600"
                       } placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6`}
                     />
-                    {fetcherData.message && (
+                    {fetcherData.message && !fetcherData.success && (
                       <p
                         className={`text-sm ${
                           fetcherData.success
@@ -192,7 +192,7 @@ export default function RegisterUser({ loaderData }: Route.ComponentProps) {
                           : "outline-gray-300 focus:outline-blue-600"
                       } placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6`}
                     />
-                    {fetcherData.message && (
+                    {fetcherData.message && !fetcherData.success && (
                       <p
                         className={`text-sm ${
                           fetcherData.success
@@ -254,7 +254,7 @@ export default function RegisterUser({ loaderData }: Route.ComponentProps) {
                         )}
                       </button>
                     </div>
-                    {fetcherData.message && (
+                    {fetcherData.message && !fetcherData.success && (
                       <p
                         className={`text-sm ${
                           fetcherData.success

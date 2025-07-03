@@ -120,7 +120,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 onChange={(e) => setName(e.target.value)}
                 id="nama"
               />
-              {fetcherData.message && (
+              {fetcherData.message && !fetcherData.success && (
                 <p
                   className={`text-sm ${
                     fetcherData.success ? "text-green-600" : "text-red-600"
@@ -164,7 +164,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 id="no_wa"
               />
-              {fetcherData.message && (
+              {fetcherData.message && !fetcherData.success && (
                 <p
                   className={`text-sm ${
                     fetcherData.success ? "text-green-600" : "text-red-600"
@@ -196,7 +196,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 name="message"
                 id="message"
               />
-              {fetcherData.message && (
+              {fetcherData.message && !fetcherData.success && (
                 <p
                   className={`text-sm ${
                     fetcherData.success ? "text-green-600" : "text-red-600"

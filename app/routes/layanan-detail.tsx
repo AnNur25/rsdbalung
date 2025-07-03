@@ -40,13 +40,13 @@ export default function LayananDetail({ loaderData }: Route.ComponentProps) {
             <h2 className="rounded-t-md bg-dark-blue-900 p-1 text-lg font-bold text-white">
               Jangka Waktu
             </h2>
-            <p className="h-min p-2 px-8 text-center">{JangkaWaktu}</p>
+            <p className="h-min p-2 px-8 text-justify">{JangkaWaktu}</p>
           </section>
           <section className="flex-1 rounded-md text-center shadow-md">
             <h2 className="rounded-t-md bg-dark-blue-900 p-1 text-lg font-bold text-white">
               Biaya
             </h2>
-            <p className="mx-auto h-min p-2 px-8 text-center">
+            <p className="mx-auto h-min p-2 px-8 text-justify">
               {/* Rp{formatDigits(Biaya.toString())} */}
               {Biaya}
             </p>

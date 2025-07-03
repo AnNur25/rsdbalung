@@ -128,7 +128,9 @@ export default function GalleryNews({
   return (
     <>
       <div className="w-[100%] p-4 shadow-2xl">
-        <h1 className="mb-4 w-max text-2xl font-bold">Form Galeri Berita</h1>
+        <h1 className="mb-4 w-max text-2xl font-bold uppercase">
+          Form Galeri Berita
+        </h1>
 
         <div className="flex items-center justify-center gap-2 lg:max-w-3/5">
           <fetcher.Form

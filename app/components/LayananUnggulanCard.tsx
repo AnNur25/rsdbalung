@@ -16,8 +16,8 @@ export default function LayananUnggulanCard({
         alt="Background"
         className="h-full w-full object-cover"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent from-60% to-white to-80%"></div>
-      <div className="absolute inset-0 flex items-end justify-center p-4 text-xl font-bold text-persian-blue-950">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent from-10% to-[#366B9F] to-100%"></div>
+      <div className="absolute inset-0 flex items-end justify-center p-4 text-xl font-bold text-white text-center">
         <p>{description}</p>
       </div>
     </div>

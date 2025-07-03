@@ -20,7 +20,7 @@ export default function Banner({ bannersSrc }: BannerProps) {
           ))}
         </Slider>
       ) : (
-        <div className="aspect-[2172/857] w-screen">
+        <div className="aspect-[2172/857] w-full">
           <img src={bannerUrl} className="h-full w-full object-cover" />
         </div>
       )}

@@ -79,7 +79,7 @@ export default function CreateNews() {
               } w-full rounded border border-gray-300 p-2`}
               // className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -101,7 +101,7 @@ export default function CreateNews() {
               name="date"
               id="tanggal_berita"
             />
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -133,7 +133,7 @@ export default function CreateNews() {
               } w-full rounded border border-gray-300 p-2`}
               // className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -164,7 +164,7 @@ export default function CreateNews() {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -190,7 +190,7 @@ export default function CreateNews() {
             <Editor
               onChange={handleEditorChange}
               tinymceScriptSrc="/tinymce/tinymce.min.js"
-              licenseKey=""
+              licenseKey="gpl"
               onInit={(_evt, editor) => (editorRef.current = editor)}
               init={{
                 height: 500,
@@ -222,7 +222,7 @@ export default function CreateNews() {
             />
           </div>
 
-          {fetcherData.message && (
+          {fetcherData.message && !fetcherData.success && (
             <p
               className={`text-sm ${
                 fetcherData.success ? "text-green-600" : "text-red-600"

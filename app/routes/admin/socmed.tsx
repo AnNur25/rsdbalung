@@ -3,14 +3,14 @@ import type { Route } from "./+types/socmed";
 import { handleAction } from "~/utils/handleAction";
 import { handleLoader } from "~/utils/handleLoader";
 import axios from "axios";
-import { useFetcher } from "react-router";
+import { useFetcher, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export async function loader() {
   const igRequest = new URL(`${import.meta.env.VITE_API_URL}/media-sosial`);
 
-    return handleLoader(() => axios.get(igRequest.href));
+  return handleLoader(() => axios.get(igRequest.href));
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -22,11 +22,14 @@ export async function action({ request }: Route.ActionArgs) {
   console.log("formData", formData);
 
   const data = {
-    links: igs.map(link =>
-      typeof link === "string" && link.startsWith("https://www.instagram.com/")
-        ? link
-        : ""
-    ).filter(link => link !== ""),
+    links: igs
+      .map((link) =>
+        typeof link === "string" &&
+        link.startsWith("https://www.instagram.com/")
+          ? link
+          : "",
+      )
+      .filter((link) => link !== ""),
   };
 
   return handleAction(() => client.put(igRequest.href, data));
@@ -48,6 +51,7 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
   }
 
   const fetcher = useFetcher();
+  const navigate = useNavigate();
   const [instagram, setInstagram] = useState(
     instagramsLinks || ["", "", "", ""],
   );
@@ -72,7 +76,7 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <h1 className="mb-6 text-4xl font-bold uppercase">
-        Form Pengisian Daftar Dokter
+        Media Sosial
       </h1>
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
         <fetcher.Form method="put" className="flex flex-col gap-2">
@@ -99,7 +103,21 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
             </div>
           ))}
 
-          <button>Simpan</button>
+          <div className="mt-4 flex gap-2">
+            <button
+              type="submit"
+              className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+            >
+              Simpan
+            </button>
+            {/* <button
+              type="button"
+              onClick={() => navigate("/humasbalung/media-sosial")}
+              className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+            >
+              Batal
+            </button> */}
+          </div>
         </fetcher.Form>
       </div>
     </>

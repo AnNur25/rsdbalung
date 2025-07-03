@@ -107,7 +107,11 @@ export default function AdminSidebar() {
         <div className="bg-opacity-25 fixed inset-0 z-40 bg-black" />
         <DialogPanel className="fixed top-0 left-0 z-50 h-full w-64 bg-white p-4 shadow-md">
           <div className="mb-6 flex items-center justify-between">
-            <img src={logoBlack} alt="Logo" className="h-8" />
+            <div className="flex flex-col gap-2">
+              <img src={logoBlack} alt="Logo" className="h-8 w-fit" />
+              <p className="text-sm text-gray-800">Admin Dashboard</p>
+            </div>
+
             <button onClick={() => setSidebarOpen(false)}>
               <XMarkIcon className="h-6 w-6 text-gray-700" />
             </button>
@@ -197,8 +201,9 @@ export default function AdminSidebar() {
 
       {/* Desktop Sidebar */}
       <aside className="hidden bg-gradient-to-r from-blue-950 to-blue-700 p-4 text-white lg:fixed lg:inset-y-0 lg:flex lg:w-54 lg:flex-col">
-        <div className="mb-8 flex items-center justify-center">
+        <div className="mb-8 flex flex-col items-center justify-center gap-2">
           <img src={logo} alt="Logo" className="h-10" />
+          <p>Admin Dashboard</p>
         </div>
         <nav className="flex-1 space-y-2">
           {navigation.map((item) =>

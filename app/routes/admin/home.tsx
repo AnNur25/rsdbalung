@@ -1,8 +1,5 @@
 import type { Route } from "./+types/home";
-import {
-  useFetcher,
-  type HTMLFormMethod,
-} from "react-router";
+import { useFetcher, type HTMLFormMethod } from "react-router";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
@@ -131,10 +128,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   return { error: "Permintaan tidak dikenal." };
 }
 
-export default function AdminHome({
-  loaderData,
-}: Route.ComponentProps) {
-
+export default function AdminHome({ loaderData }: Route.ComponentProps) {
   const banners = Array.isArray(loaderData?.data?.banners)
     ? (loaderData?.data?.banners as BannerModel[])
     : [];
@@ -426,7 +420,13 @@ export default function AdminHome({
             </div>
           ))}
         </div>
-        <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 4 Foto</p>
+        {/* <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 4 Foto</p> */}
+        <ul className="ms-4 mt-2 list-decimal text-sm text-red-500">
+          <li>Maksimal 4 foto</li>
+          <li>Resolusi 2172 x 857 pixel</li>
+          <li>Masing-masing gambar besarnya maksimal 5 mb</li>
+          <li>Tipe file png dan jpg</li>
+        </ul>
       </div>
 
       {/* Layanan Unggulan */}
@@ -437,6 +437,7 @@ export default function AdminHome({
         <button
           onClick={() => setDisableUnggulanForm(false)}
           className={`h-min rounded p-2 text-white ${disableUnggulanForm ? "bg-green-600" : "bg-gray-500"}`}
+          title="Edit"
         >
           <PencilSquareIcon className="h-4 w-4" />
         </button>
@@ -493,7 +494,17 @@ export default function AdminHome({
                   *
                 </span>
               </label>
-              <input
+              <textarea
+                required
+                placeholder="Isi deskripsi di sini"
+                className={`rounded-lg border border-gray-400 px-4 py-2 ${disableUnggulanForm && "text-gray-500"}`}
+                name="deskripsi"
+                id="deskripsi"
+                disabled={disableUnggulanForm}
+                value={unggulanDescription}
+                onChange={(e) => setUnggulanDescription(e.target.value)}
+              ></textarea>
+              {/* <input
                 required
                 placeholder="Isi deskripsi di sini"
                 type="text"
@@ -503,7 +514,7 @@ export default function AdminHome({
                 disabled={disableUnggulanForm}
                 value={unggulanDescription}
                 onChange={(e) => setUnggulanDescription(e.target.value)}
-              />
+              /> */}
             </div>
 
             <div className="mt-6 flex gap-17">
@@ -517,7 +528,7 @@ export default function AdminHome({
                   *
                 </span>
               </h2>
-              <h2
+              {/* <h2
                 className={`text-md font-semibold max-md:hidden ${disableUnggulanForm && "text-gray-500"}`}
               >
                 Caption{" "}
@@ -526,18 +537,18 @@ export default function AdminHome({
                 >
                   *
                 </span>
-              </h2>
+              </h2> */}
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {(existingImagesData ?? []).length > 0 &&
               (existingImagesData ?? []).length <= 4 ? (
                 existingImagesData.map((u, index) => (
                   <>
-                    <div className="flex items-center gap-2 max-md:flex-col">
+                    <div className="flex flex-col items-center gap-2">
                       {/* {u.id ? ( */}
                       <img
                         src={u.gambar}
-                        className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500 grayscale"}`}
+                        className={`aspect-[2/3] h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500 grayscale"}`}
                       />
                       {/* ) : (
                         <input
@@ -564,7 +575,7 @@ export default function AdminHome({
                       />
                       {/* Add / Remove Buttons */}
                       {/* <div className="col-span-2 flex gap-2"> */}
-                      {index == 0 ? (
+                      {/* {index == 0 ? (
                         <div className="flex w-full gap-2 min-md:w-min">
                           <button
                             disabled={disableUnggulanForm}
@@ -583,16 +594,16 @@ export default function AdminHome({
                             <PlusIcon className="h-4 w-4" />
                           </button>
                         </div>
-                      ) : (
-                        <button
-                          disabled={disableUnggulanForm}
-                          type="button"
-                          onClick={() => handleRemoveExistingUnggulan(index)}
-                          className={`flex h-min w-full justify-center rounded p-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
-                        >
-                          <MinusIcon className="h-4 w-4" />
-                        </button>
-                      )}
+                      ) : ( */}
+                      <button
+                        disabled={disableUnggulanForm}
+                        type="button"
+                        onClick={() => handleRemoveExistingUnggulan(index)}
+                        className={`flex h-min w-full justify-center rounded p-2 text-white  ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
+                      >
+                        <MinusIcon className="h-4 w-4" />
+                      </button>
+                      {/* )} */}
                       {/* </div> */}
                     </div>
                   </>
@@ -632,15 +643,23 @@ export default function AdminHome({
                   4 &&
                 (newUnggulanData ?? [{ caption: "" }]).map((u, index) => (
                   <>
-                    <div className="flex items-center gap-2 max-md:flex-col">
-                      <input
-                        required
-                        disabled={disableUnggulanForm}
-                        type="file"
-                        name="file"
-                        accept="image/*"
-                        className={`h-full w-full rounded border border-gray-400 p-1 min-md:max-w-64 ${disableUnggulanForm && "text-gray-500"}`}
-                      />
+                    <div className="flex flex-col items-center gap-2">
+                      <label
+                        className={`flex aspect-[2/3] w-full cursor-pointer flex-col items-center justify-center rounded border-2 border-dashed border-gray-400 bg-gray-50 transition-colors hover:border-gray-600 min-md:max-w-64 ${disableUnggulanForm ? "cursor-not-allowed bg-gray-100 text-gray-400" : "text-gray-500"}`}
+                        // style={{ minHeight: "160px" }}
+                      >
+                        <span className="text-sm text-gray-400">
+                          Pilih gambar
+                        </span>
+                      </label>
+                        <input
+                          required
+                          disabled={disableUnggulanForm}
+                          type="file"
+                          name="file"
+                          accept="image/*"
+                          // className="hidden"
+                        />
                       <input
                         value={u.caption}
                         onChange={(e) =>
@@ -657,7 +676,7 @@ export default function AdminHome({
                         name="caption"
                         className={`w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4 ${disableUnggulanForm && "text-gray-500"}`}
                       />
-                      {index == 0 && (existingImagesData ?? []).length <= 0 ? (
+                      {/* {index == 0 && (existingImagesData ?? []).length <= 0 ? (
                         <div className="flex w-full gap-2 min-md:w-min">
                           <button
                             disabled={disableUnggulanForm}
@@ -676,24 +695,32 @@ export default function AdminHome({
                             <PlusIcon className="h-4 w-4" />
                           </button>
                         </div>
-                      ) : (
+                      ) : ( */}
                         <button
                           disabled={disableUnggulanForm}
                           type="button"
                           onClick={() => handleRemoveNewUnggulan(index)}
-                          className={`flex h-min w-full justify-center rounded p-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
+                          className={`flex h-min w-full justify-center rounded p-2 text-white  ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
                         >
                           <MinusIcon className="h-4 w-4" />
                         </button>
-                      )}
+                      {/* )} */}
                     </div>
                   </>
                 ))}
             </div>
             <button
+              disabled={disableUnggulanForm}
+              type="button"
+              onClick={handleAddUnggulan}
+              className={`flex h-min w-full flex-1 justify-center rounded p-2 text-white ${disableUnggulanForm ? "bg-gray-500" : "bg-green-500 hover:bg-green-600"}`}
+            >
+              <PlusIcon className="h-4 w-4" />
+            </button>
+            <button
               onClick={handleUnggulan}
               type="button"
-              className={`mt-3 rounded px-8 py-2 text-white min-md:w-min ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
+              className={`mt-3 rounded px-8 py-2 text-white  ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
             >
               Simpan
             </button>

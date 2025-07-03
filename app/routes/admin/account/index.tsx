@@ -88,16 +88,6 @@ export default function AdminAccount({ loaderData }: Route.ComponentProps) {
                 </p>
               </div>
               <div className="flex w-full flex-col">
-                <label className="text-md font-semibold">Nama</label>
-                <input
-                  type="text"
-                  readOnly
-                  value={nama}
-                  disabled
-                  className="rounded-lg border border-gray-400 px-4 py-2 text-gray-400"
-                />
-              </div>
-              <div className="flex w-full flex-col">
                 <label className="text-md font-semibold">Email</label>
                 <input
                   type="text"
@@ -107,8 +97,18 @@ export default function AdminAccount({ loaderData }: Route.ComponentProps) {
                   className="rounded-lg border border-gray-400 px-4 py-2 text-gray-400"
                 />
               </div>
+              <div className="flex w-full flex-col">
+                <label className="text-md font-semibold">Username</label>
+                <input
+                  type="text"
+                  readOnly
+                  value={nama}
+                  disabled
+                  className="rounded-lg border border-gray-400 px-4 py-2 text-gray-400"
+                />
+              </div>
               <button
-                className="rounded-lg border bg-blue-700 px-6 py-3 text-white shadow"
+                className="rounded-lg border bg-green-700 px-6 py-3 text-white shadow"
                 onClick={() => setVisibleChangeForm(true)}
                 type="button"
               >
@@ -160,7 +160,7 @@ export default function AdminAccount({ loaderData }: Route.ComponentProps) {
                       )}
                     </button>
                   </div>
-                  {fetcherData.message && (
+                  {fetcherData.message && !fetcherData.success && (
                     <p
                       className={`text-sm ${
                         fetcherData.success ? "text-green-600" : "text-red-600"
@@ -202,7 +202,7 @@ export default function AdminAccount({ loaderData }: Route.ComponentProps) {
                       )}
                     </button>
                   </div>
-                  {fetcherData.message && (
+                  {fetcherData.message && !fetcherData.success && (
                     <p
                       className={`text-sm ${
                         fetcherData.success ? "text-green-600" : "text-red-600"

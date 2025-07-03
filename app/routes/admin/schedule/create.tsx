@@ -190,7 +190,7 @@ export default function CreateSchedule({ loaderData }: Route.ComponentProps) {
                   key={index}
                   type="button"
                   onClick={() => setSelectedPoli(poli.id_poli)}
-                  className="min-h-36 rounded-2xl bg-dark-blue-900 p-6 text-white"
+                  className="bg-grd min-h-36 rounded-2xl p-6 text-white"
                 >
                   {poli.nama_poli}
                 </button>
@@ -346,7 +346,7 @@ export default function CreateSchedule({ loaderData }: Route.ComponentProps) {
                     </div>
                   </div>
                 ))}
-                {fetcherData.message && (
+                {fetcherData.message && !fetcherData.success && (
                   <p
                     className={`text-sm ${
                       fetcherData.success ? "text-green-600" : "text-red-600"

@@ -8,4 +8,5 @@ export interface News {
   gambar_sampul: string;
   tanggal_dibuat: string;
   gambar_tambahan: [];
+  slug: string;
 }

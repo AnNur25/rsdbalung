@@ -183,7 +183,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
             className="mx-auto my-8 aspect-video h-auto w-full rounded-sm object-cover"
           />
           <h1 className="text-2xl font-bold lg:text-3xl">{judul}</h1>
-          <p className="my-4">{ringkasan}</p>
+          <p className="my-4 italic">{ringkasan}</p>
 
           <HtmlParse htmlString={isi} />
 
@@ -229,7 +229,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                 onChange={(e) => setName(e.target.value)}
                 id="nama"
               />
-              {fetcherData.message && (
+              {fetcherData.message && !fetcherData.success && (
                 <p
                   className={`text-sm ${
                     fetcherData.success ? "text-green-600" : "text-red-600"
@@ -273,7 +273,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 id="no_wa"
               />
-              {fetcherData.message && (
+              {fetcherData.message && !fetcherData.success && (
                 <p
                   className={`text-sm ${
                     fetcherData.success ? "text-green-600" : "text-red-600"
@@ -304,7 +304,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                 } min-h-56 rounded-lg border border-gray-400 px-4 py-2`}
                 name="isi_komentar"
               />
-              {fetcherData.message && (
+              {fetcherData.message && !fetcherData.success && (
                 <p
                   className={`text-sm ${
                     fetcherData.success ? "text-green-600" : "text-red-600"

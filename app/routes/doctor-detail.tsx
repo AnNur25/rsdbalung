@@ -65,13 +65,13 @@ export default function DoctorDetail({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <PageBanner title="Detail Dokter"/>
+      <PageBanner title="Detail Dokter" />
       <div className="flex flex-col">
         <div className="flex flex-col justify-center gap-8 p-8 min-md:flex-row">
           <div className="flex w-fit flex-col items-center">
             <img
               onError={imageErrorHandler}
-              className="aspect-[9/12] h-auto w-full rounded-sm object-cover min-md:w-64"
+              className="aspect-[9/12] h-auto w-full rounded-lg border-1 border-gray-300 object-cover min-md:w-64"
               src={schedule.gambar || "https://example.com"}
               alt={`Foto ${schedule.nama}`}
             />
@@ -101,12 +101,12 @@ export default function DoctorDetail({ loaderData }: Route.ComponentProps) {
             <p className="bg-gradient-to-l from-blue-300 to-blue-950 bg-clip-text text-lg font-semibold text-transparent uppercase">
               {schedule.poli.nama_poli}
             </p>
-            <hr className="border- my-4 w-full border-dashed border-gray-700" />
+            <hr className="my-4 w-full border border-dashed border-gray-700" />
             <p>Biodata Singkat</p>
             <p className="text-justify text-gray-700">
               {schedule.biodata_singkat}
             </p>
-            <hr className="border- my-4 w-full border-dashed border-gray-700" />
+            <hr className="my-4 w-full border border-dashed border-gray-700" />
             <p>Jadwal Praktek</p>
             <p className="text-sm text-red-600">
               *Jadwal dapat berubah sewaktu-waktu
@@ -154,8 +154,14 @@ export default function DoctorDetail({ loaderData }: Route.ComponentProps) {
             </section>
           </div>
         </div>
+        <div className="flex w-full flex-col items-center justify-center p-4 px-8">
+          <hr className="my-4 w-full border-1 border-gray-400" />
+          <h2 className="text-2xl font-bold text-gray-800 uppercase">
+            Dokter Spesialis Lainnya
+          </h2>
+        </div>
         {doctors.length > 0 && (
-          <section className="p-8">
+          <section className="px-8 py-4">
             <Slider>
               {doctors.map((doctor, index) => (
                 <div className="relative mx-2 h-full w-min" key={index}>

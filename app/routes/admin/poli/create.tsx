@@ -43,7 +43,7 @@ export default function CreatePoli() {
         <fetcher.Form method="post">
           <div className="mb-4">
             <label htmlFor="nama_poli" className="text-lg font-bold">
-              Nama Poli <span className="text-red-600">*</span>
+              Nama Poli/Klinik <span className="text-red-600">*</span>
             </label>
             <input
               onInput={(e) => {
@@ -63,7 +63,7 @@ export default function CreatePoli() {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"

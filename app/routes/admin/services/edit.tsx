@@ -93,7 +93,7 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -127,7 +127,7 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             ></textarea>
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -166,7 +166,7 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
                 } w-full rounded border border-gray-300 p-2`}
               />
             </div>
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -200,7 +200,7 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             ></textarea>
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -232,9 +232,9 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
                 fetcherData.message && !fetcherData.success
                   ? "border-red-500 focus:outline-red-500"
                   : "border-gray-300 focus:outline-blue-500"
-              } w-full rounded border border-gray-300 p-2`}
+              } min-h-max w-full rounded border border-gray-300 p-2`}
             ></textarea>
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"

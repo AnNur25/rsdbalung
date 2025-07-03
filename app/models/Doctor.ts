@@ -10,5 +10,6 @@ export interface Doctor {
     id_poli: string;
     nama_poli: string;
   };
+  slug: string;
 }
 

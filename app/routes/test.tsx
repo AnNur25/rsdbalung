@@ -35,19 +35,19 @@ export async function loader({ request }: Route.LoaderArgs) {
   //   return redirectWithCookie(request.url, refreshCookieHeader ?? "");
   // }
 
-  const channelId = "UChVGsibHFT03DpOhvBp36kQ";
-  const res = await axios.get(
-    `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`,
-    { responseType: "text" },
-  );
-  const str = res.data;
+  // const channelId = "UChVGsibHFT03DpOhvBp36kQ";
+  // const res = await axios.get(
+  //   `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`,
+  //   { responseType: "text" },
+  // );
+  // const str = res.data;
 
-  const matches = Array.from(
-    str.matchAll(/<yt:videoId>([^<]+)<\/yt:videoId>/g),
-  ) as RegExpMatchArray[];
-  const videoIds = matches.map((m) => m[1]);
+  // const matches = Array.from(
+  //   str.matchAll(/<yt:videoId>([^<]+)<\/yt:videoId>/g),
+  // ) as RegExpMatchArray[];
+  // const videoIds = matches.map((m) => m[1]);
 
-  return videoIds;
+  // return videoIds;
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -79,7 +79,7 @@ export default function Test({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <div className="relative flex h-[300px] w-[250px] flex-col justify-end overflow-hidden rounded-xl border bg-white shadow-lg">
+      {/* <div className="relative flex h-[300px] w-[250px] flex-col justify-end overflow-hidden rounded-xl border bg-white shadow-lg">
         <img
           src="{member.image}"
           alt="{member.name}"
@@ -118,7 +118,7 @@ export default function Test({ loaderData }: Route.ComponentProps) {
         >
           Submit
         </button>
-      </fetcher.Form>
+      </fetcher.Form> */}
     </>
   );
 }

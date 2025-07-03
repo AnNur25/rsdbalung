@@ -17,7 +17,7 @@ export default function Profile() {
       <PageBanner title="PROFIL RSD BALUNG" />
       <main className="mx-auto lg:max-w-3/4">
         <section className="my-8">
-          <h2 className="text-center text-2xl font-bold">
+          <h2 className="text-center text-2xl font-bold uppercase">
             Struktur Organisasi
           </h2>
           <img

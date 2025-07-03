@@ -85,7 +85,7 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"

@@ -38,13 +38,14 @@ export default function CreateService() {
       }
     }
   }, [fetcherData]);
+  console.log("fetcherData", fetcherData);
   return (
     <>
       <h1 className="mb-6 text-2xl font-bold uppercase">
         Form Pengisian Layanan RS
       </h1>
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
-        <Form method="post" action="/humasbalung/pelayanan/create">
+        <fetcher.Form method="post" action="/humasbalung/pelayanan/create">
           <div className="mb-4">
             <label htmlFor="nama_pelayanan" className="text-lg font-bold">
               Nama Pelayanan <span className="text-red-600">*</span>
@@ -67,7 +68,7 @@ export default function CreateService() {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -99,7 +100,7 @@ export default function CreateService() {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             ></textarea>
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -136,7 +137,7 @@ export default function CreateService() {
                 } w-full rounded border border-gray-300 p-2`}
               />
             </div>
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -174,7 +175,7 @@ export default function CreateService() {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             ></textarea>
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -206,7 +207,7 @@ export default function CreateService() {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             ></textarea>
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -232,7 +233,7 @@ export default function CreateService() {
               Batal
             </button>
           </div>
-        </Form>
+        </fetcher.Form>
       </div>
     </>
   );

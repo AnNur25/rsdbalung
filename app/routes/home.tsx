@@ -348,7 +348,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           <TextWithRect>BERITA</TextWithRect>
           <p className="text-center text-lg font-black lg:text-2xl">
             <span className="text-dark-blue-950">Warta RSD Balung:</span>{" "}
-            <span className="text-dark-blue-900">
+            <span className="text-dark-blue-500">
               Mengabari, Melayani, Menginspirasi
             </span>
           </p>

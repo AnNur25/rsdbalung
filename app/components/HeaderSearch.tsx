@@ -13,7 +13,7 @@ export default function HeaderSearch({
       <MagnifyingGlassIcon className="absolute left-3 h-4 w-4 text-gray-400" />
 
       <input
-        className="w-full rounded-full border-1 border-gray-300 py-2 ps-10 pe-2 focus:border-dark-blue-950 focus:outline-none min-md:min-w-32"
+        className="w-full w-100 rounded-full border-1 border-gray-300 py-2 ps-10 pe-2 focus:border-dark-blue-950 focus:outline-none min-md:min-w-32"
         type="search"
         placeholder="Cari"
         name="search"

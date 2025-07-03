@@ -77,7 +77,7 @@ export default function News({ loaderData }: Route.ComponentProps) {
             news.map((berita, index) => (
               <NewsCard
                 key={index}
-                id={berita.id}
+                id={berita.slug}
                 title={berita.judul}
                 description={berita.ringkasan}
                 image={berita.gambar_sampul}

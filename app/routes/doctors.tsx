@@ -85,7 +85,7 @@ export default function Doctors({ loaderData }: Route.ComponentProps) {
             doctors.map((doctor, index) => (
               <div className="relative w-min">
                 <DoctorCard
-                  id={doctor.id_dokter}
+                  id={doctor.slug}
                   key={index}
                   name={doctor.nama}
                   specialty={doctor.poli.nama_poli}

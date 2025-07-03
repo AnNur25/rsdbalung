@@ -1,8 +1,4 @@
-import {
-  useNavigation,
-  useNavigate,
-  useFetcher,
-} from "react-router";
+import { useNavigation, useNavigate, useFetcher } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -109,7 +105,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -141,7 +137,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             ></textarea>
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -171,7 +167,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
                 </option>
               ))}
             </select>
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -183,7 +179,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
           </div>
           <div className="mb-4">
             <label htmlFor="nama" className="text-lg font-bold">
-              Nama <span className="text-red-600">*</span>
+              Nama Dokter<span className="text-red-600">*</span>
             </label>
             <input
               onInput={(e) => {
@@ -203,7 +199,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && (
+            {fetcherData.message && !fetcherData.success && (
               <p
                 className={`text-sm ${
                   fetcherData.success ? "text-green-600" : "text-red-600"
@@ -215,7 +211,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
           </div>
           <div className="mb-4">
             <label htmlFor="link_instagram" className="text-lg font-bold">
-              Link Instagram
+              Instagram
             </label>
 
             <input
@@ -234,7 +230,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
           </div>
           <div className="mb-4">
             <label htmlFor="link_linkedin" className="text-lg font-bold">
-              Link LinkendIn
+              LinkendIn
             </label>
 
             <input
@@ -253,7 +249,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
           </div>
           <div className="mb-4">
             <label htmlFor="link_facebook" className="text-lg font-bold">
-              Link Facebook
+              Facebook
             </label>
 
             <input

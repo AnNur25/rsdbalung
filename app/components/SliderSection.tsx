@@ -15,7 +15,7 @@ export default function SliderSection({
   subtitle,
   description,
   navInside = false,
-  overlapSize = 16,
+  overlapSize = 4,
   children,
 }: SliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -168,7 +168,7 @@ export default function SliderSection({
           }}
         >
           {children.map((child, index) => (
-            <div key={index} className={`grow ${overlapSize ? `-mr-16` : ""}`}>
+            <div key={index} className={`grow ${overlapSize ? `-mr-4` : ""}`}>
               {child}
             </div>
           ))}

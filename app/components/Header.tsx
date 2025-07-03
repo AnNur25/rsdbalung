@@ -53,6 +53,13 @@ export default function Header({
     { name: "Profil", href: "/profile" },
     { name: "Berita", href: "/berita" },
     {
+      name: "Pelayanan",
+      submenu: pelayanan.map((item) => ({
+        name: item.nama_pelayanan,
+        href: `/pelayanan/${item.slug}`,
+      })),
+    },
+    {
       name: "Informasi RS",
       submenu: [
         { name: "Dokter", href: "/dokter" },
@@ -62,13 +69,6 @@ export default function Header({
           href: "https://rsdbalung.simkeskhanza.com/index.php?act=FasilitasKamar",
         },
       ],
-    },
-    {
-      name: "Pelayanan",
-      submenu: pelayanan.map((item) => ({
-        name: item.nama_pelayanan,
-        href: `/pelayanan/${item.id_pelayanan}`,
-      })),
     },
     { name: "Aduan", href: "/aduan" },
   ];
@@ -156,7 +156,8 @@ export default function Header({
                 </a>
               ),
             )}
-
+          {/* </div> */}
+          {/* <div> */}
             <HeaderSearch />
 
             {isLogin ? (
