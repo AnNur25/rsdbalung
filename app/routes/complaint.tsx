@@ -93,9 +93,9 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
         <div className="flex items-center max-md:flex-col">
           <fetcher.Form
             method="post"
-            className="m-4 max-md:w-6/7 flex flex-1 flex-col items-center justify-center gap-4 rounded-xl border border-gray-300 p-6 shadow-lg min-md:p-8"
+            className="my-4 flex flex-1 flex-col items-center justify-center gap-4 rounded-xl border border-gray-300 p-6 shadow-lg max-md:w-[95%] min-md:p-8"
           >
-            <div className="flex flex-col gap-2 max-md:w-7/8">
+            <div className="flex flex-col gap-2 max-md:w-full">
               <label htmlFor="nama" className="text-md font-semibold">
                 Nama <span className="text-red-600">*</span>
               </label>
@@ -131,7 +131,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
               )}
             </div>
 
-            <div className="flex flex-col gap-2 max-md:w-7/8">
+            <div className="flex flex-col gap-2 max-md:w-full">
               <label htmlFor="no_wa" className="text-md font-semibold">
                 No. Whatsapp <span className="text-red-600">*</span>
               </label>
@@ -175,7 +175,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
               )}
             </div>
 
-            <div className="flex flex-col gap-2 max-md:w-7/8">
+            <div className="flex flex-col gap-2 max-md:w-full">
               <label htmlFor="message" className="text-md font-semibold">
                 Aduan <span className="text-red-600">*</span>
               </label>
@@ -206,7 +206,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 </p>
               )}
             </div>
-            <div className="overflow-x-auto max-md:w-7/8">
+            <div className="overflow-x-auto max-md:w-full">
               <GoogleReCaptchaProvider
                 type="v2-checkbox"
                 siteKey={import.meta.env.VITE_SITE_KEY}
