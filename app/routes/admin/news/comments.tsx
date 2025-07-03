@@ -115,7 +115,13 @@ export default function AdminComments({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <h1 className="mb-4 w-max text-2xl font-bold uppercase">Komentar</h1>
+      <h1 className="mb-2 w-max text-2xl font-bold uppercase">
+        Komentar Berita
+      </h1>
+      <p className="mb-4 text-gray-600">
+        Mohon diperhatikan, komentar yang tidak diaktifkan visibilitasnya akan
+        terhapus otomatis setiap tanggal 28
+      </p>
       <div className="w-full overflow-x-auto rounded-lg border-1 border-gray-300 p-1 shadow-xl">
         <section className="mb-4 w-full overflow-x-auto">
           {comments?.map((c) => (
