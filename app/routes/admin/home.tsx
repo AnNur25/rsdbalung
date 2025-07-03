@@ -367,7 +367,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
               name="banner"
               multiple
               accept="image/*"
-              className="w-full rounded border border-gray-500 px-2 py-1.5"
+              className="w-full rounded border border-gray-500 px-2 py-1.5 hover:cursor-pointer"
             />
             <button
               type="submit"
@@ -571,7 +571,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
                         placeholder="Isi caption di sini"
                         type="text"
                         // name="caption"
-                        className={`w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4 ${disableUnggulanForm && "text-gray-500"}`}
+                        className={`w-full grow rounded border border-gray-400 px-2 py-1.5  ${disableUnggulanForm && "text-gray-500"}`}
                       />
                       {/* Add / Remove Buttons */}
                       {/* <div className="col-span-2 flex gap-2"> */}
@@ -599,7 +599,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
                         disabled={disableUnggulanForm}
                         type="button"
                         onClick={() => handleRemoveExistingUnggulan(index)}
-                        className={`flex h-min w-full justify-center rounded p-2 text-white  ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
+                        className={`flex h-min w-full justify-center rounded p-2 text-white ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
                       >
                         <MinusIcon className="h-4 w-4" />
                       </button>
@@ -625,7 +625,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
                       placeholder="Isi caption di sini"
                       type="text"
                       name="caption"
-                      className="w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4"
+                      className="w-full grow rounded border border-gray-400 px-2 py-1.5 "
                     />
 
                     <button
@@ -645,21 +645,21 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
                   <>
                     <div className="flex flex-col items-center gap-2">
                       <label
-                        className={`flex aspect-[2/3] w-full cursor-pointer flex-col items-center justify-center rounded border-2 border-dashed border-gray-400 bg-gray-50 transition-colors hover:border-gray-600 min-md:max-w-64 ${disableUnggulanForm ? "cursor-not-allowed bg-gray-100 text-gray-400" : "text-gray-500"}`}
+                        className={`flex aspect-[2/3] w-full flex-col items-center justify-center rounded border-2 border-dashed border-gray-400 bg-gray-50 transition-colors hover:border-gray-600 min-md:max-w-64 ${disableUnggulanForm ? "cursor-not-allowed bg-gray-100 text-gray-400" : "text-gray-500"}`}
                         // style={{ minHeight: "160px" }}
                       >
-                        <span className="text-sm text-gray-400">
+                        {/* <span className="text-sm text-gray-400">
                           Pilih gambar
-                        </span>
+                        </span> */}
                       </label>
-                        <input
-                          required
-                          disabled={disableUnggulanForm}
-                          type="file"
-                          name="file"
-                          accept="image/*"
-                          // className="hidden"
-                        />
+                      <input
+                        required
+                        disabled={disableUnggulanForm}
+                        type="file"
+                        name="file"
+                        accept="image/*"
+                        className="hover:cursor-pointer"
+                      />
                       <input
                         value={u.caption}
                         onChange={(e) =>
@@ -674,7 +674,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
                         placeholder="Isi caption di sini"
                         type="text"
                         name="caption"
-                        className={`w-full grow rounded border border-gray-400 px-2 py-1.5 min-md:ms-4 ${disableUnggulanForm && "text-gray-500"}`}
+                        className={`w-full grow rounded border border-gray-400 px-2 py-1.5  ${disableUnggulanForm && "text-gray-500"}`}
                       />
                       {/* {index == 0 && (existingImagesData ?? []).length <= 0 ? (
                         <div className="flex w-full gap-2 min-md:w-min">
@@ -696,14 +696,14 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
                           </button>
                         </div>
                       ) : ( */}
-                        <button
-                          disabled={disableUnggulanForm}
-                          type="button"
-                          onClick={() => handleRemoveNewUnggulan(index)}
-                          className={`flex h-min w-full justify-center rounded p-2 text-white  ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
-                        >
-                          <MinusIcon className="h-4 w-4" />
-                        </button>
+                      <button
+                        disabled={disableUnggulanForm}
+                        type="button"
+                        onClick={() => handleRemoveNewUnggulan(index)}
+                        className={`flex h-min w-full justify-center rounded p-2 text-white ${disableUnggulanForm ? "bg-gray-500" : "bg-red-500 hover:bg-red-600"}`}
+                      >
+                        <MinusIcon className="h-4 w-4" />
+                      </button>
                       {/* )} */}
                     </div>
                   </>
@@ -720,7 +720,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
             <button
               onClick={handleUnggulan}
               type="button"
-              className={`mt-3 rounded px-8 py-2 text-white  ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
+              className={`mt-3 rounded px-8 py-2 text-white ${disableUnggulanForm ? "bg-gray-500" : "bg-green-600"}`}
             >
               Simpan
             </button>

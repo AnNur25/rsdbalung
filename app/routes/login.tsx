@@ -64,7 +64,8 @@ export default function LoginUser({ loaderData }: Route.ComponentProps) {
     <>
       <div className="flex min-h-screen items-center justify-center">
         <div
-          className="hidden h-screen w-max bg-cover bg-center py-10 text-center text-white shadow-md lg:block lg:flex-1"
+          className="lg:w-3/8 hidden h-screen w-max bg-cover bg-center text-center text-white shadow-md lg:block"
+          // className="hidden h-screen w-max bg-center py-10 text-center text-white shadow-md lg:block lg:flex-1"
           style={{
             backgroundImage: `url(/images/login.png)`,
           }}

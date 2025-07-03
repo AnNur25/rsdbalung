@@ -104,9 +104,9 @@ export default function Header({
         </div>
         <nav
           aria-label="Global"
-          className="flex items-center justify-between p-4 lg:px-8"
+          className="flex items-center justify-between gap-4 p-4 lg:px-8"
         >
-          <div className="flex lg:flex-1">
+          <div className="flex">
             <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Rumah Sakit Daerah Balung</span>
               <img alt="" src={logo} className="h-8 w-auto" />
@@ -122,24 +122,24 @@ export default function Header({
               <Bars3Icon aria-hidden="true" className="size-6" />
             </button>
           </div>
-          <div className="hidden items-center lg:flex lg:flex-2 lg:gap-x-12">
+          <div className="hidden items-center justify-center lg:flex lg:gap-x-12">
             {navigation.map((item, index) =>
               item.submenu ? (
                 <Popover
                   as="div"
-                  className="relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer"
+                  className="hover-grd group relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 transition-colors duration-200 hover:cursor-pointer hover:text-white"
                   key={index}
                 >
-                  <PopoverButton className="flex w-max items-center gap-2 outline-none hover:cursor-pointer hover:text-dark-blue-900">
+                  <PopoverButton className="flex w-max items-center gap-2 transition-colors duration-200 outline-none group-hover:text-white hover:cursor-pointer">
                     {item.name}
                     <ChevronDownIcon className="h-4 w-4" />
                   </PopoverButton>
-                  <PopoverPanel className="ring-opacity-5 absolute left-0 z-100 mt-2 w-56 rounded-md bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none">
+                  <PopoverPanel className="ring-opacity-5 absolute left-0 z-100 mt-2 w-56 origin-top scale-95 rounded-md bg-white opacity-0 shadow-2xl ring-1 ring-gray-200 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100 focus:outline-none">
                     {item.submenu.map((subitem, subindex) => (
                       <a
                         key={subindex}
                         href={subitem.href}
-                        className="block w-full px-4 py-2 text-sm font-medium hover:text-dark-blue-950"
+                        className="block w-full px-4 py-2 text-sm font-medium text-gray-900 hover:text-dark-blue-900"
                       >
                         {subitem.name}
                       </a>
@@ -150,19 +150,22 @@ export default function Header({
                 <a
                   key={index}
                   href={item.href}
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:text-dark-blue-950"
+                  className="hover-grd -mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:text-white"
                 >
                   {item.name}
                 </a>
               ),
             )}
-          {/* </div> */}
-          {/* <div> */}
+          </div>
+          <div className="hidden lg:flex items-center gap-x-8  lg:justify-end">
+            <div className="hidden lg:block">
             <HeaderSearch />
+            </div>
+              
 
             {isLogin ? (
               <>
-                <Popover as="div" className="relative">
+                <Popover as="div" className="hidden relative lg:block">
                   <PopoverButton>
                     <UserCircleIcon className="h-8 w-8 text-gray-700 hover:text-dark-blue-900" />
                   </PopoverButton>

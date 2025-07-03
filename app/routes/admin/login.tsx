@@ -76,7 +76,8 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
     <>
       <div className="flex min-h-screen items-center justify-center">
         <div
-          className="hidden h-screen w-full bg-cover bg-top py-10 text-center text-white shadow-md lg:block lg:flex-1"
+          className="hidden h-screen w-max bg-cover text-center text-white shadow-md lg:block lg:w-5/11"
+          // className="hidden h-full bg-top text-center text-white shadow-md lg:block lg:flex-1"
           // className="hidden h-screen bg-cover bg-center py-10 text-center text-white shadow-md lg:block lg:w-1/4"
           style={{
             backgroundImage: `url(/images/loginadmin.png)`,

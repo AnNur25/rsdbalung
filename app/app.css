@@ -16,6 +16,10 @@
 .bg-grd {
   background: var(--color-gdr-dark-blue);
 }
+
+.hover-grd:hover {
+  background: var(--color-gdr-dark-blue);
+}
 /* "Inter", ui-sans-serif, system-ui, sans-serif; */
 /* "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
 

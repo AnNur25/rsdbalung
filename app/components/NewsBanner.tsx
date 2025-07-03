@@ -19,7 +19,7 @@ export default function NewsBanner({
         backgroundBlendMode: "darken",
       }}
     >
-      <div className="flex h-full flex-col items-start justify-center gap-4 p-8 ps-20">
+      <div className="flex h-full flex-col items-start justify-center gap-4 p-8 min-md:px-20">
         <p className="rounded-md bg-dark-blue-900 p-2 text-sm font-semibold">
           Tanggal: {date}
         </p>
