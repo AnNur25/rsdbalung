@@ -425,7 +425,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
           <li>Maksimal 4 foto</li>
           <li>Resolusi 2172 x 857 pixel</li>
           <li>Masing-masing gambar besarnya maksimal 5 mb</li>
-          <li>Tipe file png dan jpg</li>
+          <li>Tipe file png dan jpeg</li>
         </ul>
       </div>
 
@@ -732,7 +732,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
           <li>Maksimal 4 foto</li>
           <li>Rasio 2:3</li>
           <li>Masing-masing gambar besarnya maksimal 5 mb</li>
-          <li>Tipe file png dan jpg</li>
+          <li>Tipe file png dan jpeg</li>
         </ul>
       </div>
       <ConfirmDialog
