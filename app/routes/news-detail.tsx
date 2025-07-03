@@ -52,10 +52,10 @@ export async function action({ request, params }: Route.ActionArgs) {
 
   const formData = await request.formData();
   const feature = formData.get("feat");
-  const id = formData.get("id");
+  // const id = formData.get("id");
 
   const urlRequest = new URL(
-    `${import.meta.env.VITE_API_URL}/berita/${id}/komentar/`,
+    `${import.meta.env.VITE_API_URL}/berita/${params.id}/komentar/`,
   );
 
   if (feature === "comment") {
@@ -78,7 +78,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     console.log(feature);
     const comment_id = formData.get("id");
     const replyRequest = new URL(
-      `${import.meta.env.VITE_API_URL}/berita/${id}/komentar/${comment_id}/reply`,
+      `${import.meta.env.VITE_API_URL}/berita/${params.id}/komentar/${comment_id}/reply`,
     );
     console.log(formData);
 
@@ -86,7 +86,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   }
   if (method === "PATCH") {
     const id = formData.get("id");
-    urlRequest.pathname = `/api/v1/berita/${id}/komentar/${id}`;
+    urlRequest.pathname = `/api/v1/berita/${params.id}/komentar/${id}`;
     return handleAction(() => client.patch(urlRequest.href));
   }
 }
