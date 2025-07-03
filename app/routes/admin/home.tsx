@@ -571,7 +571,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
                         placeholder="Isi caption di sini"
                         type="text"
                         // name="caption"
-                        className={`w-full grow rounded border border-gray-400 px-2 py-1.5  ${disableUnggulanForm && "text-gray-500"}`}
+                        className={`w-full grow rounded border border-gray-400 px-2 py-1.5 ${disableUnggulanForm && "text-gray-500"}`}
                       />
                       {/* Add / Remove Buttons */}
                       {/* <div className="col-span-2 flex gap-2"> */}
@@ -674,7 +674,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
                         placeholder="Isi caption di sini"
                         type="text"
                         name="caption"
-                        className={`w-full grow rounded border border-gray-400 px-2 py-1.5  ${disableUnggulanForm && "text-gray-500"}`}
+                        className={`w-full grow rounded border border-gray-400 px-2 py-1.5 ${disableUnggulanForm && "text-gray-500"}`}
                       />
                       {/* {index == 0 && (existingImagesData ?? []).length <= 0 ? (
                         <div className="flex w-full gap-2 min-md:w-min">
@@ -727,7 +727,13 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
           </div>
         </div>
 
-        <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 4 Foto</p>
+        {/* <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 4 Foto</p> */}
+        <ul className="ms-4 mt-2 list-decimal text-sm text-red-500">
+          <li>Maksimal 4 foto</li>
+          <li>Rasio 2:3</li>
+          <li>Masing-masing gambar besarnya maksimal 5 mb</li>
+          <li>Tipe file png dan jpg</li>
+        </ul>
       </div>
       <ConfirmDialog
         isOpen={deleteDialogOpen}

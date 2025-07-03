@@ -166,7 +166,7 @@ export default function AdminDoctors({ loaderData }: Route.ComponentProps) {
                   </div>
                   <div className="flex flex-none justify-center gap-0.5">
                     <a
-                      href={`/humasbalung/dokter/edit/${doctor.id_dokter}`}
+                      href={`/humasbalung/dokter/edit/${doctor.slug}`}
                       className="block h-fit w-min rounded bg-green-600 p-2 text-white hover:underline"
                     >
                       <PencilSquareIcon className="h-4 w-4" />

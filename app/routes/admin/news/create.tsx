@@ -98,7 +98,7 @@ export default function CreateNews() {
               type="date"
               lang="id-ID"
               placeholder="Pilih Tanggal"
-              name="date"
+              name="tanggal_berita"
               id="tanggal_berita"
             />
             {fetcherData.message && !fetcherData.success && (

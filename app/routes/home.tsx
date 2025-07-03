@@ -384,8 +384,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           </h2>
 
           <p className="text-justify text-white lg:text-lg">
-            Ikuti kami di Instagram untuk mendapatkan informasi seputar
-            kesehatan, layanan terbaru, dan momen menarik lainnya.
+            Dapatkan berbagai informasi terbaru dari RSD Balung mulai seputar
+            kesehatan, layanan terbaru, hingga kegiatan menarik lainnya sehingga
+            dapat menjadi referensi terpercaya untuk Anda dan keluarga.
           </p>
 
           <a

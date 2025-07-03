@@ -63,7 +63,7 @@ export default function AdminEditPoli({ loaderData }: Route.ComponentProps) {
         <fetcher.Form method="post">
           <div className="mb-4">
             <label htmlFor="nama_poli" className="text-lg font-bold">
-              Nama Poli <span className="text-red-600">*</span>
+              Nama Poli/Klinik <span className="text-red-600">*</span>
             </label>
             <input
               onInput={(e) => {

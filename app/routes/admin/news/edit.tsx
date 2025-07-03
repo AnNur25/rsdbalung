@@ -26,7 +26,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
 
   const formData = await request.formData();
-  const newsId = params.id;
+  const newsId = formData.get("id") as string;
 
   const urlRequest = new URL(
     `${import.meta.env.VITE_API_URL}/berita/${newsId}`,
@@ -35,6 +35,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   const headers = {
     "Content-Type": "multipart/form-data",
   };
+
   const config = {
     headers: headers,
   };
@@ -103,6 +104,7 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
       </h1>
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
         <fetcher.Form method="post" encType="multipart/form-data">
+          <input hidden type="text" name="id" value={news.id} />
           <div className="mb-4">
             <label htmlFor="gambar_sampul" className="text-lg font-bold">
               Gambar Sampul <span className="text-red-600">*</span>
@@ -141,7 +143,7 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
               type="date"
               lang="id-ID"
               placeholder="Pilih Tanggal"
-              name="date"
+              name="tanggal_berita"
               id="tanggal_berita"
               value={newsDate}
               onChange={(e) => setNewsDate(e.target.value)}

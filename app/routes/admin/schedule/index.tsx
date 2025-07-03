@@ -224,7 +224,7 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
                         rowSpan={totalRows}
                         className="border border-gray-300 px-4 py-2"
                       >
-                        <div className="flex justify-center gap-0.5">
+                      <div className="flex justify-center gap-0.5">
                           <a
                             href={`/humasbalung/jadwal-dokter/edit/${doctor.id_dokter}`}
                             className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:cursor-pointer"

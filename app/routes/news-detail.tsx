@@ -46,16 +46,17 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export async function action({ request, params }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
-  const { id } = params;
+  // const { id } = params;
   console.log(params);
   const method = request.method;
+
+  const formData = await request.formData();
+  const feature = formData.get("feat");
+  const id = formData.get("id");
 
   const urlRequest = new URL(
     `${import.meta.env.VITE_API_URL}/berita/${id}/komentar/`,
   );
-
-  const formData = await request.formData();
-  const feature = formData.get("feat");
 
   if (feature === "comment") {
     const captcha = formData.get("g-recaptcha-response");
@@ -107,6 +108,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
 
   // const data = loaderData?.data ?? {};
   const {
+    id = "",
     judul = "",
     ringkasan = "",
     isi = "",
@@ -150,6 +152,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
       },
     );
   };
+
   const handleVisible = (id: string) => {
     fetcher.submit(
       { id },
@@ -204,6 +207,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
             method="post"
             className="flex flex-1 flex-col gap-4 rounded-xl border border-gray-300 p-8 shadow-lg"
           >
+            <input hidden type="text" name="id" value={id} />
             <div className="flex flex-col gap-2">
               <label htmlFor="nama" className="text-md font-semibold">
                 Nama <span className="text-red-600">*</span>

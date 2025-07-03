@@ -212,16 +212,16 @@ export default function AdminAccount({ loaderData }: Route.ComponentProps) {
                     </p>
                   )}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex w-full gap-2">
                   <button
-                    className="min-w-30 rounded-lg border bg-green-700 px-6 py-3 text-white shadow"
+                    className="w-full min-w-30 rounded-lg border bg-green-700 px-6 py-3 text-white shadow"
                     onClick={() => setDialogOpen(true)}
                     type="button"
                   >
                     Simpan
                   </button>
                   <button
-                    className="min-w-30 rounded-lg border bg-red-700 px-6 py-3 text-white shadow"
+                    className="w-full min-w-30 rounded-lg border bg-red-700 px-6 py-3 text-white shadow"
                     onClick={() => setVisibleChangeForm(false)}
                     type="button"
                   >

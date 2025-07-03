@@ -188,7 +188,7 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
                       <PhotoIcon className="h-4 w-4" />
                     </a>
                     <a
-                      href={`/humasbalung/berita/edit/${item.id}`}
+                      href={`/humasbalung/berita/edit/${item.slug}`}
                       className="block w-min rounded bg-green-600 p-2 text-white"
                     >
                       <PencilSquareIcon className="h-4 w-4" />

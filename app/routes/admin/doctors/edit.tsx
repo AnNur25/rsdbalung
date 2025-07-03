@@ -33,6 +33,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   const formData = await request.formData();
   const defaultImageUrl = formData.get("gambar") as string;
   console.log("formData", formData);
+  const id = formData.get("id");
   const file = formData.get("file") as File;
   console.log(file);
   // Check if no file uploaded
@@ -51,7 +52,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   console.log("formData", formData);
 
   const urlRequest = new URL(
-    `${import.meta.env.VITE_API_URL}/dokter/${params.id}`,
+    `${import.meta.env.VITE_API_URL}/dokter/${id}`,
   );
   return handleAction(() =>
     client.put(urlRequest.href, formData, {
@@ -118,6 +119,7 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
       </h1>
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
         <fetcher.Form method="post" encType="multipart/form-data">
+          <input type="text" hidden name="id" value={dokter.id_dokter} />
           <div className="mb-4">
             <label htmlFor="file" className="text-lg font-bold">
               Gambar Dokter

@@ -18,12 +18,11 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export async function action({ request, params }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
-
-  const urlRequest = new URL(
-    `${import.meta.env.VITE_API_URL}/pelayanan/${params.id}`,
-  );
-
   const formData = await request.formData();
+  const id = formData.get("id");
+
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/pelayanan/${id}`);
+
   return handleAction(() =>
     client.put(urlRequest.href, {
       ...Object.fromEntries(formData.entries()),
@@ -69,6 +68,7 @@ export default function EditService({ loaderData }: Route.ComponentProps) {
       </h1>
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
         <fetcher.Form method="put">
+          <input hidden type="text" name="id" value={pelayanan.id_pelayanan} />
           <div className="mb-4">
             <label htmlFor="nama_pelayanan" className="text-lg font-bold">
               Nama Pelayanan <span className="text-red-600">*</span>

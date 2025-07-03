@@ -6,6 +6,7 @@ import axios from "axios";
 import { useFetcher, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { PencilSquareIcon } from "@heroicons/react/24/solid";
 
 export async function loader() {
   const igRequest = new URL(`${import.meta.env.VITE_API_URL}/media-sosial`);
@@ -66,6 +67,7 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
       }
     }
   }, [fetcherData]);
+  const [disableForm, setDisableForm] = useState<boolean>(true);
 
   const handleChange = (index: number, value: string) => {
     const editedInstagrams = [...instagram];
@@ -75,14 +77,28 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <h1 className="mb-6 text-4xl font-bold uppercase">
-        Media Sosial
-      </h1>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="w-min text-2xl font-bold uppercase min-md:w-max">
+          Media Sosial
+        </h2>
+        <button
+          onClick={() => setDisableForm(false)}
+          className={`h-min rounded p-2 text-white ${disableForm ? "bg-green-600" : "bg-gray-500"}`}
+          title="Edit"
+        >
+          <PencilSquareIcon className="h-4 w-4" />
+        </button>
+      </div>
+      {/* <h1 className="mb-6 text-4xl font-bold uppercase">Media Sosial</h1> */}
       <div className="mb-4 rounded-xl border border-gray-300 p-4 text-sm shadow-lg">
         <fetcher.Form method="put" className="flex flex-col gap-2">
           {instagram.map((ig, index) => (
             <div className="mb-4">
-              <label className="text-lg font-bold">Link Instagram</label>
+              <label
+                className={`text-lg font-bold ${disableForm && "text-gray-500"}`}
+              >
+                Link Instagram
+              </label>
 
               <input
                 onInput={(e) => {
@@ -97,26 +113,27 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
                 onChange={(e) => handleChange(index, e.target.value)}
                 type="text"
                 name="links"
-                className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                disabled={disableForm}
+                className={`w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none ${disableForm && "text-gray-500"}`}
                 placeholder="Isi link instagram di sini"
               />
             </div>
           ))}
 
-          <div className="mt-4 flex gap-2">
+          <div className="flex gap-2">
             <button
               type="submit"
-              className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+              className={`rounded px-4 py-2 text-white ${disableForm ? "bg-gray-500" : "bg-green-600"}`}
             >
               Simpan
             </button>
-            {/* <button
+            <button
               type="button"
-              onClick={() => navigate("/humasbalung/media-sosial")}
-              className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+              onClick={() => setDisableForm(true)}
+              className={`rounded px-4 py-2 text-white ${disableForm ? "bg-gray-500" : "bg-red-600"}`}
             >
               Batal
-            </button> */}
+            </button>
           </div>
         </fetcher.Form>
       </div>
