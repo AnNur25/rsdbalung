@@ -176,24 +176,28 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
                 <td className="border border-gray-300 px-4 py-2">
                   <div className="flex justify-center gap-0.5">
                     <a
+                      title="Komentar"
                       href={`/humasbalung/berita/komentar/${item.slug}`}
                       className="block w-min rounded bg-blue-600 p-2 text-white"
                     >
                       <ChatBubbleLeftRightIcon className="h-4 w-4" />
                     </a>
                     <a
+                      title="Galeri Berita"
                       href={`/humasbalung/berita/galeri/${item.slug}`}
                       className="block w-min rounded bg-yellow-500 p-2 text-white"
                     >
                       <PhotoIcon className="h-4 w-4" />
                     </a>
                     <a
+                      title="Ubah"
                       href={`/humasbalung/berita/edit/${item.slug}`}
                       className="block w-min rounded bg-green-600 p-2 text-white"
                     >
                       <PencilSquareIcon className="h-4 w-4" />
                     </a>
                     <button
+                      title="Hapus"
                       onClick={() => deleteOnClick(item.id)}
                       className="block w-min rounded bg-red-600 p-2 text-white hover:cursor-pointer"
                     >

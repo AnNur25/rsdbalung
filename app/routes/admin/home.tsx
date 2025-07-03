@@ -53,7 +53,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   console.log("method", method);
   const feature = formData.get("feat");
   console.log("feature", feature);
-  
+
   if (feature === "banner") {
     const bannerRequest = new URL(`${import.meta.env.VITE_API_URL}/banner/`);
     if (method === "POST") {
@@ -68,7 +68,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       ) {
         return { success: false, message: "Mohon upload minimal 1 foto" };
       }
-      
+
       // const maxMb = 1;
       // if (
       //   files.every(
@@ -391,6 +391,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
           )}
 
           <button
+            title="Hapus"
             disabled={selectedIds.length <= 0}
             onClick={() => setDeleteDialogOpen(true)}
             className={`ms-auto me-2 flex items-center rounded px-2 py-1.5 text-white ${selectedIds.length <= 0 ? "bg-gray-500" : "bg-red-600"}`}
@@ -437,7 +438,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
         <button
           onClick={() => setDisableUnggulanForm(false)}
           className={`h-min rounded p-2 text-white ${disableUnggulanForm ? "bg-green-600" : "bg-gray-500"}`}
-          title="Edit"
+          title="Ubah"
         >
           <PencilSquareIcon className="h-4 w-4" />
         </button>

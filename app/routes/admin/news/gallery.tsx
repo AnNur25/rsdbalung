@@ -168,6 +168,7 @@ export default function GalleryNews({
           )}
 
           <button
+            title="Hapus"
             disabled={selectedIds.length <= 0}
             onClick={() => setDeleteDialogOpen(true)}
             // onClick={handleDeleteSelected}

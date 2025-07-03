@@ -53,6 +53,7 @@ export default function MessageCard({
             <div className="flex items-center gap-3">
               {deleteOnClick && (
                 <button
+                  title="Hapus"
                   onClick={() => deleteOnClick(id)}
                   className="ms-2 flex items-center rounded bg-red-600 p-2 text-white"
                 >
@@ -107,6 +108,7 @@ export default function MessageCard({
             />
 
             <button
+              title="Kirim"
               onClick={handleSend}
               className="h-fit w-fit rounded bg-blue-600 p-2 text-white"
             >

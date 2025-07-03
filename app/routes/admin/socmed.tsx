@@ -84,7 +84,7 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
         <button
           onClick={() => setDisableForm(false)}
           className={`h-min rounded p-2 text-white ${disableForm ? "bg-green-600" : "bg-gray-500"}`}
-          title="Edit"
+          title="Ubah"
         >
           <PencilSquareIcon className="h-4 w-4" />
         </button>

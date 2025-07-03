@@ -42,6 +42,7 @@ export default function AdminPoli({ loaderData }: Route.ComponentProps) {
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   <a
+                    title="Ubah"
                     href={`/humasbalung/poli/edit/${item.id_poli}`}
                     className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:underline"
                   >

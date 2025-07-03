@@ -226,12 +226,14 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
                       >
                       <div className="flex justify-center gap-0.5">
                           <a
+                            title="Ubah"
                             href={`/humasbalung/jadwal-dokter/edit/${doctor.id_dokter}`}
                             className="mx-auto block w-min rounded bg-green-600 p-2 text-white hover:cursor-pointer"
                           >
                             <PencilSquareIcon className="h-4 w-4" />
                           </a>
                           <button
+                            title="Hapus"
                             onClick={() => deleteOnClick(doctor.id_dokter)}
                             className="block w-min rounded bg-red-600 p-2 text-white hover:cursor-pointer"
                           >

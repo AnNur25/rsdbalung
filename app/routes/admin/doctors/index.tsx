@@ -166,12 +166,14 @@ export default function AdminDoctors({ loaderData }: Route.ComponentProps) {
                   </div>
                   <div className="flex flex-none justify-center gap-0.5">
                     <a
+                      title="Ubah"
                       href={`/humasbalung/dokter/edit/${doctor.slug}`}
                       className="block h-fit w-min rounded bg-green-600 p-2 text-white hover:underline"
                     >
                       <PencilSquareIcon className="h-4 w-4" />
                     </a>
                     <button
+                      title="Hapus"
                       // onClick={() => handleDelete(doctor.id_dokter)}
                       onClick={() => deleteOnClick(doctor.id_dokter)}
                       className="block h-fit w-min cursor-pointer rounded bg-red-600 p-2 text-white hover:cursor-pointer"
