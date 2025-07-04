@@ -62,13 +62,17 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
     if (fetcherData.message) {
       if (fetcherData.success) {
         toast.success(fetcherData.message);
+        setDisableForm(true);
+        // setTimeout(() => {
+        //   navigate("/humasbalung/media-sosial");
+        // }, 2000);
       } else {
         toast.error(fetcherData.message);
       }
     }
   }, [fetcherData]);
   const [disableForm, setDisableForm] = useState<boolean>(true);
-
+  
   const handleChange = (index: number, value: string) => {
     const editedInstagrams = [...instagram];
     editedInstagrams[index] = value;
@@ -122,9 +126,7 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
 
           <div className="flex gap-2">
             <button
-              onClick={() => {
-                setDisableForm(true);
-              }}
+              // onClick={handleSave}
               type="submit"
               className={`rounded px-4 py-2 text-white ${disableForm ? "bg-gray-500" : "bg-green-600"}`}
             >
