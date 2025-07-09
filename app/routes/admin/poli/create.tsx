@@ -63,15 +63,6 @@ export default function CreatePoli() {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
 
           <div className="mt-4 flex gap-2">

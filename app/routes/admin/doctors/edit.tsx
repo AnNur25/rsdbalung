@@ -51,9 +51,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   // }
   // console.log("formData", formData);
 
-  const urlRequest = new URL(
-    `${import.meta.env.VITE_API_URL}/dokter/${id}`,
-  );
+  const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/dokter/${id}`);
   return handleAction(() =>
     client.put(urlRequest.href, formData, {
       headers: { "Content-Type": "multipart/form-data" },
@@ -143,15 +141,6 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
 
           <div className="mb-4">
@@ -177,15 +166,6 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             ></textarea>
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
           <div className="mb-4">
             <label htmlFor="id_poli" className="text-lg font-bold">
@@ -209,15 +189,6 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
                 </option>
               ))}
             </select>
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
           <div className="mb-4">
             <label htmlFor="nama" className="text-lg font-bold">
@@ -243,15 +214,6 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
           <div className="mb-4">
             <label htmlFor="link_instagram" className="text-lg font-bold">

@@ -1,7 +1,7 @@
 import DOMPurify from "dompurify";
 import { useEffect, useState } from "react";
 
-export default function HtmlParse({ htmlString }: { htmlString: string }) {
+export default function HtmlParse({ htmlString, className = "" }: { htmlString: string, className?: string }) {
   const [sanitizedHtml, setSanitizedHtml] = useState<string>("");
 
   useEffect(() => {
@@ -9,5 +9,5 @@ export default function HtmlParse({ htmlString }: { htmlString: string }) {
     setSanitizedHtml(clean);
   }, [htmlString]);
 
-  return <div className="sanitizedHtml" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />;
+  return <div className={`sanitizedHtml ${className}`} dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />;
 }

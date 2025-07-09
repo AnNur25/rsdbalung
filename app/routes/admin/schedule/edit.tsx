@@ -316,15 +316,6 @@ export default function EditSchedule({ loaderData }: Route.ComponentProps) {
                 </div>
               </div>
             ))}
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
 
           <div className="flex gap-2">

@@ -58,18 +58,6 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
     news.gambar_sampul || "",
   );
 
-  // const hasShownLoaderToastRef = useRef(false);
-  // useEffect(() => {
-  //   if (!hasShownLoaderToastRef.current && loaderData?.message) {
-  //     if (loaderData.success) {
-  //       toast.success(loaderData.message);
-  //     } else {
-  //       toast.error(loaderData.message);
-  //     }
-  //     hasShownLoaderToastRef.current = true;
-  //   }
-  // }, [loaderData]);
-
   const navigate = useNavigate();
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
@@ -124,15 +112,6 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
           <div className="mb-4">
             <label htmlFor="tanggal_berita" className="text-lg font-bold">
@@ -148,15 +127,6 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
               value={newsDate}
               onChange={(e) => setNewsDate(e.target.value)}
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
           <div className="mb-4">
             <label htmlFor="judul" className="text-lg font-bold">
@@ -181,15 +151,6 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
           <div className="mb-4">
             <label htmlFor="ringkasan" className="text-lg font-bold">
@@ -214,15 +175,6 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
 
           <input hidden type="textarea" readOnly name="isi" value={content} />
@@ -238,7 +190,7 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
             } w-full rounded-lg border border-gray-300`}
           >
             <Editor
-              onChange={handleEditorChange}
+              onFocusOut={handleEditorChange}
               tinymceScriptSrc="/tinymce/tinymce.min.js"
               licenseKey="gpl"
               onInit={(_evt, editor) => (editorRef.current = editor)}
@@ -271,15 +223,6 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
                   "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
               }}
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
           {/* <button onClick={log}>Log editor content</button> */}
 

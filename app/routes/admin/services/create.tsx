@@ -1,10 +1,13 @@
 import { Form, useFetcher, useNavigate } from "react-router";
 import type { Route } from "./+types";
 import { handleAction } from "~/utils/handleAction";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import formatDigits from "~/utils/formatDigits";
 import toast from "react-hot-toast";
 import { createAuthenticatedClient } from "~/utils/auth-client";
+
+import { Editor } from "@tinymce/tinymce-react";
+import type { Editor as TinyMCEEditor } from "tinymce";
 
 export async function action({ request }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
@@ -38,6 +41,41 @@ export default function CreateService() {
       }
     }
   }, [fetcherData]);
+
+  const [name, setName] = useState<string>("");
+  const [duration, setDuration] = useState<string>("");
+  const [cost, setCost] = useState<string>("");
+  const [requirement, setRequirement] = useState<string>("");
+  const [procedure, setProcedure] = useState<string>("");
+
+  const durationRef = useRef<TinyMCEEditor | null>(null);
+  const handleDurationChange = () => {
+    if (durationRef.current) {
+      setDuration(durationRef.current.getContent());
+    }
+  };
+
+  const costRef = useRef<TinyMCEEditor | null>(null);
+  const handleCostChange = () => {
+    if (costRef.current) {
+      setCost(costRef.current.getContent());
+    }
+  };
+
+  const requirementRef = useRef<TinyMCEEditor | null>(null);
+  const handleRequirementChange = () => {
+    if (requirementRef.current) {
+      setRequirement(requirementRef.current.getContent());
+    }
+  };
+
+  const procedureRef = useRef<TinyMCEEditor | null>(null);
+  const handleProcedureChange = () => {
+    if (procedureRef.current) {
+      setProcedure(procedureRef.current.getContent());
+    }
+  };
+
   // console.log("fetcherData", fetcherData);
   return (
     <>
@@ -68,154 +106,226 @@ export default function CreateService() {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
 
           <div className="mb-4">
             <label htmlFor="JangkaWaktu" className="text-lg font-bold">
               Jangka Waktu <span className="text-red-600">*</span>
             </label>
-            <textarea
-              name="JangkaWaktu"
-              id="JangkaWaktu"
-              onInput={(e) => {
-                const input = e.currentTarget;
-                if (input.value === " " || input.value === "0") {
-                  input.value = "";
-                }
-              }}
-              placeholder="Isi jangka waktu di sini"
-              required
+            <div
               className={`${
                 fetcherData.message && !fetcherData.success
                   ? "border-red-500 focus:outline-red-500"
                   : "border-gray-300 focus:outline-blue-500"
-              } w-full rounded border border-gray-300 p-2`}
-            ></textarea>
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
+              } w-full rounded-lg border border-gray-300`}
+            >
+              <Editor
+                onFocusOut={handleDurationChange}
+                tinymceScriptSrc="/tinymce/tinymce.min.js"
+                licenseKey="gpl"
+                onInit={(_evt, editor) => (durationRef.current = editor)}
+                initialValue={duration}
+                init={{
+                  height: 200,
+                  menubar: false,
+                  plugins: [
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "charmap",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "fullscreen",
+                    "insertdatetime",
+                    "table",
+                    "preview",
+                    "help",
+                    "wordcount",
+                  ],
+                  toolbar:
+                    "undo redo | blocks | " +
+                    "bold italic forecolor | alignleft aligncenter " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help",
+                  content_style:
+                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                }}
+              />
+              <input
+                hidden
+                type="textarea"
+                readOnly
+                name="JangkaWaktu"
+                value={duration}
+              />
+            </div>
           </div>
 
           <div className="mb-4">
             <label htmlFor="Biaya" className="text-lg font-bold">
               Biaya <span className="text-red-600">*</span>
             </label>
-            <div className="relative flex items-center">
-              {/* <p className="absolute left-3">Rp</p> */}
-              <input
-                onInput={(e) => {
-                  const input = e.currentTarget;
-                  if (input.value === " " || input.value === "0") {
-                    input.value = "";
-                  }
-                }}
-                // value={displayValue}
-                name="Biaya"
-                type="text"
-                placeholder="Isi jumlah biaya di sini"
-                id="Biaya"
-                required
-                className={`${
-                  fetcherData.message && !fetcherData.success
-                    ? "border-red-500 focus:outline-red-500"
-                    : "border-gray-300 focus:outline-blue-500"
-                } w-full rounded border border-gray-300 p-2`}
-              />
-            </div>
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
-            {/* <input
-              type="number"
-              name="Biaya"
-              hidden
-              readOnly
-              value={numberValue}
-            /> */}
-          </div>
-          <div className="mb-4">
-            <label htmlFor="Persyaratan" className="text-lg font-bold">
-              Persyaratan <span className="text-red-600">*</span>
-            </label>
-            <textarea
-              name="Persyaratan"
-              id="Persyaratan"
-              placeholder="Isi persyaratan di sini"
-              required
-              onInput={(e) => {
-                const input = e.currentTarget;
-                if (input.value === " " || input.value === "0") {
-                  input.value = "";
-                }
-              }}
+            <div
               className={`${
                 fetcherData.message && !fetcherData.success
                   ? "border-red-500 focus:outline-red-500"
                   : "border-gray-300 focus:outline-blue-500"
-              } w-full rounded border border-gray-300 p-2`}
-            ></textarea>
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
+              } w-full rounded-lg border border-gray-300`}
+            >
+              <Editor
+                onFocusOut={handleCostChange}
+                tinymceScriptSrc="/tinymce/tinymce.min.js"
+                licenseKey="gpl"
+                onInit={(_evt, editor) => (costRef.current = editor)}
+                initialValue={cost}
+                init={{
+                  height: 200,
+                  menubar: false,
+                  plugins: [
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "charmap",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "fullscreen",
+                    "insertdatetime",
+                    "table",
+                    "preview",
+                    "help",
+                    "wordcount",
+                  ],
+                  toolbar:
+                    "undo redo | blocks | " +
+                    "bold italic forecolor | alignleft aligncenter " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help",
+                  content_style:
+                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                }}
+              />
+              <input
+                hidden
+                type="textarea"
+                readOnly
+                name="Biaya"
+                value={cost}
+              />
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="Persyaratan" className="text-lg font-bold">
+              Persyaratan <span className="text-red-600">*</span>
+            </label>
+            <div
+              className={`${
+                fetcherData.message && !fetcherData.success
+                  ? "border-red-500 focus:outline-red-500"
+                  : "border-gray-300 focus:outline-blue-500"
+              } w-full rounded-lg border border-gray-300`}
+            >
+              <Editor
+                onFocusOut={handleRequirementChange}
+                tinymceScriptSrc="/tinymce/tinymce.min.js"
+                licenseKey="gpl"
+                onInit={(_evt, editor) => (requirementRef.current = editor)}
+                initialValue={requirement}
+                init={{
+                  height: 200,
+                  menubar: false,
+                  plugins: [
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "charmap",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "fullscreen",
+                    "insertdatetime",
+                    "table",
+                    "preview",
+                    "help",
+                    "wordcount",
+                  ],
+                  toolbar:
+                    "undo redo | blocks | " +
+                    "bold italic forecolor | alignleft aligncenter " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help",
+                  content_style:
+                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                }}
+              />
+              <input
+                hidden
+                type="textarea"
+                readOnly
+                name="Persyaratan"
+                value={requirement}
+              />
+            </div>
           </div>
 
           <div className="mb-4">
             <label htmlFor="Prosedur" className="text-lg font-bold">
               Prosedur <span className="text-red-600">*</span>
             </label>
-            <textarea
-              name="Prosedur"
-              id="Prosedur"
-              onInput={(e) => {
-                const input = e.currentTarget;
-                if (input.value === " " || input.value === "0") {
-                  input.value = "";
-                }
-              }}
-              placeholder="Isi prosedur di sini"
-              required
+            <div
               className={`${
                 fetcherData.message && !fetcherData.success
                   ? "border-red-500 focus:outline-red-500"
                   : "border-gray-300 focus:outline-blue-500"
-              } w-full rounded border border-gray-300 p-2`}
-            ></textarea>
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
+              } w-full rounded-lg border border-gray-300`}
+            >
+              <Editor
+                onFocusOut={handleProcedureChange}
+                tinymceScriptSrc="/tinymce/tinymce.min.js"
+                licenseKey="gpl"
+                onInit={(_evt, editor) => (procedureRef.current = editor)}
+                initialValue={procedure}
+                init={{
+                  height: 200,
+                  menubar: false,
+                  plugins: [
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "charmap",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "fullscreen",
+                    "insertdatetime",
+                    "table",
+                    "preview",
+                    "help",
+                    "wordcount",
+                  ],
+                  toolbar:
+                    "undo redo | blocks | " +
+                    "bold italic forecolor | alignleft aligncenter " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help",
+                  content_style:
+                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                }}
+              />
+              <input
+                hidden
+                type="textarea"
+                readOnly
+                name="Prosedur"
+                value={procedure}
+              />
+            </div>
           </div>
 
           <div className="mt-4 flex gap-2">

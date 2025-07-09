@@ -50,10 +50,6 @@ export default function CreateNews() {
       }
     }
   }, [fetcherData]);
-  const log = () => {
-    if (editorRef.current) {
-    }
-  };
 
   return (
     <>
@@ -79,15 +75,6 @@ export default function CreateNews() {
               } w-full rounded border border-gray-300 p-2`}
               // className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
           <div className="mb-4">
             <label htmlFor="tanggal_berita" className="text-lg font-bold">
@@ -101,15 +88,6 @@ export default function CreateNews() {
               name="tanggal_berita"
               id="tanggal_berita"
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
           <div className="mb-4">
             <label htmlFor="judul" className="text-lg font-bold">
@@ -133,15 +111,6 @@ export default function CreateNews() {
               } w-full rounded border border-gray-300 p-2`}
               // className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
           <div className="mb-4">
             <label htmlFor="ringkasan" className="text-lg font-bold">
@@ -164,15 +133,6 @@ export default function CreateNews() {
                   : "border-gray-300 focus:outline-blue-500"
               } w-full rounded border border-gray-300 p-2`}
             />
-            {fetcherData.message && !fetcherData.success && (
-              <p
-                className={`text-sm ${
-                  fetcherData.success ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {fetcherData.message}
-              </p>
-            )}
           </div>
 
           <input hidden readOnly type="textarea" name="isi" value={content} />
@@ -222,15 +182,6 @@ export default function CreateNews() {
             />
           </div>
 
-          {fetcherData.message && !fetcherData.success && (
-            <p
-              className={`text-sm ${
-                fetcherData.success ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {fetcherData.message}
-            </p>
-          )}
           {/* <button onClick={log}>Log editor content</button> */}
 
           <div className="mt-4 flex gap-2">

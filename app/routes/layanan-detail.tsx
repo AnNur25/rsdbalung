@@ -4,6 +4,8 @@ import type { PelayananDetail } from "~/models/Pelayanan";
 import formatDigits from "~/utils/formatDigits";
 import type { Route } from "./+types/layanan-detail";
 import { handleLoader } from "~/utils/handleLoader";
+import HtmlParse from "~/components/HtmlParse";
+import "~/lists.css";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const { id } = params;
@@ -36,20 +38,21 @@ export default function LayananDetail({ loaderData }: Route.ComponentProps) {
 
         {/* Jangka Waktu & Biaya  */}
         <div className="m-4 mx-auto flex flex-col gap-4 px-4 min-md:flex-row">
-          <section className="flex-1 rounded-md text-center shadow-md">
-            <h2 className="rounded-t-md bg-dark-blue-900 p-1 text-lg font-bold text-white">
+          <section className="flex-1 rounded-md text-justify shadow-md">
+            <h2 className="rounded-t-md bg-dark-blue-900 p-1 text-center text-lg font-bold text-white">
               Jangka Waktu
             </h2>
-            <p className="h-min p-2 px-8 text-justify">{JangkaWaktu}</p>
+            {/* <p className="h-min p-2 px-8 text-justify">{JangkaWaktu}</p> */}
+            <HtmlParse htmlString={JangkaWaktu} className="px-3 py-2" />
           </section>
-          <section className="flex-1 rounded-md text-center shadow-md">
-            <h2 className="rounded-t-md bg-dark-blue-900 p-1 text-lg font-bold text-white">
+          <section className="flex-1 rounded-md shadow-md">
+            <h2 className="rounded-t-md bg-dark-blue-900 p-1 text-center text-lg font-bold text-white">
               Biaya
             </h2>
-            <p className="mx-auto h-min p-2 px-8 text-justify">
-              {/* Rp{formatDigits(Biaya.toString())} */}
+            {/* <p className="mx-auto h-min p-2 px-8 text-justify">
               {Biaya}
-            </p>
+            </p> */}
+            <HtmlParse htmlString={Biaya} className="px-3 py-2" />
           </section>
         </div>
 
@@ -58,25 +61,27 @@ export default function LayananDetail({ loaderData }: Route.ComponentProps) {
           <h2 className="text-xl font-bold text-persian-blue-950">
             Persyaratan
           </h2>
-          <ol className="ms-8 list-decimal text-justify">
+          {/* <ol className="ms-8 list-decimal text-justify">
             {Persyaratan.split(",")
               .map((item) => item.trim())
               .map((item, index) => (
                 <li key={index}>{item}</li>
               ))}
-          </ol>
+          </ol> */}
+          <HtmlParse htmlString={Persyaratan} />
         </section>
 
         {/* Prosedur */}
         <section className="mx-auto mt-4 max-w-9/10">
           <h2 className="text-xl font-bold text-persian-blue-950">Prosedur</h2>
-          <ol className="ms-8 list-decimal text-justify">
+          {/* <ol className="ms-8 list-decimal text-justify">
             {Prosedur.split(",")
               .map((item) => item.trim())
               .map((item, index) => (
                 <li key={index}>{item}</li>
               ))}
-          </ol>
+          </ol> */}
+          <HtmlParse htmlString={Prosedur} />
         </section>
       </main>
     </>
