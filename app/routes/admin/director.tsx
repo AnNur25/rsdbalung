@@ -99,7 +99,9 @@ export default function Director({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <div className="w-[100%] p-4 shadow-2xl">
-        <h1 className="mb-4 w-max text-2xl font-bold uppercase">Foto Direktur</h1>
+        <h1 className="mb-4 w-max text-2xl font-bold uppercase">
+          Foto Direktur
+        </h1>
 
         <div className="flex items-center justify-center gap-2 lg:max-w-3/5">
           <fetcher.Form
@@ -138,7 +140,12 @@ export default function Director({ loaderData }: Route.ComponentProps) {
           ))}
         </div>
 
-        <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 1 Foto</p>
+        {/* <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 1 Foto</p> */}
+        <ul className="ms-4 mt-2 list-decimal text-sm text-red-500">
+          <li>Maksimal 1 foto</li>
+          <li>Masing-masing gambar besarnya maksimal 5 mb</li>
+          <li>Tipe file png, jpg, dan jpeg</li>
+        </ul>
       </div>
     </>
   );
