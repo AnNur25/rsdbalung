@@ -198,7 +198,13 @@ export default function GalleryNews({
           ))}
         </div>
 
-        <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 4 Foto</p>
+        {/* <p className="mt-2 w-max text-sm text-red-500">NB: Maksimal 4 Foto</p> */}
+        <ul className="ms-4 mt-2 list-decimal text-sm text-red-500">
+          <li>Maksimal 4 foto</li>
+          <li>Rasio 16:9</li>
+          <li>Masing-masing gambar besarnya maksimal 5 mb</li>
+          <li>Tipe file png, jpg, dan jpeg</li>
+        </ul>
       </div>
       <Dialog
         open={deleteDialogOpen}

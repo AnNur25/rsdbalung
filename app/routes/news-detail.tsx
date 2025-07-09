@@ -233,15 +233,6 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                 // onChange={(e) => setName(e.target.value)}
                 id="nama"
               />
-              {fetcherData.message && !fetcherData.success && (
-                <p
-                  className={`text-sm ${
-                    fetcherData.success ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {fetcherData.message}
-                </p>
-              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -277,15 +268,6 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                 // onChange={(e) => setPhoneNumber(e.target.value)}
                 id="no_wa"
               />
-              {fetcherData.message && !fetcherData.success && (
-                <p
-                  className={`text-sm ${
-                    fetcherData.success ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {fetcherData.message}
-                </p>
-              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -308,15 +290,6 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                 } min-h-56 rounded-lg border border-gray-400 px-4 py-2`}
                 name="isi_komentar"
               />
-              {fetcherData.message && !fetcherData.success && (
-                <p
-                  className={`text-sm ${
-                    fetcherData.success ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {fetcherData.message}
-                </p>
-              )}
             </div>
             <div className="overflow-x-auto">
               <GoogleReCaptchaProvider

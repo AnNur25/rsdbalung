@@ -64,7 +64,7 @@ export default function LoginUser({ loaderData }: Route.ComponentProps) {
     <>
       <div className="flex min-h-screen items-center justify-center">
         <div
-          className="lg:w-3/8 hidden h-screen w-max bg-cover bg-center text-center text-white shadow-md lg:block"
+          className="hidden h-screen w-max bg-cover bg-center text-center text-white shadow-md lg:block lg:w-3/8"
           // className="hidden h-screen w-max bg-center py-10 text-center text-white shadow-md lg:block lg:flex-1"
           style={{
             backgroundImage: `url(/images/login.png)`,
@@ -109,17 +109,6 @@ export default function LoginUser({ loaderData }: Route.ComponentProps) {
                           : "outline-gray-300 focus:outline-blue-600"
                       } placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6`}
                     />
-                    {fetcherData.message && !fetcherData.success && (
-                      <p
-                        className={`text-sm ${
-                          fetcherData.success
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {fetcherData.message}
-                      </p>
-                    )}
                   </div>
                 </div>
                 <div>
@@ -178,17 +167,6 @@ export default function LoginUser({ loaderData }: Route.ComponentProps) {
                         )}
                       </button>
                     </div>
-                    {fetcherData.message && !fetcherData.success && (
-                      <p
-                        className={`text-sm ${
-                          fetcherData.success
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {fetcherData.message}
-                      </p>
-                    )}
                   </div>
                 </div>
                 <button className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:cursor-pointer hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">

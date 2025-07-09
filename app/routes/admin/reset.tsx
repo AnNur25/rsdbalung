@@ -116,17 +116,7 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                         )}
                       </button>
                     </div>
-                    {/* {fetcherData.message && !fetcherData.success && (
-                      <p
-                        className={`text-sm ${
-                          fetcherData.success
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {fetcherData.message}
-                      </p>
-                    )} */}
+                    {/*  */}
                   </div>
                   <div>
                     <label
@@ -159,17 +149,7 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                         )}
                       </button>
                     </div>
-                    {/* {fetcherData.message && !fetcherData.success && (
-                      <p
-                        className={`text-sm ${
-                          fetcherData.success
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {fetcherData.message}
-                      </p>
-                    )} */}
+                    {/*  */}
                   </div>
 
                   <button className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:cursor-pointer hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
@@ -215,17 +195,6 @@ export default function LoginAdmin({ loaderData }: Route.ComponentProps) {
                             : "outline-gray-300 focus:outline-blue-600"
                         } placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6`}
                       />
-                      {/* {fetcherData.message && !fetcherData.success && (
-                        <p
-                          className={`text-sm ${
-                            fetcherData.success
-                              ? "text-green-600"
-                              : "text-red-600"
-                          }`}
-                        >
-                          {fetcherData.message}
-                        </p>
-                      )} */}
                     </div>
                   </div>
 

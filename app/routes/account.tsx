@@ -285,17 +285,6 @@ export default function UserAccount({ loaderData }: Route.ComponentProps) {
                         )}
                       </button>
                     </div>
-                    {fetcherData.message && !fetcherData.success && (
-                      <p
-                        className={`text-sm ${
-                          fetcherData.success
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {fetcherData.message}
-                      </p>
-                    )}
                   </div>
                   <div className="flex w-full flex-col">
                     <label className="text-lg font-semibold capitalize">
@@ -331,17 +320,6 @@ export default function UserAccount({ loaderData }: Route.ComponentProps) {
                         )}
                       </button>
                     </div>
-                    {fetcherData.message && !fetcherData.success && (
-                      <p
-                        className={`text-sm ${
-                          fetcherData.success
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {fetcherData.message}
-                      </p>
-                    )}
                   </div>
                   <div className="flex gap-2">
                     <button

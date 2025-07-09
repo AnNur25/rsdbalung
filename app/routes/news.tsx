@@ -75,14 +75,16 @@ export default function News({ loaderData }: Route.ComponentProps) {
         <section className="flex flex-col flex-wrap justify-center gap-5 p-4 min-md:flex-row">
           {news.length > 0 ? (
             news.map((berita, index) => (
-              <NewsCard
-                key={index}
-                id={berita.slug}
-                title={berita.judul}
-                description={berita.ringkasan}
-                image={berita.gambar_sampul}
-                date={berita.tanggal_dibuat}
-              />
+              <div className="grow max-w-fit">
+                <NewsCard
+                  key={index}
+                  id={berita.slug}
+                  title={berita.judul}
+                  description={berita.ringkasan}
+                  image={berita.gambar_sampul}
+                  date={berita.tanggal_dibuat}
+                />
+              </div>
             ))
           ) : (
             <p className="text-gray-500">{loaderData.message}</p>
