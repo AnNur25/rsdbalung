@@ -38,7 +38,7 @@ export default function CreateService() {
       }
     }
   }, [fetcherData]);
-  console.log("fetcherData", fetcherData);
+  // console.log("fetcherData", fetcherData);
   return (
     <>
       <h1 className="mb-6 text-2xl font-bold uppercase">

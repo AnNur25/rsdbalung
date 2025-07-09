@@ -76,19 +76,19 @@ export default function AdminSidebar() {
   const navigate = useNavigate();
   const handleLogout = () => {
     navigate("/humasbalung/logout");
-    console.log("Logout");
+    // console.log("Logout");
     setLogoutDialogOpen(false);
   };
   const [complaints, setComplaints] = useState<ComplaintModel[]>([]);
   const nComplaints = complaints.length;
-  console.log("nComplaints", nComplaints);
+  // console.log("nComplaints", nComplaints);
   const nComplaint = localStorage.getItem("nComplaint") ?? "0";
   const nComplaintInt = parseInt(nComplaint, 10);
   const isUnread = nComplaintInt < nComplaints;
   useEffect(() => {
     const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/all`);
     axios.get(urlRequest.href).then((res) => {
-      console.log(res);
+      // console.log(res);
       setComplaints(res.data.data.data_aduan);
     });
   }, []);

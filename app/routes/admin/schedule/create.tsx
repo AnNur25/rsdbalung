@@ -53,7 +53,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/jadwal-dokter/`);
   const formData = await request.formData();
-  console.log("action form", formData);
+  // console.log("action form", formData);
 
   const idDokter = formData.get("id_dokter") as string;
   const hariList = formData.getAll("hari") as string[];

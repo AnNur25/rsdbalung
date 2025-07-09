@@ -61,7 +61,7 @@ export default function DoctorDetail({ loaderData }: Route.ComponentProps) {
       layanan: layanan.nama_pelayanan,
       jadwal: layanan.jadwal,
     })) || [];
-  console.log(flattenedSchedules);
+  // console.log(flattenedSchedules);
 
   return (
     <>

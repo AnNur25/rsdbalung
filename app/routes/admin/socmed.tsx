@@ -20,7 +20,7 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const igRequest = new URL(`${import.meta.env.VITE_API_URL}/media-sosial/`);
   const igs = formData.getAll("links");
-  console.log("formData", formData);
+  // console.log("formData", formData);
 
   const data = {
     links: igs
@@ -50,14 +50,14 @@ export default function AdminSocmed({ loaderData }: Route.ComponentProps) {
   while (instagramsLinks.length < 4) {
     instagramsLinks.push("");
   }
-  console.log(loaderData);
+  // console.log(loaderData);
   const fetcher = useFetcher();
   const navigate = useNavigate();
   const [instagram, setInstagram] = useState(
     instagramsLinks || ["", "", "", ""],
   );
   const fetcherData = fetcher.data || { message: "", success: false };
-  console.log("fetcherData", fetcherData);
+  // console.log("fetcherData", fetcherData);
   useEffect(() => {
     if (fetcherData.message) {
       if (fetcherData.success) {

@@ -32,7 +32,7 @@ export async function action({ request, params }: Route.ActionArgs) {
 }
 
 export default function EditService({ loaderData }: Route.ComponentProps) {
-  console.log(loaderData);
+  // console.log(loaderData);
   const pelayanan: PelayananDetail = loaderData.data;
 
   const [name, setName] = useState<string>(pelayanan.nama_pelayanan || "");

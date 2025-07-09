@@ -29,7 +29,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   );
   const profileRequest = new URL(`${import.meta.env.VITE_API_URL}/profil`);
   const profilResponse = await client.get(profileRequest.href);
-  console.log(commentsResponse.data);
+  // console.log(commentsResponse.data);
   return {
     success: commentsResponse.data.success && profilResponse.data.success,
     message:
@@ -70,13 +70,13 @@ export async function action({ request, params }: Route.ActionArgs) {
 
 export default function AdminComments({ loaderData }: Route.ComponentProps) {
   const data = loaderData?.data || { data: {} };
-  console.log("loader data", data);
+  // console.log("loader data", data);
   const comments = Array.isArray(data?.data) ? (data.data as Comment[]) : [];
   const profileData = data?.profil?.data || {
     no_wa: "",
     nama: "",
   };
-  console.log(profileData);
+  // console.log(profileData);
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
   useEffect(() => {

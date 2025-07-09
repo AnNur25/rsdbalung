@@ -14,7 +14,7 @@ type SearchResult = {
 export async function loader({
   request,
 }: Route.LoaderArgs): Promise<SearchResult> {
-  console.log(request);
+  // console.log(request);
   const url = new URL(request.url);
   const query = url.searchParams.get("q");
 
@@ -31,13 +31,13 @@ export async function loader({
       params: { keyword: query },
     }),
   );
-  console.log("doctors", doctors);
+  // console.log("doctors", doctors);
   const news = await handleLoader(() =>
     axios.get(`${import.meta.env.VITE_API_URL}/berita/search`, {
       params: { keyword: query },
     }),
   );
-  console.log("news", news);
+  // console.log("news", news);
   return {
     success: news.success && doctors.success,
     message:
@@ -56,7 +56,7 @@ interface DeveloperPageProps {
 }
 
 export default function DeveloperPage({ loaderData }: DeveloperPageProps) {
-  console.log("loaderData search", loaderData);
+  // console.log("loaderData search", loaderData);
   const berita = Array.isArray(loaderData?.data?.berita)
     ? (loaderData.data.berita as News[])
     : [];

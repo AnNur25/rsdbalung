@@ -14,7 +14,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function LayananDetail({ loaderData }: Route.ComponentProps) {
-  console.log(loaderData);
+  // console.log(loaderData);
   const {
     id_pelayanan = "",
     nama_pelayanan = "",

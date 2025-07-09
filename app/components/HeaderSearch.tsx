@@ -21,7 +21,7 @@ export default function HeaderSearch({
           if (e.key === "Enter") {
             const value = (e.target as HTMLInputElement).value.trim();
             if (value) {
-              console.log(`Searching for: ${value}`);
+              // console.log(`Searching for: ${value}`);
               navigate(`/cari?q=${value}`);
             }
           }

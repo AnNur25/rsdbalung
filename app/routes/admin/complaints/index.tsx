@@ -80,7 +80,7 @@ export default function AdminComplaints({ loaderData }: Route.ComponentProps) {
 
   const deleteOnClick = (id: string) => {
     setDeleteComplaintId(id);
-    console.log(deleteComplaintId);
+    // console.log(deleteComplaintId);
     setDeleteDialogOpen(true);
   };
   const handleDelete = () => {

@@ -9,14 +9,14 @@ export async function handleAction(
 ): Promise<ActionResult> {
   try {
     const response = await fn();
-    console.log("Handle Action Success", response.data);
+    // console.log("Handle Action Success", response.data);
 
     return {
       success: response.data?.success || true,
       message: response.data?.message || successMessage || "Berhasil.",
     };
   } catch (error: any) {
-    console.error("Action Error:", error.response?.data || error.message);
+    // console.error("Action Error:", error.response?.data || error.message);
 
     const message = getErrorMessage(error);
 

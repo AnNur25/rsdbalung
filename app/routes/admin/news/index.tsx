@@ -83,7 +83,7 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
 
   const deleteOnClick = (id: string) => {
     setDeleteNewsId(id);
-    console.log(deleteNewsId);
+    // console.log(deleteNewsId);
     setDeleteDialogOpen(true);
   };
 
@@ -96,7 +96,7 @@ export default function AdminNews({ loaderData }: Route.ComponentProps) {
     );
     setDeleteDialogOpen(false);
   };
-  console.log(loaderData);
+  // console.log(loaderData);
   // const hasShownLoaderToastRef = useRef(false);
   // useEffect(() => {
   //   if (!hasShownLoaderToastRef.current && loaderData?.message) {

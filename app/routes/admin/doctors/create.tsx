@@ -18,7 +18,7 @@ export async function action({ request }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
   const formData = await request.formData();
   const defaultImageUrl = `http://localhost:5173/logosquare.jpg`;
-  console.log("formData", formData);
+  // console.log("formData", formData);
   const file = formData.get("file") as File;
   // const maxMb = 1;
   // if (file.size > maxMb * 1024 * 1024) {
@@ -33,7 +33,7 @@ export async function action({ request }: Route.ActionArgs) {
   //   formData.delete("file");
   //   formData.append("file", defaultFile);
   // }
-  console.log("formData", formData);
+  // console.log("formData", formData);
 
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/dokter/`);
   return handleAction(() =>
@@ -56,7 +56,7 @@ export default function CreateDoctor({ loaderData }: Route.ComponentProps) {
       reader.onloadend = () => setPreview(reader.result as string);
       reader.readAsDataURL(file);
     }
-    console.log(file);
+    // console.log(file);
   };
 
   const navigate = useNavigate();

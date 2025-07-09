@@ -32,10 +32,10 @@ export async function action({ request, params }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
   const formData = await request.formData();
   const defaultImageUrl = formData.get("gambar") as string;
-  console.log("formData", formData);
+  // console.log("formData", formData);
   const id = formData.get("id");
   const file = formData.get("file") as File;
-  console.log(file);
+  // console.log(file);
   // Check if no file uploaded
   // if (!file || file.size === 0) {
   //   // Create a default image file
@@ -49,7 +49,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   // if (file.size > maxMb * 1024 * 1024) {
   //   return { success: false, message: `Ukuran file maksimal ${maxMb}MB` };
   // }
-  console.log("formData", formData);
+  // console.log("formData", formData);
 
   const urlRequest = new URL(
     `${import.meta.env.VITE_API_URL}/dokter/${id}`,
@@ -81,7 +81,7 @@ export default function EditDoctor({ loaderData }: Route.ComponentProps) {
       reader.onloadend = () => setPreview(reader.result as string);
       reader.readAsDataURL(file);
     }
-    console.log(file);
+    // console.log(file);
   };
 
   // const hasShownLoaderToastRef = useRef(false);

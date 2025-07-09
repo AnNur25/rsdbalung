@@ -31,7 +31,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   if (feature === "password") {
     formData.delete("feat");
-    console.log(formData);
+    // console.log(formData);
     return handleAction(
       () => client.put(passwordRequest.href, formData),
       "Berhasil",
@@ -47,7 +47,7 @@ export async function action({ request }: Route.ActionArgs) {
 }
 export default function UserAccount({ loaderData }: Route.ComponentProps) {
   const { data } = loaderData || {};
-  console.log(loaderData);
+  // console.log(loaderData);
 
   const {
     id_user = "noId",
@@ -55,7 +55,7 @@ export default function UserAccount({ loaderData }: Route.ComponentProps) {
     email = "user@email.com",
     no_wa: phoneNumber = "621234567890",
   } = data;
-  console.log("User Account Data:", data);
+  // console.log("User Account Data:", data);
 
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
@@ -90,7 +90,7 @@ export default function UserAccount({ loaderData }: Route.ComponentProps) {
 
     const formData = new FormData(formPasswordRef.current);
     formData.append("feat", "password");
-    console.log("formData", formData);
+    // console.log("formData", formData);
     fetcher.submit(formData, { method: "PUT" });
     setDialogOpen(false);
   };

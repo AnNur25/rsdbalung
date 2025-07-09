@@ -36,7 +36,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     if (files.length > 4) {
       return { success: false, message: "Maksimal upload 4 foto." };
     }
-    console.log(files);
+    // console.log(files);
     if (
       files.length === 0 ||
       files.every((file) => !(file instanceof File) || file.size === 0)

@@ -15,7 +15,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   try {
     const response = await axios.post(urlRequest.href, formData);
-    console.log("response", response);
+    // console.log("response", response);
     const data = response.data;
 
     if (data.success) {
@@ -24,14 +24,14 @@ export async function action({ request }: Route.ActionArgs) {
         message: data.message || "Registrasi berhasil, silakan masuk.",
       };
     } else {
-      console.error("Login failed:", data.message);
+      // console.error("Login failed:", data.message);
       return {
         success: false,
         message: data.message || "Registrasi gagal, silakan coba lagi.",
       };
     }
   } catch (error: any) {
-    console.error("Error during login:", error);
+    // console.error("Error during login:", error);
     return {
       success: false,
       message:

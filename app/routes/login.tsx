@@ -16,7 +16,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   try {
     const response = await axios.post(urlRequest.href, { email, password });
-    console.log("response", response.headers);
+    // console.log("response", response.headers);
     const data = response.data;
 
     if (data.success) {
@@ -32,18 +32,18 @@ export async function action({ request }: Route.ActionArgs) {
 
       const refreshCookieHeader = refreshRes.headers["set-cookie"];
 
-      console.log("refresh token", refreshRes.headers);
+      // console.log("refresh token", refreshRes.headers);
 
       return redirectWithCookie("/", refreshCookieHeader ?? "");
     } else {
-      console.error("Login failed:", data.message);
+      // console.error("Login failed:", data.message);
       return {
         success: false,
         message: data.message || "Login gagal, silakan coba lagi.",
       };
     }
   } catch (error: any) {
-    console.error("Error during login:", error);
+    // console.error("Error during login:", error);
   }
 }
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useFetcher, useOutletContext } from "react-router";
+import { useFetcher } from "react-router";
 import NewsBanner from "~/components/NewsBanner";
 import type { News } from "~/models/News";
 import "~/lists.css";
@@ -75,7 +75,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   }
 
   if (feature === "reply") {
-    console.log(feature);
+    // console.log(feature);
     const comment_id = formData.get("id");
     const replyRequest = new URL(
       `${import.meta.env.VITE_API_URL}/berita/${params.id}/komentar/${comment_id}/reply`,
@@ -92,19 +92,19 @@ export async function action({ request, params }: Route.ActionArgs) {
 }
 
 export default function NewsDetail({ loaderData }: Route.ComponentProps) {
-  const dataProfil = useOutletContext();
-  const { profil } = dataProfil as any;
-  const isLogin = profil.success;
-  const profileData = profil.data;
-  const isAdmin =
-    profileData && profileData.role
-      ? profileData.role.toLowerCase() === "admin"
-      : false;
+  // const dataProfil = useOutletContext();
+  // const { profil } = dataProfil as any;
+  // const isLogin = profil.success;
+  // const profileData = profil.data;
+  // const isAdmin =
+  //   profileData && profileData.role
+  //     ? profileData.role.toLowerCase() === "admin"
+  //     : false;
   // console.log(isLogin, isAdmin, profileData);
-  const [name, setName] = useState<string>(profileData?.nama || "");
-  const [phoneNumber, setPhoneNumber] = useState<string>(
-    profileData?.no_wa || "",
-  );
+  // const [name, setName] = useState<string>(profileData?.nama || "");
+  // const [phoneNumber, setPhoneNumber] = useState<string>(
+  //   profileData?.no_wa || "",
+  // );
 
   // const data = loaderData?.data ?? {};
   const {
@@ -143,8 +143,8 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
       {
         id,
         isi_komentar: message,
-        no_wa: profileData.no_wa,
-        nama: profileData.nama,
+        // no_wa: profileData.no_wa,
+        // nama: profileData.nama,
         feat: "reply",
       },
       {
@@ -229,8 +229,8 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                     : "outline-gray-300 focus:outline-green-600"
                 } rounded-lg border border-gray-400 px-4 py-2`}
                 name="nama"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                // value={name}
+                // onChange={(e) => setName(e.target.value)}
                 id="nama"
               />
               {fetcherData.message && !fetcherData.success && (
@@ -273,8 +273,8 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                     : "outline-gray-300 focus:outline-green-600"
                 } rounded-lg border border-gray-400 px-4 py-2`}
                 name="no_wa"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                // value={phoneNumber}
+                // onChange={(e) => setPhoneNumber(e.target.value)}
                 id="no_wa"
               />
               {fetcherData.message && !fetcherData.success && (
@@ -355,7 +355,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                   date: reply.tanggal_komentar,
                 })) ?? []
               }
-              isAdmin={isAdmin}
+              // isAdmin={isAdmin}
             />
           ))}
         </article>

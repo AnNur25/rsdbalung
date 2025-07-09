@@ -32,7 +32,7 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function AdminAccount({ loaderData }: Route.ComponentProps) {
-  console.log(loaderData);
+  // console.log(loaderData);
   const { data } = loaderData || {
     data: { id_user: "admin", nama: "Admin", email: "admin@admin.com" },
   };
@@ -41,7 +41,7 @@ export default function AdminAccount({ loaderData }: Route.ComponentProps) {
 
   const fetcher = useFetcher();
   const fetcherData = fetcher.data || { message: "", success: false };
-  console.log("fetcherData", fetcherData);
+  // console.log("fetcherData", fetcherData);
   useEffect(() => {
     if (fetcherData.message) {
       if (fetcherData.success) {

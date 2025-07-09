@@ -61,7 +61,7 @@ export async function loader(): Promise<LoaderResult> {
   );
   const newsResponse = await handleLoader(() => axios.get(newsRequest.href));
   const igResponse = await handleLoader(() => axios.get(igRequest.href));
-  console.log("direktur", direkturResponse.data);
+  // console.log("direktur", direkturResponse.data);
 
   const data = {
     banners: bannerResponse.data,
@@ -118,7 +118,7 @@ const animationVariants = {
 export default function Home({ loaderData }: Route.ComponentProps) {
   const data = loaderData?.data ?? {};
   const banners: BannerModel[] = data.banners || [];
-  console.log("banners", banners);
+  // console.log("banners", banners);
   const direktur = Array.isArray(data.direktur)
     ? (data.direktur as { id_direktur: string; gambar: string }[])
     : [];
@@ -159,7 +159,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     },
   ];
   const unggulanData: Unggulan = loaderData?.data?.unggulan ?? {};
-  console.log("unggulanData", unggulanData);
+  // console.log("unggulanData", unggulanData);
   const news = (data.news?.berita as News[]) || []; //{ berita: News[]; pagination: Pagination };
   const instagrams = (data.instagrams as { link_embed: string }[]) || []; //{ berita: News[]; pagination: Pagination };
   const bannerList = Array.isArray(banners) ? banners.map((b) => b.gambar) : [];

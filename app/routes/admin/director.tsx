@@ -18,12 +18,12 @@ export async function action({ request }: Route.ActionArgs) {
 
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/direktur`);
   const formData = await request.formData();
-  console.log("formData direktur", formData);
+  // console.log("formData direktur", formData);
   const method = request.method;
   if (method === "POST") {
     const file = formData.get("gambar") as File;
     
-    console.log("file direktur", file.size);
+    // console.log("file direktur", file.size);
     if (!(file instanceof File) || file.size === 0) {
       return { success: false, message: "Mohon upload minimal 1 foto" };
     }
@@ -66,7 +66,7 @@ export default function Director({ loaderData }: Route.ComponentProps) {
   const photos = Array.isArray(loaderData?.data)
     ? (loaderData.data as { id_direktur: string; gambar: string }[])
     : [];
-  console.log("photos direktur", photos);
+  // console.log("photos direktur", photos);
   const fetcher = useFetcher();
 
   const fetcherData = fetcher.data || { message: "", success: false };

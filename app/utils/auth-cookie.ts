@@ -52,8 +52,8 @@ export async function getAuthCookies(request: Request) {
   const cookieHeader = request.headers.get("Cookie");
   const aksesToken = await aksesTokenCookie.parse(cookieHeader);
   const refreshToken = await refreshTokenCookie.parse(cookieHeader);
-  console.log("aksesTokenCookie", aksesToken);
-  console.log("refreshTokenCookie", refreshToken);
+  // console.log("aksesTokenCookie", aksesToken);
+  // console.log("refreshTokenCookie", refreshToken);
   return { aksesToken, refreshToken };
 }
 

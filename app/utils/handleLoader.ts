@@ -43,7 +43,7 @@ export async function handleLoader(
       message: message,
       data: {},
     };
-    console.log(data);
+    // console.log(data);
     return data;
   }
 }

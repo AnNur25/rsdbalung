@@ -78,7 +78,7 @@ export default function Header({
   const navigate = useNavigate();
   const handleLogout = () => {
     navigate("/logout");
-    console.log("Logout");
+    // console.log("Logout");
     setLogoutDialogOpen(false);
   };
   return (

@@ -10,19 +10,19 @@ import { handleAction } from "~/utils/handleAction";
 // export async function loader({ request, params }: Route.LoaderArgs) {}
 
 export async function action({ request }: Route.ActionArgs) {
-  console.log("action");
+  // console.log("action");
 
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/`);
   const formData = await request.formData();
   const url = new URL(request.url);
   const token = url.searchParams.get("token");
-  console.log("token", token);
+  // console.log("token", token);
   if (token) {
     const resetRequest = `${import.meta.env.VITE_API_URL}/reset-password?token=${token}`;
     const newPassw = formData.get("newPassw");
     const confirmPassw = formData.get("confirmPassw");
-    console.log(formData);
-    console.log("token", token);
+    // console.log(formData);
+    // console.log("token", token);
 
     return handleAction(() =>
       axios.post(
@@ -39,7 +39,7 @@ export async function action({ request }: Route.ActionArgs) {
     const email = formData.get("email");
 
     urlRequest.pathname = "/api/v1/profil";
-    console.log("urlRequest", urlRequest.href);
+    // console.log("urlRequest", urlRequest.href);
     return handleAction(() => axios.post("/profil", { email }));
   }
 }

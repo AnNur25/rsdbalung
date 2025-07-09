@@ -49,8 +49,8 @@ export default function EditNews({ loaderData }: Route.ComponentProps) {
     convertToDate(news.tanggal_default) ||
       new Date().toISOString().split("T")[0],
   );
-  console.log(loaderData);
-  console.log(convertToDate(news.tanggal_default));
+  // console.log(loaderData);
+  // console.log(convertToDate(news.tanggal_default));
   const [title, setTitle] = useState<string>(news.judul || "");
   const [summary, setSummary] = useState<string>(news.ringkasan || "");
   const [content, setContent] = useState<string>(news.isi || "");

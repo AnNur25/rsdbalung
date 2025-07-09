@@ -116,7 +116,7 @@ export default function AdminDoctors({ loaderData }: Route.ComponentProps) {
   // }, [loaderData]);
   const deleteOnClick = (id: string) => {
     setDeleteDoctorId(id);
-    console.log(deleteDoctorId);
+    // console.log(deleteDoctorId);
     setDeleteDialogOpen(true);
   };
   const handleDelete = () => {

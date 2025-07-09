@@ -6,8 +6,8 @@ import { redirect } from "react-router";
 export async function loader({ request }: Route.LoaderArgs) {
     const url = new URL(request.url);
     const searchParams = url.searchParams;
-    console.log("url", url);
-    console.log("searchParams", searchParams);
+    // console.log("url", url);
+    // console.log("searchParams", searchParams);
     let authSuccess = searchParams.get("authSuccess");
     let refreshToken = searchParams.get("refreshToken") ?? "";
     let aksesToken = authSuccess?.split("?")[1] ?? "";
@@ -16,7 +16,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       return redirect("/test");
     }
     if (refreshToken && aksesToken) {
-      console.log("aksesToken", aksesToken);
+      // console.log("aksesToken", aksesToken);
       const setTokenRes = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/set-cookie`,
         {
@@ -26,7 +26,7 @@ export async function loader({ request }: Route.LoaderArgs) {
         { withCredentials: true },
       );
       const setCookieHeader = setTokenRes.headers["set-cookie"];
-      console.log(setTokenRes);
+      // console.log(setTokenRes);
       return redirectWithCookie("/", setCookieHeader ?? "");
     }
 }

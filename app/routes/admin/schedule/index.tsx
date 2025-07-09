@@ -129,7 +129,7 @@ export default function AdminSchedule({ loaderData }: Route.ComponentProps) {
   }, [fetcherData]);
   const deleteOnClick = (id: string) => {
     setDeleteDoctorId(id);
-    console.log(deleteDoctorId);
+    // console.log(deleteDoctorId);
     setDeleteDialogOpen(true);
   };
   const handleDelete = () => {

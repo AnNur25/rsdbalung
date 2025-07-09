@@ -1,4 +1,4 @@
-import { useFetcher, useOutletContext } from "react-router";
+import { useFetcher } from "react-router";
 import axios from "axios";
 
 import type { Route } from "./+types/complaint";
@@ -31,13 +31,13 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   // const method = request.method;
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/`);
-  console.log("formData", formData);
+  // console.log("formData", formData);
   const captcha = formData.get("g-recaptcha-response");
   // if (method === "POST")
   if (captcha) {
     formData.delete("g-recaptcha-response");
     formData.append("recaptcha_token", captcha as string);
-    console.log("formDatarecaptcha", formData);
+    // console.log("formDatarecaptcha", formData);
 
     return handleAction(() => client.post(urlRequest.href, formData));
   } else {
@@ -49,15 +49,15 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function Complaint({ loaderData }: Route.ComponentProps) {
-  const dataProfil = useOutletContext() as { profil: { data: ProfileData } };
-  console.log(dataProfil);
-  const profileData = dataProfil?.profil?.data || {};
-  console.log("Profile Data", profileData);
+  // const dataProfil = useOutletContext() as { profil: { data: ProfileData } };
+  // console.log(dataProfil);
+  // const profileData = dataProfil?.profil?.data || {};
+  // console.log("Profile Data", profileData);
 
-  const [name, setName] = useState<string>(profileData?.nama || "");
-  const [phoneNumber, setPhoneNumber] = useState<string>(
-    profileData?.no_wa || "",
-  );
+  // const [name, setName] = useState<string>(profileData?.nama || "");
+  // const [phoneNumber, setPhoneNumber] = useState<string>(
+  //   profileData?.no_wa || "",
+  // );
 
   const complaints = Array.isArray(loaderData?.data?.data_aduan)
     ? (loaderData.data.data_aduan as ComplaintModel[])
@@ -116,8 +116,8 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                     : "outline-gray-300 focus:outline-green-600"
                 } rounded-lg border border-gray-400 px-4 py-2`}
                 name="nama"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                // value={name}
+                // onChange={(e) => setName(e.target.value)}
                 id="nama"
               />
               {fetcherData.message && !fetcherData.success && (
@@ -160,8 +160,8 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                     : "outline-gray-300 focus:outline-green-600"
                 } rounded-lg border border-gray-400 px-4 py-2`}
                 name="no_wa"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                // value={phoneNumber}
+                // onChange={(e) => setPhoneNumber(e.target.value)}
                 id="no_wa"
               />
               {fetcherData.message && !fetcherData.success && (

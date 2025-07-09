@@ -36,7 +36,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     banners: bannerResponse.data,
     unggulan: unggulanResponse.data,
   };
-  console.log(data);
+  // console.log(data);
   return {
     success: true,
     message: "Selesai mendapatkan data",
@@ -48,11 +48,11 @@ export async function action({ request, params }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
 
   const formData = await request.formData();
-  console.log("formData", formData);
+  // console.log("formData", formData);
   const method = request.method;
-  console.log("method", method);
+  // console.log("method", method);
   const feature = formData.get("feat");
-  console.log("feature", feature);
+  // console.log("feature", feature);
 
   if (feature === "banner") {
     const bannerRequest = new URL(`${import.meta.env.VITE_API_URL}/banner/`);
@@ -61,7 +61,7 @@ export async function action({ request, params }: Route.ActionArgs) {
       if (files.length > 4) {
         return { success: false, message: "Maksimal upload 4 foto." };
       }
-      console.log(files);
+      // console.log(files);
       if (
         files.length === 0 ||
         files.every((file) => !(file instanceof File) || file.size === 0)
@@ -268,8 +268,8 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
     }
   };
 
-  console.log("existingImagesData", existingImagesData);
-  console.log("newImagesData", newUnggulanData);
+  // console.log("existingImagesData", existingImagesData);
+  // console.log("newImagesData", newUnggulanData);
   const handleUnggulanChange = (
     index: number,
     field: keyof ExistingImage,
@@ -311,7 +311,7 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
     fileInputs.forEach((fileInput) => {
       if (fileInput.files && fileInput.files.length > 0) {
         Array.from(fileInput.files).forEach((file) => {
-          console.log(file);
+          // console.log(file);
           formData.append("file", file);
         });
       }
@@ -319,18 +319,18 @@ export default function AdminHome({ loaderData }: Route.ComponentProps) {
 
     const captionsArray: { caption: string }[] = [];
     captionInputs.forEach((captionInput) => {
-      console.log({ caption: captionInput.value });
+      // console.log({ caption: captionInput.value });
 
       captionsArray.push({ caption: captionInput.value });
     });
 
     formData.append("gambarCaption", JSON.stringify([...captionsArray]));
 
-    console.log(formData);
+    // console.log(formData);
 
-    console.log("form unggulan", formData);
+    // console.log("form unggulan", formData);
     for (let [key, value] of formData.entries()) {
-      console.log(key, value);
+      // console.log(key, value);
     }
     // return;
     fetcher.submit(formData, {
