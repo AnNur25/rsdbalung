@@ -47,7 +47,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 export async function action({ request, params }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
   // const { id } = params;
-  console.log(params);
+  // console.log(params);
   const method = request.method;
 
   const formData = await request.formData();
@@ -64,7 +64,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     if (captcha) {
       formData.delete("g-recaptcha-response");
       formData.append("recaptcha_token", captcha);
-      console.log(formData);
+      // console.log(formData);
       return handleAction(() => client.post(urlRequest.href, formData));
     } else {
       return {
@@ -80,7 +80,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     const replyRequest = new URL(
       `${import.meta.env.VITE_API_URL}/berita/${params.id}/komentar/${comment_id}/reply`,
     );
-    console.log(formData);
+    // console.log(formData);
 
     return handleAction(() => client.post(replyRequest.href, formData));
   }
@@ -100,7 +100,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
     profileData && profileData.role
       ? profileData.role.toLowerCase() === "admin"
       : false;
-  console.log(isLogin, isAdmin, profileData);
+  // console.log(isLogin, isAdmin, profileData);
   const [name, setName] = useState<string>(profileData?.nama || "");
   const [phoneNumber, setPhoneNumber] = useState<string>(
     profileData?.no_wa || "",
@@ -122,7 +122,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
 
   const komentarList: Comment[] =
     Array.isArray(comments) && comments.length > 0 ? comments : [];
-  console.log(komentarList);
+  // console.log(komentarList);
 
   const tanggal = tanggal_dibuat.split(" pukul")[0];
 
@@ -325,7 +325,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
               >
                 <GoogleReCaptchaCheckbox
                   onChange={(token) => {
-                    console.log(token);
+                    // console.log(token);
                   }}
                 />
               </GoogleReCaptchaProvider>
@@ -345,7 +345,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
               date={c.tanggal_komentar}
               isVisible={c.isVisible}
               switchOnClick={() => handleVisible(c.id_komentar)}
-              isLogin={isLogin}
+              // isLogin={isLogin}
               phoneNumber={c.no_wa ?? ""}
               replies={
                 c.replies?.map((reply) => ({

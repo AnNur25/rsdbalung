@@ -122,17 +122,18 @@ export default function Header({
               <Bars3Icon aria-hidden="true" className="size-6" />
             </button>
           </div>
-          <div className="hidden items-center justify-center lg:flex lg:gap-x-12">
+          <div className="hidden items-center justify-center lg:flex lg:gap-x-16">
             {navigation.map((item, index) =>
               item.submenu ? (
                 <Popover
                   as="div"
-                  className="hover-grd group relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 transition-colors duration-200 hover:cursor-pointer hover:text-white"
+                  className="group relative -mx-3 block rounded-lg px-1 py-2 text-left text-base/7 font-semibold text-gray-900 transition-colors duration-200 hover:cursor-pointer"
                   key={index}
                 >
-                  <PopoverButton className="flex w-max items-center gap-2 transition-colors duration-200 outline-none group-hover:text-white hover:cursor-pointer">
+                  <PopoverButton className="flex w-max items-center gap-2 transition-colors duration-200 outline-none hover:cursor-pointer">
                     {item.name}
                     <ChevronDownIcon className="h-4 w-4" />
+                    <span className="absolute bottom-0.5 left-0 h-0.5 w-0 bg-dark-blue-950 transition-all duration-300 group-hover:w-full"></span>
                   </PopoverButton>
                   <PopoverPanel className="ring-opacity-5 absolute left-0 z-100 mt-2 w-56 origin-top scale-95 rounded-md bg-white opacity-0 shadow-2xl ring-1 ring-gray-200 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100 focus:outline-none">
                     {item.submenu.map((subitem, subindex) => (
@@ -150,26 +151,26 @@ export default function Header({
                 <a
                   key={index}
                   href={item.href}
-                  className="hover-grd -mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:text-white"
+                  className="group relative -mx-3 block rounded-lg px-1 py-2 text-base/7 font-semibold text-gray-900"
                 >
                   {item.name}
+                  <span className="absolute bottom-0.5 left-0 h-0.5 w-0 bg-dark-blue-950 transition-all duration-300 group-hover:w-full"></span>
                 </a>
               ),
             )}
           </div>
-          <div className="hidden lg:flex items-center gap-x-8  lg:justify-end">
+          <div className="hidden items-center gap-x-8 lg:flex lg:justify-end">
             <div className="hidden lg:block">
-            <HeaderSearch />
+              <HeaderSearch />
             </div>
-              
 
-            {isLogin ? (
+            {/* {isLogin ? (
               <>
                 <Popover as="div" className="hidden relative lg:block">
                   <PopoverButton>
                     <UserCircleIcon className="h-8 w-8 text-gray-700 hover:text-dark-blue-900" />
                   </PopoverButton>
-                  {/* <PopoverPanel className="ring-opacity-5 absolute right-0 z-100 mt-2 w-56 rounded-md bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none"> */}
+                  // <PopoverPanel className="ring-opacity-5 absolute right-0 z-100 mt-2 w-56 rounded-md bg-white shadow-2xl ring-1 ring-gray-200 focus:outline-none">
                   <PopoverPanel className="absolute right-0 z-100 mt-2 flex w-fit flex-col rounded border border-gray-200 bg-white shadow-2xl">
                     <a
                       className="px-4 py-2 text-sm font-medium hover:text-dark-blue-950"
@@ -198,7 +199,7 @@ export default function Header({
                   Masuk/Daftar
                 </a>
               </>
-            )}
+            )} */}
           </div>
         </nav>
         <Dialog
@@ -228,7 +229,7 @@ export default function Header({
                   <HeaderSearch
                     setMobileMenuOpen={() => setMobileMenuOpen(false)}
                   />
-                  {isLogin ? (
+                  {/* {isLogin ? (
                     <>
                       <a
                         href="/akun"
@@ -247,25 +248,28 @@ export default function Header({
                         Masuk/Daftar
                       </a>
                     </>
-                  )}
+                  )} */}
 
                   {navigation.map((item, index) =>
                     item.submenu ? (
                       <Menu
                         as="div"
-                        className="group relative -mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer hover:bg-gradient-to-b hover:text-white"
+                        className="group relative -mx-3 block rounded-lg px-3 py-2 text-left text-base/7 font-semibold text-gray-900 hover:cursor-pointer"
                         key={index}
                       >
                         <MenuButton
                           // className="flex w-max items-center gap-2 outline-none hover:cursor-pointer"
-                          className="flex w-full items-center justify-between gap-2 from-dark-blue-900 to-dark-blue-950 text-base font-semibold text-gray-900 group-hover:text-white hover:bg-gradient-to-b"
+                          className="flex w-full items-center justify-between gap-2 text-base font-semibold text-gray-900"
                         >
-                          {item.name}
+                          <div className="relative w-max p-1">
+                            {item.name}
+                            <span className="absolute bottom-0.5 left-0 h-0.5 w-0 bg-dark-blue-950 transition-all duration-300 group-hover:w-full"></span>
+                          </div>
                           <ChevronDownIcon className="h-4 w-4" />
                         </MenuButton>
                         <MenuItems
                           anchor="bottom"
-                          className="ring-opacity-5 absolute left-0 z-100 ms-5 mt-4 w-56 origin-top-left rounded-md bg-white font-semibold shadow-2xl ring-1 ring-gray-200 focus:outline-none"
+                          className="ring-opacity-5 absolute left-0 z-100 ms-5 mt-4 w-full sm:w-90 origin-top-left rounded-md bg-white font-semibold shadow-2xl ring-1 ring-gray-200 focus:outline-none min-lg:w-56"
                         >
                           {item.submenu.map((subitem, subindex) => (
                             <MenuItem key={subindex}>
@@ -287,14 +291,17 @@ export default function Header({
                       <a
                         key={index}
                         href={item.href}
-                        className="-mx-3 block rounded-lg from-dark-blue-900 to-dark-blue-950 px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gradient-to-b hover:text-white"
+                        className="group relative -mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900"
                       >
-                        {item.name}
+                        <div className="relative w-max p-1">
+                          {item.name}
+                          <span className="absolute bottom-0.5 left-0 h-0.5 w-0 bg-dark-blue-950 transition-all duration-300 group-hover:w-full"></span>
+                        </div>
                       </a>
                     ),
                   )}
 
-                  {isLogin && (
+                  {/* {isLogin && (
                     <button
                       onClick={() => setLogoutDialogOpen(true)}
                       type="button"
@@ -302,7 +309,7 @@ export default function Header({
                     >
                       Logout
                     </button>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>

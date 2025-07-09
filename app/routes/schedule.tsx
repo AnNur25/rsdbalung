@@ -21,14 +21,14 @@ export async function loader({
   const page = url.searchParams.get("page") || "1";
   const poli = url.searchParams.get("poli") ?? "";
   const date = url.searchParams.get("date") ?? "";
-
+  
   const poliRequest = new URL(`${import.meta.env.VITE_API_URL}/poli/`);
 
-  if (poli) {
+  if (poli && date) {
     urlRequest.pathname = "/api/v1/jadwal-dokter/search";
     urlRequest.searchParams.set("id_poli", poli);
-  }
-  if (date) {
+  // }
+  // if (date) {
     urlRequest.pathname = "/api/v1/jadwal-dokter/search";
     urlRequest.searchParams.set("tanggal", date);
   }
@@ -104,6 +104,7 @@ export default function Schedule({ loaderData }: Route.ComponentProps) {
               value={searchPoli}
               onChange={(e) => setSearchPoli(e.target.value)}
             >
+              <option value="">Pilih Poli</option>
               {poli.length > 0 ? (
                 poli.map((item, index) => (
                   <option key={index} value={item.id_poli}>
@@ -177,7 +178,7 @@ export default function Schedule({ loaderData }: Route.ComponentProps) {
                             rowSpan={totalRows}
                             className="border border-gray-300 px-4 py-2 text-center"
                           >
-                            {index + 1}
+                            {lIndex + 1}
                           </td>
                           <td
                             rowSpan={totalRows}

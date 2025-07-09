@@ -8,16 +8,16 @@ import {
 
 export default [
   // Public routes
-  route("login", "routes/login.tsx"),
-  route("register", "routes/register.tsx"),
-  route("logout", "routes/logout.tsx"),
-  route("google", "routes/google.tsx"),
+  // route("login", "routes/login.tsx"),
+  // route("register", "routes/register.tsx"),
+  // route("logout", "routes/logout.tsx"),
+  // route("google", "routes/google.tsx"),
   layout("routes/layout.tsx", [
+    // route("test", "routes/test.tsx"),
+    // route("akun", "routes/account.tsx"),
+    // route("api/v1", "routes/testoauth.tsx"),
     route("developer", "routes/developer.tsx"),
-    route("test", "routes/test.tsx"),
     route("cari", "routes/search.tsx"),
-    route("akun", "routes/account.tsx"),
-    route("api/v1", "routes/testoauth.tsx"),
     index("routes/home.tsx"),
     route("profile", "routes/profile.tsx"),
     route("berita/", "routes/news.tsx"),

@@ -29,23 +29,23 @@ export async function action({ request }: Route.ActionArgs) {
   const client = await createAuthenticatedClient(request);
 
   const formData = await request.formData();
-  const method = request.method;
+  // const method = request.method;
   const urlRequest = new URL(`${import.meta.env.VITE_API_URL}/aduan/`);
   console.log("formData", formData);
   const captcha = formData.get("g-recaptcha-response");
-  if (method === "POST")
-    if (captcha) {
-      formData.delete("g-recaptcha-response");
-      formData.append("recaptcha_token", captcha as string);
-      console.log("formDatarecaptcha", formData);
+  // if (method === "POST")
+  if (captcha) {
+    formData.delete("g-recaptcha-response");
+    formData.append("recaptcha_token", captcha as string);
+    console.log("formDatarecaptcha", formData);
 
-      return handleAction(() => client.post(urlRequest.href, formData));
-    } else {
-      return {
-        success: false,
-        message: "Captcha diperlukan untuk mengirim aduan",
-      };
-    }
+    return handleAction(() => client.post(urlRequest.href, formData));
+  } else {
+    return {
+      success: false,
+      message: "Captcha diperlukan untuk mengirim aduan",
+    };
+  }
 }
 
 export default function Complaint({ loaderData }: Route.ComponentProps) {
@@ -95,7 +95,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
             method="post"
             className="my-4 flex flex-1 flex-col items-center justify-center gap-4 rounded-xl border border-gray-300 p-6 shadow-lg max-md:w-[95%] min-md:p-8"
           >
-            <div className="flex flex-col gap-2 w-full">
+            <div className="flex w-full flex-col gap-2">
               <label htmlFor="nama" className="text-md font-semibold">
                 Nama <span className="text-red-600">*</span>
               </label>
@@ -131,7 +131,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
               )}
             </div>
 
-            <div className="flex flex-col gap-2 w-full">
+            <div className="flex w-full flex-col gap-2">
               <label htmlFor="no_wa" className="text-md font-semibold">
                 No. Whatsapp <span className="text-red-600">*</span>
               </label>
@@ -175,7 +175,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
               )}
             </div>
 
-            <div className="flex flex-col gap-2 w-full">
+            <div className="flex w-full flex-col gap-2">
               <label htmlFor="message" className="text-md font-semibold">
                 Aduan <span className="text-red-600">*</span>
               </label>
@@ -206,14 +206,14 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 </p>
               )}
             </div>
-            <div className="overflow-x-auto w-full">
+            <div className="w-full overflow-x-auto">
               <GoogleReCaptchaProvider
                 type="v2-checkbox"
                 siteKey={import.meta.env.VITE_SITE_KEY}
               >
                 <GoogleReCaptchaCheckbox
                   onChange={(token) => {
-                    console.log(token);
+                    // console.log(token);
                   }}
                 />
               </GoogleReCaptchaProvider>
