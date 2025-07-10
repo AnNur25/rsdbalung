@@ -166,7 +166,7 @@ export default function DoctorDetail({ loaderData }: Route.ComponentProps) {
               {doctors.map((doctor, index) => (
                 <div className="relative mx-2 h-full w-min" key={index}>
                   <DoctorCard
-                    id={doctor.id_dokter}
+                    id={doctor.slug}
                     name={doctor.nama}
                     specialty={doctor.poli.nama_poli}
                     image={doctor.gambar}
