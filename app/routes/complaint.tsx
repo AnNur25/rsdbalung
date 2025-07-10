@@ -191,7 +191,7 @@ export default function Complaint({ loaderData }: Route.ComponentProps) {
                 />
               </GoogleReCaptchaProvider>
             </div>
-            <button className="rounded bg-green-600 px-8 py-2 text-white min-md:w-min">
+            <button className="rounded self-start bg-green-600 px-8 py-2 text-white min-md:w-min">
               Kirim
             </button>
           </fetcher.Form>
